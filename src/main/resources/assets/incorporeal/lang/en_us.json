@@ -1,4 +1,9 @@
 {
 	"itemGroup.incorporeal": "Incorporeal",
+	
+	"item.incorporeal.corporea_ticket": "Corporea Ticket",
+	
+	"block.incorporeal.corporea_solidifier": "Corporea Solidifier",
+	
 	"incorporeal.tooltip.ticket": "%sx %s"
 }

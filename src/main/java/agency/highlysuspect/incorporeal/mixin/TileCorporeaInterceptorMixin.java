@@ -22,10 +22,10 @@ public class TileCorporeaInterceptorMixin {
 	@Inject(
 		method = "interceptRequestLast",
 		at = @At(
-			value = "INVOKE_ASSIGN",
-			target = "Lnet/minecraft/world/World;getTileEntity(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/tileentity/TileEntity;"
+			value = "INVOKE",
+			target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
 		),
-		//TODO: Well, interceptRequestLast doesn't need to get remapped, but getTileEntity most certainly does.
+		//TODO: Well, interceptRequestLast doesn't need to get remapped, but setBlockState most certainly does.
 		// Does setting remap = false give the correct behavior?
 		remap = false
 	)
@@ -34,9 +34,10 @@ public class TileCorporeaInterceptorMixin {
 		BlockPos pos = ((TileCorporeaInterceptor) (Object) this).getPos();
 		
 		for(Direction dir : Direction.values()) {
-			BlockState state = world.getBlockState(pos.offset(dir));
+			BlockPos solidifierPos = pos.offset(dir);
+			BlockState state = world.getBlockState(solidifierPos);
 			if(state.getBlock() instanceof CorporeaSolidifierBlock) {
-				((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(world, pos, state, request, count);
+				((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(world, solidifierPos, state, request, count);
 			}
 		}
 	}

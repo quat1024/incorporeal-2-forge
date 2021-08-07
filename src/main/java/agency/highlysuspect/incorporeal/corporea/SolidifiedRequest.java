@@ -51,6 +51,7 @@ public class SolidifiedRequest {
 	private static Map<ResourceLocation, Function<CompoundNBT, ? extends ICorporeaRequestMatcher>> getDeserializers() {
 		try {
 			Field f = TileCorporeaRetainer.class.getDeclaredField("corporeaMatcherDeserializers");
+			f.setAccessible(true);
 			//noinspection unchecked
 			return (Map<ResourceLocation, Function<CompoundNBT, ? extends ICorporeaRequestMatcher>>) f.get(null);
 		} catch (ReflectiveOperationException e) {
@@ -61,6 +62,7 @@ public class SolidifiedRequest {
 	private static Map<Class<? extends ICorporeaRequestMatcher>, ResourceLocation> getSerializers() {
 		try {
 			Field f = TileCorporeaRetainer.class.getDeclaredField("corporeaMatcherSerializers");
+			f.setAccessible(true);
 			//noinspection unchecked
 			return (Map<Class<? extends ICorporeaRequestMatcher>, ResourceLocation>) f.get(null);
 		} catch (ReflectiveOperationException e) {
