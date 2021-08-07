@@ -11,8 +11,12 @@ public class IncTileTypes {
 	public static final TileEntityType<SanvocaliaSubTile> SANVOCALIA_BIG = TileEntityType.Builder.create(SanvocaliaSubTile::big, IncBlocks.SANVOCALIA, IncBlocks.FLOATING_SANVOCALIA).build(null);
 	public static final TileEntityType<SanvocaliaSubTile> SANVOCALIA_SMALL = TileEntityType.Builder.create(SanvocaliaSubTile::small, IncBlocks.SMALL_SANVOCALIA, IncBlocks.SMALL_FLOATING_SANVOCALIA).build(null);
 	
+	public static final TileEntityType<RedStringLiarTile> RED_STRING_LIAR = TileEntityType.Builder.create(RedStringLiarTile::new, IncBlocks.RED_STRING_LIAR).build(null);
+	
 	public static void register(RegistryEvent.Register<TileEntityType<?>> event) {
 		IForgeRegistry<TileEntityType<?>> r = event.getRegistry();
+		
+		Init.reg(r, "red_string_liar", RED_STRING_LIAR);
 		
 		Init.reg(r, "sanvocalia", SANVOCALIA_BIG);
 		Init.reg(r, "sanvocalia_small", SANVOCALIA_SMALL);

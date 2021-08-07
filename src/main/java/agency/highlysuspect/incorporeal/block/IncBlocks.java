@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 
 public class IncBlocks {
 	public static final Block CORPOREA_SOLIDIFIER = new CorporeaSolidifierBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
+	public static final Block RED_STRING_LIAR = new RedStringLiarBlock(AbstractBlock.Properties.from(ModBlocks.redStringContainer));
 	
 	private static final Block.Properties FLOWER_PROPS = AbstractBlock.Properties.from(Blocks.POPPY);
 	private static final Block.Properties FLOATING_PROPS = ModBlocks.FLOATING_PROPS;
@@ -32,6 +33,7 @@ public class IncBlocks {
 		
 		//misc blocks!
 		Init.reg(r, "corporea_solidifier", CORPOREA_SOLIDIFIER);
+		Init.reg(r, "red_string_liar", RED_STRING_LIAR);
 		
 		//flowers
 		//this is the block ID scheme that botania uses

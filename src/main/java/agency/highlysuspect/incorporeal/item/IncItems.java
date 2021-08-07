@@ -14,6 +14,7 @@ public class IncItems {
 	public static final CorporeaTicketItem CORPOREA_TICKET = new CorporeaTicketItem(defaultProps());
 	
 	public static final BlockItem CORPOREA_SOLIDIFIER = new BlockItem(IncBlocks.CORPOREA_SOLIDIFIER, defaultProps());
+	public static final BlockItem RED_STRING_LIAR = new BlockItem(IncBlocks.RED_STRING_LIAR, defaultProps());
 	
 	public static final ItemBlockSpecialFlower SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SANVOCALIA, defaultProps());
 	public static final ItemBlockSpecialFlower SMALL_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SMALL_SANVOCALIA, defaultProps());
@@ -32,6 +33,7 @@ public class IncItems {
 		
 		//item blocks
 		regBlockItem(r, CORPOREA_SOLIDIFIER);
+		regBlockItem(r, RED_STRING_LIAR);
 		
 		//flowers
 		regBlockItem(r, SANVOCALIA);
