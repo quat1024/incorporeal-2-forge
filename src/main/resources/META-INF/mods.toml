@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="LGPL-3.0-or-later"
+issueTrackerURL="https://github.com/quat1024/incorporeal-2-forge/issues"
+
+[[mods]]
+modId="incorporeal"
+version="${file.jarVersion}" #mandatory
+displayName="Incorporeal 2" #mandatory
+displayURL="https://github.com/quat1024/incorporeal-2-forge/"
+#logoFile="examplemod.png" #TODO
+credits="Dudblockman and SnazzGass for some textures. And a very special thanks to all the Botania nerds over the years, you're the best." #optional
+authors="quaternary"
+description="Botania addon. More toys and tools for large-scale corporea networks."
+
+[[dependencies.incorporeal]]
+    modId="botania"
+    mandatory=true #mandatory
+    versionRange="[1.16.5-419,)"
+    ordering="AFTER"
+    side="BOTH"
