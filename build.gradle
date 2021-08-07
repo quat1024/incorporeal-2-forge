@@ -55,11 +55,16 @@ minecraft {
 		client {
 			workingDirectory project.file("run")
 			
-			property "forge.logging.console.level", "debug"
+			//property "forge.logging.console.level", "debug" //omfg, there's way too much logging.
+			
 			property "fml.earlyprogresswindow", "false"
 			//property "mixin.config", "incorporeal.mixins.json"
 			property "mixin.env.remapRefMap", "true"
 			property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+
+//does not actually work			
+// 			args "--username quaternary"
+// 			args "--uuid 873dea16-d058-4343-861c-f62c21da124b"
 			
 			mods {
 				incorporeal {
