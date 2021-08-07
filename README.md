@@ -16,6 +16,7 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 * block and item models
 * cygnus network
 * ender soul core
+* that thing that blocks corporea sparks from connecting
 * item frame tinkerer (there was some interest in botania taking this on)
 * ticket conjurer
 * rod of the fractured space
