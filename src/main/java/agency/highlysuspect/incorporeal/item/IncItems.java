@@ -29,9 +29,7 @@ public class IncItems {
 	private static class Tab extends ItemGroup {
 		public static final Tab INSTANCE = new Tab();
 		
-		public Tab() {
-			super(Init.MODID);
-		}
+		public Tab() { super(Init.MODID); }
 		
 		@Override
 		public ItemStack createIcon() {

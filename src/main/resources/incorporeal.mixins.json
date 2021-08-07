@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"compatibilityLevel": "JAVA_8",
+	"package": "agency.highlysuspect.incorporeal.mixin",
+	"refmap": "incorporeal.refmap.json",
+	"mixins": [
+		"TileCorporeaInterceptorMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

@@ -1,16 +1,27 @@
 buildscript {
 	repositories {
-		maven { url = "https://maven.minecraftforge.net" }
 		mavenCentral()
+		maven {
+			url = "https://maven.minecraftforge.net"
+		}
+		maven {
+    	name "Sponge"
+    	url "https://repo.spongepowered.org/repository/maven-public/"
+    	content {
+    		includeGroup "org.spongepowered"
+    	}
+    }
 	}
 	dependencies {
 		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
+		classpath group: "org.spongepowered", name: "mixingradle", version: "0.7-SNAPSHOT"
 	}
 }
+
 apply plugin: "net.minecraftforge.gradle"
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: "eclipse"
 apply plugin: "maven-publish"
+apply plugin: "org.spongepowered.mixin"
 
 ////////////////
 
@@ -26,7 +37,12 @@ def curios_forge_version = "1.16.4-4.0.3.5"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
-println("Java: " + System.getProperty("java.version") + " JVM: " + System.getProperty("java.vm.version") + "(" + System.getProperty("java.vendor") + ") Arch: " + System.getProperty("os.arch"))
+println("Java: " + System.getProperty("java.version") + " JVM: " + System.getProperty("java.vm.version") + "(" + System.getProperty("java.vendor") + ") Arch: " + System.getProperty("os.arch")) //so true bestie
+
+mixin {
+	add sourceSets.main, "incorporeal.refmap.json"
+}
+
 minecraft {
 	//mappings channel: "official", version: "1.16.5"
 	mappings channel: "snapshot", version: "20201028-1.16.3" //same mappings Botania uses (MCP)
@@ -41,7 +57,10 @@ minecraft {
 			
 			property "forge.logging.console.level", "debug"
 			property "fml.earlyprogresswindow", "false"
-
+			//property "mixin.config", "incorporeal.mixins.json"
+			property "mixin.env.remapRefMap", "true"
+			property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+			
 			mods {
 				incorporeal {
 					source sourceSets.main
@@ -53,7 +72,10 @@ minecraft {
 			workingDirectory project.file("run/server")
 			
 			property "forge.logging.console.level", "debug"
-
+			//property "mixin.config", "incorporeal.mixins.json"
+			property "mixin.env.remapRefMap", "true"
+			property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+			
 			mods {
 				incorporeal {
 					source sourceSets.main
@@ -66,7 +88,10 @@ minecraft {
 			
 			property "forge.logging.console.level", "debug"
 			property "fml.earlyprogresswindow", "false"
-
+			//property "mixin.config", "incorporeal.mixins.json"
+			property "mixin.env.remapRefMap", "true"
+      property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+      			
 			// Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
 			args "--mod", "incorporeal", "--all",
 				"--existing", file("src/main/resources/"),
@@ -90,9 +115,16 @@ sourceSets.main.resources {
 repositories {
 	maven {
 		url "https://maven.blamejared.com"
+		content {
+			includeGroup "vazkii.botania"
+			includeGroup "vazkii.patchouli"
+		}
 	}
 	maven {
 		url "https://maven.theillusivec4.top/"
+		content {
+			includeGroup "top.theillusivec4.curios"
+		}
 	}
 }
 
@@ -109,6 +141,11 @@ dependencies {
 	//curios
 	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_forge_version}:api")
 	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_forge_version}")
+	
+	//idk what the fuck this is
+	if(System.getProperty("idea.sync.active") != true) {
+		annotationProcessor "org.spongepowered:mixin:0.8.2:processor"
+	}
 }
 
 jar {
@@ -120,7 +157,9 @@ jar {
 			"Specification-Vendor": "quat",
 			"Implementation-Title": project.name,
 			"Implementation-Version": "${version}",
-			"Implementation-Vendor": "quat"
+			"Implementation-Vendor": "quat",
+			
+			"MixinConnector": "agency.highlysuspect.incorporeal.IncMixinConnector"
 		])
 	}
 }
