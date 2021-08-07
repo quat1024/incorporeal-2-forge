@@ -43,9 +43,13 @@ public class CorporeaTicketItem extends Item {
 		return SolidifiedRequest.tryFromTag(requestNbt);
 	}
 	
+	public boolean hasRequest(ItemStack stack) {
+		return getRequest(stack).isPresent();
+	}
+	
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		getRequest(stack).ifPresent(request -> tooltip.add(new TranslationTextComponent("incorporeal.tooltip.ticket", request.count, request.matcher.getRequestName())));
+		getRequest(stack).ifPresent(request -> tooltip.add(request.toText()));
 	}
 }

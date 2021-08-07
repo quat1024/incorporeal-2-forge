@@ -44,10 +44,4 @@ public class Init {
 		thing.setRegistryName(id(name));
 		r.register(thing);
 	}
-	
-	public static void regBlockItem(IForgeRegistry<Item> r, BlockItem bi) {
-		assert bi.getBlock().getRegistryName() != null; //i dont know what the fuck "registry delegates" are, and i never will
-		bi.setRegistryName(bi.getBlock().getRegistryName());
-		r.register(bi);
-	}
 }

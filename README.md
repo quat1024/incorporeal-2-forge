@@ -13,7 +13,6 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 
 ## Things to port, in rough order of importance
 
-* corporea solidifier / sanvocalia flower
 * red string liar
 * cygnus network
 * ender soul core
@@ -27,4 +26,6 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 
 ## Things that have been ported
 
-Nothing lol
+* corporea solidifier
+* corporea ticket
+* sanvocalia flower

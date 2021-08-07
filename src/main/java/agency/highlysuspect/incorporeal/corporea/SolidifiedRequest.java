@@ -2,6 +2,8 @@ package agency.highlysuspect.incorporeal.corporea;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
 import vazkii.botania.common.block.tile.corporea.TileCorporeaRetainer;
 
@@ -31,6 +33,10 @@ public class SolidifiedRequest {
 		//count
 		tag.putInt("count", count);
 		return tag;
+	}
+	
+	public ITextComponent toText() {
+		return new TranslationTextComponent("incorporeal.solidified_request", count, matcher.getRequestName());
 	}
 	
 	public static Optional<SolidifiedRequest> tryFromTag(CompoundNBT tag) {

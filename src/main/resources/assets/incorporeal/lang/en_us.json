@@ -5,5 +5,10 @@
 	
 	"block.incorporeal.corporea_solidifier": "Corporea Solidifier",
 	
-	"incorporeal.tooltip.ticket": "%sx %s"
+	"block.incorporeal.sanvocalia": "Sanvocalia",
+	"block.incorporeal.sanvocalia_chibi": "Sanvocalia Petite",
+	"block.incorporeal.floating_sanvocalia": "Floating Sanvocalia",
+	"block.incorporeal.floating_sanvocalia_chibi": "Floating Sanvocalia Petite",
+	
+	"incorporeal.solidified_request": "%sx %s"
 }

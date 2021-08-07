@@ -8,11 +8,17 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 public class IncItems {
 	public static final CorporeaTicketItem CORPOREA_TICKET = new CorporeaTicketItem(defaultProps());
 	
 	public static final BlockItem CORPOREA_SOLIDIFIER = new BlockItem(IncBlocks.CORPOREA_SOLIDIFIER, defaultProps());
+	
+	public static final ItemBlockSpecialFlower SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SANVOCALIA, defaultProps());
+	public static final ItemBlockSpecialFlower SMALL_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SMALL_SANVOCALIA, defaultProps());
+	public static final ItemBlockSpecialFlower FLOATING_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.FLOATING_SANVOCALIA, defaultProps());
+	public static final ItemBlockSpecialFlower SMALL_FLOATING_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SMALL_FLOATING_SANVOCALIA, defaultProps());
 	
 	private static Item.Properties defaultProps() {
 		return new Item.Properties().group(Tab.INSTANCE);
@@ -21,9 +27,23 @@ public class IncItems {
 	public static void register(RegistryEvent.Register<Item> event) {
 		IForgeRegistry<Item> r = event.getRegistry();
 		
+		//items
 		Init.reg(r, "corporea_ticket", CORPOREA_TICKET);
 		
-		Init.regBlockItem(r, CORPOREA_SOLIDIFIER);
+		//item blocks
+		regBlockItem(r, CORPOREA_SOLIDIFIER);
+		
+		//flowers
+		regBlockItem(r, SANVOCALIA);
+		regBlockItem(r, SMALL_SANVOCALIA);
+		regBlockItem(r, FLOATING_SANVOCALIA);
+		regBlockItem(r, SMALL_FLOATING_SANVOCALIA);
+	}
+	
+	public static void regBlockItem(IForgeRegistry<Item> r, BlockItem bi) {
+		assert bi.getBlock().getRegistryName() != null; //i dont know what the fuck "registry delegates" are, and i never will
+		bi.setRegistryName(bi.getBlock().getRegistryName());
+		r.register(bi);
 	}
 	
 	private static class Tab extends ItemGroup {
