@@ -23,6 +23,7 @@ public class IncBlocks {
 	public static final Block CORPOREA_SOLIDIFIER = new CorporeaSolidifierBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
 	public static final Block RED_STRING_LIAR = new RedStringLiarBlock(AbstractBlock.Properties.from(ModBlocks.redStringContainer));
 	public static final Block FRAME_TINKERER = new FrameTinkererBlock(AbstractBlock.Properties.from(Blocks.OAK_PLANKS));
+	public static final Block CORPOREA_RETAINER_EVAPORATOR = new CorporeaRetainerEvaporatorBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
 	
 	public static final Block.Properties soulCoreProps = AbstractBlock.Properties.create(Material.ORGANIC).hardnessAndResistance(1f).setOpaque((state, world, pos) -> false).notSolid();
 	
@@ -49,6 +50,7 @@ public class IncBlocks {
 		Init.reg(r, "corporea_solidifier", CORPOREA_SOLIDIFIER);
 		Init.reg(r, "red_string_liar", RED_STRING_LIAR);
 		Init.reg(r, "frame_tinkerer", FRAME_TINKERER);
+		Init.reg(r, "corporea_retainer_evaporator", CORPOREA_RETAINER_EVAPORATOR);
 		
 		Init.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
 		Init.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);

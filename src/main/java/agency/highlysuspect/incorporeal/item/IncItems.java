@@ -19,6 +19,7 @@ public class IncItems {
 	public static final BlockItem CORPOREA_SOLIDIFIER = new BlockItem(IncBlocks.CORPOREA_SOLIDIFIER, defaultProps());
 	public static final BlockItem RED_STRING_LIAR = new BlockItem(IncBlocks.RED_STRING_LIAR, defaultProps());
 	public static final BlockItem FRAME_TINKERER = new BlockItem(IncBlocks.FRAME_TINKERER, defaultProps());
+	public static final BlockItem CORPOREA_RETAINER_EVAPORATOR = new BlockItem(IncBlocks.CORPOREA_RETAINER_EVAPORATOR, defaultProps());
 	
 	//What the fuck is this Forge......
 	//thanks botania for having this little utility, Lol
@@ -51,6 +52,7 @@ public class IncItems {
 		regBlockItem(r, CORPOREA_SOLIDIFIER);
 		regBlockItem(r, RED_STRING_LIAR);
 		regBlockItem(r, FRAME_TINKERER);
+		regBlockItem(r, CORPOREA_RETAINER_EVAPORATOR);
 		
 		regBlockItem(r, ENDER_SOUL_CORE);
 		regBlockItem(r, CORPOREA_SOUL_CORE);

@@ -56,6 +56,11 @@ public class StatesModels extends BlockStateProvider {
 				.texture("top", Init.id("block/frame_tinkerer/top"))
 				.texture("side", Init.id("block/frame_tinkerer/side"))));
 		
+		getVariantBuilder(IncBlocks.CORPOREA_RETAINER_EVAPORATOR)
+			.partialState()
+			.setModels(new ConfiguredModel(models()
+				.cubeColumn(n(IncBlocks.CORPOREA_RETAINER_EVAPORATOR), Init.id("block/corporea_retainer_evaporator/side"), Init.id("block/corporea_retainer_evaporator/top_bottom"))));
+		
 		particleOnly(IncBlocks.ENDER_SOUL_CORE, Init.id("entity/ender_soul_core"));
 		particleOnly(IncBlocks.CORPOREA_SOUL_CORE, Init.id("entity/corporea_soul_core"));
 		
@@ -71,6 +76,9 @@ public class StatesModels extends BlockStateProvider {
 		simpleBlock(IncBlocks.FLOATING_FUNNY, new ModelFile.UncheckedModelFile(Init.id("block/floating_funny")));
 		simpleBlock(IncBlocks.SMALL_FLOATING_FUNNY, new ModelFile.UncheckedModelFile(Init.id("block/floating_funny_chibi")));
 		
+		///////////////uhhhh items
+		
+		//do the block items
 		//this is somewhat miserable
 		//noinspection deprecation,ConstantConditions
 		Registry.ITEM.stream().filter(i -> i instanceof BlockItem && Init.MODID.equals(i.getRegistryName().getNamespace())).map(i -> (BlockItem) i).forEach(i -> {
@@ -85,6 +93,7 @@ public class StatesModels extends BlockStateProvider {
 			itemModels().withExistingParent(n(i), Init.id("block/" + n(i)));
 		});
 		
+		//item/generated items
 		itemGenerated(IncItems.TICKET_CONJURER, Init.id("item/ticket_conjurer/tex"));
 		itemGenerated(IncItems.FRACTURED_SPACE_ROD, Init.id("item/fractured_space_rod/tex"));
 	}

@@ -5,7 +5,8 @@
 	"package": "agency.highlysuspect.incorporeal.mixin",
 	"refmap": "incorporeal.refmap.json",
 	"mixins": [
-		"TileCorporeaInterceptorMixin"
+		"TileCorporeaInterceptorMixin",
+		"TileCorporeaRetainerMixin"
 	],
 	"client": [
 		"client.HUDHandlerMixin"
