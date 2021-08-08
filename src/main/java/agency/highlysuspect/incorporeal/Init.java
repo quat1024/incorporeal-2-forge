@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -84,5 +85,13 @@ public class Init {
 		float x = (value - low1) / (high1 - low1);
 		//The value goes from 0..1 -> remap that range to low2..high2
 		return x * (high2 - low2) + low2;
+	}
+	
+	public static float sinDegrees(float in) {
+		return MathHelper.sin((in % 360) * (float) (Math.PI / 180));
+	}
+	
+	public static float cosDegrees(float in) {
+		return MathHelper.cos((in % 360) * (float) (Math.PI / 180));
 	}
 }

@@ -9,11 +9,10 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 
 ## Things to port, in rough order of importance
 
-* ender soul core
 * ticket conjurer
 * rod of the fractured space
+* potion soul core
 * recipes Lol
-* corporea soul core (security system)
 * natural redstone circuitry from redstone root plants
 * corporea retainer evaporator (possssibly obsolete???)
 * unstable cube
@@ -26,6 +25,8 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 * red string liar
 * funny despacito flower
 * item frame tinkerer (there was some interest in botania taking this on)
+* ender soul core
+* corporea soul core (security system)
 
 ## Things that will not be ported
 

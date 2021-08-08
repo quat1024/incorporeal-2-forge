@@ -2,21 +2,25 @@ package agency.highlysuspect.incorporeal.datagen.asset;
 
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
+import agency.highlysuspect.incorporeal.block.SoulCoreBlock;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
 public class StatesModels extends BlockStateProvider {
 	public StatesModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
@@ -51,6 +55,9 @@ public class StatesModels extends BlockStateProvider {
 				.texture("top", Init.id("block/frame_tinkerer/top"))
 				.texture("side", Init.id("block/frame_tinkerer/side"))));
 		
+		particleOnly(IncBlocks.ENDER_SOUL_CORE, Init.id("entity/ender_soul_core"));
+		particleOnly(IncBlocks.CORPOREA_SOUL_CORE, Init.id("entity/corporea_soul_core"));
+		
 		flowerBlock(IncBlocks.SANVOCALIA, Init.id("block/sanvocalia/big"));
 		flowerBlock(IncBlocks.SMALL_SANVOCALIA, Init.id("block/sanvocalia/small"));
 		//Floating flower models are done in regular json because forge datagens are awful
@@ -68,6 +75,11 @@ public class StatesModels extends BlockStateProvider {
 		Registry.ITEM.stream().filter(i -> i instanceof BlockItem && Init.MODID.equals(i.getRegistryName().getNamespace())).map(i -> (BlockItem) i).forEach(i -> {
 			//noinspection ConstantConditions
 			if(i instanceof ItemBlockSpecialFlower && !i.getRegistryName().getPath().contains("floating")) return;
+			
+			if(i.getBlock() instanceof SoulCoreBlock) {
+				builtinEntity(i);
+				return;
+			}
 			
 			itemModels().withExistingParent(n(i), Init.id("block/" + n(i)));
 		});
@@ -91,5 +103,40 @@ public class StatesModels extends BlockStateProvider {
 	private void flowerBlock(Block b, ResourceLocation flowerTexture) {
 		simpleBlock(b, models().withExistingParent(n(b), Init.botaniaId("block/shapes/cross")).texture("cross", flowerTexture));
 		itemModels().withExistingParent(n(b), new ResourceLocation("item/generated")).texture("layer0", flowerTexture);
+	}
+	
+	private void particleOnly(Block b, ResourceLocation particle) {
+		simpleBlock(b, models().getBuilder(n(b)).texture("particle", particle));
+	}
+	
+	//copy from botania, modified a bit
+	private void builtinEntity(Item i) {
+		itemModels().getBuilder(n(i)).parent(new ModelFile.UncheckedModelFile("builtin/entity"))
+			.transforms()
+			.transform(ModelBuilder.Perspective.GUI)
+			.rotation(30, 45, 0)
+			.scale(0.625F)
+			.end()
+			.transform(ModelBuilder.Perspective.GROUND)
+			.translation(0, 3, 0)
+			.scale(0.25F)
+			.end()
+			.transform(ModelBuilder.Perspective.HEAD)
+			.rotation(0, 180, 0)
+			.end()
+			.transform(ModelBuilder.Perspective.FIXED)
+			.rotation(0, 180, 0)
+			.scale(0.5F)
+			.end()
+			.transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT)
+			.rotation(75, 315, 0)
+			.translation(0, 2.5F, 0)
+			.scale(0.375F)
+			.end()
+			.transform(ModelBuilder.Perspective.FIRSTPERSON_RIGHT)
+			.rotation(0, 315, 0)
+			.scale(0.4F)
+			.end()
+			.end();
 	}
 }

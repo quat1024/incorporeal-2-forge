@@ -2,12 +2,15 @@ package agency.highlysuspect.incorporeal.item;
 
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
+import agency.highlysuspect.incorporeal.client.SoulCoreItemRenderer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import vazkii.botania.client.render.tile.TEISR;
+import vazkii.botania.common.Botania;
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 public class IncItems {
@@ -17,8 +20,10 @@ public class IncItems {
 	public static final BlockItem RED_STRING_LIAR = new BlockItem(IncBlocks.RED_STRING_LIAR, defaultProps());
 	public static final BlockItem FRAME_TINKERER = new BlockItem(IncBlocks.FRAME_TINKERER, defaultProps());
 	
-	public static final BlockItem ENDER_SOUL_CORE = new BlockItem(IncBlocks.ENDER_SOUL_CORE, defaultProps());
-	public static final BlockItem CORPOREA_SOUL_CORE = new BlockItem(IncBlocks.CORPOREA_SOUL_CORE, defaultProps());
+	//What the fuck is this Forge......
+	//thanks botania for having this little utility, Lol
+	public static final BlockItem ENDER_SOUL_CORE = new BlockItem(IncBlocks.ENDER_SOUL_CORE, Botania.proxy.propertiesWithRenderer(defaultProps(), IncBlocks.ENDER_SOUL_CORE));
+	public static final BlockItem CORPOREA_SOUL_CORE = new BlockItem(IncBlocks.CORPOREA_SOUL_CORE, Botania.proxy.propertiesWithRenderer(defaultProps(), IncBlocks.CORPOREA_SOUL_CORE));
 	
 	public static final ItemBlockSpecialFlower SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SANVOCALIA, defaultProps());
 	public static final ItemBlockSpecialFlower SMALL_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SMALL_SANVOCALIA, defaultProps());

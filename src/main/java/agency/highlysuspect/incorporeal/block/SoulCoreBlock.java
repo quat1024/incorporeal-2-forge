@@ -4,6 +4,7 @@ import agency.highlysuspect.incorporeal.block.tile.AbstractSoulCoreTile;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -71,5 +72,10 @@ public class SoulCoreBlock extends Block implements IWandHUD {
 		AbstractSoulCoreTile tile = typeS.get().getIfExists(world, pos);
 		if(tile != null) tile.renderHUD(ms, mc, world, pos);
 		else HUDHandler.drawSimpleManaHUD(ms, 0xff0000, 1, 1, "Missing tile entity?");
+	}
+	
+	@Override
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 }
