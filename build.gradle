@@ -101,6 +101,7 @@ minecraft {
 			args "--mod", "incorporeal", "--all",
 				"--existing", file("src/main/resources/"),
 				"--existing", file("src/generated/resources/"),
+				"--existing-mod", "botania",
 				"--output", file("src/generated/resources/")
 
 			mods {

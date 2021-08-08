@@ -4,13 +4,12 @@ import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.block.tile.RedStringLiarTile;
 import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
+import agency.highlysuspect.incorporeal.datagen.DataGenerators;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -30,6 +29,8 @@ public class Init {
 	
 	public Init() {
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		
+		modBus.addListener(DataGenerators::gatherData);
 		
 		modBus.addGenericListener(Block.class, IncBlocks::register);
 		modBus.addGenericListener(Item.class, IncItems::register);
