@@ -71,7 +71,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 		
 		AxisAlignedBB itemDetectionBox = new AxisAlignedBB(pos.add(-radius, 0, -radius), pos.add(radius + 1, 1, radius + 1));
 		List<ItemEntity> nearbyTicketEnts = world.getEntitiesWithinAABB(ItemEntity.class, itemDetectionBox, ent -> {
-			if(ent == null) return false;
+			if(ent == null || !ent.isAlive()) return false;
 			ItemStack stack = ent.getItem();
 			return stack.getItem() == IncItems.CORPOREA_TICKET && IncItems.CORPOREA_TICKET.getRequest(stack).isPresent();
 		});

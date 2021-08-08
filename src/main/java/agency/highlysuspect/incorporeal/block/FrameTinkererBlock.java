@@ -3,6 +3,7 @@ package agency.highlysuspect.incorporeal.block;
 import agency.highlysuspect.incorporeal.Init;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -99,7 +100,7 @@ public class FrameTinkererBlock extends Block {
 	
 	private static List<ItemFrameEntity> findItemFramesNearby(World world, BlockPos pos, Predicate<ItemFrameEntity> test) {
 		Set<ItemFrameEntity> nearbyFrames = new HashSet<>();
-		for(Direction dir : Direction.values()) nearbyFrames.addAll(world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(pos.offset(dir)), test));
+		for(Direction dir : Direction.values()) nearbyFrames.addAll(world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(pos.offset(dir)), test.and(Entity::isAlive)));
 		return new ArrayList<>(nearbyFrames); //copying to an arraylist, since there's no good way to choose a random element from a Set >.>
 	}
 	
