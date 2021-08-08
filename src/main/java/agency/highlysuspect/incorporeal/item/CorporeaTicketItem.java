@@ -47,9 +47,10 @@ public class CorporeaTicketItem extends Item {
 		return getRequest(stack).isPresent();
 	}
 	
-	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		getRequest(stack).ifPresent(request -> tooltip.add(request.toText()));
+	public ITextComponent getDisplayName(ItemStack stack) {
+		return getRequest(stack)
+			.<ITextComponent>map(request -> new TranslationTextComponent("item.incorporeal.corporea_ticket.has", request.toText()))
+			.orElseGet(() -> super.getDisplayName(stack));
 	}
 }

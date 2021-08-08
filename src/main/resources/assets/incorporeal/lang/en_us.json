@@ -1,7 +1,8 @@
 {
 	"itemGroup.incorporeal": "Incorporeal",
 	
-	"item.incorporeal.corporea_ticket": "Corporea Ticket",
+	"item.incorporeal.corporea_ticket": "Corporea Ticket (blank)",
+	"item.incorporeal.corporea_ticket.has": "Corporea Ticket: %s",
 	
 	"block.incorporeal.corporea_solidifier": "Corporea Solidifier",
 	"block.incorporeal.red_string_liar": "Red String Liar",
