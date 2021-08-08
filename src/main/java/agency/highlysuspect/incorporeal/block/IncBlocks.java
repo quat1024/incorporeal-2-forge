@@ -1,11 +1,11 @@
 package agency.highlysuspect.incorporeal.block;
 
 import agency.highlysuspect.incorporeal.Init;
-import agency.highlysuspect.incorporeal.block.tile.FunnySubTile;
-import agency.highlysuspect.incorporeal.block.tile.SanvocaliaSubTile;
+import agency.highlysuspect.incorporeal.block.tile.*;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.event.RegistryEvent;
@@ -22,18 +22,23 @@ public class IncBlocks {
 	public static final Block RED_STRING_LIAR = new RedStringLiarBlock(AbstractBlock.Properties.from(ModBlocks.redStringContainer));
 	public static final Block FRAME_TINKERER = new FrameTinkererBlock(AbstractBlock.Properties.from(Blocks.OAK_PLANKS));
 	
-	private static final Block.Properties FLOWER_PROPS = AbstractBlock.Properties.from(Blocks.POPPY);
-	private static final Block.Properties FLOATING_PROPS = ModBlocks.FLOATING_PROPS;
+	public static final Block.Properties soulCoreProps = AbstractBlock.Properties.create(Material.ORGANIC).hardnessAndResistance(1f).setOpaque((state, world, pos) -> false);
 	
-	public static final BlockSpecialFlower SANVOCALIA = new NotBlockSpecialFlower(Effects.GLOWING, 20, FLOWER_PROPS, SanvocaliaSubTile::big);
-	public static final BlockSpecialFlower SMALL_SANVOCALIA = new NotBlockSpecialFlower(Effects.GLOWING, 5, FLOWER_PROPS, SanvocaliaSubTile::small);
-	public static final BlockFloatingSpecialFlower FLOATING_SANVOCALIA = new NotBlockFloatingSpecialFlower(FLOATING_PROPS, SanvocaliaSubTile::big);
-	public static final BlockFloatingSpecialFlower SMALL_FLOATING_SANVOCALIA = new NotBlockFloatingSpecialFlower(FLOATING_PROPS, SanvocaliaSubTile::small);
+	public static final Block ENDER_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.ENDER_SOUL_CORE);
+	public static final Block CORPOREA_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.CORPOREA_SOUL_CORE);
 	
-	public static final BlockSpecialFlower FUNNY = new NotBlockSpecialFlower(Effects.BAD_OMEN, 20, FLOWER_PROPS, FunnySubTile::big);
-	public static final BlockSpecialFlower SMALL_FUNNY = new NotBlockSpecialFlower(Effects.BAD_OMEN, 5, FLOWER_PROPS, FunnySubTile::small);
-	public static final BlockFloatingSpecialFlower FLOATING_FUNNY = new NotBlockFloatingSpecialFlower(FLOATING_PROPS, FunnySubTile::big);
-	public static final BlockFloatingSpecialFlower SMALL_FLOATING_FUNNY = new NotBlockFloatingSpecialFlower(FLOATING_PROPS, FunnySubTile::small);
+	public static final Block.Properties flowerProps = AbstractBlock.Properties.from(Blocks.POPPY);
+	public static final Block.Properties floatingProps = ModBlocks.FLOATING_PROPS;
+	
+	public static final BlockSpecialFlower SANVOCALIA = new NotBlockSpecialFlower(Effects.GLOWING, 20, flowerProps, SanvocaliaSubTile::big);
+	public static final BlockSpecialFlower SMALL_SANVOCALIA = new NotBlockSpecialFlower(Effects.GLOWING, 5, flowerProps, SanvocaliaSubTile::small);
+	public static final BlockFloatingSpecialFlower FLOATING_SANVOCALIA = new NotBlockFloatingSpecialFlower(floatingProps, SanvocaliaSubTile::big);
+	public static final BlockFloatingSpecialFlower SMALL_FLOATING_SANVOCALIA = new NotBlockFloatingSpecialFlower(floatingProps, SanvocaliaSubTile::small);
+	
+	public static final BlockSpecialFlower FUNNY = new NotBlockSpecialFlower(Effects.BAD_OMEN, 20, flowerProps, FunnySubTile::big);
+	public static final BlockSpecialFlower SMALL_FUNNY = new NotBlockSpecialFlower(Effects.BAD_OMEN, 5, flowerProps, FunnySubTile::small);
+	public static final BlockFloatingSpecialFlower FLOATING_FUNNY = new NotBlockFloatingSpecialFlower(floatingProps, FunnySubTile::big);
+	public static final BlockFloatingSpecialFlower SMALL_FLOATING_FUNNY = new NotBlockFloatingSpecialFlower(floatingProps, FunnySubTile::small);
 	
 	public static void register(RegistryEvent.Register<Block> event) {
 		IForgeRegistry<Block> r = event.getRegistry();
@@ -42,6 +47,9 @@ public class IncBlocks {
 		Init.reg(r, "corporea_solidifier", CORPOREA_SOLIDIFIER);
 		Init.reg(r, "red_string_liar", RED_STRING_LIAR);
 		Init.reg(r, "frame_tinkerer", FRAME_TINKERER);
+		
+		Init.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
+		Init.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);
 		
 		//flowers
 		//this is the block ID scheme that botania uses

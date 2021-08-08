@@ -17,6 +17,9 @@ public class IncItems {
 	public static final BlockItem RED_STRING_LIAR = new BlockItem(IncBlocks.RED_STRING_LIAR, defaultProps());
 	public static final BlockItem FRAME_TINKERER = new BlockItem(IncBlocks.FRAME_TINKERER, defaultProps());
 	
+	public static final BlockItem ENDER_SOUL_CORE = new BlockItem(IncBlocks.ENDER_SOUL_CORE, defaultProps());
+	public static final BlockItem CORPOREA_SOUL_CORE = new BlockItem(IncBlocks.CORPOREA_SOUL_CORE, defaultProps());
+	
 	public static final ItemBlockSpecialFlower SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SANVOCALIA, defaultProps());
 	public static final ItemBlockSpecialFlower SMALL_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SMALL_SANVOCALIA, defaultProps());
 	public static final ItemBlockSpecialFlower FLOATING_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.FLOATING_SANVOCALIA, defaultProps());
@@ -41,6 +44,9 @@ public class IncItems {
 		regBlockItem(r, CORPOREA_SOLIDIFIER);
 		regBlockItem(r, RED_STRING_LIAR);
 		regBlockItem(r, FRAME_TINKERER);
+		
+		regBlockItem(r, ENDER_SOUL_CORE);
+		regBlockItem(r, CORPOREA_SOUL_CORE);
 		
 		//flowers
 		regBlockItem(r, SANVOCALIA);

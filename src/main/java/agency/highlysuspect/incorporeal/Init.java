@@ -1,6 +1,7 @@
 package agency.highlysuspect.incorporeal;
 
 import agency.highlysuspect.incorporeal.block.IncBlocks;
+import agency.highlysuspect.incorporeal.block.tile.CorporeaSoulCoreTile;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.block.tile.RedStringLiarTile;
 import agency.highlysuspect.incorporeal.client.IncClient;
@@ -11,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -51,6 +53,8 @@ public class Init {
 			CorporeaHelper corporeaHelper = CorporeaHelper.instance();
 			corporeaHelper.registerRequestMatcher(id("wildcard"), WildcardCorporeaRequestMatcher.class, nbt -> WildcardCorporeaRequestMatcher.INSTANCE);
 			
+			MinecraftForge.EVENT_BUS.addListener(CorporeaSoulCoreTile::corporeaIndexRequestEvent);
+			
 			IncNetwork.setup();
 		});
 		
@@ -73,5 +77,12 @@ public class Init {
 	
 	public static <T> T choose(List<T> things, Random random) {
 		return things.get(random.nextInt(things.size()));
+	}
+	
+	public static float rangeRemap(float value, float low1, float high1, float low2, float high2) {
+		//The value goes from low1..high1 -> remap that range to 0..1
+		float x = (value - low1) / (high1 - low1);
+		//The value goes from 0..1 -> remap that range to low2..high2
+		return x * (high2 - low2) + low2;
 	}
 }

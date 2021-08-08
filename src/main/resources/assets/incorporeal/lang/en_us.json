@@ -19,5 +19,7 @@
 	"block.incorporeal.floating_funny_chibi": "Floating Sweet Alexum Petite",
 	
 	"incorporeal.solidified_request": "%sx %s",
-	"incorporeal.request.anything": "Anything"
+	"incorporeal.request.anything": "Anything",
+	
+	"incorporeal.no_soul_core": "Your soul is not compatible with this Corporea Network."
 }
