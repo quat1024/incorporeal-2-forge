@@ -41,7 +41,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	}
 	
 	public static SanvocaliaSubTile small() {
-		return new SanvocaliaSubTile(1, IncTileTypes.SANVOCALIA_BIG);
+		return new SanvocaliaSubTile(1, IncTileTypes.SANVOCALIA_SMALL);
 	}
 	
 	private static final UUID CHAT_SEND_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");

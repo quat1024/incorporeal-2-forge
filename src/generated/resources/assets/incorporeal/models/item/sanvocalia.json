@@ -1,3 +1,6 @@
 {
-  "parent": "incorporeal:block/sanvocalia"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "incorporeal:block/sanvocalia/big"
+  }
 }

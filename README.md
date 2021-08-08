@@ -9,8 +9,6 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 
 ## Things to port, in rough order of importance
 
-* block and item models
-* cygnus network
 * ender soul core
 * item frame tinkerer (there was some interest in botania taking this on)
 * ticket conjurer
@@ -28,13 +26,21 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 * sanvocalia flower
 * red string liar
 
-## Things that will probably not be ported
+## Things that will not be ported
 
+* cygnus network
+  * planning to replace with the rhododendrite tree
 * corporea decorative blocks
   * subsumed
 * corporea spark tinkerer
   * obsoleted by paintslinger lens
 * that block that obstructs corporea sparks from connecting
-  * it's fairly computationally expensive and doesn't even work too well; just use paintslinger now
+  * it's fairly computationally expensive, and doesn't even work too well; just use paintslinger now
 * lokiw block
-  * wait it wasn't funny? never has been.
+  * wait it wasn't funny? Never has been
+* forgotten shrine
+  * weird fluff, only existed because the tile was left unused in botania and i found it interesting. it was deleted last year
+
+## other things to do
+
+move more things to datagen, i really dont like forge datagens though
