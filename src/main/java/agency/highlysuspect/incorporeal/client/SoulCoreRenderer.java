@@ -51,7 +51,7 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		float ticks = ClientTickHandler.ticksInGame + partialTicks;
 		
 		//shh
-		combinedLight = LightTexture.packLight(15, 15);
+		//combinedLight = LightTexture.packLight(15, 15);
 		
 		ms.push();
 		initialWobble(ms, hash, ticks);
