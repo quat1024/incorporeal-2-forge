@@ -24,7 +24,7 @@ public class IncBlocks {
 	public static final Block RED_STRING_LIAR = new RedStringLiarBlock(AbstractBlock.Properties.from(ModBlocks.redStringContainer));
 	public static final Block FRAME_TINKERER = new FrameTinkererBlock(AbstractBlock.Properties.from(Blocks.OAK_PLANKS));
 	
-	public static final Block.Properties soulCoreProps = AbstractBlock.Properties.create(Material.ORGANIC).hardnessAndResistance(1f).setOpaque((state, world, pos) -> false);
+	public static final Block.Properties soulCoreProps = AbstractBlock.Properties.create(Material.ORGANIC).hardnessAndResistance(1f).setOpaque((state, world, pos) -> false).notSolid();
 	
 	public static final Block ENDER_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.ENDER_SOUL_CORE);
 	public static final Block CORPOREA_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.CORPOREA_SOUL_CORE);

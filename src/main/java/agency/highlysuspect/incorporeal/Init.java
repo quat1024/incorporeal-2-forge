@@ -8,12 +8,14 @@ import agency.highlysuspect.incorporeal.client.IncClient;
 import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.datagen.DataGenerators;
 import agency.highlysuspect.incorporeal.item.IncItems;
+import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -55,6 +57,7 @@ public class Init {
 			corporeaHelper.registerRequestMatcher(id("wildcard"), WildcardCorporeaRequestMatcher.class, nbt -> WildcardCorporeaRequestMatcher.INSTANCE);
 			
 			MinecraftForge.EVENT_BUS.addListener(CorporeaSoulCoreTile::corporeaIndexRequestEvent);
+			MinecraftForge.EVENT_BUS.addListener(TicketConjurerItem::chatEvent);
 			
 			IncNetwork.setup();
 		});

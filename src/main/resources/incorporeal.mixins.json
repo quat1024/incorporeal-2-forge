@@ -7,6 +7,9 @@
 	"mixins": [
 		"TileCorporeaInterceptorMixin"
 	],
+	"client": [
+		"client.HUDHandlerMixin"
+	],
 	"injectors": {
 		"defaultRequire": 1
 	}

@@ -3,6 +3,8 @@ package agency.highlysuspect.incorporeal.datagen.asset;
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.SoulCoreBlock;
+import agency.highlysuspect.incorporeal.item.IncItems;
+import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
@@ -82,6 +84,8 @@ public class StatesModels extends BlockStateProvider {
 			
 			itemModels().withExistingParent(n(i), Init.id("block/" + n(i)));
 		});
+		
+		itemGenerated(IncItems.TICKET_CONJURER, Init.id("item/ticket_conjurer/tex"));
 	}
 	
 	//copypaste from botania kinda
@@ -101,11 +105,15 @@ public class StatesModels extends BlockStateProvider {
 	
 	private void flowerBlock(Block b, ResourceLocation flowerTexture) {
 		simpleBlock(b, models().withExistingParent(n(b), Init.botaniaId("block/shapes/cross")).texture("cross", flowerTexture));
-		itemModels().withExistingParent(n(b), new ResourceLocation("item/generated")).texture("layer0", flowerTexture);
+		itemGenerated(b, flowerTexture);
 	}
 	
 	private void particleOnly(Block b, ResourceLocation particle) {
 		simpleBlock(b, models().getBuilder(n(b)).texture("particle", particle));
+	}
+	
+	private void itemGenerated(IForgeRegistryEntry<?> thingie, ResourceLocation texture) {
+		itemModels().withExistingParent(n(thingie), new ResourceLocation("item/generated")).texture("layer0", texture);
 	}
 	
 	//copy from botania, modified a bit

@@ -9,7 +9,6 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 
 ## Things to port, in rough order of importance
 
-* ticket conjurer
 * rod of the fractured space
 * potion soul core
 * recipes Lol
@@ -27,6 +26,7 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 * item frame tinkerer (there was some interest in botania taking this on)
 * ender soul core
 * corporea soul core (security system)
+* ticket conjurer
 
 ## Things that will not be ported
 
