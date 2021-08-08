@@ -1,6 +1,5 @@
 package agency.highlysuspect.incorporeal;
 
-import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.client.ClientPacketHandler;
 import com.google.common.base.Preconditions;
 import net.minecraft.network.PacketBuffer;

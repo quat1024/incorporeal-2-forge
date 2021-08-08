@@ -1,12 +1,12 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.IncConfig;
+import agency.highlysuspect.incorporeal.IncNetwork;
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.corporea.IndexRequestFaker;
 import agency.highlysuspect.incorporeal.corporea.NearbyIndicesFinder;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.item.IncItems;
-import agency.highlysuspect.incorporeal.IncNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;

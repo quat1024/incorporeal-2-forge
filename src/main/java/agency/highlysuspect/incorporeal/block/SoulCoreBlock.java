@@ -1,7 +1,6 @@
 package agency.highlysuspect.incorporeal.block;
 
 import agency.highlysuspect.incorporeal.block.tile.AbstractSoulCoreTile;
-import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;

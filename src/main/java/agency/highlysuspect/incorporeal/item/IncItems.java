@@ -2,14 +2,12 @@ package agency.highlysuspect.incorporeal.item;
 
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
-import agency.highlysuspect.incorporeal.client.SoulCoreItemRenderer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
-import vazkii.botania.client.render.tile.TEISR;
 import vazkii.botania.common.Botania;
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 

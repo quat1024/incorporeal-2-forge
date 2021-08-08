@@ -1,7 +1,9 @@
 package agency.highlysuspect.incorporeal.block;
 
 import agency.highlysuspect.incorporeal.Init;
-import agency.highlysuspect.incorporeal.block.tile.*;
+import agency.highlysuspect.incorporeal.block.tile.FunnySubTile;
+import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
+import agency.highlysuspect.incorporeal.block.tile.SanvocaliaSubTile;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

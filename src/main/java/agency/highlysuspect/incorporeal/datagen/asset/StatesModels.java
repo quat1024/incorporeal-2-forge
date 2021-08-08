@@ -20,7 +20,6 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 import javax.annotation.Nonnull;
-import java.util.Set;
 
 public class StatesModels extends BlockStateProvider {
 	public StatesModels(DataGenerator gen, ExistingFileHelper exFileHelper) {

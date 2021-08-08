@@ -1,19 +1,13 @@
 package agency.highlysuspect.incorporeal.item;
 
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Optional;
 
 public class CorporeaTicketItem extends Item {
