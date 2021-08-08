@@ -29,8 +29,7 @@ public class BlockDrops implements IDataProvider {
 	@Override
 	public void act(DirectoryCache cache) throws IOException {
 		for(Block b : ForgeRegistries.BLOCKS.getValues()) {
-			ResourceLocation id = b.getRegistryName();
-			assert id != null; //FUCKING FORGE
+			ResourceLocation id = b.getRegistryName(); assert id != null; //FUCKING FORGE
 			if(!id.getNamespace().equals(Init.MODID)) continue;
 			
 			//all blocks drop themselves
