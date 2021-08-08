@@ -12,6 +12,8 @@ import java.util.List;
 
 public class IndexRequestFaker {
 	public static void requestAtIndex(World world, SolidifiedRequest request, ICorporeaSpark indexSpark, BlockPos indexPos) {
+		if(indexSpark == null) return;
+		
 		ICorporeaResult result = CorporeaHelper.instance().requestItem(request.matcher, request.count, indexSpark, true);
 		List<ItemStack> stacks = result.getStacks();
 		indexSpark.onItemsRequested(stacks);
