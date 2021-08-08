@@ -7,9 +7,11 @@ import agency.highlysuspect.incorporeal.block.tile.RedStringLiarTile;
 import agency.highlysuspect.incorporeal.client.IncClient;
 import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.datagen.DataGenerators;
+import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -48,6 +50,7 @@ public class Init {
 		modBus.addGenericListener(Block.class, IncBlocks::register);
 		modBus.addGenericListener(Item.class, IncItems::register);
 		modBus.addGenericListener(TileEntityType.class, IncTileTypes::register);
+		modBus.addGenericListener(EntityType.class, IncEntityTypes::register);
 		
 		modBus.addListener((FMLCommonSetupEvent event) -> {
 			BotaniaAPI botania = BotaniaAPI.instance();

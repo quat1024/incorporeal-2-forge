@@ -4,6 +4,7 @@
 	"item.incorporeal.corporea_ticket": "Corporea Ticket (blank)",
 	"item.incorporeal.corporea_ticket.has": "Corporea Ticket: %s",
 	"item.incorporeal.ticket_conjurer": "Ticket Conjurer",
+	"item.incorporeal.fractured_space_rod": "Rod of the Fractured Space",
 	
 	"block.incorporeal.corporea_solidifier": "Corporea Solidifier",
 	"block.incorporeal.red_string_liar": "Red String Liar",
@@ -29,5 +30,20 @@
 	
 	"incorporeal.ticket_conjurer.hold0": "Holding Ticket Conjurer!",
 	"incorporeal.ticket_conjurer.hold1": "Anything you say will",
-	"incorporeal.ticket_conjurer.hold2": "create a Corporea Ticket"
+	"incorporeal.ticket_conjurer.hold2": "create a Corporea Ticket",
+	
+	"incorporeal.fractured_space.saved": "Crate remembered.",
+	"incorporeal.fractured_space.no_pos": "Not bound to a crate",
+	"incorporeal.fractured_space.wrong_dimension": "Bound crate not of this realm",
+	"incorporeal.fractured_space.no_crate_there": "Missing crate at bound location",
+	
+	"incorporeal.fractured_space.tooltip.not_bound": "Not bound to a crate",
+	"incorporeal.fractured_space.tooltip.bound": "Bound to a crate",
+	"incorporeal.fractured_space.tooltip.wrong_dimension": "! Bound crate not of this realm",
+	"incorporeal.fractured_space.tooltip.debug.pos": "Bound position: X %s, Y %s, Z %s",
+	"incorporeal.fractured_space.tooltip.debug.dim": "Bound dimension: %s",
+	
+	"death.attack.incorporeal.soul": "%s's soul withered away",
+	
+	"entity.incorporeal.fractured_space_collector": "Fractured Space (collector)"
 }

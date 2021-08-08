@@ -9,7 +9,6 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 
 ## Things to port, in rough order of importance
 
-* rod of the fractured space
 * potion soul core
 * recipes Lol
 * natural redstone circuitry from redstone root plants
@@ -27,6 +26,7 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 * ender soul core
 * corporea soul core (security system)
 * ticket conjurer
+* rod of the fractured space
 
 ## Things that will not be ported
 

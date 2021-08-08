@@ -86,6 +86,7 @@ public class StatesModels extends BlockStateProvider {
 		});
 		
 		itemGenerated(IncItems.TICKET_CONJURER, Init.id("item/ticket_conjurer/tex"));
+		itemGenerated(IncItems.FRACTURED_SPACE_ROD, Init.id("item/fractured_space_rod/tex"));
 	}
 	
 	//copypaste from botania kinda

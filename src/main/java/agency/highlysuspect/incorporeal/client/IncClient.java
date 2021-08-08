@@ -4,6 +4,8 @@ import agency.highlysuspect.incorporeal.IncProxy;
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
+import agency.highlysuspect.incorporeal.entity.FracturedSpaceCollectorEntity;
+import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -13,8 +15,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import vazkii.botania.client.render.entity.RenderNoop;
 import vazkii.botania.client.render.tile.RenderTileRedString;
 import vazkii.botania.client.render.tile.RenderTileSpecialFlower;
 
@@ -40,6 +44,8 @@ public class IncClient implements IncProxy {
 			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FUNNY, RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_FUNNY, RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_FUNNY, RenderType.getCutout());
+			
+			RenderingRegistry.registerEntityRenderingHandler(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, RenderNoop::new);
 		});
 		
 		modBus.addListener((ModelRegistryEvent e) -> {

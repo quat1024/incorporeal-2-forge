@@ -14,6 +14,7 @@ import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 public class IncItems {
 	public static final CorporeaTicketItem CORPOREA_TICKET = new CorporeaTicketItem(defaultProps());
 	public static final TicketConjurerItem TICKET_CONJURER = new TicketConjurerItem(defaultProps().maxStackSize(1));
+	public static final FracturedSpaceRodItem FRACTURED_SPACE_ROD = new FracturedSpaceRodItem(defaultProps().maxStackSize(1));
 	
 	public static final BlockItem CORPOREA_SOLIDIFIER = new BlockItem(IncBlocks.CORPOREA_SOLIDIFIER, defaultProps());
 	public static final BlockItem RED_STRING_LIAR = new BlockItem(IncBlocks.RED_STRING_LIAR, defaultProps());
@@ -44,6 +45,7 @@ public class IncItems {
 		//items
 		Init.reg(r, "corporea_ticket", CORPOREA_TICKET);
 		Init.reg(r, "ticket_conjurer", TICKET_CONJURER);
+		Init.reg(r, "fractured_space_rod", FRACTURED_SPACE_ROD);
 		
 		//item blocks
 		regBlockItem(r, CORPOREA_SOLIDIFIER);
