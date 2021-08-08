@@ -24,6 +24,9 @@ import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.corporea.CorporeaHelper;
 import vazkii.botania.common.lib.LibMisc;
 
+import java.util.List;
+import java.util.Random;
+
 @Mod("incorporeal")
 public class Init {
 	public static final String MODID = "incorporeal";
@@ -66,5 +69,9 @@ public class Init {
 	public static <T extends ForgeRegistryEntry<T>> void reg(IForgeRegistry<T> r, String name, T thing) {
 		thing.setRegistryName(id(name));
 		r.register(thing);
+	}
+	
+	public static <T> T choose(List<T> things, Random random) {
+		return things.get(random.nextInt(things.size()));
 	}
 }

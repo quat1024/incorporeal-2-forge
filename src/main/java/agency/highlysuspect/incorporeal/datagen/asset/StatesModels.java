@@ -2,7 +2,6 @@ package agency.highlysuspect.incorporeal.datagen.asset;
 
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
-import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
@@ -12,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -44,6 +42,14 @@ public class StatesModels extends BlockStateProvider {
 				.cubeColumn(n(IncBlocks.CORPOREA_SOLIDIFIER), Init.id("block/corporea_solidifier/side"), Init.id("block/corporea_solidifier/top_bottom"))));
 		
 		redStringBlock(IncBlocks.RED_STRING_LIAR, Init.id("block/red_string_liar/side"));
+		
+		getVariantBuilder(IncBlocks.FRAME_TINKERER)
+			.partialState()
+			.setModels(new ConfiguredModel(models()
+				.withExistingParent(n(IncBlocks.FRAME_TINKERER), Init.botaniaId("block/shapes/three_high_bottom_top"))
+				.texture("bottom", Init.id("block/frame_tinkerer/bottom"))
+				.texture("top", Init.id("block/frame_tinkerer/top"))
+				.texture("side", Init.id("block/frame_tinkerer/side"))));
 		
 		flowerBlock(IncBlocks.SANVOCALIA, Init.id("block/sanvocalia/big"));
 		flowerBlock(IncBlocks.SMALL_SANVOCALIA, Init.id("block/sanvocalia/small"));

@@ -10,7 +10,6 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 ## Things to port, in rough order of importance
 
 * ender soul core
-* item frame tinkerer (there was some interest in botania taking this on)
 * ticket conjurer
 * rod of the fractured space
 * recipes Lol
@@ -26,6 +25,7 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 * sanvocalia flower
 * red string liar
 * funny despacito flower
+* item frame tinkerer (there was some interest in botania taking this on)
 
 ## Things that will not be ported
 

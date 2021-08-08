@@ -4,7 +4,6 @@ import agency.highlysuspect.incorporeal.corporea.FrameReader;
 import agency.highlysuspect.incorporeal.corporea.LyingCorporeaNode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
@@ -19,7 +18,6 @@ import vazkii.botania.common.impl.corporea.ForgeCapCorporeaNode;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 public class RedStringLiarTile extends TileRedString {
 	public RedStringLiarTile() {
@@ -55,7 +53,7 @@ public class RedStringLiarTile extends TileRedString {
 	}
 	
 	public List<ItemStack> getSpoofedStacks() {
-		return FrameReader.readFramesAround(world, pos);
+		return FrameReader.readFramesRestingOn(world, pos);
 	}
 	
 	public static class NodeDetector implements ICorporeaNodeDetector {
