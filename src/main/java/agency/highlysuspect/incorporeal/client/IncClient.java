@@ -31,6 +31,11 @@ public class IncClient implements IncProxy {
 			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_SANVOCALIA, RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_SANVOCALIA, RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_SANVOCALIA, RenderType.getCutout());
+			
+			RenderTypeLookup.setRenderLayer(IncBlocks.FUNNY, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FUNNY, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_FUNNY, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_FUNNY, RenderType.getCutout());
 		});
 		
 		modBus.addListener((ModelRegistryEvent e) -> {
@@ -38,6 +43,8 @@ public class IncClient implements IncProxy {
 			
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.SANVOCALIA_BIG, RenderTileSpecialFlower::new);
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.SANVOCALIA_SMALL, RenderTileSpecialFlower::new);
+			ClientRegistry.bindTileEntityRenderer(IncTileTypes.FUNNY_BIG, RenderTileSpecialFlower::new);
+			ClientRegistry.bindTileEntityRenderer(IncTileTypes.FUNNY_SMALL, RenderTileSpecialFlower::new);
 		});
 	}
 }

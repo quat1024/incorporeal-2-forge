@@ -21,6 +21,11 @@ public class IncItems {
 	public static final ItemBlockSpecialFlower FLOATING_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.FLOATING_SANVOCALIA, defaultProps());
 	public static final ItemBlockSpecialFlower SMALL_FLOATING_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SMALL_FLOATING_SANVOCALIA, defaultProps());
 	
+	public static final ItemBlockSpecialFlower FUNNY = new ItemBlockSpecialFlower(IncBlocks.FUNNY, defaultProps());
+	public static final ItemBlockSpecialFlower SMALL_FUNNY = new ItemBlockSpecialFlower(IncBlocks.SMALL_FUNNY, defaultProps());
+	public static final ItemBlockSpecialFlower FLOATING_FUNNY = new ItemBlockSpecialFlower(IncBlocks.FLOATING_FUNNY, defaultProps());
+	public static final ItemBlockSpecialFlower SMALL_FLOATING_FUNNY = new ItemBlockSpecialFlower(IncBlocks.SMALL_FLOATING_FUNNY, defaultProps());
+	
 	private static Item.Properties defaultProps() {
 		return new Item.Properties().group(Tab.INSTANCE);
 	}
@@ -40,6 +45,11 @@ public class IncItems {
 		regBlockItem(r, SMALL_SANVOCALIA);
 		regBlockItem(r, FLOATING_SANVOCALIA);
 		regBlockItem(r, SMALL_FLOATING_SANVOCALIA);
+		
+		regBlockItem(r, FUNNY);
+		regBlockItem(r, SMALL_FUNNY);
+		regBlockItem(r, FLOATING_FUNNY);
+		regBlockItem(r, SMALL_FLOATING_FUNNY);
 	}
 	
 	public static void regBlockItem(IForgeRegistry<Item> r, BlockItem bi) {

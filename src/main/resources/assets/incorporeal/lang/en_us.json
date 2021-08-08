@@ -12,6 +12,11 @@
 	"block.incorporeal.floating_sanvocalia": "Floating Sanvocalia",
 	"block.incorporeal.floating_sanvocalia_chibi": "Floating Sanvocalia Petite",
 	
+	"block.incorporeal.funny": "Sweet Alexum",
+	"block.incorporeal.funny_chibi": "Sweet Alexum Petite",
+	"block.incorporeal.floating_funny": "Floating Sweet Alexum",
+	"block.incorporeal.floating_funny_chibi": "Floating Sweet Alexum Petite",
+	
 	"incorporeal.solidified_request": "%sx %s",
 	"incorporeal.request.anything": "Anything"
 }

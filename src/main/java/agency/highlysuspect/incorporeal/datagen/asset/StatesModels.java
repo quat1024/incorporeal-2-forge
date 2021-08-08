@@ -52,11 +52,14 @@ public class StatesModels extends BlockStateProvider {
 		simpleBlock(IncBlocks.FLOATING_SANVOCALIA, new ModelFile.UncheckedModelFile(Init.id("block/floating_sanvocalia")));
 		simpleBlock(IncBlocks.SMALL_FLOATING_SANVOCALIA, new ModelFile.UncheckedModelFile(Init.id("block/floating_sanvocalia_chibi")));
 		
+		flowerBlock(IncBlocks.FUNNY, Init.id("block/funny/thisissosad"));
+		flowerBlock(IncBlocks.SMALL_FUNNY, Init.id("block/funny/alexaplaydespacito"));
+		simpleBlock(IncBlocks.FLOATING_FUNNY, new ModelFile.UncheckedModelFile(Init.id("block/floating_funny")));
+		simpleBlock(IncBlocks.SMALL_FLOATING_FUNNY, new ModelFile.UncheckedModelFile(Init.id("block/floating_funny_chibi")));
 		
 		//this is somewhat miserable
 		//noinspection deprecation,ConstantConditions
 		Registry.ITEM.stream().filter(i -> i instanceof BlockItem && Init.MODID.equals(i.getRegistryName().getNamespace())).map(i -> (BlockItem) i).forEach(i -> {
-			
 			//noinspection ConstantConditions
 			if(i instanceof ItemBlockSpecialFlower && !i.getRegistryName().getPath().contains("floating")) return;
 			
