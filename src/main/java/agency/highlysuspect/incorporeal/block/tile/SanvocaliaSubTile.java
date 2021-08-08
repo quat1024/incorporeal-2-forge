@@ -6,12 +6,15 @@ import agency.highlysuspect.incorporeal.corporea.IndexRequestFaker;
 import agency.highlysuspect.incorporeal.corporea.NearbyIndicesFinder;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.item.IncItems;
+import agency.highlysuspect.incorporeal.IncNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ItemParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
@@ -19,10 +22,12 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import vazkii.botania.api.subtile.RadiusDescriptor;
 import vazkii.botania.api.subtile.TileEntityFunctionalFlower;
 import vazkii.botania.common.block.tile.corporea.TileCorporeaIndex;
@@ -123,13 +128,23 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	private void consumeTicket(ItemEntity ticket, @Nullable Collection<BlockPos> indexPositions) {
 		assert world != null;
 		
-		//TODO: Sparkle line packet
-		//TODO: Eating particles (cannot be done serverside anymore)
-		//probably could make a dedicated "sanvocalia effect" packet for this.
-		
 		//Burp
 		SoundEvent sound = world.rand.nextFloat() < 0.1 ? SoundEvents.ENTITY_PLAYER_BURP : SoundEvents.ENTITY_GENERIC_EAT;
 		world.playSound(null, pos, sound, SoundCategory.BLOCKS, .5f, 1);
+		
+		//Show eating particles
+		if(world instanceof ServerWorld) {
+			((ServerWorld) world).spawnParticle(new ItemParticleData(ParticleTypes.ITEM, ticket.getItem()), ticket.getPosX(), ticket.getPosY(), ticket.getPosZ(), 10, 0.1, 0.1, 0.1, 0.03);
+		}
+		
+		//Show sparkle lines
+		if(indexPositions != null) {
+			Vector3d here = ticket.getPositionVec();
+			for(BlockPos pos : indexPositions) {
+				Vector3d there = Vector3d.copyCentered(pos);
+				IncNetwork.sendToNearby(world, pos, new IncNetwork.SparkleLine(here, there, 4));
+			}
+		}
 		
 		//Shrink the item
 		if(ticket.getItem().getCount() > 1) {

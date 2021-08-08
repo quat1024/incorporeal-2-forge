@@ -1,6 +1,7 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.Despacito;
+import agency.highlysuspect.incorporeal.IncNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -114,7 +115,7 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 		
 		int[] notes = Despacito.notesForTick(tick, inst);
 		if(notes != null) {
-			//IncorporeticNetCommon.sendFunnyFlower((ServerWorld) world, particleSrc, new Vec3d(noteblockPos.getX() + .5, noteblockPos.getY() + .5, noteblockPos.getZ() + .5), 2, notes);
+			IncNetwork.sendToNearby(world, pos, new IncNetwork.FunnyFlower(particleSrc, Vector3d.copyCentered(noteblockPos), 2, notes));
 			for(int note : notes) {
 				if(getMana() > NOTE_MANA_COST) {
 					addMana(-NOTE_MANA_COST);

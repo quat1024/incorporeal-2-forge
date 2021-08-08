@@ -47,6 +47,8 @@ public class Init {
 			
 			CorporeaHelper corporeaHelper = CorporeaHelper.instance();
 			corporeaHelper.registerRequestMatcher(id("wildcard"), WildcardCorporeaRequestMatcher.class, nbt -> WildcardCorporeaRequestMatcher.INSTANCE);
+			
+			IncNetwork.setup();
 		});
 		
 		proxy.setup();
