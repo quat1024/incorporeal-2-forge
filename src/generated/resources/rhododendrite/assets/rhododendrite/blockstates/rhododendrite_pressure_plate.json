@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "rhododendrite:block/rhododendrite_pressure_plate"
+    },
+    "powered=true": {
+      "model": "rhododendrite:block/rhododendrite_pressure_plate"
+    }
+  }
+}

@@ -3,10 +3,16 @@ package agency.highlysuspect.rhododendrite.datagen;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.FinishedVariantBlockState;
+import net.minecraft.data.ModelTextures;
+import net.minecraft.data.StockModelShapes;
 import net.minecraft.item.Item;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -40,8 +46,9 @@ public class RhoStatesModels extends BlockStateProvider {
 	
 	@SuppressWarnings("SameParameterValue")
 	private void handleWoodBlockFamily(WoodFamily family) {
-		ResourceLocation planks = blockTexture(family.planks);
-		ResourceLocation log = blockTexture(family.log);
+		ResourceLocation planksTex = blockTexture(family.planks);
+		ResourceLocation logTex = blockTexture(family.log);
+		ResourceLocation strippedLogTex = blockTexture(family.strippedLog);
 		
 		simpleBlock(family.planks);
 		blockItemParent(family.planks.asItem());
@@ -52,16 +59,16 @@ public class RhoStatesModels extends BlockStateProvider {
 		blockItemParent(family.log.asItem());
 		logBlock(family.strippedLog); 
 		blockItemParent(family.strippedLog.asItem());
-		axisBlock(family.wood, blockTexture(family.log), extend(blockTexture(family.log), "_top"));
+		axisBlock(family.wood, logTex, logTex);
 		blockItemParent(family.wood.asItem());
-		axisBlock(family.strippedWood, blockTexture(family.strippedLog), extend(blockTexture(family.strippedLog), "_top"));
+		axisBlock(family.strippedWood, strippedLogTex, strippedLogTex);
 		blockItemParent(family.strippedWood.asItem());
 		
 		//todo leaves
 		blockItemParent(family.leaves.asItem());
 		
-		stairsBlock(family.stairs, planks);
-		itemModels().stairs(n(family.stairs), planks, planks, planks);
+		stairsBlock(family.stairs, planksTex);
+		itemModels().stairs(n(family.stairs), planksTex, planksTex, planksTex);
 		
 		//todo sign
 		
@@ -70,23 +77,35 @@ public class RhoStatesModels extends BlockStateProvider {
 		
 		//todo wall sign
 		
-		//todo pressure plate
+		pressurePlate(family.pressurePlate, planksTex);
+		blockItemParent(family.pressurePlate.asItem());
 		
-		fenceBlock(family.fence, planks);
-		itemModels().fenceInventory(n(family.fence), planks);
+		fenceBlock(family.fence, planksTex);
+		itemModels().fenceInventory(n(family.fence), planksTex);
 		
 		trapdoorBlock(family.trapdoor, Rho.id("block/" + family.name + "_trapdoor"), true);
 		blockItemParent(family.trapdoor.asItem());
 		
-		fenceGateBlock(family.fenceGate, planks);
-		itemModels().fenceGate(n(family.fenceGate), planks);
+		fenceGateBlock(family.fenceGate, planksTex);
+		itemModels().fenceGate(n(family.fenceGate), planksTex);
 		
 		//todo potted sapling
 		
 		//todo button
+		// BUTTON is done with a manual JSON file copypasted from Quark
+		// because forge datagen is kinda CBT and i cant figure out a way to do it nice
+		// Its really easy with the vanilla stuff, why didnt they just expose that?????
+		//blockItemParent(family.button.asItem()); //actually they have their own model
 		
-		slabBlock(family.slab, planks, planks);
-		itemModels().slab(n(family.slab), planks, planks, planks);
+		slabBlock(family.slab, planksTex, planksTex);
+		itemModels().slab(n(family.slab), planksTex, planksTex, planksTex);
+	}
+	
+	private void pressurePlate(Block b, ResourceLocation texture) {
+		getVariantBuilder(b).partialState().with(BlockStateProperties.POWERED, false).setModels(new ConfiguredModel(models()
+			.withExistingParent(n(b), new ResourceLocation("block/pressure_plate_down")).texture("texture", texture)));
+		getVariantBuilder(b).partialState().with(BlockStateProperties.POWERED, true).setModels(new ConfiguredModel(models()
+			.withExistingParent(n(b), new ResourceLocation("block/pressure_plate_up")).texture("texture", texture)));
 	}
 	
 	private void blockItemParent(Item i) {
