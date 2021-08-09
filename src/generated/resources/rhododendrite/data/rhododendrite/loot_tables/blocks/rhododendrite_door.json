@@ -2,11 +2,19 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "self",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "rhododendrite:rhododendrite_door",
+              "properties": {
+                "half": "lower"
+              }
+            }
+          ],
           "name": "rhododendrite:rhododendrite_door"
         }
       ],
