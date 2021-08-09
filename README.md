@@ -48,11 +48,12 @@ This .jar contains two mods for the price of one: Incorporeal 2, a fairly straig
 
 move more things to datagen, i really dont like forge datagens though
 
-# rhododendrite textures i have to do
+# rhododendrite things i have to do
 
-trapdoor
-item/door
-block/door_top, door_bottom
-minecraft/textures/entity/signs/rhodo
+trapdoor texture, door item and block texture, sign texture
 
-Also need to fix Wood using the same model as regular logs lol im dum
+- boat (huge pain in the tail)
+- sign (needs a remapped mixin to add it to the tile entity)
+- make it flammable (needs either a remapped mixin, or subclassing every block for a poorly-designed Forge extension)
+
+reason im shying away from remapped mixins is they're currently broken in this workspace for some reason, i'll file a bug report later

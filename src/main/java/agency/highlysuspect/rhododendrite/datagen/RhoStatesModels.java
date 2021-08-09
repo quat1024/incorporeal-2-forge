@@ -5,9 +5,6 @@ import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.FinishedVariantBlockState;
-import net.minecraft.data.ModelTextures;
-import net.minecraft.data.StockModelShapes;
 import net.minecraft.item.Item;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
@@ -91,11 +88,9 @@ public class RhoStatesModels extends BlockStateProvider {
 		
 		//todo potted sapling
 		
-		//todo button
-		// BUTTON is done with a manual JSON file copypasted from Quark
+		//todo buttons are done with a manual JSON file copypasted from Quark
 		// because forge datagen is kinda CBT and i cant figure out a way to do it nice
 		// Its really easy with the vanilla stuff, why didnt they just expose that?????
-		//blockItemParent(family.button.asItem()); //actually they have their own model
 		
 		slabBlock(family.slab, planksTex, planksTex);
 		itemModels().slab(n(family.slab), planksTex, planksTex, planksTex);
@@ -108,6 +103,7 @@ public class RhoStatesModels extends BlockStateProvider {
 			.withExistingParent(n(b), new ResourceLocation("block/pressure_plate_up")).texture("texture", texture)));
 	}
 	
+	//i thought forge datagen stuff was supposed to handle the common cases. guess im wrong?
 	private void blockItemParent(Item i) {
 		itemModels().withExistingParent(n(i), Rho.id("block/" + n(i)));
 	}

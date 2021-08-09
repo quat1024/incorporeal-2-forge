@@ -10,7 +10,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BoatItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SignItem;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -75,23 +74,23 @@ public class WoodFamily {
 		//supplier is a forge extension
 		stairs = new StairsBlock(planks::getDefaultState, AbstractBlock.Properties.from(planks));
 		
-		sign = new StandingSignBlock(AbstractBlock.Properties.create(Material.WOOD)
-			.doesNotBlockMovement()
-			.hardnessAndResistance(1f)
-			.sound(SoundType.WOOD),
-			woodType);
+//		sign = new StandingSignBlock(AbstractBlock.Properties.create(Material.WOOD)
+//			.doesNotBlockMovement()
+//			.hardnessAndResistance(1f)
+//			.sound(SoundType.WOOD),
+//			woodType);
 		
 		door = new DoorBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
 			.hardnessAndResistance(3)
 			.sound(SoundType.WOOD)
 			.notSolid());
 		
-		wallSign = new WallSignBlock(AbstractBlock.Properties.create(Material.WOOD)
-			.doesNotBlockMovement()
-			.hardnessAndResistance(1f)
-			.sound(SoundType.WOOD)
-			.lootFrom(() -> sign),
-			woodType);
+//		wallSign = new WallSignBlock(AbstractBlock.Properties.create(Material.WOOD)
+//			.doesNotBlockMovement()
+//			.hardnessAndResistance(1f)
+//			.sound(SoundType.WOOD)
+//			.lootFrom(() -> sign),
+//			woodType);
 		
 		pressurePlate = new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, AbstractBlock.Properties.create(Material.WOOD, planksColor)
 			.doesNotBlockMovement()
@@ -140,9 +139,9 @@ public class WoodFamily {
 	public final RotatedPillarBlock strippedWood;
 	public final Block leaves;
 	public final StairsBlock stairs;
-	public final StandingSignBlock sign;
+	//public final StandingSignBlock sign;
 	public final DoorBlock door;
-	public final WallSignBlock wallSign;
+	//public final WallSignBlock wallSign;
 	public final PressurePlateBlock pressurePlate;
 	public final FenceBlock fence;
 	public final TrapDoorBlock trapdoor;
@@ -162,9 +161,9 @@ public class WoodFamily {
 		Rho.reg(r, "stripped_" + name + "_wood", strippedWood);
 		Rho.reg(r, name + "_leaves", leaves);
 		Rho.reg(r, name + "_stairs", stairs);
-		Rho.reg(r, name + "_sign", sign);
+		//Rho.reg(r, name + "_sign", sign);
 		Rho.reg(r, name + "_door", door);
-		Rho.reg(r, name + "_wall_sign", wallSign);
+		//Rho.reg(r, name + "_wall_sign", wallSign);
 		Rho.reg(r, name + "_pressure_plate", pressurePlate);
 		Rho.reg(r, name + "_fence", fence);
 		Rho.reg(r, name + "_trapdoor", trapdoor);
@@ -178,7 +177,7 @@ public class WoodFamily {
 		Rho.simpleBlockItems(r, planks, log, strippedLog, wood, strippedWood, leaves, stairs, door, pressurePlate, fence, trapdoor, fenceGate, button, slab);
 		//need to add sapling though
 		
-		Rho.reg(r, name + "_sign", new SignItem(RhoItems.defaultProps(), sign, wallSign));
+		//Rho.reg(r, name + "_sign", new SignItem(RhoItems.defaultProps(), sign, wallSign));
 		Rho.reg(r, name + "_boat", boat);
 	}
 }
