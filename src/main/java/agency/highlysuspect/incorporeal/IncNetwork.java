@@ -19,7 +19,7 @@ public class IncNetwork {
 	private IncNetwork() {}
 	
 	private static final String PROTOCOL = "0";
-	public static final SimpleChannel HANDLER = NetworkRegistry.newSimpleChannel(Init.id("channel"), () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
+	public static final SimpleChannel HANDLER = NetworkRegistry.newSimpleChannel(Inc.id("channel"), () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 	
 	public static void setup() {
 		HANDLER.registerMessage(0, SparkleLine.class, SparkleLine::encode, SparkleLine::decode, ClientPacketHandler::handleSparkleLine, Optional.of(NetworkDirection.PLAY_TO_CLIENT));

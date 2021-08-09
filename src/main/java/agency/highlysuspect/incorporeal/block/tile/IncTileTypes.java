@@ -1,8 +1,7 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
-import net.minecraft.block.Block;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Util;
@@ -33,16 +32,16 @@ public class IncTileTypes {
 	public static void register(RegistryEvent.Register<TileEntityType<?>> event) {
 		IForgeRegistry<TileEntityType<?>> r = event.getRegistry();
 		
-		Init.reg(r, "red_string_liar", RED_STRING_LIAR);
-		UNSTABLE_CUBES.forEach((color, type) -> Init.reg(r, color.getString() + "_unstable_cube", type));
+		Inc.reg(r, "red_string_liar", RED_STRING_LIAR);
+		UNSTABLE_CUBES.forEach((color, type) -> Inc.reg(r, color.getString() + "_unstable_cube", type));
 		
-		Init.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
-		Init.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);
+		Inc.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
+		Inc.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);
 		
-		Init.reg(r, "sanvocalia", SANVOCALIA_BIG);
-		Init.reg(r, "sanvocalia_small", SANVOCALIA_SMALL);
+		Inc.reg(r, "sanvocalia", SANVOCALIA_BIG);
+		Inc.reg(r, "sanvocalia_small", SANVOCALIA_SMALL);
 		
-		Init.reg(r, "funny", FUNNY_BIG);
-		Init.reg(r, "funny_small", FUNNY_SMALL);
+		Inc.reg(r, "funny", FUNNY_BIG);
+		Inc.reg(r, "funny_small", FUNNY_SMALL);
 	}
 }

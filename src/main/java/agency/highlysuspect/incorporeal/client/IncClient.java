@@ -1,14 +1,13 @@
 package agency.highlysuspect.incorporeal.client;
 
 import agency.highlysuspect.incorporeal.IncProxy;
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
@@ -31,7 +30,7 @@ public class IncClient implements IncProxy {
 		
 		modBus.addListener((FMLClientSetupEvent e) -> {
 			e.enqueueWork(() -> {
-				ItemModelsProperties.registerProperty(IncItems.CORPOREA_TICKET, Init.id("written_ticket"), (stack, world, ent) -> IncItems.CORPOREA_TICKET.hasRequest(stack) ? 1 : 0);
+				ItemModelsProperties.registerProperty(IncItems.CORPOREA_TICKET, Inc.id("written_ticket"), (stack, world, ent) -> IncItems.CORPOREA_TICKET.hasRequest(stack) ? 1 : 0);
 			});
 			
 			RenderTypeLookup.setRenderLayer(IncBlocks.ENDER_SOUL_CORE, RenderType.getTranslucent());
@@ -55,8 +54,8 @@ public class IncClient implements IncProxy {
 			
 			IncTileTypes.UNSTABLE_CUBES.forEach((color, type) -> ClientRegistry.bindTileEntityRenderer(type, d -> new UnstableCubeRenderer(d, color)));
 			
-			ClientRegistry.bindTileEntityRenderer(IncTileTypes.ENDER_SOUL_CORE, d -> new SoulCoreRenderer(d, Init.id("textures/entity/ender_soul_core.png")));
-			ClientRegistry.bindTileEntityRenderer(IncTileTypes.CORPOREA_SOUL_CORE, d -> new SoulCoreRenderer(d, Init.id("textures/entity/corporea_soul_core.png")));
+			ClientRegistry.bindTileEntityRenderer(IncTileTypes.ENDER_SOUL_CORE, d -> new SoulCoreRenderer(d, Inc.id("textures/entity/ender_soul_core.png")));
+			ClientRegistry.bindTileEntityRenderer(IncTileTypes.CORPOREA_SOUL_CORE, d -> new SoulCoreRenderer(d, Inc.id("textures/entity/corporea_soul_core.png")));
 			
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.SANVOCALIA_BIG, RenderTileSpecialFlower::new);
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.SANVOCALIA_SMALL, RenderTileSpecialFlower::new);

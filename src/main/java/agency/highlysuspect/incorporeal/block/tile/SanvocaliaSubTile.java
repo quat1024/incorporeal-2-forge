@@ -2,7 +2,7 @@ package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.IncConfig;
 import agency.highlysuspect.incorporeal.IncNetwork;
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.corporea.IndexRequestFaker;
 import agency.highlysuspect.incorporeal.corporea.NearbyIndicesFinder;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
@@ -90,7 +90,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 			if(server != null && getMana() >= 100) {
 				TranslationTextComponent msg = new TranslationTextComponent("chat.type.text", displayName == null ? new TranslationTextComponent("block.incorporeal.sanvocalia") : displayName, request.toText());
 				
-				Init.LOG.info("Sanvocalia chat message triggered at " + pos.getCoordinatesAsString() + " in dimension " + world.getDimensionKey().getLocation());
+				Inc.LOG.info("Sanvocalia chat message triggered at " + pos.getCoordinatesAsString() + " in dimension " + world.getDimensionKey().getLocation());
 				if(IncConfig.everyoneHearsSanvocalia) {
 					server.getPlayerList().func_232641_a_(msg, ChatType.CHAT, CHAT_SEND_UUID);
 				} else {

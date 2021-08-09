@@ -1,12 +1,10 @@
 package agency.highlysuspect.incorporeal.datagen.asset;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.SoulCoreBlock;
 import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
-import agency.highlysuspect.incorporeal.block.tile.UnstableCubeTile;
 import agency.highlysuspect.incorporeal.item.IncItems;
-import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
@@ -27,7 +25,7 @@ import javax.annotation.Nonnull;
 
 public class StatesModels extends BlockStateProvider {
 	public StatesModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
-		super(gen, Init.MODID, exFileHelper);
+		super(gen, Inc.MODID, exFileHelper);
 	}
 	
 	@Nonnull
@@ -46,46 +44,46 @@ public class StatesModels extends BlockStateProvider {
 		getVariantBuilder(IncBlocks.CORPOREA_SOLIDIFIER)
 			.partialState()
 			.setModels(new ConfiguredModel(models()
-				.cubeColumn(n(IncBlocks.CORPOREA_SOLIDIFIER), Init.id("block/corporea_solidifier/side"), Init.id("block/corporea_solidifier/top_bottom"))));
+				.cubeColumn(n(IncBlocks.CORPOREA_SOLIDIFIER), Inc.id("block/corporea_solidifier/side"), Inc.id("block/corporea_solidifier/top_bottom"))));
 		
-		redStringBlock(IncBlocks.RED_STRING_LIAR, Init.id("block/red_string_liar/side"));
+		redStringBlock(IncBlocks.RED_STRING_LIAR, Inc.id("block/red_string_liar/side"));
 		
 		getVariantBuilder(IncBlocks.FRAME_TINKERER)
 			.partialState()
 			.setModels(new ConfiguredModel(models()
-				.withExistingParent(n(IncBlocks.FRAME_TINKERER), Init.botaniaId("block/shapes/three_high_bottom_top"))
-				.texture("bottom", Init.id("block/frame_tinkerer/bottom"))
-				.texture("top", Init.id("block/frame_tinkerer/top"))
-				.texture("side", Init.id("block/frame_tinkerer/side"))));
+				.withExistingParent(n(IncBlocks.FRAME_TINKERER), Inc.botaniaId("block/shapes/three_high_bottom_top"))
+				.texture("bottom", Inc.id("block/frame_tinkerer/bottom"))
+				.texture("top", Inc.id("block/frame_tinkerer/top"))
+				.texture("side", Inc.id("block/frame_tinkerer/side"))));
 		
 		getVariantBuilder(IncBlocks.CORPOREA_RETAINER_EVAPORATOR)
 			.partialState()
 			.setModels(new ConfiguredModel(models()
-				.cubeColumn(n(IncBlocks.CORPOREA_RETAINER_EVAPORATOR), Init.id("block/corporea_retainer_evaporator/side"), Init.id("block/corporea_retainer_evaporator/top_bottom"))));
+				.cubeColumn(n(IncBlocks.CORPOREA_RETAINER_EVAPORATOR), Inc.id("block/corporea_retainer_evaporator/side"), Inc.id("block/corporea_retainer_evaporator/top_bottom"))));
 		
-		particleOnly(IncBlocks.ENDER_SOUL_CORE, Init.id("entity/ender_soul_core"));
-		particleOnly(IncBlocks.CORPOREA_SOUL_CORE, Init.id("entity/corporea_soul_core"));
+		particleOnly(IncBlocks.ENDER_SOUL_CORE, Inc.id("entity/ender_soul_core"));
+		particleOnly(IncBlocks.CORPOREA_SOUL_CORE, Inc.id("entity/corporea_soul_core"));
 		
-		for(UnstableCubeBlock u : IncBlocks.UNSTABLE_CUBES.values()) particleOnly(u, Init.id("entity/unstable_cube"));
+		for(UnstableCubeBlock u : IncBlocks.UNSTABLE_CUBES.values()) particleOnly(u, Inc.id("entity/unstable_cube"));
 		
-		flowerBlock(IncBlocks.SANVOCALIA, Init.id("block/sanvocalia/big"));
-		flowerBlock(IncBlocks.SMALL_SANVOCALIA, Init.id("block/sanvocalia/small"));
+		flowerBlock(IncBlocks.SANVOCALIA, Inc.id("block/sanvocalia/big"));
+		flowerBlock(IncBlocks.SMALL_SANVOCALIA, Inc.id("block/sanvocalia/small"));
 		//Floating flower models are done in regular json because forge datagens are awful
 		//I'd love to literally just provide a ResourceLocation to paste into the "loader" field of the json file. Nope!
-		simpleBlock(IncBlocks.FLOATING_SANVOCALIA, new ModelFile.UncheckedModelFile(Init.id("block/floating_sanvocalia")));
-		simpleBlock(IncBlocks.SMALL_FLOATING_SANVOCALIA, new ModelFile.UncheckedModelFile(Init.id("block/floating_sanvocalia_chibi")));
+		simpleBlock(IncBlocks.FLOATING_SANVOCALIA, new ModelFile.UncheckedModelFile(Inc.id("block/floating_sanvocalia")));
+		simpleBlock(IncBlocks.SMALL_FLOATING_SANVOCALIA, new ModelFile.UncheckedModelFile(Inc.id("block/floating_sanvocalia_chibi")));
 		
-		flowerBlock(IncBlocks.FUNNY, Init.id("block/funny/thisissosad"));
-		flowerBlock(IncBlocks.SMALL_FUNNY, Init.id("block/funny/alexaplaydespacito"));
-		simpleBlock(IncBlocks.FLOATING_FUNNY, new ModelFile.UncheckedModelFile(Init.id("block/floating_funny")));
-		simpleBlock(IncBlocks.SMALL_FLOATING_FUNNY, new ModelFile.UncheckedModelFile(Init.id("block/floating_funny_chibi")));
+		flowerBlock(IncBlocks.FUNNY, Inc.id("block/funny/thisissosad"));
+		flowerBlock(IncBlocks.SMALL_FUNNY, Inc.id("block/funny/alexaplaydespacito"));
+		simpleBlock(IncBlocks.FLOATING_FUNNY, new ModelFile.UncheckedModelFile(Inc.id("block/floating_funny")));
+		simpleBlock(IncBlocks.SMALL_FLOATING_FUNNY, new ModelFile.UncheckedModelFile(Inc.id("block/floating_funny_chibi")));
 		
 		///////////////uhhhh items
 		
 		//do the block items
 		//this is somewhat miserable
 		//noinspection deprecation,ConstantConditions
-		Registry.ITEM.stream().filter(i -> i instanceof BlockItem && Init.MODID.equals(i.getRegistryName().getNamespace())).map(i -> (BlockItem) i).forEach(i -> {
+		Registry.ITEM.stream().filter(i -> i instanceof BlockItem && Inc.MODID.equals(i.getRegistryName().getNamespace())).map(i -> (BlockItem) i).forEach(i -> {
 			//noinspection ConstantConditions
 			if(i instanceof ItemBlockSpecialFlower && !i.getRegistryName().getPath().contains("floating")) return;
 			
@@ -94,14 +92,14 @@ public class StatesModels extends BlockStateProvider {
 				return;
 			}
 			
-			itemModels().withExistingParent(n(i), Init.id("block/" + n(i)));
+			itemModels().withExistingParent(n(i), Inc.id("block/" + n(i)));
 		});
 		
 		//item/generated items
 		
 		//IncItems.CORPOREA_TICKET - handwritten
-		itemGenerated(IncItems.TICKET_CONJURER, Init.id("item/ticket_conjurer/tex"));
-		itemGenerated(IncItems.FRACTURED_SPACE_ROD, Init.id("item/fractured_space_rod/tex"));
+		itemGenerated(IncItems.TICKET_CONJURER, Inc.id("item/ticket_conjurer/tex"));
+		itemGenerated(IncItems.FRACTURED_SPACE_ROD, Inc.id("item/fractured_space_rod/tex"));
 		builtinEntity(IncItems.SOUL_CORE_FRAME);
 	}
 	
@@ -109,7 +107,7 @@ public class StatesModels extends BlockStateProvider {
 	@SuppressWarnings("SameParameterValue")
 	private void redStringBlock(Block b, ResourceLocation funny) {
 		String name = Registry.BLOCK.getKey(b).getPath();
-		ResourceLocation front = Init.botaniaId("block/red_string_sender");
+		ResourceLocation front = Inc.botaniaId("block/red_string_sender");
 		ModelFile file = models().orientable(name, funny, front, funny);
 		getVariantBuilder(b)
 			.partialState().with(BlockStateProperties.FACING, Direction.NORTH).setModels(new ConfiguredModel(file))
@@ -121,7 +119,7 @@ public class StatesModels extends BlockStateProvider {
 	}
 	
 	private void flowerBlock(Block b, ResourceLocation flowerTexture) {
-		simpleBlock(b, models().withExistingParent(n(b), Init.botaniaId("block/shapes/cross")).texture("cross", flowerTexture));
+		simpleBlock(b, models().withExistingParent(n(b), Inc.botaniaId("block/shapes/cross")).texture("cross", flowerTexture));
 		itemGenerated(b, flowerTexture);
 	}
 	

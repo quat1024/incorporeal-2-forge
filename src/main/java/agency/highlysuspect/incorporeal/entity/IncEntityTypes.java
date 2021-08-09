@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal.entity;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
@@ -18,6 +18,6 @@ public class IncEntityTypes {
 	public static void register(RegistryEvent.Register<EntityType<?>> event) {
 		IForgeRegistry<EntityType<?>> r = event.getRegistry();
 		
-		Init.reg(r, "fractured_space_collector", FRACTURED_SPACE_COLLECTOR);
+		Inc.reg(r, "fractured_space_collector", FRACTURED_SPACE_COLLECTOR);
 	}
 }

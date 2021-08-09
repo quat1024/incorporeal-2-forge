@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
 import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
@@ -8,7 +8,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.common.Botania;
 import vazkii.botania.common.block.tile.TileMod;
@@ -47,7 +46,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 		
 		bump *= bumpDecay;
 		
-		int newPower = MathHelper.clamp(MathHelper.floor(Init.rangeRemap(rotationSpeed, 0, 90, 0, 15)), 0, 15);
+		int newPower = MathHelper.clamp(MathHelper.floor(Inc.rangeRemap(rotationSpeed, 0, 90, 0, 15)), 0, 15);
 		if(power != newPower) {
 			power = newPower;
 			world.notifyNeighborsOfStateChange(pos, getBlockState().getBlock());

@@ -1,8 +1,7 @@
 package agency.highlysuspect.incorporeal.item;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
-import agency.highlysuspect.incorporeal.client.IncClient;
 import net.minecraft.item.*;
 import net.minecraft.util.Util;
 import net.minecraftforge.event.RegistryEvent;
@@ -18,7 +17,7 @@ public class IncItems {
 	public static final TicketConjurerItem TICKET_CONJURER = new TicketConjurerItem(defaultProps().maxStackSize(1));
 	public static final FracturedSpaceRodItem FRACTURED_SPACE_ROD = new FracturedSpaceRodItem(defaultProps().maxStackSize(1));
 	
-	public static final Item SOUL_CORE_FRAME = new Item(Init.proxy.soulCoreFrameIster(defaultProps()));
+	public static final Item SOUL_CORE_FRAME = new Item(Inc.proxy.soulCoreFrameIster(defaultProps()));
 	
 	public static final BlockItem CORPOREA_SOLIDIFIER = new BlockItem(IncBlocks.CORPOREA_SOLIDIFIER, defaultProps());
 	public static final BlockItem RED_STRING_LIAR = new BlockItem(IncBlocks.RED_STRING_LIAR, defaultProps());
@@ -27,7 +26,7 @@ public class IncItems {
 	
 	public static final Map<DyeColor, BlockItem> UNSTABLE_CUBES = Util.make(new EnumMap<>(DyeColor.class), m ->
 		IncBlocks.UNSTABLE_CUBES.forEach((color, block) ->
-			m.put(color, new BlockItem(block, Init.proxy.unstableCubeIster(defaultProps(), color)))));
+			m.put(color, new BlockItem(block, Inc.proxy.unstableCubeIster(defaultProps(), color)))));
 	
 	//What the fuck is this Forge......
 	//thanks botania for having this little utility, Lol
@@ -52,10 +51,10 @@ public class IncItems {
 		IForgeRegistry<Item> r = event.getRegistry();
 		
 		//items
-		Init.reg(r, "corporea_ticket", CORPOREA_TICKET);
-		Init.reg(r, "ticket_conjurer", TICKET_CONJURER);
-		Init.reg(r, "fractured_space_rod", FRACTURED_SPACE_ROD);
-		Init.reg(r, "soul_core_frame", SOUL_CORE_FRAME);
+		Inc.reg(r, "corporea_ticket", CORPOREA_TICKET);
+		Inc.reg(r, "ticket_conjurer", TICKET_CONJURER);
+		Inc.reg(r, "fractured_space_rod", FRACTURED_SPACE_ROD);
+		Inc.reg(r, "soul_core_frame", SOUL_CORE_FRAME);
 		
 		//item blocks
 		regBlockItem(r, CORPOREA_SOLIDIFIER);
@@ -89,7 +88,7 @@ public class IncItems {
 	private static class Tab extends ItemGroup {
 		public static final Tab INSTANCE = new Tab();
 		
-		public Tab() { super(Init.MODID); }
+		public Tab() { super(Inc.MODID); }
 		
 		@Override
 		public ItemStack createIcon() {

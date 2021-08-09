@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal.datagen.data;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.datagen.DataGenerators;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
@@ -30,7 +30,7 @@ public class BlockDrops implements IDataProvider {
 	public void act(DirectoryCache cache) throws IOException {
 		for(Block b : ForgeRegistries.BLOCKS.getValues()) {
 			ResourceLocation id = b.getRegistryName(); assert id != null; //FUCKING FORGE
-			if(!id.getNamespace().equals(Init.MODID)) continue;
+			if(!id.getNamespace().equals(Inc.MODID)) continue;
 			
 			//all blocks drop themselves
 			save(cache, b, self(b));

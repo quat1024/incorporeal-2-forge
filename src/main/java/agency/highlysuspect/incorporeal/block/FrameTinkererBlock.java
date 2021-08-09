@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal.block;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -87,12 +87,12 @@ public class FrameTinkererBlock extends Block {
 				);
 				
 				if(frameChoices.isEmpty()) return; //No candidate frames are present to switch with.
-				ItemFrameEntity frame = Init.choose(frameChoices, world.rand);
+				ItemFrameEntity frame = Inc.choose(frameChoices, world.rand);
 				
 				if(itemChoices.isEmpty()) {
 					switchWithNothing(world, pos, frame);
 				} else {
-					switchWithEntity(world, pos, frame, Init.choose(itemChoices, world.rand));
+					switchWithEntity(world, pos, frame, Inc.choose(itemChoices, world.rand));
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
@@ -114,7 +114,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	
 	public int getComparator() {
 		if(getMaxMana() == 0) return 0;
-		else return Math.round(Init.rangeRemap(mana, 0, getMaxMana(), 0, 15));
+		else return Math.round(Inc.rangeRemap(mana, 0, getMaxMana(), 0, 15));
 	}
 	
 	@Override

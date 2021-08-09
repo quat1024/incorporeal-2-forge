@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal.block;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.tile.FunnySubTile;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.block.tile.SanvocaliaSubTile;
@@ -60,27 +60,27 @@ public class IncBlocks {
 		IForgeRegistry<Block> r = event.getRegistry();
 		
 		//misc blocks!
-		Init.reg(r, "corporea_solidifier", CORPOREA_SOLIDIFIER);
-		Init.reg(r, "red_string_liar", RED_STRING_LIAR);
-		Init.reg(r, "frame_tinkerer", FRAME_TINKERER);
-		Init.reg(r, "corporea_retainer_evaporator", CORPOREA_RETAINER_EVAPORATOR);
+		Inc.reg(r, "corporea_solidifier", CORPOREA_SOLIDIFIER);
+		Inc.reg(r, "red_string_liar", RED_STRING_LIAR);
+		Inc.reg(r, "frame_tinkerer", FRAME_TINKERER);
+		Inc.reg(r, "corporea_retainer_evaporator", CORPOREA_RETAINER_EVAPORATOR);
 		
-		UNSTABLE_CUBES.values().forEach(block -> Init.reg(r, block.color.getString() + "_unstable_cube", block));
+		UNSTABLE_CUBES.values().forEach(block -> Inc.reg(r, block.color.getString() + "_unstable_cube", block));
 		
-		Init.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
-		Init.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);
+		Inc.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
+		Inc.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);
 		
 		//flowers
 		//this is the block ID scheme that botania uses
-		Init.reg(r, "sanvocalia", SANVOCALIA);
-		Init.reg(r, "sanvocalia_chibi", SMALL_SANVOCALIA);
-		Init.reg(r, "floating_sanvocalia", FLOATING_SANVOCALIA);
-		Init.reg(r, "floating_sanvocalia_chibi", SMALL_FLOATING_SANVOCALIA);
+		Inc.reg(r, "sanvocalia", SANVOCALIA);
+		Inc.reg(r, "sanvocalia_chibi", SMALL_SANVOCALIA);
+		Inc.reg(r, "floating_sanvocalia", FLOATING_SANVOCALIA);
+		Inc.reg(r, "floating_sanvocalia_chibi", SMALL_FLOATING_SANVOCALIA);
 		
-		Init.reg(r, "funny", FUNNY);
-		Init.reg(r, "funny_chibi", SMALL_FUNNY);
-		Init.reg(r, "floating_funny", FLOATING_FUNNY);
-		Init.reg(r, "floating_funny_chibi", SMALL_FLOATING_FUNNY);
+		Inc.reg(r, "funny", FUNNY);
+		Inc.reg(r, "funny_chibi", SMALL_FUNNY);
+		Inc.reg(r, "floating_funny", FLOATING_FUNNY);
+		Inc.reg(r, "floating_funny_chibi", SMALL_FLOATING_FUNNY);
 	}
 	
 	private static class NotBlockSpecialFlower extends BlockSpecialFlower {

@@ -1,9 +1,7 @@
 package agency.highlysuspect.incorporeal.item;
 
-import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.entity.FracturedSpaceCollectorEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

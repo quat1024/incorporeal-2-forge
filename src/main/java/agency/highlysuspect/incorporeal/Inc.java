@@ -35,14 +35,14 @@ import java.util.List;
 import java.util.Random;
 
 @Mod("incorporeal")
-public class Init {
+public class Inc {
 	public static final String MODID = "incorporeal";
 	public static final Logger LOG = LogManager.getLogger(MODID);
 	
 	//"WE HAVE CLIENT ENTRYPOINTS AT HOME"
 	public static final IncProxy proxy = DistExecutor.safeRunForDist(() -> IncClient::new, () -> IncProxy.Server::new);
 	
-	public Init() {
+	public Inc() {
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
 		modBus.addListener(DataGenerators::gatherData);

@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal.client;
 
-import agency.highlysuspect.incorporeal.Init;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.tile.AbstractSoulCoreTile;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -8,7 +8,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.GenericHeadModel;
 import net.minecraft.client.renderer.entity.model.HumanoidHeadModel;
@@ -74,8 +73,8 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		
 		//idk
 		IVertexBuilder builder = buf.getBuffer(RenderType.getEntityTranslucentCull(cubesTexture));
-		cubeModel.expand = Init.rangeRemap(Init.sinDegrees(hash + 800 + ticks * 3.4f), -1, 1, 1.5f / 16f, 1.9f / 16f);
-		cubeModel.render(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, Init.rangeRemap(Init.sinDegrees(hash + ticks * 4), -1, 1, .7f, .95f));
+		cubeModel.expand = Inc.rangeRemap(Inc.sinDegrees(hash + 800 + ticks * 3.4f), -1, 1, 1.5f / 16f, 1.9f / 16f);
+		cubeModel.render(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, Inc.rangeRemap(Inc.sinDegrees(hash + ticks * 4), -1, 1, .7f, .95f));
 		
 		ms.pop();
 	}
@@ -133,13 +132,13 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 	private static void initialWobble(MatrixStack ms, int hash, float ticks) {
 		ms.translate(.5, .5, .5);
 		ms.rotate(Vector3f.YP.rotationDegrees((hash + ticks) * 2 % 360));
-		ms.translate(0, 0.1 * Init.sinDegrees((hash + ticks) * 4), 0);
+		ms.translate(0, 0.1 * Inc.sinDegrees((hash + ticks) * 4), 0);
 	}
 	
 	private static void wobbleSkull(MatrixStack ms, int hash, float ticks) {
 		float wobble = (hash + ticks) * 5;
-		float wobbleSin = Init.sinDegrees(wobble);
-		float wobbleCos = Init.cosDegrees(wobble);
+		float wobbleSin = Inc.sinDegrees(wobble);
+		float wobbleCos = Inc.cosDegrees(wobble);
 		float wobbleAmountDegrees = 10f;
 		
 		ms.rotate(Vector3f.XP.rotationDegrees(wobbleCos * wobbleAmountDegrees));
@@ -156,8 +155,8 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		ms.rotate(Vector3f.YP.rotationDegrees(MathHelper.sin((ticks + hash) / 50f) * 40));
 		
 		float wobble2 = (hash + ticks) * 3;
-		float wobble2Sin = Init.sinDegrees(wobble2);
-		float wobble2Cos = Init.cosDegrees(wobble2);
+		float wobble2Sin = Inc.sinDegrees(wobble2);
+		float wobble2Cos = Inc.cosDegrees(wobble2);
 		float wobble2AmountDegrees = 10f;
 		ms.rotate(Vector3f.XP.rotationDegrees(-wobble2Cos * wobble2AmountDegrees));
 		ms.rotate(Vector3f.XP.rotationDegrees(-wobble2Sin * wobble2AmountDegrees));

@@ -1,12 +1,9 @@
 package agency.highlysuspect.incorporeal.client;
 
-import agency.highlysuspect.incorporeal.Init;
-import agency.highlysuspect.incorporeal.block.SoulCoreBlock;
-import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.tile.UnstableCubeTile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -32,7 +29,7 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 		this(TileEntityRendererDispatcher.instance, color);
 	}
 	
-	private static final ResourceLocation texture = Init.id("textures/entity/unstable_cube.png");
+	private static final ResourceLocation texture = Inc.id("textures/entity/unstable_cube.png");
 	private final DyeColor color;
 	
 	@Override
@@ -104,7 +101,7 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 		//I don't know what this shit is either. Copied it from the 1.12 version.
 		
 		float predictedAngle = angle + (speed * partialTicks);
-		float predictedBump = bump * Init.rangeRemap(partialTicks, 0, 1, bump, bump * bumpDecay);
+		float predictedBump = bump * Inc.rangeRemap(partialTicks, 0, 1, bump, bump * bumpDecay);
 		
 		int flip = (hash % 2) == 0 ? -1 : 1;
 		
@@ -112,8 +109,8 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 		ms.rotate(Vector3f.YP.rotationDegrees((flip * predictedAngle + hash) % 360));
 		
 		float wobble = ticks + hash;
-		float wobbleSin = Init.sinDegrees(wobble);
-		float wobbleCos = Init.cosDegrees(wobble);
+		float wobbleSin = Inc.sinDegrees(wobble);
+		float wobbleCos = Inc.cosDegrees(wobble);
 		float wobbleAmountDegrees = 15 * flip;
 		
 		ms.rotate(XZP.rotationDegrees(MathHelper.sin(hash + ticks * 0.02f) * 40 * flip));
