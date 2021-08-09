@@ -16,6 +16,8 @@ public class IncItems {
 	public static final TicketConjurerItem TICKET_CONJURER = new TicketConjurerItem(defaultProps().maxStackSize(1));
 	public static final FracturedSpaceRodItem FRACTURED_SPACE_ROD = new FracturedSpaceRodItem(defaultProps().maxStackSize(1));
 	
+	public static final Item SOUL_CORE_FRAME = new Item(Init.proxy.soulCoreFrameIster(defaultProps()));
+	
 	public static final BlockItem CORPOREA_SOLIDIFIER = new BlockItem(IncBlocks.CORPOREA_SOLIDIFIER, defaultProps());
 	public static final BlockItem RED_STRING_LIAR = new BlockItem(IncBlocks.RED_STRING_LIAR, defaultProps());
 	public static final BlockItem FRAME_TINKERER = new BlockItem(IncBlocks.FRAME_TINKERER, defaultProps());
@@ -47,6 +49,7 @@ public class IncItems {
 		Init.reg(r, "corporea_ticket", CORPOREA_TICKET);
 		Init.reg(r, "ticket_conjurer", TICKET_CONJURER);
 		Init.reg(r, "fractured_space_rod", FRACTURED_SPACE_ROD);
+		Init.reg(r, "soul_core_frame", SOUL_CORE_FRAME);
 		
 		//item blocks
 		regBlockItem(r, CORPOREA_SOLIDIFIER);

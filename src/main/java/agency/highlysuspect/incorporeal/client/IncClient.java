@@ -4,11 +4,12 @@ import agency.highlysuspect.incorporeal.IncProxy;
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
-import agency.highlysuspect.incorporeal.entity.FracturedSpaceCollectorEntity;
 import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -62,5 +63,10 @@ public class IncClient implements IncProxy {
 		
 		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 		forgeBus.addListener(EventPriority.LOW, IncHudHandler::onDrawScreenPost); //make sure we're after Botania
+	}
+	
+	@Override
+	public Item.Properties soulCoreFrameIster(Item.Properties in) {
+		return in.setISTER(() -> SoulCoreFrameIster::new);
 	}
 }

@@ -48,16 +48,14 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 	@Override
 	public void render(@Nullable AbstractSoulCoreTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int combinedLight, int combinedOverlay) {
 		int hash = positionalHash(tile);
-		float ticks = ClientTickHandler.ticksInGame + partialTicks;
-		
-		//shh
-		//combinedLight = LightTexture.packLight(15, 15);
+		//Using getRenderPartialTicks instead of trusting the partialTicks parameter - Botania's "TEISR" utility passes 0 always. I should PR that.
+		float ticks = ClientTickHandler.ticksInGame + Minecraft.getInstance().getRenderPartialTicks();
 		
 		ms.push();
 		initialWobble(ms, hash, ticks);
 		
 		if(tile == null) {
-			//used for TEISR, in the 1.12
+			//used for TEISR
 			ms.scale(.9f, .9f, .9f);
 		} else {
 			//real tile entity

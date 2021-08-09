@@ -94,8 +94,11 @@ public class StatesModels extends BlockStateProvider {
 		});
 		
 		//item/generated items
+		
+		//IncItems.CORPOREA_TICKET - handwritten
 		itemGenerated(IncItems.TICKET_CONJURER, Init.id("item/ticket_conjurer/tex"));
 		itemGenerated(IncItems.FRACTURED_SPACE_ROD, Init.id("item/fractured_space_rod/tex"));
+		builtinEntity(IncItems.SOUL_CORE_FRAME);
 	}
 	
 	//copypaste from botania kinda
