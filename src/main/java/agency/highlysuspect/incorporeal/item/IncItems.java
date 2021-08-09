@@ -92,7 +92,7 @@ public class IncItems {
 		
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(CORPOREA_TICKET);
+			return new ItemStack(SOUL_CORE_FRAME);
 		}
 		
 		@Override

@@ -1,4 +1,4 @@
-package agency.highlysuspect.incorporeal.datagen.asset;
+package agency.highlysuspect.incorporeal.datagen;
 
 import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
@@ -23,8 +23,8 @@ import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 import javax.annotation.Nonnull;
 
-public class StatesModels extends BlockStateProvider {
-	public StatesModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
+public class IncStatesModels extends BlockStateProvider {
+	public IncStatesModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
 		super(gen, Inc.MODID, exFileHelper);
 	}
 	

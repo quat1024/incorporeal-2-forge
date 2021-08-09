@@ -1,7 +1,6 @@
 package agency.highlysuspect.incorporeal.datagen;
 
-import agency.highlysuspect.incorporeal.datagen.asset.StatesModels;
-import agency.highlysuspect.incorporeal.datagen.data.BlockDrops;
+import agency.highlysuspect.incorporeal.Inc;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.data.DataGenerator;
@@ -11,7 +10,7 @@ import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import java.util.Collections;
 
 //feels kind of weird to ship these with the mod, but alright
-public class DataGenerators {
+public class IncDatagen {
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	
 	public static void gatherData(GatherDataEvent e) {
@@ -28,11 +27,11 @@ public class DataGenerators {
 		ExistingFileHelper dontCare = new ExistingFileHelper(Collections.emptySet(), false);
 		
 		if(e.includeServer()) {
-			data.addProvider(new BlockDrops(data));
+			data.addProvider(new ModidBlockDrops(Inc.MODID, data));
 		}
 		
 		if(e.includeClient()) {
-			data.addProvider(new StatesModels(data, dontCare));
+			data.addProvider(new IncStatesModels(data, dontCare));
 		}
 	}
 }

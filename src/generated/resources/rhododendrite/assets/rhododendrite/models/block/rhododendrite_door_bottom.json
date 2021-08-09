@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom",
+  "textures": {
+    "bottom": "rhododendrite:rhododendrite_door_bottom",
+    "top": "rhododendrite:rhododendrite_door_top"
+  }
+}

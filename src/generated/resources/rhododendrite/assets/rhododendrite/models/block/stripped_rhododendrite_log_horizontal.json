@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "side": "rhododendrite:block/stripped_rhododendrite_log",
+    "end": "rhododendrite:block/stripped_rhododendrite_log_top"
+  }
+}

@@ -1,7 +1,7 @@
-package agency.highlysuspect.incorporeal.datagen.data;
+package agency.highlysuspect.incorporeal.datagen;
 
-import agency.highlysuspect.incorporeal.Inc;
-import agency.highlysuspect.incorporeal.datagen.DataGenerators;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
@@ -14,23 +14,26 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class BlockDrops implements IDataProvider {
-	public BlockDrops(DataGenerator d) {
+public class ModidBlockDrops implements IDataProvider {
+	public ModidBlockDrops(String modid, DataGenerator d) {
+		this.modid = modid;
 		this.d = d;
 	}
 	
+	private final String modid;
 	private final DataGenerator d;
+	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	
 	@Override
 	public String getName() {
-		return "incorporeal block drops";
+		return modid + " block drops";
 	}
 	
 	@Override
 	public void act(DirectoryCache cache) throws IOException {
 		for(Block b : ForgeRegistries.BLOCKS.getValues()) {
 			ResourceLocation id = b.getRegistryName(); assert id != null; //FUCKING FORGE
-			if(!id.getNamespace().equals(Inc.MODID)) continue;
+			if(!id.getNamespace().equals(modid)) continue;
 			
 			//all blocks drop themselves
 			save(cache, b, self(b));
@@ -41,7 +44,7 @@ public class BlockDrops implements IDataProvider {
 		ResourceLocation id = b.getRegistryName(); assert id != null; //im gonna kms for real
 		
 		Path out = d.getOutputFolder().resolve("data/" + id.getNamespace() + "/loot_tables/blocks/" + id.getPath() + ".json");
-		IDataProvider.save(DataGenerators.GSON, cache, LootTableManager.toJson(table), out);
+		IDataProvider.save(GSON, cache, LootTableManager.toJson(table), out);
 	}
 	
 	private static LootTable self(Block b) {

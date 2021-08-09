@@ -6,7 +6,7 @@ import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.block.tile.RedStringLiarTile;
 import agency.highlysuspect.incorporeal.client.IncClient;
 import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
-import agency.highlysuspect.incorporeal.datagen.DataGenerators;
+import agency.highlysuspect.incorporeal.datagen.IncDatagen;
 import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
@@ -17,7 +17,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -45,7 +44,7 @@ public class Inc {
 	public Inc() {
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
-		modBus.addListener(DataGenerators::gatherData);
+		modBus.addListener(IncDatagen::gatherData);
 		
 		modBus.addGenericListener(Block.class, IncBlocks::register);
 		modBus.addGenericListener(Item.class, IncItems::register);

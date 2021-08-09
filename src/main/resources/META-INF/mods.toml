@@ -5,13 +5,22 @@ issueTrackerURL="https://github.com/quat1024/incorporeal-2-forge/issues"
 
 [[mods]]
 modId="incorporeal"
-version="${file.jarVersion}" #mandatory
-displayName="Incorporeal 2" #mandatory
+version="${file.jarVersion}"
+displayName="Incorporeal 2"
 displayURL="https://github.com/quat1024/incorporeal-2-forge/"
 #logoFile="examplemod.png" #TODO
 credits="Dudblockman and SnazzGass for some textures. And a very special thanks to all the Botania nerds over the years, you're the best." #optional
 authors="quaternary"
 description="Botania addon. More toys and tools for large-scale corporea networks."
+
+[[mods]]
+modId="rhododendrite"
+version="${file.jarVersion}"
+displayName="Rhododendrite"
+displayURL="https://github.com/quat1024/incorporeal-2-forge/"
+#logoFile="examplemod.png" #TODO
+authors="quaternary"
+description="Component of Incorporeal. Tree-based computing."
 
 [[dependencies.incorporeal]]
     modId="botania"

@@ -26,7 +26,7 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 	}
 	
 	public UnstableCubeRenderer(DyeColor color) {
-		this(TileEntityRendererDispatcher.instance, color);
+		this(null, color);
 	}
 	
 	private static final ResourceLocation texture = Inc.id("textures/entity/unstable_cube.png");

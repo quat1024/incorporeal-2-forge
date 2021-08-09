@@ -36,7 +36,7 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 	
 	public SoulCoreRenderer(ResourceLocation cubesTexture) {
 		//cheeky way to allow creating one in a ISTER
-		this(TileEntityRendererDispatcher.instance, cubesTexture);
+		this(null, cubesTexture);
 	}
 	
 	private static final GenericHeadModel headModel = new HumanoidHeadModel(); 

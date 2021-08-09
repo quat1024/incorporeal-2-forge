@@ -1,9 +1,9 @@
-Incorporeal 2
-=============
+Incorporeal 2 + Rhododendrite
+=============================
 
-Let's try this again. Forge this time.
+Let's try this again. Forge this time. This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy on me :)
 
-This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy on me :)
+This .jar contains two mods for the price of one: Incorporeal 2, a fairly straightforward port of Incorporeal less the "cygnus network", and Rhododendrite, that mechanic's successor. The reason for them being two separate mods is mainly for organizational purposes. Eventually I want to separate the mods into their own .jars. The reason I haven't is because Rhododendrite will not be very useful without Botania/a corporea network behind it.
 
 # list of the old incorporeal features, for myself, cuz i forgot what the mod even added
 
@@ -32,7 +32,7 @@ This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy o
 ## Things that will not be ported
 
 * cygnus network
-  * planning to replace with the rhododendrite tree
+  * planning to replace with the rhododendrite mod
 * corporea decorative blocks
   * subsumed
 * corporea spark tinkerer

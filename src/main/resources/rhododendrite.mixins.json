@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"compatibilityLevel": "JAVA_8",
+	"package": "agency.highlysuspect.rhododendrite.mixin",
+	"refmap": "incorporeal.refmap.json",
+	"mixins": [
+		
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
