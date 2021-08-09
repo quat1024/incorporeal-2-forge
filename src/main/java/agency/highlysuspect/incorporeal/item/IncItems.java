@@ -2,14 +2,16 @@ package agency.highlysuspect.incorporeal.item;
 
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import agency.highlysuspect.incorporeal.client.IncClient;
+import net.minecraft.item.*;
+import net.minecraft.util.Util;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import vazkii.botania.common.Botania;
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class IncItems {
 	public static final CorporeaTicketItem CORPOREA_TICKET = new CorporeaTicketItem(defaultProps());
@@ -22,6 +24,10 @@ public class IncItems {
 	public static final BlockItem RED_STRING_LIAR = new BlockItem(IncBlocks.RED_STRING_LIAR, defaultProps());
 	public static final BlockItem FRAME_TINKERER = new BlockItem(IncBlocks.FRAME_TINKERER, defaultProps());
 	public static final BlockItem CORPOREA_RETAINER_EVAPORATOR = new BlockItem(IncBlocks.CORPOREA_RETAINER_EVAPORATOR, defaultProps());
+	
+	public static final Map<DyeColor, BlockItem> UNSTABLE_CUBES = Util.make(new EnumMap<>(DyeColor.class), m ->
+		IncBlocks.UNSTABLE_CUBES.forEach((color, block) ->
+			m.put(color, new BlockItem(block, Init.proxy.unstableCubeIster(defaultProps(), color)))));
 	
 	//What the fuck is this Forge......
 	//thanks botania for having this little utility, Lol
@@ -56,6 +62,8 @@ public class IncItems {
 		regBlockItem(r, RED_STRING_LIAR);
 		regBlockItem(r, FRAME_TINKERER);
 		regBlockItem(r, CORPOREA_RETAINER_EVAPORATOR);
+		
+		UNSTABLE_CUBES.values().forEach(i -> regBlockItem(r, i));
 		
 		regBlockItem(r, ENDER_SOUL_CORE);
 		regBlockItem(r, CORPOREA_SOUL_CORE);

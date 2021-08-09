@@ -9,6 +9,7 @@ import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -52,6 +53,8 @@ public class IncClient implements IncProxy {
 		modBus.addListener((ModelRegistryEvent e) -> {
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.RED_STRING_LIAR, RenderTileRedString::new);
 			
+			IncTileTypes.UNSTABLE_CUBES.forEach((color, type) -> ClientRegistry.bindTileEntityRenderer(type, d -> new UnstableCubeRenderer(d, color)));
+			
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.ENDER_SOUL_CORE, d -> new SoulCoreRenderer(d, Init.id("textures/entity/ender_soul_core.png")));
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.CORPOREA_SOUL_CORE, d -> new SoulCoreRenderer(d, Init.id("textures/entity/corporea_soul_core.png")));
 			
@@ -68,5 +71,10 @@ public class IncClient implements IncProxy {
 	@Override
 	public Item.Properties soulCoreFrameIster(Item.Properties in) {
 		return in.setISTER(() -> SoulCoreFrameIster::new);
+	}
+	
+	@Override
+	public Item.Properties unstableCubeIster(Item.Properties in, DyeColor color) {
+		return in.setISTER(() -> () -> new UnstableCubeIster(color));
 	}
 }

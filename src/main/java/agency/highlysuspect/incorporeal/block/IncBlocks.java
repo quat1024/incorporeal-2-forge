@@ -8,8 +8,10 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.DyeColor;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.Util;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import vazkii.botania.api.subtile.TileEntitySpecialFlower;
@@ -17,16 +19,27 @@ import vazkii.botania.common.block.BlockFloatingSpecialFlower;
 import vazkii.botania.common.block.BlockSpecialFlower;
 import vazkii.botania.common.block.ModBlocks;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class IncBlocks {
-	public static final Block CORPOREA_SOLIDIFIER = new CorporeaSolidifierBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
-	public static final Block RED_STRING_LIAR = new RedStringLiarBlock(AbstractBlock.Properties.from(ModBlocks.redStringContainer));
-	public static final Block FRAME_TINKERER = new FrameTinkererBlock(AbstractBlock.Properties.from(Blocks.OAK_PLANKS));
-	public static final Block CORPOREA_RETAINER_EVAPORATOR = new CorporeaRetainerEvaporatorBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
+	public static final CorporeaSolidifierBlock CORPOREA_SOLIDIFIER = new CorporeaSolidifierBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
+	public static final RedStringLiarBlock RED_STRING_LIAR = new RedStringLiarBlock(AbstractBlock.Properties.from(ModBlocks.redStringContainer));
+	public static final FrameTinkererBlock FRAME_TINKERER = new FrameTinkererBlock(AbstractBlock.Properties.from(Blocks.OAK_PLANKS));
+	public static final CorporeaRetainerEvaporatorBlock CORPOREA_RETAINER_EVAPORATOR = new CorporeaRetainerEvaporatorBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
 	
-	public static final Block.Properties soulCoreProps = AbstractBlock.Properties.create(Material.ORGANIC).hardnessAndResistance(1f).setOpaque((state, world, pos) -> false).notSolid();
+	public static final Map<DyeColor, UnstableCubeBlock> UNSTABLE_CUBES = Util.make(new EnumMap<>(DyeColor.class), m -> {
+		for(DyeColor color : DyeColor.values()) m.put(color, new UnstableCubeBlock(AbstractBlock.Properties.create(Material.IRON, color.getMapColor())
+			.hardnessAndResistance(5f)
+			.setOpaque((state, world, pos) -> false)
+			.notSolid(), color));
+	});
 	
+	public static final Block.Properties soulCoreProps = AbstractBlock.Properties.create(Material.ORGANIC)
+		.hardnessAndResistance(1f)
+		.setOpaque((state, world, pos) -> false)
+		.notSolid();
 	public static final Block ENDER_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.ENDER_SOUL_CORE);
 	public static final Block CORPOREA_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.CORPOREA_SOUL_CORE);
 	
@@ -51,6 +64,8 @@ public class IncBlocks {
 		Init.reg(r, "red_string_liar", RED_STRING_LIAR);
 		Init.reg(r, "frame_tinkerer", FRAME_TINKERER);
 		Init.reg(r, "corporea_retainer_evaporator", CORPOREA_RETAINER_EVAPORATOR);
+		
+		UNSTABLE_CUBES.values().forEach(block -> Init.reg(r, block.color.getString() + "_unstable_cube", block));
 		
 		Init.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
 		Init.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);

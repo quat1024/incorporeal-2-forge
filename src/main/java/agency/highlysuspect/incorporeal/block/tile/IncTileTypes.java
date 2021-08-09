@@ -2,13 +2,25 @@ package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
+import net.minecraft.block.Block;
+import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Util;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 @SuppressWarnings("ConstantConditions")
 public class IncTileTypes {
 	public static final TileEntityType<RedStringLiarTile> RED_STRING_LIAR = TileEntityType.Builder.create(RedStringLiarTile::new, IncBlocks.RED_STRING_LIAR).build(null);
+	
+	//forgive me for this - I can only assign one renderer per tileentitytype
+	public static final Map<DyeColor, TileEntityType<UnstableCubeTile>> UNSTABLE_CUBES = Util.make(new EnumMap<>(DyeColor.class), m -> {
+		for(DyeColor color : DyeColor.values()) m.put(color, TileEntityType.Builder.create(() -> new UnstableCubeTile(color), IncBlocks.UNSTABLE_CUBES.get(color)).build(null));
+	});
+	
 	public static final TileEntityType<EnderSoulCoreTile> ENDER_SOUL_CORE = TileEntityType.Builder.create(EnderSoulCoreTile::new, IncBlocks.ENDER_SOUL_CORE).build(null);
 	public static final TileEntityType<CorporeaSoulCoreTile> CORPOREA_SOUL_CORE = TileEntityType.Builder.create(CorporeaSoulCoreTile::new, IncBlocks.CORPOREA_SOUL_CORE).build(null);
 	
@@ -22,6 +34,8 @@ public class IncTileTypes {
 		IForgeRegistry<TileEntityType<?>> r = event.getRegistry();
 		
 		Init.reg(r, "red_string_liar", RED_STRING_LIAR);
+		UNSTABLE_CUBES.forEach((color, type) -> Init.reg(r, color.getString() + "_unstable_cube", type));
+		
 		Init.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
 		Init.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);
 		

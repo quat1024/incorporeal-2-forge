@@ -83,7 +83,7 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 	
 	private static class CubeModel extends Model {
 		public CubeModel() {
-			super(RenderType::getEntityCutout);
+			super(RenderType::getEntityTranslucentCull);
 			textureWidth = 64;
 			textureHeight = 32;
 			

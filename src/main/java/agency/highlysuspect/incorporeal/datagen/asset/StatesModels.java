@@ -3,6 +3,8 @@ package agency.highlysuspect.incorporeal.datagen.asset;
 import agency.highlysuspect.incorporeal.Init;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.SoulCoreBlock;
+import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
+import agency.highlysuspect.incorporeal.block.tile.UnstableCubeTile;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
 import net.minecraft.block.Block;
@@ -64,6 +66,8 @@ public class StatesModels extends BlockStateProvider {
 		particleOnly(IncBlocks.ENDER_SOUL_CORE, Init.id("entity/ender_soul_core"));
 		particleOnly(IncBlocks.CORPOREA_SOUL_CORE, Init.id("entity/corporea_soul_core"));
 		
+		for(UnstableCubeBlock u : IncBlocks.UNSTABLE_CUBES.values()) particleOnly(u, Init.id("entity/unstable_cube"));
+		
 		flowerBlock(IncBlocks.SANVOCALIA, Init.id("block/sanvocalia/big"));
 		flowerBlock(IncBlocks.SMALL_SANVOCALIA, Init.id("block/sanvocalia/small"));
 		//Floating flower models are done in regular json because forge datagens are awful
@@ -85,7 +89,7 @@ public class StatesModels extends BlockStateProvider {
 			//noinspection ConstantConditions
 			if(i instanceof ItemBlockSpecialFlower && !i.getRegistryName().getPath().contains("floating")) return;
 			
-			if(i.getBlock() instanceof SoulCoreBlock) {
+			if(i.getBlock() instanceof SoulCoreBlock || i.getBlock() instanceof UnstableCubeBlock) {
 				builtinEntity(i);
 				return;
 			}
