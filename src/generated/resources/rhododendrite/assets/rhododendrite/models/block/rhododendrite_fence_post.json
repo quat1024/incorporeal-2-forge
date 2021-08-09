@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/fence_post",
   "textures": {
-    "texture": "rhododendrite:rhododendrite_planks"
+    "texture": "rhododendrite:block/rhododendrite_planks"
   }
 }

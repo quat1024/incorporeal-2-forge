@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/slab",
   "textures": {
-    "side": "rhododendrite:rhododendrite_planks",
-    "bottom": "rhododendrite:rhododendrite_planks",
-    "top": "rhododendrite:rhododendrite_planks"
+    "side": "rhododendrite:block/rhododendrite_planks",
+    "bottom": "rhododendrite:block/rhododendrite_planks",
+    "top": "rhododendrite:block/rhododendrite_planks"
   }
 }

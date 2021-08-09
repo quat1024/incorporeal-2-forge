@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/door_top",
   "textures": {
-    "bottom": "rhododendrite:rhododendrite_door_bottom",
-    "top": "rhododendrite:rhododendrite_door_top"
+    "bottom": "rhododendrite:block/rhododendrite_door_bottom",
+    "top": "rhododendrite:block/rhododendrite_door_top"
   }
 }

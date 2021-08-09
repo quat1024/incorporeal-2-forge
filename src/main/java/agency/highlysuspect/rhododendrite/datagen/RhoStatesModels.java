@@ -1,8 +1,7 @@
 package agency.highlysuspect.rhododendrite.datagen;
 
-import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.rhododendrite.Rho;
-import agency.highlysuspect.rhododendrite.WoodBlockFamily;
+import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
@@ -33,9 +32,16 @@ public class RhoStatesModels extends BlockStateProvider {
 	protected void registerStatesAndModels() {
 		handleWoodBlockFamily(RhoBlocks.RHODODENDRITE);
 	}
+	
+	//LITERALLY copy paste from Forge code. Including the PRIVATE modifier. WHAT
+	private ResourceLocation extend(ResourceLocation rl, String suffix) {
+		return new ResourceLocation(rl.getNamespace(), rl.getPath() + suffix);
+	}
+	
 	@SuppressWarnings("SameParameterValue")
-	private void handleWoodBlockFamily(WoodBlockFamily family) {
-		ResourceLocation planks = family.planks.getRegistryName();
+	private void handleWoodBlockFamily(WoodFamily family) {
+		ResourceLocation planks = blockTexture(family.planks);
+		ResourceLocation log = blockTexture(family.log);
 		
 		simpleBlock(family.planks);
 		blockItemParent(family.planks.asItem());
@@ -46,9 +52,9 @@ public class RhoStatesModels extends BlockStateProvider {
 		blockItemParent(family.log.asItem());
 		logBlock(family.strippedLog); 
 		blockItemParent(family.strippedLog.asItem());
-		logBlock(family.wood);
+		axisBlock(family.wood, blockTexture(family.log), extend(blockTexture(family.log), "_top"));
 		blockItemParent(family.wood.asItem());
-		logBlock(family.strippedWood);
+		axisBlock(family.strippedWood, blockTexture(family.strippedLog), extend(blockTexture(family.strippedLog), "_top"));
 		blockItemParent(family.strippedWood.asItem());
 		
 		//todo leaves
@@ -59,7 +65,7 @@ public class RhoStatesModels extends BlockStateProvider {
 		
 		//todo sign
 		
-		doorBlock(family.door, Rho.id(family.name + "_door_bottom"), Rho.id(family.name + "_door_top"));
+		doorBlock(family.door, Rho.id("block/" + family.name + "_door_bottom"), Rho.id("block/" + family.name + "_door_top"));
 		itemGenerated(family.door.asItem());
 		
 		//todo wall sign
@@ -69,7 +75,7 @@ public class RhoStatesModels extends BlockStateProvider {
 		fenceBlock(family.fence, planks);
 		itemModels().fenceInventory(n(family.fence), planks);
 		
-		trapdoorBlock(family.trapdoor, Rho.id(family.name + "_trapdoor"), true);
+		trapdoorBlock(family.trapdoor, Rho.id("block/" + family.name + "_trapdoor"), true);
 		blockItemParent(family.trapdoor.asItem());
 		
 		fenceGateBlock(family.fenceGate, planks);
@@ -88,7 +94,9 @@ public class RhoStatesModels extends BlockStateProvider {
 	}
 	
 	private void itemGenerated(IForgeRegistryEntry<?> thingie) {
-		itemGenerated(thingie, thingie.getRegistryName());
+		assert thingie.getRegistryName() != null; //no u
+		ResourceLocation item = new ResourceLocation(thingie.getRegistryName().getNamespace(), "item/" + thingie.getRegistryName().getPath());
+		itemGenerated(thingie, item);
 	}
 	
 	private void itemGenerated(IForgeRegistryEntry<?> thingie, ResourceLocation texture) {

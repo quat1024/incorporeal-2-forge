@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_orientable_trapdoor_open",
   "textures": {
-    "texture": "rhododendrite:rhododendrite_trapdoor"
+    "texture": "rhododendrite:block/rhododendrite_trapdoor"
   }
 }

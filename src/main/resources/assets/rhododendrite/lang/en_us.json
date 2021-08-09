@@ -1,3 +1,23 @@
 {
-	"itemGroup.rhododendrite": "Rhododendrite"
+	"itemGroup.rhododendrite": "Rhododendrite",
+	
+	"block.rhododendrite.rhododendrite_planks": "Rhododendrite Planks",
+	"block.rhododendrite.rhododendrite_sapling": "Rhododendrite Sapling",
+	"block.rhododendrite.rhododendrite_door": "Rhododendrite Door",
+	"block.rhododendrite.rhododendrite_wood": "Rhododendrite Wood",
+	"block.rhododendrite.rhododendrite_log": "Rhododendrite Log",
+	"block.rhododendrite.stripped_rhododendrite_log": "Stripped Rhododendrite Log",
+	"block.rhododendrite.stripped_rhododendrite_wood": "Stripped Rhododendrite Wood",
+	"block.rhododendrite.rhododendrite_leaves": "Rhododendrite Leaves",
+	"block.rhododendrite.rhododendrite_slab": "Rhododendrite Slab",
+	"block.rhododendrite.rhododendrite_stairs": "Rhododendrite Stairs",
+	"block.rhododendrite.rhododendrite_sign": "Rhododendrite Sign",
+	"block.rhododendrite.rhododendrite_wall_sign": "Rhododendrite Wall Sign",
+	"block.rhododendrite.rhododendrite_pressure_plate": "Rhododendrite Pressure Plate",
+	"block.rhododendrite.rhododendrite_button": "Rhododendrite Button",
+	"block.rhododendrite.rhododendrite_fence": "Rhododendrite Fence",
+	"block.rhododendrite.rhododendrite_fence_gate": "Rhododendrite Fence Gate",
+	"block.rhododendrite.rhododendrite_trapdoor": "Rhododendrite Trapdoor",
+	"block.rhododendrite.potted_rhododendrite_sapling": "Potted Rhododendrite Sapling",
+	"item.rhododendrite.rhododendrite_boat": "Rhododendrite Boat"
 }

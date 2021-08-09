@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "side": "rhododendrite:block/rhododendrite_wood",
-    "end": "rhododendrite:block/rhododendrite_wood_top"
+    "side": "rhododendrite:block/rhododendrite_log",
+    "end": "rhododendrite:block/rhododendrite_log_top"
   }
 }

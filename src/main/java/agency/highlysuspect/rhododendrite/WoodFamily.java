@@ -5,6 +5,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -16,8 +17,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
 
-public class WoodBlockFamily {
-	public WoodBlockFamily(String name, MaterialColor planksColor, MaterialColor barkColor) {
+public class WoodFamily {
+	public WoodFamily(String name, MaterialColor planksColor, MaterialColor barkColor) {
 		this.name = name;
 		this.woodType = WoodType.register(WoodType.create(name));
 		
@@ -120,6 +121,9 @@ public class WoodBlockFamily {
 		slab = new SlabBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
 			.hardnessAndResistance(2f, 3f)
 			.sound(SoundType.WOOD));
+		
+		//TODO enum hell (probably need a custom entity, ugh)
+		boat = new BoatItem(BoatEntity.Type.DARK_OAK, RhoItems.defaultProps().maxStackSize(1));
 	}
 	
 	public final String name;
@@ -143,6 +147,8 @@ public class WoodBlockFamily {
 	//public final Block pottedSapling;
 	public final WoodButtonBlock button;
 	public final SlabBlock slab;
+	
+	public final BoatItem boat;
 	
 	public void registerBlocks(IForgeRegistry<Block> r) {
 		Rho.reg(r, name + "_planks", planks);
@@ -170,5 +176,6 @@ public class WoodBlockFamily {
 		//need to add sapling though
 		
 		Rho.reg(r, name + "_sign", new SignItem(RhoItems.defaultProps(), sign, wallSign));
+		Rho.reg(r, name + "_boat", boat);
 	}
 }

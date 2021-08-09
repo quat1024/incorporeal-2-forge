@@ -47,3 +47,12 @@ This .jar contains two mods for the price of one: Incorporeal 2, a fairly straig
 ## other things to do
 
 move more things to datagen, i really dont like forge datagens though
+
+# rhododendrite textures i have to do
+
+trapdoor
+item/door
+block/door_top, door_bottom
+minecraft/textures/entity/signs/rhodo
+
+Also need to fix Wood using the same model as regular logs lol im dum

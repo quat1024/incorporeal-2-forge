@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/fence_inventory",
   "textures": {
-    "texture": "rhododendrite:rhododendrite_planks"
+    "texture": "rhododendrite:block/rhododendrite_planks"
   }
 }

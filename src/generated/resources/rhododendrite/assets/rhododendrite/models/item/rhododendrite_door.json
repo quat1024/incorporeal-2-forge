@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "rhododendrite:rhododendrite_door"
+    "layer0": "rhododendrite:item/rhododendrite_door"
   }
 }
