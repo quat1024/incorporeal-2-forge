@@ -63,7 +63,6 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 				ms.push(); //again
 				wobbleSkull(ms, hash, ticks);
 				
-				//headModel.func_225603_a_(0, 0, 0);
 				IVertexBuilder builder = buf.getBuffer(getSkullRenderType(tile.getOwnerProfile()));
 				headModel.render(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
 				
