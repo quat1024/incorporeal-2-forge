@@ -10,7 +10,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BoatItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,7 +41,7 @@ public class WoodFamily {
 			@Nullable
 			@Override
 			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
-				if(toolType == ToolType.AXE) return strippedLog.getDefaultState().with(BlockStateProperties.AXIS, state.get(BlockStateProperties.AXIS));
+				if(toolType == ToolType.AXE) return strippedLog.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
 				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
 			}
 		};
@@ -57,7 +56,7 @@ public class WoodFamily {
 			@Nullable
 			@Override
 			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
-				if(toolType == ToolType.AXE) return strippedWood.getDefaultState().with(BlockStateProperties.AXIS, state.get(BlockStateProperties.AXIS));
+				if(toolType == ToolType.AXE) return strippedWood.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
 				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
 			}
 		};
@@ -124,33 +123,33 @@ public class WoodFamily {
 			.hardnessAndResistance(2f, 3f)
 			.sound(SoundType.WOOD));
 		
-		//TODO enum hell (probably need a custom entity, ugh)
-		boat = new BoatItem(BoatEntity.Type.DARK_OAK, RhoItems.defaultProps().maxStackSize(1));
+		//TODO enum hell (need a custom entity, ugh)
+		//boat = new BoatItem(BoatEntity.Type.DARK_OAK, RhoItems.defaultProps().maxStackSize(1));
 	}
 	
-	public final String name;
-	public final WoodType woodType;
+	public String name;
+	public WoodType woodType;
 	
-	public final Block planks;
-	//public final Block sapling;
-	public final RotatedPillarBlock log;
-	public final RotatedPillarBlock strippedLog;
-	public final RotatedPillarBlock wood;
-	public final RotatedPillarBlock strippedWood;
-	public final Block leaves;
-	public final StairsBlock stairs;
-	//public final StandingSignBlock sign;
-	public final DoorBlock door;
-	//public final WallSignBlock wallSign;
-	public final PressurePlateBlock pressurePlate;
-	public final FenceBlock fence;
-	public final TrapDoorBlock trapdoor;
-	public final FenceGateBlock fenceGate;
-	//public final Block pottedSapling;
-	public final WoodButtonBlock button;
-	public final SlabBlock slab;
+	public Block planks;
+	//public Block sapling;
+	public RotatedPillarBlock log;
+	public RotatedPillarBlock strippedLog;
+	public RotatedPillarBlock wood;
+	public RotatedPillarBlock strippedWood;
+	public Block leaves;
+	public StairsBlock stairs;
+	//public StandingSignBlock sign;
+	public DoorBlock door;
+	//public WallSignBlock wallSign;
+	public PressurePlateBlock pressurePlate;
+	public FenceBlock fence;
+	public TrapDoorBlock trapdoor;
+	public FenceGateBlock fenceGate;
+	//public Block pottedSapling;
+	public WoodButtonBlock button;
+	public SlabBlock slab;
 	
-	public final BoatItem boat;
+	//public BoatItem boat;
 	
 	public void registerBlocks(IForgeRegistry<Block> r) {
 		Rho.reg(r, name + "_planks", planks);
@@ -178,6 +177,6 @@ public class WoodFamily {
 		//need to add sapling though
 		
 		//Rho.reg(r, name + "_sign", new SignItem(RhoItems.defaultProps(), sign, wallSign));
-		Rho.reg(r, name + "_boat", boat);
+		//Rho.reg(r, name + "_boat", boat);
 	}
 }

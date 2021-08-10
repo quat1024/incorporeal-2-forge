@@ -1,6 +1,7 @@
 package agency.highlysuspect.rhododendrite.computer;
 
 import net.minecraft.nbt.CompoundNBT;
+import vazkii.botania.api.corporea.CorporeaHelper;
 
 import java.math.BigInteger;
 import java.util.Optional;
@@ -40,5 +41,30 @@ public class NumberType implements DataType<BigInteger> {
 	@Override
 	public boolean isZero(BigInteger thing) {
 		return BigInteger.ZERO.equals(thing);
+	}
+	
+	public static final BigInteger COMPARATOR_MIN = BigInteger.ZERO;
+	public static final BigInteger COMPARATOR_MAX = BigInteger.valueOf(16384); // log2(16384) == 15
+	
+	@Override
+	public int signalStrength(BigInteger thing) {
+		if(COMPARATOR_MAX.compareTo(thing) <= 0) return 15;
+		else if(COMPARATOR_MIN.compareTo(thing) > 0) return 0;
+		else return CorporeaHelper.instance().signalStrengthForRequestSize(thing.intValue());
+	}
+	
+	@Override
+	public boolean dataEquals(BigInteger a, BigInteger b) {
+		return a.equals(b);
+	}
+	
+	@Override
+	public int dataCompareTo(BigInteger a, BigInteger b) {
+		return a.compareTo(b);
+	}
+	
+	@Override
+	public int dataHash(BigInteger thing) {
+		return thing.hashCode();
 	}
 }

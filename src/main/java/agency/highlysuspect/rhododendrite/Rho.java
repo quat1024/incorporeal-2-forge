@@ -4,6 +4,7 @@ import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import agency.highlysuspect.rhododendrite.client.RhoClient;
 import agency.highlysuspect.rhododendrite.computer.DataTypes;
+import agency.highlysuspect.rhododendrite.computer.FragmentCapability;
 import agency.highlysuspect.rhododendrite.datagen.RhoDatagen;
 import agency.highlysuspect.rhododendrite.item.RhoItems;
 import com.google.common.base.Preconditions;
@@ -11,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -36,6 +38,8 @@ public class Rho {
 		modBus.addGenericListener(TileEntityType.class, RhoTileTypes::register);
 		
 		modBus.addListener((FMLCommonSetupEvent e) -> {
+			FragmentCapability.initialize();
+			
 			DataTypes.initialize();
 		});
 		
@@ -61,5 +65,17 @@ public class Rho {
 		BlockItem yes = new BlockItem(b, RhoItems.defaultProps());
 		yes.setRegistryName(b.getRegistryName());
 		r.register(yes);
+	}
+	
+	public static Direction positive(Direction.Axis axis) {
+		if(axis == Direction.Axis.X) return Direction.EAST;
+		else if(axis == Direction.Axis.Y) return Direction.UP;
+		else return Direction.SOUTH; 
+	}
+	
+	public static Direction negative(Direction.Axis axis) {
+		if(axis == Direction.Axis.X) return Direction.WEST;
+		else if(axis == Direction.Axis.Y) return Direction.DOWN;
+		else return Direction.NORTH;
 	}
 }

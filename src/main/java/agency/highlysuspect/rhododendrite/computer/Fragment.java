@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -69,6 +70,36 @@ public class Fragment<T> {
 			.orElseGet(() -> Either.left(create(newType, newData)));
 	}
 	
+	public boolean isUnit() {
+		return type.isUnit();
+	}
+	
+	public boolean isZero() {
+		return type.isZero(data);
+	}
+	
+	public int signalStrength() {
+		return type.signalStrength(data);
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		
+		Fragment<?> other = (Fragment<?>) o;
+		
+		if(!type.equals(other.type)) return false;
+		
+		//noinspection unchecked
+		return type.dataEquals(data, (T) other.data); //changed from typical implementations of equals(). cast is safe because type.equals() was checked
+	}
+	
+	@Override
+	public int hashCode() {
+		return type.dataHash(data) * 37 + type.hashCode();
+	}
+	
 	public CompoundNBT toNbt(Registry<DataType<?>> types) {
 		CompoundNBT nbt = type.toNbt(data);
 		
@@ -85,5 +116,11 @@ public class Fragment<T> {
 	
 	public static Fragment<?> fromNbtOrEmpty(Registry<DataType<?>> types, CompoundNBT nbt) {
 		return fromNbt(types, nbt).orElse(Fragment.EMPTY);
+	}
+	
+	//capability target
+	public interface Holder {
+		@Nonnull Fragment<?> getFragment();
+		void setFragment(@Nonnull Fragment<?> fragment);
 	}
 }
