@@ -3,10 +3,8 @@ package agency.highlysuspect.rhododendrite.computer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
-import org.apache.logging.log4j.core.util.Integers;
 import vazkii.botania.api.corporea.CorporeaHelper;
 
-import java.util.Comparator;
 import java.util.Optional;
 
 public class ItemStackType implements DataType<ItemStack> {

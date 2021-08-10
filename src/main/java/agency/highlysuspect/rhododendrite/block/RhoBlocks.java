@@ -4,7 +4,6 @@ import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.WoodFamily;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
