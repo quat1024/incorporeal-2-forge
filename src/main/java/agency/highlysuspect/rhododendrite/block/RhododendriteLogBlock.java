@@ -1,18 +1,24 @@
 package agency.highlysuspect.rhododendrite.block;
 
-import agency.highlysuspect.rhododendrite.Rho;
-import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
+import agency.highlysuspect.rhododendrite.computer.CorePathTracing;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.Random;
 
 public class RhododendriteLogBlock extends RotatedPillarBlock {
 	public RhododendriteLogBlock(Properties properties) {
@@ -20,36 +26,28 @@ public class RhododendriteLogBlock extends RotatedPillarBlock {
 	}
 	
 	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block fromBlock, BlockPos fromPos, boolean isMoving) {
-		BlockState awakenedState = awakenedState(world, pos, state);
-		if(awakenedState != null) world.setBlockState(pos, awakenedState);
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		BlockState state = super.getStateForPlacement(context);
+		if(state == null) return null;
+		else return awakenedState(context.getWorld(), context.getPos(), state).orElse(state);
 	}
 	
-	//Returns `null` if it's not appropriate for this log to become activated right now.
-	protected @Nullable BlockState awakenedState(World world, BlockPos pos, BlockState state) {
-		Direction.Axis axis = state.get(RotatedPillarBlock.AXIS);
-		BlockState awakenedState = scan(world, pos, state, Rho.positive(axis));
-		return awakenedState != null ? awakenedState : scan(world, pos, state, Rho.negative(axis));
-	}
-	
-	protected @Nullable BlockState scan(World world, BlockPos pos, BlockState state, Direction scanDir) {
-		//search "out" from myself, in the direction of scanDir, for a core
-		BlockPos.Mutable scanPos = pos.toMutable();
-		for(int distance = 1; distance < CoreTile.MAX_RANGE; distance++) {
-			scanPos.move(scanDir);
-			BlockState stateThere = world.getBlockState(scanPos);
-			
-			//skip over blocks that are okay to have in the path of a rhododendrite stack - (TODO this could be a tag)
-			if(stateThere.getBlock() == RhoBlocks.RHODODENDRITE.leaves || stateThere.getBlock() instanceof AwakenedLogBlock) continue;
-			
-			if(stateThere.getBlock() instanceof CoreBlock) {
-				return RhoBlocks.AWAKENED_LOG.getDefaultState()
-					.with(AwakenedLogBlock.DISTANCE, distance)
-					.with(AwakenedLogBlock.FACING, scanDir);
-			} else return null;
+	@Override
+	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+		if(awakenedState(world, pos, state).isPresent()) {
+			world.getPendingBlockTicks().scheduleTick(pos, this, 1);
 		}
 		
-		return null;
+		return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+	}
+	
+	@Override
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+		awakenedState(world, pos, state).ifPresent(awakeState -> world.setBlockState(pos, awakeState));
+	}
+	
+	protected Optional<BlockState> awakenedState(IWorldReader world, BlockPos pos, BlockState state) {
+		return CorePathTracing.scanForCore(world, pos, state.get(RotatedPillarBlock.AXIS)).map(r -> r.toAwakenedLogState(RhoBlocks.AWAKENED_LOG));
 	}
 	
 	//In lieu of letting you just add things to the stinkin axe-item stripping map, Forge provides... whatever this is!

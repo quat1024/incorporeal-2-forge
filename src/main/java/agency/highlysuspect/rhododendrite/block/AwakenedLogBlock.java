@@ -4,10 +4,14 @@ import agency.highlysuspect.rhododendrite.block.tile.AwakenedLogTile;
 import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
 import agency.highlysuspect.rhododendrite.block.tile.FragmentContainerTile;
 import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
+import agency.highlysuspect.rhododendrite.computer.CorePathTracing;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -16,9 +20,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class AwakenedLogBlock extends DirectionalBlock {
 	public AwakenedLogBlock(Properties properties) {
@@ -26,32 +33,31 @@ public class AwakenedLogBlock extends DirectionalBlock {
 	}
 	
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
-	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, CoreTile.MAX_RANGE);
+	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, CorePathTracing.MAX_RANGE);
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		//yeah you have to add FACING manually because DirectionalBlock doesnt do it for you. good job Mojang
+		//yeah you have to add FACING manually, DirectionalBlock doesnt do it for you, good job
 		super.fillStateContainer(builder.add(FACING, DISTANCE));
 	}
 	
-	public boolean shouldDeactivate(World world, BlockPos pos, BlockState state) {
-		return !(world.getBlockState(pos.offset(state.get(FACING), state.get(DISTANCE))).getBlock() instanceof CoreBlock);
+	@Override
+	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+		if(!CorePathTracing.stillValid(world, pos, state.get(FACING), state.get(DISTANCE))) {
+			world.getPendingBlockTicks().scheduleTick(pos, this, 1);
+		}
+		
+		return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
 	}
 	
-	public @Nullable CoreTile getCore(World world, BlockPos pos, BlockState state) {
-		return RhoTileTypes.CORE.getIfExists(world, pos.offset(state.get(FACING), state.get(DISTANCE)));
+	@Override
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+		if(!CorePathTracing.stillValid(world, pos, state.get(FACING), state.get(DISTANCE))) world.setBlockState(pos, unawakenedState(state));
 	}
 	
 	public BlockState unawakenedState(BlockState self) {
 		if(self.getBlock() != this) return self;
 		else return RhoBlocks.RHODODENDRITE.log.getDefaultState().with(RotatedPillarBlock.AXIS, self.get(FACING).getAxis());
-	}
-	
-	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-		if(shouldDeactivate(world, pos, state)) {
-			world.setBlockState(pos, unawakenedState(state));
-		}
 	}
 	
 	@Override
@@ -63,6 +69,10 @@ public class AwakenedLogBlock extends DirectionalBlock {
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new AwakenedLogTile();
+	}
+	
+	public @Nullable CoreTile getCore(World world, BlockPos pos, BlockState state) {
+		return RhoTileTypes.CORE.getIfExists(world, pos.offset(state.get(FACING), state.get(DISTANCE)));
 	}
 	
 	@Override

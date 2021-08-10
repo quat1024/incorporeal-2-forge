@@ -11,8 +11,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class RhoItems {
 	public static BlockItem CORE;
-	//creative-only (?)
-	public static BlockItem AWAKENED_LOG;
 	
 	public static Item.Properties defaultProps() {
 		return new Item.Properties().group(Tab.INSTANCE);
@@ -20,18 +18,16 @@ public class RhoItems {
 	
 	public static void register(RegistryEvent.Register<Item> event) {
 		//TODO clean this shit up.
-		// They used to be in `final` fields but like, classloading threw a wrench in that.
+		// used to be in `final` fields but like, classloading order threw a wrench in that.
 		// I should fix it in Incorporeal too
 		
 		CORE = new BlockItem(RhoBlocks.CORE, defaultProps());
-		AWAKENED_LOG = new BlockItem(RhoBlocks.AWAKENED_LOG, defaultProps());
 		
 		IForgeRegistry<Item> r = event.getRegistry();
 		
 		RhoBlocks.RHODODENDRITE.registerItems(r);
 		
 		regBlockItem(r, CORE);
-		regBlockItem(r, AWAKENED_LOG);
 	}
 	
 	public static void regBlockItem(IForgeRegistry<Item> r, BlockItem bi) {

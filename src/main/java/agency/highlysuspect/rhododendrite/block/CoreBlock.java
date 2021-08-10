@@ -2,7 +2,6 @@ package agency.highlysuspect.rhododendrite.block;
 
 import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
 import agency.highlysuspect.rhododendrite.block.tile.FragmentContainerTile;
-import agency.highlysuspect.rhododendrite.computer.Fragment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.tileentity.TileEntity;

@@ -5,5 +5,4 @@ public class CoreTile extends FragmentContainerTile {
 		super(RhoTileTypes.CORE);
 	}
 	
-	public static final int MAX_RANGE = 16;
 }
