@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class CorePathTracing {
 	///////////////////////// logs ///////////////////////// 
@@ -94,46 +96,81 @@ public class CorePathTracing {
 	
 	///////////////////////// opcodes and wireless network /////////////////////////
 	
-	public static final int WIRELESS_RANGE = 8; //just like corporea sparks
+	public static final int WIRELESS_RANGE = 10; //just like flowers
 	
-	public static boolean withinWirelessRange(BlockPos a, BlockPos b) {
-		//return (a.distanceSq(b) - 0.0001f) <= WIRELESS_RANGE * WIRELESS_RANGE; //actually looks like botania uses a square region
-		int x = Math.abs(a.getX() - b.getX());
-		int y = Math.abs(a.getY() - b.getY());
-		int z = Math.abs(a.getZ() - b.getZ());
-		return Math.max(Math.max(x, y), z) <= WIRELESS_RANGE;
+	public static int blockPosDistSq(BlockPos a, BlockPos b) {
+		//BlockPos#distanceSq seems to offset *one* of the positions by .5, so it has a directional bias.
+		int x = a.getX() - b.getX();
+		int y = a.getY() - b.getY();
+		int z = a.getZ() - b.getZ();
+		return x * x + y * y + z * z;
 	}
 	
-	public static final List<BlockPos> ABSOLUTE_SCAN_OFFSETS = new ArrayList<>();
-	//element 0 of this list = absolute [0]
-	//element N of this list = the vector pointing from absolute[n-1] -> absolute[n].
-	//the idea being: ok so, you want to iterate a BlockPos through all the offsets in ABSOLUTE_SCAN_OFFSETS,
-	//but you don't want to allocate 100000 throwaway block poses?
-	//you can just take that single blockpos, make it mutable, and add it to each of the RELATIVE_SCAN_OFFSETS in turn
+	public static boolean withinWirelessRange(BlockPos a, BlockPos b) {
+		//botania uses a cubical region for corporea sparks and a spherical region for flowers
+		//since these bind with wand of the forest now, i think a spherical region is more appropriate
+		return (blockPosDistSq(a, b) - 0.0001f) <= WIRELESS_RANGE * WIRELESS_RANGE; //subtract a bit to fudge ties in your favor
+		
+		//int x = Math.abs(a.getX() - b.getX());
+		//int y = Math.abs(a.getY() - b.getY());
+		//int z = Math.abs(a.getZ() - b.getZ());
+		//return Math.max(Math.max(x, y), z) <= WIRELESS_RANGE;
+	}
+	
+	/**
+	 * Like this:
+	 * 
+	 * BlockPos.Mutable mut = pos.toMutable();
+	 *   for(BlockPos a : CorePathTracing.RELATIVE_SCAN_OFFSETS) {
+	 *     mut.func_243531_h(a); //it's "move" with a fucked up MCP name
+	 *     //(do something with the block pos)
+	 *   }
+	 * }
+	 * 
+	 * This process moves the mutable BlockPos inwards-to-outwards in a sphere.
+	 * The origin is not iterated over (i.e. the first vector is not 0, 0, 0)
+	 */
 	public static final List<BlockPos> RELATIVE_SCAN_OFFSETS = new ArrayList<>();
 	
 	static {
+		List<BlockPos> ABSOLUTE_SCAN_OFFSETS = new ArrayList<>();
+			
 		for(int dx = -WIRELESS_RANGE; dx <= WIRELESS_RANGE; dx++) {
 			for(int dy = -WIRELESS_RANGE; dy <= WIRELESS_RANGE; dy++) {
 				for(int dz = -WIRELESS_RANGE; dz <= WIRELESS_RANGE; dz++) {
-					if(dx == 0 && dy == 0 && dz == 0) continue;
-					
 					BlockPos pos = new BlockPos(dx, dy, dz);
+					if(pos.equals(BlockPos.ZERO)) continue;
 					if(withinWirelessRange(BlockPos.ZERO, pos)) ABSOLUTE_SCAN_OFFSETS.add(pos);
 				}
 			}
 		}
 		
-		ABSOLUTE_SCAN_OFFSETS.sort(Comparator.comparingDouble(pos -> pos.distanceSq(BlockPos.ZERO)));
+		//TODO: distanceSq seems to have a bias, I thought it 
+		ABSOLUTE_SCAN_OFFSETS.sort(Comparator.comparingDouble(pos -> blockPosDistSq(pos, BlockPos.ZERO)));
+		
+		Map<BlockPos, BlockPos> objectCache = new HashMap<>();
 		
 		BlockPos prev = null;
 		for(BlockPos next : ABSOLUTE_SCAN_OFFSETS) {
+			BlockPos add;
 			if(prev == null) {
-				RELATIVE_SCAN_OFFSETS.add(next);
+				add = next;
 			} else {
-				RELATIVE_SCAN_OFFSETS.add(next.subtract(prev));
+				add = next.subtract(prev);
 			}
+			add = objectCache.computeIfAbsent(add, Function.identity());
+			RELATIVE_SCAN_OFFSETS.add(add);
 			prev = next;
 		}
+	}
+	
+	public static boolean iterateWirelessRange(BlockPos start, Predicate<? super BlockPos.Mutable> shouldBreak) {
+		BlockPos.Mutable pos = start.toMutable();
+		for(BlockPos d : RELATIVE_SCAN_OFFSETS) {
+			pos.func_243531_h(d); //"move" that takes a blockpos instead of x,y,z
+			
+			if(shouldBreak.test(pos)) return true;
+		}
+		return false;
 	}
 }

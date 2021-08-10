@@ -6,6 +6,7 @@ import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import agency.highlysuspect.rhododendrite.block.tile.RhodoNetworkTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
@@ -63,6 +64,12 @@ public class OpcodeBlock extends Block implements IWandable {
 			((RhodoNetworkTile) tile).sparkle();
 			return true;
 		} else return false;
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof RhodoNetworkTile) ((RhodoNetworkTile) tile).tryAutobind();
 	}
 	
 	@Override
