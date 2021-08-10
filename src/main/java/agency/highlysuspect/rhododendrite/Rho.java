@@ -21,10 +21,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod("rhododendrite")
 public class Rho {
 	public static final String MODID = "rhododendrite";
+	public static final Logger LOGGER = LogManager.getLogger(MODID);
 	
 	public static final RhoProxy proxy = DistExecutor.safeRunForDist(() -> RhoClient::new, () -> RhoProxy.Server::new);
 	

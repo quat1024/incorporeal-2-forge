@@ -4,5 +4,4 @@ public class CoreTile extends FragmentContainerTile {
 	public CoreTile() {
 		super(RhoTileTypes.CORE);
 	}
-	
 }

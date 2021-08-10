@@ -3,14 +3,21 @@ package agency.highlysuspect.rhododendrite.computer;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.block.AwakenedLogBlock;
 import agency.highlysuspect.rhododendrite.block.CoreBlock;
+import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
+import agency.highlysuspect.rhododendrite.block.tile.RhodoNetworkTile;
 import net.minecraft.block.BlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class CorePathTracing {
+	///////////////////////// logs ///////////////////////// 
+	
 	public static final int MAX_RANGE = 16;
 	
 	public static Optional<Result> scanForCore(IWorldReader world, BlockPos pos, Direction.Axis axis) {
@@ -82,6 +89,51 @@ public class CorePathTracing {
 		
 		public BlockState toAwakenedLogState(AwakenedLogBlock log) {
 			return log.getDefaultState().with(AwakenedLogBlock.FACING, facing).with(AwakenedLogBlock.DISTANCE, distance);
+		}
+	}
+	
+	///////////////////////// opcodes and wireless network /////////////////////////
+	
+	public static final int WIRELESS_RANGE = 8; //just like corporea sparks
+	
+	public static boolean withinWirelessRange(BlockPos a, BlockPos b) {
+		//return (a.distanceSq(b) - 0.0001f) <= WIRELESS_RANGE * WIRELESS_RANGE; //actually looks like botania uses a square region
+		int x = Math.abs(a.getX() - b.getX());
+		int y = Math.abs(a.getY() - b.getY());
+		int z = Math.abs(a.getZ() - b.getZ());
+		return Math.max(Math.max(x, y), z) <= WIRELESS_RANGE;
+	}
+	
+	public static final List<BlockPos> ABSOLUTE_SCAN_OFFSETS = new ArrayList<>();
+	//element 0 of this list = absolute [0]
+	//element N of this list = the vector pointing from absolute[n-1] -> absolute[n].
+	//the idea being: ok so, you want to iterate a BlockPos through all the offsets in ABSOLUTE_SCAN_OFFSETS,
+	//but you don't want to allocate 100000 throwaway block poses?
+	//you can just take that single blockpos, make it mutable, and add it to each of the RELATIVE_SCAN_OFFSETS in turn
+	public static final List<BlockPos> RELATIVE_SCAN_OFFSETS = new ArrayList<>();
+	
+	static {
+		for(int dx = -WIRELESS_RANGE; dx <= WIRELESS_RANGE; dx++) {
+			for(int dy = -WIRELESS_RANGE; dy <= WIRELESS_RANGE; dy++) {
+				for(int dz = -WIRELESS_RANGE; dz <= WIRELESS_RANGE; dz++) {
+					if(dx == 0 && dy == 0 && dz == 0) continue;
+					
+					BlockPos pos = new BlockPos(dx, dy, dz);
+					if(withinWirelessRange(BlockPos.ZERO, pos)) ABSOLUTE_SCAN_OFFSETS.add(pos);
+				}
+			}
+		}
+		
+		ABSOLUTE_SCAN_OFFSETS.sort(Comparator.comparingDouble(pos -> pos.distanceSq(BlockPos.ZERO)));
+		
+		BlockPos prev = null;
+		for(BlockPos next : ABSOLUTE_SCAN_OFFSETS) {
+			if(prev == null) {
+				RELATIVE_SCAN_OFFSETS.add(next);
+			} else {
+				RELATIVE_SCAN_OFFSETS.add(next.subtract(prev));
+			}
+			prev = next;
 		}
 	}
 }

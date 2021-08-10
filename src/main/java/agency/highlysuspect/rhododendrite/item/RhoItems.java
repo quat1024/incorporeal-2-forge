@@ -10,31 +10,25 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class RhoItems {
-	public static BlockItem CORE;
+	//dont put item fields directly in here because classloading makes it blow up
+	//todo i should fix that in incorporeal too... and probably like, half my mods...
 	
 	public static Item.Properties defaultProps() {
 		return new Item.Properties().group(Tab.INSTANCE);
 	}
 	
 	public static void register(RegistryEvent.Register<Item> event) {
-		//TODO clean this shit up.
-		// used to be in `final` fields but like, classloading order threw a wrench in that.
-		// I should fix it in Incorporeal too
-		
-		CORE = new BlockItem(RhoBlocks.CORE, defaultProps());
-		
 		IForgeRegistry<Item> r = event.getRegistry();
 		
 		RhoBlocks.RHODODENDRITE.registerItems(r);
-		
-		regBlockItem(r, CORE);
+		Rho.simpleBlockItems(r, RhoBlocks.CORE, RhoBlocks.AWAKENED_LOG, RhoBlocks.TEST1, RhoBlocks.TEST2);
 	}
 	
-	public static void regBlockItem(IForgeRegistry<Item> r, BlockItem bi) {
-		assert bi.getBlock().getRegistryName() != null;
-		bi.setRegistryName(bi.getBlock().getRegistryName());
-		r.register(bi);
-	}
+//	public static void regBlockItem(IForgeRegistry<Item> r, BlockItem bi) {
+//		assert bi.getBlock().getRegistryName() != null;
+//		bi.setRegistryName(bi.getBlock().getRegistryName());
+//		r.register(bi);
+//	}
 	
 	private static class Tab extends ItemGroup {
 		public static final Tab INSTANCE = new Tab();

@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -36,6 +37,18 @@ public class AwakenedLogBlock extends DirectionalBlock {
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		//yeah you have to add FACING manually, DirectionalBlock doesnt do it for you, good job
 		super.fillStateContainer(builder.add(FACING, DISTANCE));
+	}
+	
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		//This is like, not *really* an item that you're supposed to place (this block drops the non-awakened version)
+		//but it's nice to be able to do it in creative mode et al
+		BlockState state = super.getStateForPlacement(context);
+		if(state == null) return null;
+		state = state.with(FACING, context.getFace().getOpposite());
+		return CorePathTracing.scanForCore(context.getWorld(), context.getPos(), state.get(FACING))
+			.map(r -> r.toAwakenedLogState(this))
+			.orElse(unawakenedState(state));
 	}
 	
 	@Override
