@@ -4,6 +4,7 @@ import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.block.AwakenedLogBlock;
 import agency.highlysuspect.rhododendrite.block.CoreBlock;
 import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
+import agency.highlysuspect.rhododendrite.block.tile.FragmentContainerTile;
 import agency.highlysuspect.rhododendrite.block.tile.RhodoNetworkTile;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -55,7 +56,7 @@ public class CorePathTracing {
 //	public static Optional<Result> scanForCore(World world, BlockPos pos, Direction scanDir) {
 //		//search "out" from myself, in the direction of scanDir, for a core
 //		BlockPos.Mutable scanPos = pos.toMutable();
-//		for(int distance = 1; distance < MAX_RANGE; distance++) {
+//		for(int distance = 1; distance < MAX_RANGE; distance++) { //starting at 1
 //			scanPos.move(scanDir);
 //			BlockState stateThere = world.getBlockState(scanPos);
 //			
@@ -94,7 +95,49 @@ public class CorePathTracing {
 		}
 	}
 	
-	///////////////////////// opcodes and wireless network /////////////////////////
+	///////////////////////// shifting /////////////////////////
+	
+	public static List<Fragment.Holder> readFragmentHolderLine(World world, BlockPos corePos, BlockState coreState) {
+		if(!(coreState.getBlock() instanceof CoreBlock)) return Collections.emptyList();
+		Direction coreFacing = coreState.get(CoreBlock.FACING);
+		
+		List<Fragment.Holder> holders = new ArrayList<>();
+		BlockPos.Mutable cursor = corePos.toMutable();
+		for(int i = 0; i <= MAX_RANGE; i++) { // <=: the actual max size of a conga line is MAX_RANGE + 1, counting the Core itself
+			TileEntity tile = world.getTileEntity(cursor);
+			if(tile == null) break;
+			
+			Optional<Fragment.Holder> holder = tile.getCapability(FragmentCapability.INSTANCE).resolve();
+			if(holder.isPresent()) {
+				holders.add(holder.get());
+				//offsetting at the end of the loop btw, so the core itself gets included in the conga line
+				cursor.move(coreFacing);	
+			} else {
+				break;
+			}
+		}
+		
+		return holders;
+	}
+	
+	public static void pushFragments(List<Fragment.Holder> holders) {
+		//[A][B][C] -> [ ][A][B], C gets lost
+		
+		for(int i = holders.size() - 1; i > 0; i--) { //not >=
+			holders.get(i).setFragment(holders.get(i - 1).getFragment());
+		}
+		holders.get(0).setFragment(Fragment.EMPTY);
+	}
+	
+	public static void pullFragments(List<Fragment.Holder> holders) {
+		//[A][B][C] -> [B][C][ ], A gets lost
+		for(int i = 0; i < holders.size() - 1; i++) {
+			holders.get(i).setFragment(holders.get(i + 1).getFragment());
+		}
+		holders.get(holders.size() - 1).setFragment(Fragment.EMPTY);
+	}
+	
+	///////////////////////// wireless network /////////////////////////
 	
 	public static final int WIRELESS_RANGE = 10; //just like flowers
 	

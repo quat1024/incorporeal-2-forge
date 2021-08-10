@@ -21,7 +21,15 @@ public class RhoItems {
 		IForgeRegistry<Item> r = event.getRegistry();
 		
 		RhoBlocks.RHODODENDRITE.registerItems(r);
-		Rho.simpleBlockItems(r, RhoBlocks.CORE, RhoBlocks.AWAKENED_LOG, RhoBlocks.TEST1, RhoBlocks.TEST2);
+		Rho.simpleBlockItems(r,
+			RhoBlocks.CORE,
+			RhoBlocks.AWAKENED_LOG,
+			RhoBlocks.TEST1,
+			RhoBlocks.TEST2,
+			RhoBlocks.PUSH,
+			RhoBlocks.PULL,
+			RhoBlocks.REORIENT
+		);
 	}
 	
 //	public static void regBlockItem(IForgeRegistry<Item> r, BlockItem bi) {

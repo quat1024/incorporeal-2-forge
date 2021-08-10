@@ -6,9 +6,12 @@ import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import agency.highlysuspect.rhododendrite.block.tile.RhodoNetworkTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.DirectionalBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -85,5 +88,25 @@ public class OpcodeBlock extends Block implements IWandable {
 	
 	public interface CoreAction {
 		void apply(World world, BlockPos pos, BlockState state, CoreTile core);
+	}
+	
+	public static class Directional extends OpcodeBlock {
+		public Directional(Properties properties, CoreAction action) {
+			super(properties, action);
+			setDefaultState(getDefaultState().with(FACING, Direction.UP));
+		}
+		
+		public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
+		
+		@Override
+		protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+			super.fillStateContainer(builder.add(FACING));
+		}
+		
+		@Nullable
+		@Override
+		public BlockState getStateForPlacement(BlockItemUseContext context) {
+			return getDefaultState().with(FACING, context.getFace().getOpposite());
+		}
 	}
 }

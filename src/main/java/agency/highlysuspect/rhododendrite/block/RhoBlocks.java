@@ -48,6 +48,10 @@ public class RhoBlocks {
 		core.setFragment(DataTypes.NUMBER.uncheckedInstantiate(BigInteger.valueOf(hilarious)));
 	});
 	
+	public static final OpcodeBlock PUSH = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> core.push());
+	public static final OpcodeBlock PULL = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> core.pull());
+	public static final OpcodeBlock REORIENT = new OpcodeBlock.Directional(opcodeProps, (world, pos, state, core) -> core.reorient(state.get(OpcodeBlock.Directional.FACING)));
+	
 	public static void register(RegistryEvent.Register<Block> event) {
 		IForgeRegistry<Block> r = event.getRegistry();
 		
@@ -58,5 +62,9 @@ public class RhoBlocks {
 		
 		Rho.reg(r, "test1", TEST1);
 		Rho.reg(r, "test2", TEST2);
+		
+		Rho.reg(r, "push", PUSH);
+		Rho.reg(r, "pull", PULL);
+		Rho.reg(r, "reorient", REORIENT);
 	}
 }
