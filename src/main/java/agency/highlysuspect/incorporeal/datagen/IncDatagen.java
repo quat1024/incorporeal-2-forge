@@ -28,6 +28,11 @@ public class IncDatagen {
 		
 		if(e.includeServer()) {
 			data.addProvider(new ModidBlockDrops(Inc.MODID, data));
+			data.addProvider(new IncRecipes(data));
+			
+			IncTags.BlockProvider b = new IncTags.BlockProvider(data, dontCare);
+			data.addProvider(b);
+			data.addProvider(new IncTags.ItemProvider(data, b, dontCare));
 		}
 		
 		if(e.includeClient()) {

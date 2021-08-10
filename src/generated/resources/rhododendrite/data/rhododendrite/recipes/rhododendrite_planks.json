@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "item": "rhododendrite:rhododendrite_log"
+    }
+  ],
+  "result": {
+    "item": "rhododendrite:rhododendrite_planks",
+    "count": 4
+  }
+}

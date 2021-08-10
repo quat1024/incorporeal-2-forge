@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bark",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "rhododendrite:stripped_rhododendrite_log"
+    }
+  },
+  "result": {
+    "item": "rhododendrite:stripped_rhododendrite_wood",
+    "count": 3
+  }
+}
