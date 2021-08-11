@@ -3,6 +3,7 @@ package agency.highlysuspect.rhododendrite.computer;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.nbt.CompoundNBT;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 /**
@@ -10,7 +11,6 @@ import java.util.Optional;
  * It's the Item to Fragment's ItemStack.
  */
 public interface DataType<T> {
-	
 	/**
 	 * Parses the thing out of an NBT tag.
 	 * This operation may fail when the NBT tag is not well-formed.
@@ -25,12 +25,9 @@ public interface DataType<T> {
 	
 	/**
 	 * Check that the object is within some well-formedness parameters, like a number not being "too big".
-	 * Exactly what this means depends on what gameplay restrictions you want to place on the datatype.
-	 * If the type passes validation, return Optional.empty().
-	 * If the type fails validation, return a string representing what is wrong (e.g. "number too large")
-	 * TODO it probably shouldnt be a string lol
+	 * Return "true" if the object passes validation.
 	 */
-	Optional<String> validate(T thing);
+	boolean validate(T thing);
 	
 	/**
 	 * Whether this is of the unit type. There's only one unit type so don't override this.
@@ -54,10 +51,32 @@ public interface DataType<T> {
 	}
 	
 	/**
+	 * If this is mutable, return a copy of it.
+	 */
+	default T unlink(T thing) {
+		return thing;
+	}
+	
+	/**
 	 * Whether these two things are equal.
 	 */
 	default boolean dataEquals(T a, T b) {
 		return a.equals(b);
+	}
+	
+	/**
+	 * If this thing can be converted into a BigInteger, do that.
+	 */
+	default Optional<BigInteger> asNumber(T thing) {
+		return Optional.empty();
+	}
+	
+	/**
+	 * Produce an object similar to this thing, but holding that number instead.
+	 * Exactly what this means depends on what aspect of your item asNumber reads out.
+	 */
+	default Optional<T> injectNumber(T thing, BigInteger number) {
+		return Optional.of(thing);
 	}
 	
 	/**
@@ -70,18 +89,17 @@ public interface DataType<T> {
 	 * Item stack comparison compares the size of the stacks only, for example.
 	 * If the stacks are of different items but the sizes are the same, it returns 0.
 	 * 
-	 * The default implementation compares items more-or-less randomly; literally just comparing dataHash.
-	 * Please override this, lol.
+	 * The default implementation allocates a bunch of BigIntegers.
 	 */
 	default int dataCompareTo(T a, T b) {
-		return Integer.compare(dataHash(a), dataHash(b));
-	}
-	
-	/**
-	 * Hashes the thing. Might remove this one if it turns out to be unneeded.
-	 */
-	default int dataHash(T thing) {
-		return thing.hashCode();
+		Optional<BigInteger> x = asNumber(a);
+		if(x.isPresent()) {
+			Optional<BigInteger> y = asNumber(b);
+			if(y.isPresent()) {
+				return x.get().compareTo(y.get());
+			}
+		}
+		return 0;
 	}
 	
 	/**
@@ -91,11 +109,8 @@ public interface DataType<T> {
 		return Fragment.create(this, data);
 	}
 	
-	//TODO this probably shouldn't be an Optional, but should return the error
 	default Optional<Fragment<T>> checkedInstantiate(T data) {
-		Optional<String> error = validate(data);
-		if(error.isPresent()) return Optional.empty();
-		else return Optional.of(uncheckedInstantiate(data));
+		return validate(data) ? Optional.of(uncheckedInstantiate(data)) : Optional.empty();
 	}
 	
 	/**
@@ -113,9 +128,9 @@ public interface DataType<T> {
 		}
 		
 		@Override
-		public Optional<String> validate(Unit thing) {
+		public boolean validate(Unit thing) {
 			//Always succeeds, nothing to validate!
-			return Optional.empty();
+			return true;
 		}
 	}
 }

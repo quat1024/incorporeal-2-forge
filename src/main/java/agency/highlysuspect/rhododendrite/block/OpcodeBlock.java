@@ -4,6 +4,8 @@ import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
 import agency.highlysuspect.rhododendrite.block.tile.OpcodeTile;
 import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import agency.highlysuspect.rhododendrite.block.tile.RhodoNetworkTile;
+import agency.highlysuspect.rhododendrite.computer.Fragment;
+import agency.highlysuspect.rhododendrite.computer.StackOps;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DirectionalBlock;
@@ -22,6 +24,9 @@ import net.minecraft.world.World;
 import vazkii.botania.api.wand.IWandable;
 
 import javax.annotation.Nullable;
+import java.math.BigInteger;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 public class OpcodeBlock extends Block implements IWandable {
 	public OpcodeBlock(Properties properties, CoreAction action) {
@@ -29,6 +34,29 @@ public class OpcodeBlock extends Block implements IWandable {
 		this.action = action;
 		
 		setDefaultState(getDefaultState().with(BlockStateProperties.POWERED, false));
+	}
+	
+	public static CoreAction binNumeric(BiFunction<BigInteger, BigInteger, BigInteger> binOp) {
+		return binNumericOpt((x, y) -> Optional.of(binOp.apply(x, y)));
+	}
+	
+	public static CoreAction binNumericOpt(BiFunction<BigInteger, BigInteger, Optional<BigInteger>> binOp) {
+		return (world, pos, state, core) -> {
+			StackOps ops = StackOps.read(core);
+			
+			//grab the top two elements off the stack and try to convert them into numbers
+			Fragment<?> head = ops.pull();
+			Fragment<?> tail = ops.pull();
+			Optional<BigInteger> headN = head.asNumber();
+			Optional<BigInteger> tailN = tail.asNumber();
+			
+			if(headN.isPresent() && tailN.isPresent())
+				//perform the binary operation, try to inject it back into the head's type
+				binOp.apply(headN.get(), tailN.get()).flatMap(head::injectNumber).ifPresent(injResult -> {
+					ops.push(injResult);
+					ops.commit();
+				});
+		};
 	}
 	
 	public final CoreAction action;

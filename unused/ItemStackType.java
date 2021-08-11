@@ -5,8 +5,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import vazkii.botania.api.corporea.CorporeaHelper;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
+//Goes unused since I forgot Cygnus worked on corporea requests, which aren't quite ItemStacks
 public class ItemStackType implements DataType<ItemStack> {
 	@Override
 	public Optional<ItemStack> fromNbt(CompoundNBT nbt) {
@@ -20,8 +22,8 @@ public class ItemStackType implements DataType<ItemStack> {
 	}
 	
 	@Override
-	public Optional<String> validate(ItemStack thing) {
-		return Optional.empty();
+	public boolean validate(ItemStack thing) {
+		return true;
 	}
 	
 	@Override
@@ -32,6 +34,29 @@ public class ItemStackType implements DataType<ItemStack> {
 	@Override
 	public int signalStrength(ItemStack thing) {
 		return CorporeaHelper.instance().signalStrengthForRequestSize(thing.getCount());
+	}
+	
+	@Override
+	public ItemStack unlink(ItemStack thing) {
+		return thing.copy();
+	}
+	
+	@Override
+	public Optional<BigInteger> asNumber(ItemStack thing) {
+		return Optional.of(BigInteger.valueOf(thing.getCount()));
+	}
+	
+	@Override
+	public Optional<ItemStack> injectNumber(ItemStack thing, BigInteger number) {
+		//Only works if the number fits inside an int. Yeah, not great. Some kind of BigItemStack would be better.
+		try {
+			int asInt = number.intValueExact();
+			ItemStack copy = thing.copy();
+			copy.setCount(asInt);
+			return Optional.of(copy);
+		} catch (ArithmeticException e) {
+			return Optional.empty();
+		}
 	}
 	
 	@Override

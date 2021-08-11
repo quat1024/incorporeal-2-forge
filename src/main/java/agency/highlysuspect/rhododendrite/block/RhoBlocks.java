@@ -2,8 +2,8 @@ package agency.highlysuspect.rhododendrite.block;
 
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.WoodFamily;
-import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import agency.highlysuspect.rhododendrite.computer.DataTypes;
+import agency.highlysuspect.rhododendrite.computer.StackOps;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -16,6 +16,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import vazkii.botania.common.block.ModBlocks;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 public class RhoBlocks {
 	public static final WoodFamily RHODODENDRITE = Util.make(new WoodFamily("rhododendrite", MaterialColor.PINK, MaterialColor.OBSIDIAN), family -> {
@@ -38,19 +39,56 @@ public class RhoBlocks {
 	
 	private static final AbstractBlock.Properties opcodeProps = AbstractBlock.Properties.from(ModBlocks.corporeaFunnel);
 	
+	//TODO remove
 	public static final OpcodeBlock TEST1 = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
 		Rho.LOGGER.info(core.getFragment().data);
 	});
 	
+	//TODO remove
 	public static final OpcodeBlock TEST2 = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
 		int hilarious = world.rand.nextInt(500);
 		Rho.LOGGER.info("setting core fragment to " + hilarious);
-		core.setFragment(DataTypes.NUMBER.uncheckedInstantiate(BigInteger.valueOf(hilarious)));
+		core.setFragment(DataTypes.BIG_INTEGER.uncheckedInstantiate(BigInteger.valueOf(hilarious)));
 	});
 	
-	public static final OpcodeBlock PUSH = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> core.push());
-	public static final OpcodeBlock PULL = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> core.pull());
-	public static final OpcodeBlock REORIENT = new OpcodeBlock.Directional(opcodeProps, (world, pos, state, core) -> core.reorient(state.get(OpcodeBlock.Directional.FACING)));
+	public static final OpcodeBlock PUSH = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
+		StackOps ops = StackOps.read(core);
+		ops.push();
+		ops.commit();
+	});
+	
+	public static final OpcodeBlock PULL = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
+		StackOps ops = StackOps.read(core);
+		ops.pull();
+		ops.commit();
+	});
+	
+	public static final OpcodeBlock REORIENT = new OpcodeBlock.Directional(opcodeProps, (world, pos, state, core) ->
+		world.setBlockState(core.getPos(), core.getBlockState().with(CoreBlock.FACING, state.get(OpcodeBlock.Directional.FACING))));
+	
+	public static final OpcodeBlock DUP = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
+		StackOps ops = StackOps.read(core);
+		ops.push(ops.peek().unlink());
+		ops.commit();
+	});
+	
+	public static final OpcodeBlock PUSH_ZERO = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
+		StackOps ops = StackOps.read(core);
+		ops.push(DataTypes.BIG_INTEGER.uncheckedInstantiate(BigInteger.ZERO));
+		ops.commit();
+	});
+	
+	public static final OpcodeBlock PUSH_ONE = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
+		StackOps ops = StackOps.read(core);
+		ops.push(DataTypes.BIG_INTEGER.uncheckedInstantiate(BigInteger.ONE));
+		ops.commit();
+	});
+	
+	public static final OpcodeBlock ADD = new OpcodeBlock(opcodeProps, OpcodeBlock.binNumeric(BigInteger::add));
+	public static final OpcodeBlock SUBTRACT = new OpcodeBlock(opcodeProps, OpcodeBlock.binNumeric(BigInteger::subtract));
+	public static final OpcodeBlock MULTIPLY = new OpcodeBlock(opcodeProps, OpcodeBlock.binNumeric(BigInteger::multiply));
+	public static final OpcodeBlock DIVIDE = new OpcodeBlock(opcodeProps, OpcodeBlock.binNumericOpt((x, y) -> y.equals(BigInteger.ZERO) ? Optional.empty() : Optional.of(x.divide(y))));
+	public static final OpcodeBlock REMAINDER = new OpcodeBlock(opcodeProps, OpcodeBlock.binNumericOpt((x, y) -> y.equals(BigInteger.ZERO) ? Optional.empty() : Optional.of(x.remainder(y))));
 	
 	public static void register(RegistryEvent.Register<Block> event) {
 		IForgeRegistry<Block> r = event.getRegistry();
@@ -66,5 +104,13 @@ public class RhoBlocks {
 		Rho.reg(r, "push", PUSH);
 		Rho.reg(r, "pull", PULL);
 		Rho.reg(r, "reorient", REORIENT);
+		Rho.reg(r, "dup", DUP);
+		Rho.reg(r, "push_zero", PUSH_ZERO);
+		Rho.reg(r, "push_one", PUSH_ONE);
+		Rho.reg(r, "add", ADD);
+		Rho.reg(r, "subtract", SUBTRACT);
+		Rho.reg(r, "multiply", MULTIPLY);
+		Rho.reg(r, "divide", DIVIDE);
+		Rho.reg(r, "remainder", REMAINDER);
 	}
 }

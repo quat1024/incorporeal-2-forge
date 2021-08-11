@@ -75,4 +75,30 @@ public class SolidifiedRequest {
 			throw new RuntimeException("Problem reflecting!", e);
 		}
 	}
+	
+	public SolidifiedRequest withCount(int newCount) {
+		return new SolidifiedRequest(matcher, newCount);
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		
+		SolidifiedRequest that = (SolidifiedRequest) o;
+		
+		if(count != that.count) return false;
+		return compareRequestMatcher(matcher, that.matcher);
+	}
+	
+	public static boolean compareRequestMatcher(ICorporeaRequestMatcher a, ICorporeaRequestMatcher b) {
+		if(a == null && b == null) return true;
+		if((a == null) != (b == null)) return false;
+		if(!a.getClass().equals(b.getClass())) return false;
+		
+		//So I should probably pester Botania devs to implement equals and hashcode for these, huh...
+		CompoundNBT aNbt = new CompoundNBT(); a.writeToNBT(aNbt);
+		CompoundNBT bNbt = new CompoundNBT(); b.writeToNBT(bNbt);
+		return aNbt.equals(bNbt);
+	}
 }

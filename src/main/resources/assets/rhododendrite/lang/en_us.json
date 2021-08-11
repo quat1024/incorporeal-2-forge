@@ -19,5 +19,22 @@
 	"block.rhododendrite.rhododendrite_fence_gate": "Rhododendrite Fence Gate",
 	"block.rhododendrite.rhododendrite_trapdoor": "Rhododendrite Trapdoor",
 	"block.rhododendrite.potted_rhododendrite_sapling": "Potted Rhododendrite Sapling",
-	"item.rhododendrite.rhododendrite_boat": "Rhododendrite Boat"
+	"item.rhododendrite.rhododendrite_boat": "Rhododendrite Boat",
+	
+	"block.rhododendrite.core": "Awakened Rhododendrite Core",
+	"block.rhododendrite.awakened_log": "Awakened Rhododendrite Log",
+	
+	"block.rhododendrite.test1": "Opcode: TEST1 (print)",
+	"block.rhododendrite.test2": "Opcode: TEST2 (randomize)",
+	"block.rhododendrite.push": "Opcode: Push",
+	"block.rhododendrite.pull": "Opcode: Pull",
+	"block.rhododendrite.reorient": "Opcode: Reorient Core",
+	"block.rhododendrite.dup": "Opcode: Clone",
+	"block.rhododendrite.push_zero": "Opcode: Push Zero",
+	"block.rhododendrite.push_one": "Opcode: Push One",
+	"block.rhododendrite.add": "Opcode: Sum",
+	"block.rhododendrite.subtract": "Opcode: Difference",
+	"block.rhododendrite.multiply": "Opcode: Product",
+	"block.rhododendrite.divide": "Opcode: Quotient",
+	"block.rhododendrite.remainder": "Opcode: Remainder"
 }

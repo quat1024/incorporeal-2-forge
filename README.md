@@ -3,14 +3,17 @@ Incorporeal 2 + Rhododendrite
 
 Let's try this again. Forge this time. This is my first Forge 1.16 mod, it's been so long since I used Forge, go easy on me :)
 
-This .jar contains two mods for the price of one: Incorporeal 2, a fairly straightforward port of Incorporeal less the "cygnus network", and Rhododendrite, that mechanic's successor. The reason for them being two separate mods is mainly for organizational purposes. Eventually I want to separate the mods into their own .jars. The reason I haven't is because Rhododendrite will not be very useful without Botania/a corporea network behind it.
+This .jar contains two mods for the price of one: Incorporeal 2, a fairly straightforward port of Incorporeal less the "cygnus network", and Rhododendrite, that mechanic's successor. Them being two separate mods is mainly for organizational purposes - eventually I want to separate the mods into their own .jars.
+
+I hesitate because Rhododendrite will not be very useful without Botania/a corporea network to power with it, and it also depends on a small amount of code from both Botania and Incorporeal 2.
 
 # list of the old incorporeal features, for myself, cuz i forgot what the mod even added
 
 ## Things to port, in rough order of importance
 
-* potion soul core
 * recipes Lol
+* documentation Loooll
+* potion soul core
 * natural redstone circuitry from redstone root plants
 * frame screw
 
@@ -32,7 +35,7 @@ This .jar contains two mods for the price of one: Incorporeal 2, a fairly straig
 ## Things that will not be ported
 
 * cygnus network
-  * planning to replace with the rhododendrite mod
+  * replaced with Rhododendrite mod
 * corporea decorative blocks
   * subsumed
 * corporea spark tinkerer
@@ -46,9 +49,9 @@ This .jar contains two mods for the price of one: Incorporeal 2, a fairly straig
 
 ## other things to do
 
-move more things to datagen, i really dont like forge datagens though
+Move more things to datagen, i really dont like forge datagens though
 
-# rhododendrite things i have to do
+# rhododendrite wood things i have to do
 
 trapdoor texture, door item and block texture, sign texture
 

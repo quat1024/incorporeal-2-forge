@@ -6,7 +6,7 @@ import vazkii.botania.api.corporea.CorporeaHelper;
 import java.math.BigInteger;
 import java.util.Optional;
 
-public class NumberType implements DataType<BigInteger> {
+public class BigIntegerType implements DataType<BigInteger> {
 	public static final BigInteger MAX = BigInteger.valueOf(10).pow(40);
 	public static final BigInteger MIN = MAX.negate();
 	
@@ -32,10 +32,8 @@ public class NumberType implements DataType<BigInteger> {
 	}
 	
 	@Override
-	public Optional<String> validate(BigInteger thing) {
-		if(MAX.compareTo(thing) < 0) return Optional.of("Too big!");
-		else if(MIN.compareTo(thing) > 0) return Optional.of("Too small!");
-		else return Optional.empty();
+	public boolean validate(BigInteger thing) {
+		return MAX.compareTo(thing) >= 0 && MIN.compareTo(thing) <= 0;
 	}
 	
 	@Override
@@ -54,6 +52,16 @@ public class NumberType implements DataType<BigInteger> {
 	}
 	
 	@Override
+	public Optional<BigInteger> asNumber(BigInteger thing) {
+		return Optional.of(thing);
+	}
+	
+	@Override
+	public Optional<BigInteger> injectNumber(BigInteger thing, BigInteger number) {
+		return Optional.of(number);
+	}
+	
+	@Override
 	public boolean dataEquals(BigInteger a, BigInteger b) {
 		return a.equals(b);
 	}
@@ -61,10 +69,5 @@ public class NumberType implements DataType<BigInteger> {
 	@Override
 	public int dataCompareTo(BigInteger a, BigInteger b) {
 		return a.compareTo(b);
-	}
-	
-	@Override
-	public int dataHash(BigInteger thing) {
-		return thing.hashCode();
 	}
 }

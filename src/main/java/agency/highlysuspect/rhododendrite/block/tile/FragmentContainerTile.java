@@ -31,6 +31,9 @@ public abstract class FragmentContainerTile extends TileMod implements Fragment.
 	public void readPacketNBT(CompoundNBT cmp) {
 		super.readPacketNBT(cmp);
 		fragment = Fragment.fromNbtOrEmpty(DataTypes.REGISTRY, cmp.getCompound("Fragment"));
+		
+		//TODO probably shouldnt do this on the client *and* server, desyncs if you make something invalid on the server.
+		if(!fragment.validate()) fragment = Fragment.EMPTY;
 	}
 	
 	@Nonnull

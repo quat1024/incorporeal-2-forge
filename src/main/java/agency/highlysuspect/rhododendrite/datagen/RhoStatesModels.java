@@ -5,8 +5,8 @@ import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -14,6 +14,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 public class RhoStatesModels extends BlockStateProvider {
 	public RhoStatesModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
@@ -31,9 +32,49 @@ public class RhoStatesModels extends BlockStateProvider {
 		return b.getRegistryName().getPath();
 	}
 	
+	@SuppressWarnings("ConstantConditions")
 	@Override
 	protected void registerStatesAndModels() {
 		handleWoodBlockFamily(RhoBlocks.RHODODENDRITE);
+		
+		simpleBlock(RhoBlocks.CORE);
+		blockItemParent(RhoBlocks.CORE);
+		
+		directionalBlock(RhoBlocks.AWAKENED_LOG, models()
+			.cubeColumn(n(RhoBlocks.AWAKENED_LOG),
+				RhoBlocks.AWAKENED_LOG.getRegistryName(),
+				extend(RhoBlocks.AWAKENED_LOG.getRegistryName(), "_top")));
+		blockItemParent(RhoBlocks.AWAKENED_LOG);
+		
+		doIt(this::opcode,
+			RhoBlocks.PUSH,
+			RhoBlocks.PULL,
+			RhoBlocks.DUP,
+			RhoBlocks.PUSH_ZERO,
+			RhoBlocks.PUSH_ONE,
+			RhoBlocks.ADD,
+			RhoBlocks.SUBTRACT,
+			RhoBlocks.MULTIPLY,
+			RhoBlocks.DIVIDE,
+			RhoBlocks.REMAINDER);
+		reorientOpcode(RhoBlocks.REORIENT);
+	}
+	
+	protected void doIt(Consumer<Block> yes, Block... blocks) {
+		for(Block b : blocks) yes.accept(b);
+	}
+	
+	protected void opcode(Block b) {
+		//for now
+		simpleBlock(b);
+		blockItemParent(b);
+	}
+	
+	protected void reorientOpcode(Block b) {
+		//for now
+		ResourceLocation tex = blockTexture(b);
+		directionalBlock(b, models().cubeColumn(n(b), tex, extend(tex, "_end")));
+		blockItemParent(b);
 	}
 	
 	//LITERALLY copy paste from Forge code. Including the PRIVATE modifier. WHAT
@@ -48,21 +89,21 @@ public class RhoStatesModels extends BlockStateProvider {
 		ResourceLocation strippedLogTex = blockTexture(family.strippedLog);
 		
 		simpleBlock(family.planks);
-		blockItemParent(family.planks.asItem());
+		blockItemParent(family.planks);
 		
 		//todo sapling
 		
 		logBlock(family.log);
-		blockItemParent(family.log.asItem());
+		blockItemParent(family.log);
 		logBlock(family.strippedLog); 
-		blockItemParent(family.strippedLog.asItem());
+		blockItemParent(family.strippedLog);
 		axisBlock(family.wood, logTex, logTex);
-		blockItemParent(family.wood.asItem());
+		blockItemParent(family.wood);
 		axisBlock(family.strippedWood, strippedLogTex, strippedLogTex);
-		blockItemParent(family.strippedWood.asItem());
+		blockItemParent(family.strippedWood);
 		
-		//todo leaves
-		blockItemParent(family.leaves.asItem());
+		simpleBlock(family.leaves);
+		blockItemParent(family.leaves);
 		
 		stairsBlock(family.stairs, planksTex);
 		itemModels().stairs(n(family.stairs), planksTex, planksTex, planksTex);
@@ -70,18 +111,18 @@ public class RhoStatesModels extends BlockStateProvider {
 		//todo sign
 		
 		doorBlock(family.door, Rho.id("block/" + family.name + "_door_bottom"), Rho.id("block/" + family.name + "_door_top"));
-		itemGenerated(family.door.asItem());
+		itemGenerated(family.door);
 		
 		//todo wall sign
 		
 		pressurePlate(family.pressurePlate, planksTex);
-		blockItemParent(family.pressurePlate.asItem());
+		blockItemParent(family.pressurePlate);
 		
 		fenceBlock(family.fence, planksTex);
 		itemModels().fenceInventory(n(family.fence), planksTex);
 		
 		trapdoorBlock(family.trapdoor, Rho.id("block/" + family.name + "_trapdoor"), true);
-		blockItemParent(family.trapdoor.asItem());
+		blockItemParent(family.trapdoor);
 		
 		fenceGateBlock(family.fenceGate, planksTex);
 		itemModels().fenceGate(n(family.fenceGate), planksTex);
@@ -104,11 +145,12 @@ public class RhoStatesModels extends BlockStateProvider {
 	}
 	
 	//i thought forge datagen stuff was supposed to handle the common cases. guess im wrong?
-	private void blockItemParent(Item i) {
-		itemModels().withExistingParent(n(i), Rho.id("block/" + n(i)));
+	private void blockItemParent(IItemProvider i) {
+		itemModels().withExistingParent(n(i.asItem()), Rho.id("block/" + n(i.asItem())));
 	}
 	
-	private void itemGenerated(IForgeRegistryEntry<?> thingie) {
+	private void itemGenerated(IItemProvider asd) {
+		IForgeRegistryEntry<?> thingie = asd.asItem();
 		assert thingie.getRegistryName() != null; //no u
 		ResourceLocation item = new ResourceLocation(thingie.getRegistryName().getNamespace(), "item/" + thingie.getRegistryName().getPath());
 		itemGenerated(thingie, item);

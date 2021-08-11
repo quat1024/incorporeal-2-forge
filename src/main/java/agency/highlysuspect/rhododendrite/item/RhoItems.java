@@ -2,7 +2,6 @@ package agency.highlysuspect.rhododendrite.item;
 
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -28,7 +27,15 @@ public class RhoItems {
 			RhoBlocks.TEST2,
 			RhoBlocks.PUSH,
 			RhoBlocks.PULL,
-			RhoBlocks.REORIENT
+			RhoBlocks.REORIENT,
+			RhoBlocks.DUP,
+			RhoBlocks.PUSH_ZERO,
+			RhoBlocks.PUSH_ONE,
+			RhoBlocks.ADD,
+			RhoBlocks.SUBTRACT,
+			RhoBlocks.MULTIPLY,
+			RhoBlocks.DIVIDE,
+			RhoBlocks.REMAINDER
 		);
 	}
 	
