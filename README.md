@@ -60,3 +60,5 @@ trapdoor texture, door item and block texture, sign texture
 - make it flammable (needs either a remapped mixin, or subclassing every block for a poorly-designed Forge extension)
 
 reason im shying away from remapped mixins is they're currently broken in this workspace for some reason, i'll file a bug report later
+
+* Unfuck the loot table for potted rhodo sapling

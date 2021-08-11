@@ -14,6 +14,9 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.GenericEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -39,6 +42,7 @@ public class Rho {
 		modBus.addGenericListener(Block.class, RhoBlocks::register);
 		modBus.addGenericListener(Item.class, RhoItems::register);
 		modBus.addGenericListener(TileEntityType.class, RhoTileTypes::register);
+		modBus.addGenericListener(Feature.class, (RegistryEvent.Register<Feature<?>> e) -> RhoBlocks.RHODODENDRITE.registerFeature(e.getRegistry()));
 		
 		modBus.addListener((FMLCommonSetupEvent e) -> {
 			FragmentCapability.initialize();

@@ -24,6 +24,8 @@ public class RhoBlocks {
 		//replace the log with a different implementation
 		//leaky abstractions! this is my fault! yay
 		family.log = new RhododendriteLogBlock(AbstractBlock.Properties.from(family.log));
+		
+		family.okDoTheTreeNow();
 	});
 	
 	public static final CoreBlock CORE = new CoreBlock(AbstractBlock.Properties.create(Material.WOOD, MaterialColor.RED)

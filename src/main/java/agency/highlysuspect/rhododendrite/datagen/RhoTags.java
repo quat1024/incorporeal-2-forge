@@ -34,6 +34,7 @@ public class RhoTags {
 			getOrCreateBuilder(BlockTags.WOODEN_SLABS).add(family.slab);
 			getOrCreateBuilder(BlockTags.WOODEN_STAIRS).add(family.stairs);
 			getOrCreateBuilder(BlockTags.WOODEN_TRAPDOORS).add(family.trapdoor);
+			getOrCreateBuilder(BlockTags.LEAVES).add(family.leaves);
 		}
 	}
 	
@@ -53,6 +54,7 @@ public class RhoTags {
 			copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
 			copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
 			copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
+			copy(BlockTags.LEAVES, ItemTags.LEAVES);
 		}
 	}
 }

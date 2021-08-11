@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "rhododendrite:block/rhododendrite_sapling"
+  }
+}

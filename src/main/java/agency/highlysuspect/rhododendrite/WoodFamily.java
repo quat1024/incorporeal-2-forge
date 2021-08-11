@@ -3,17 +3,25 @@ package agency.highlysuspect.rhododendrite;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.block.trees.Tree;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
+import net.minecraft.world.gen.trunkplacer.StraightTrunkPlacer;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class WoodFamily {
 	public WoodFamily(String name, MaterialColor planksColor, MaterialColor barkColor) {
@@ -23,8 +31,6 @@ public class WoodFamily {
 		planks = new Block(AbstractBlock.Properties.create(Material.WOOD, planksColor)
 			.hardnessAndResistance(2, 3)
 			.sound(SoundType.WOOD));
-		
-		//sapling = null; //TODO (needs Tree)
 		
 		strippedLog = new RotatedPillarBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
 			.hardnessAndResistance(2.0F)
@@ -124,11 +130,41 @@ public class WoodFamily {
 		//boat = new BoatItem(BoatEntity.Type.DARK_OAK, RhoItems.defaultProps().maxStackSize(1));
 	}
 	
+	//cheap hack because this WoodFamily thing is a leaky as hell abstraction
+	//i need to change the log block to a different implementation for rhodo logs b/c theyre special
+	//and if i make the configured feature first it fucks up the sapling
+	public void okDoTheTreeNow() {
+		//this is literally just a straight-up copy of the birch tree with some numbers fudged a bit
+		//yeah idk how this works
+		//i tried making it bigger but it was just ugly
+		treeFeature = Feature.TREE.withConfiguration(new BaseTreeFeatureConfig.Builder(
+			new SimpleBlockStateProvider(log.getDefaultState()),
+			new SimpleBlockStateProvider(leaves.getDefaultState()),
+			new BlobFoliagePlacer(
+				FeatureSpread.func_242252_a(2),
+				FeatureSpread.func_242252_a(0),
+				3
+			),
+			new StraightTrunkPlacer(6, 3, 0),
+			new TwoLayerFeature(1, 0, 1)
+		).setIgnoreVines().build());
+		
+		tree = new Tree() {
+			@Nullable
+			@Override
+			protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getTreeFeature(Random randomIn, boolean largeHive) {
+				return WoodFamily.this.treeFeature;
+			}
+		};
+		
+		sapling = new SaplingBlock(tree, AbstractBlock.Properties.from(Blocks.OAK_SAPLING));
+		pottedSapling = new FlowerPotBlock(sapling, AbstractBlock.Properties.from(Blocks.POTTED_OAK_SAPLING));
+	}
+	
 	public String name;
 	public WoodType woodType;
 	
 	public Block planks;
-	//public Block sapling;
 	public RotatedPillarBlock log;
 	public RotatedPillarBlock strippedLog;
 	public RotatedPillarBlock wood;
@@ -142,15 +178,20 @@ public class WoodFamily {
 	public FenceBlock fence;
 	public TrapDoorBlock trapdoor;
 	public FenceGateBlock fenceGate;
-	//public Block pottedSapling;
 	public WoodButtonBlock button;
 	public SlabBlock slab;
 	
 	//public BoatItem boat;
 	
+	public Block sapling;
+	public Block pottedSapling;
+	
+	//tree hell
+	public Tree tree;
+	public ConfiguredFeature<BaseTreeFeatureConfig, ?> treeFeature;
+	
 	public void registerBlocks(IForgeRegistry<Block> r) {
 		Rho.reg(r, name + "_planks", planks);
-		//sapling
 		Rho.reg(r, name + "_log", log);
 		Rho.reg(r, "stripped_" + name + "_log", strippedLog);
 		Rho.reg(r, name + "_wood", wood);
@@ -164,16 +205,20 @@ public class WoodFamily {
 		Rho.reg(r, name + "_fence", fence);
 		Rho.reg(r, name + "_trapdoor", trapdoor);
 		Rho.reg(r, name + "_fence_gate", fenceGate);
-		//potted sapling
 		Rho.reg(r, name + "_button", button);
 		Rho.reg(r, name + "_slab", slab);
+		Rho.reg(r, name + "_sapling", sapling);
+		Rho.reg(r, "potted_" + name + "_sapling", pottedSapling);
 	}
 	
 	public void registerItems(IForgeRegistry<Item> r) {
-		Rho.simpleBlockItems(r, planks, log, strippedLog, wood, strippedWood, leaves, stairs, door, pressurePlate, fence, trapdoor, fenceGate, button, slab);
-		//need to add sapling though
+		Rho.simpleBlockItems(r, planks, log, strippedLog, wood, strippedWood, leaves, stairs, door, pressurePlate, fence, trapdoor, fenceGate, button, slab, sapling);
 		
 		//Rho.reg(r, name + "_sign", new SignItem(RhoItems.defaultProps(), sign, wallSign));
 		//Rho.reg(r, name + "_boat", boat);
+	}
+	
+	public void registerFeature(IForgeRegistry<Feature<?>> r) {
+		Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, Rho.id(name + "_tree_feature"), treeFeature);
 	}
 }

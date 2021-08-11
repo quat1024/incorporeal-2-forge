@@ -127,14 +127,22 @@ public class RhoStatesModels extends BlockStateProvider {
 		fenceGateBlock(family.fenceGate, planksTex);
 		itemModels().fenceGate(n(family.fenceGate), planksTex);
 		
-		//todo potted sapling
-		
 		//todo buttons are done with a manual JSON file copypasted from Quark
 		// because forge datagen is kinda CBT and i cant figure out a way to do it nice
 		// Its really easy with the vanilla stuff, why didnt they just expose that?????
 		
 		slabBlock(family.slab, planksTex, planksTex);
 		itemModels().slab(n(family.slab), planksTex, planksTex, planksTex);
+		
+		sapling(family.sapling, family.pottedSapling);
+	}
+	
+	private void sapling(Block sapling, Block potted) {
+		ResourceLocation pee = blockTexture(sapling);
+		getVariantBuilder(sapling).partialState().setModels(new ConfiguredModel(models().withExistingParent(n(sapling), "block/cross").texture("cross", pee)));
+		itemGenerated(sapling, pee);
+		
+		getVariantBuilder(potted).partialState().setModels(new ConfiguredModel(models().withExistingParent(n(potted), "block/flower_pot_cross").texture("plant", pee)));
 	}
 	
 	private void pressurePlate(Block b, ResourceLocation texture) {
