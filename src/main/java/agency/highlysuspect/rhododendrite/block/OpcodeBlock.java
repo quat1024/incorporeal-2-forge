@@ -13,6 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -33,8 +34,13 @@ public class OpcodeBlock extends Block implements IWandable {
 		super(properties);
 		this.action = action;
 		
-		setDefaultState(getDefaultState().with(BlockStateProperties.POWERED, false));
+		setDefaultState(getDefaultState()
+			.with(POWERED, false)
+			.with(FAILED, false));
 	}
+	
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final BooleanProperty FAILED = BooleanProperty.create("failed");
 	
 	public static CoreAction binNumeric(BiFunction<BigInteger, BigInteger, BigInteger> binOp) {
 		return binNumericOpt((x, y) -> Optional.of(binOp.apply(x, y)));
@@ -50,12 +56,17 @@ public class OpcodeBlock extends Block implements IWandable {
 			Optional<BigInteger> headN = head.asNumber();
 			Optional<BigInteger> tailN = tail.asNumber();
 			
-			if(headN.isPresent() && tailN.isPresent())
+			if(headN.isPresent() && tailN.isPresent()) {
 				//perform the binary operation, try to inject it back into the head's type
-				binOp.apply(headN.get(), tailN.get()).flatMap(head::injectNumber).ifPresent(injResult -> {
-					ops.push(injResult);
+				Optional<? extends Fragment<?>> injResult = binOp.apply(headN.get(), tailN.get()).flatMap(head::injectNumber);
+				if(injResult.isPresent()) {
+					ops.push(injResult.get());
 					ops.commit();
-				});
+					return true;
+				}
+			}
+			
+			return false;
 		};
 	}
 	
@@ -63,24 +74,26 @@ public class OpcodeBlock extends Block implements IWandable {
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(BlockStateProperties.POWERED));
+		super.fillStateContainer(builder.add(POWERED));
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-		setDefaultState(getDefaultState().with(BlockStateProperties.POWERED, false));
+		setDefaultState(getDefaultState().with(POWERED, false));
 		
 		boolean shouldPower = world.getRedstonePowerFromNeighbors(pos) > 0;
-		boolean isPowered = state.get(BlockStateProperties.POWERED);
+		boolean isPowered = state.get(POWERED);
 		if(isPowered != shouldPower) {
-			world.setBlockState(pos, state.with(BlockStateProperties.POWERED, shouldPower));
+			state = state.with(POWERED, shouldPower);
+			world.setBlockState(pos, state);
 			
 			if(!world.isRemote && shouldPower) {
 				OpcodeTile tile = RhoTileTypes.OPCODE.getIfExists(world, pos);
 				if(tile != null) {
 					CoreTile core = tile.findCore();
 					if(core != null) {
-						action.apply(world, pos, state, core);
+						boolean success = action.apply(world, pos, state, core);
+						world.setBlockState(pos, state.with(FAILED, !success));
 					}
 				}
 			}
@@ -104,6 +117,16 @@ public class OpcodeBlock extends Block implements IWandable {
 	}
 	
 	@Override
+	public boolean hasComparatorInputOverride(BlockState state) {
+		return true;
+	}
+	
+	@Override
+	public int getComparatorInputOverride(BlockState state, World world, BlockPos pos) {
+		return state.get(FAILED) ? 15 : 0;
+	}
+	
+	@Override
 	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
@@ -115,7 +138,7 @@ public class OpcodeBlock extends Block implements IWandable {
 	}
 	
 	public interface CoreAction {
-		void apply(World world, BlockPos pos, BlockState state, CoreTile core);
+		boolean apply(World world, BlockPos pos, BlockState state, CoreTile core);
 	}
 	
 	public static class Directional extends OpcodeBlock {

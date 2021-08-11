@@ -6,6 +6,7 @@ import agency.highlysuspect.rhododendrite.computer.DataTypes;
 import agency.highlysuspect.rhododendrite.computer.StackOps;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -42,6 +43,7 @@ public class RhoBlocks {
 	//TODO remove
 	public static final OpcodeBlock TEST1 = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
 		Rho.LOGGER.info(core.getFragment().data);
+		return true;
 	});
 	
 	//TODO remove
@@ -49,39 +51,55 @@ public class RhoBlocks {
 		int hilarious = world.rand.nextInt(500);
 		Rho.LOGGER.info("setting core fragment to " + hilarious);
 		core.setFragment(DataTypes.BIG_INTEGER.uncheckedInstantiate(BigInteger.valueOf(hilarious)));
+		return true;
 	});
 	
 	public static final OpcodeBlock PUSH = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
 		StackOps ops = StackOps.read(core);
 		ops.push();
 		ops.commit();
+		return true;
 	});
 	
 	public static final OpcodeBlock PULL = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
 		StackOps ops = StackOps.read(core);
 		ops.pull();
 		ops.commit();
+		return true;
 	});
 	
-	public static final OpcodeBlock REORIENT = new OpcodeBlock.Directional(opcodeProps, (world, pos, state, core) ->
-		world.setBlockState(core.getPos(), core.getBlockState().with(CoreBlock.FACING, state.get(OpcodeBlock.Directional.FACING))));
+	public static final OpcodeBlock REORIENT = new OpcodeBlock.Directional(opcodeProps, (world, pos, state, core) -> {
+		BlockState coreState = core.getBlockState();
+		if(coreState.getBlock() instanceof CoreBlock) { //u never know
+			Direction opcodeFacing = state.get(OpcodeBlock.Directional.FACING);
+			Direction coreFacing = coreState.get(CoreBlock.FACING);
+			if(opcodeFacing != coreFacing) {
+				world.setBlockState(core.getPos(), coreState.with(CoreBlock.FACING, opcodeFacing));
+				return true;
+			}
+		}
+		return false;
+	});
 	
 	public static final OpcodeBlock DUP = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
 		StackOps ops = StackOps.read(core);
 		ops.push(ops.peek().unlink());
 		ops.commit();
+		return true;
 	});
 	
 	public static final OpcodeBlock PUSH_ZERO = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
 		StackOps ops = StackOps.read(core);
 		ops.push(DataTypes.BIG_INTEGER.uncheckedInstantiate(BigInteger.ZERO));
 		ops.commit();
+		return true;
 	});
 	
 	public static final OpcodeBlock PUSH_ONE = new OpcodeBlock(opcodeProps, (world, pos, state, core) -> {
 		StackOps ops = StackOps.read(core);
 		ops.push(DataTypes.BIG_INTEGER.uncheckedInstantiate(BigInteger.ONE));
 		ops.commit();
+		return true;
 	});
 	
 	public static final OpcodeBlock ADD = new OpcodeBlock(opcodeProps, OpcodeBlock.binNumeric(BigInteger::add));
