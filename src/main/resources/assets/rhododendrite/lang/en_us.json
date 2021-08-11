@@ -23,18 +23,19 @@
 	
 	"block.rhododendrite.core": "Awakened Rhododendrite Core",
 	"block.rhododendrite.awakened_log": "Awakened Rhododendrite Log",
+	"block.rhododendrite.opcode": "Rhododendric Operator",
+	"block.rhododendrite.core_tumbler": "Core Tumbler",
 	
-	"block.rhododendrite.test1": "Opcode: TEST1 (print)",
-	"block.rhododendrite.test2": "Opcode: TEST2 (randomize)",
-	"block.rhododendrite.push": "Opcode: Push",
-	"block.rhododendrite.pull": "Opcode: Pull",
-	"block.rhododendrite.reorient": "Opcode: Reorient Core",
-	"block.rhododendrite.dup": "Opcode: Clone",
-	"block.rhododendrite.push_zero": "Opcode: Push Zero",
-	"block.rhododendrite.push_one": "Opcode: Push One",
-	"block.rhododendrite.add": "Opcode: Sum",
-	"block.rhododendrite.subtract": "Opcode: Difference",
-	"block.rhododendrite.multiply": "Opcode: Product",
-	"block.rhododendrite.divide": "Opcode: Quotient",
-	"block.rhododendrite.remainder": "Opcode: Remainder"
+	"item.rhododendrite.opcode_test_1": "Opcode: Print to the server console lol",
+	"item.rhododendrite.opcode_test_2": "Opcode: hmm idk what this one does actualy",
+	"item.rhododendrite.opcode_push": "Opcode: Push",
+	"item.rhododendrite.opcode_pull": "Opcode: Pull",
+	"item.rhododendrite.opcode_dup": "Opcode: Clone",
+	"item.rhododendrite.opcode_push_zero": "Opcode: Push Zero",
+	"item.rhododendrite.opcode_push_one": "Opcode: Push One",
+	"item.rhododendrite.opcode_add": "Opcode: Sum",
+	"item.rhododendrite.opcode_subtract": "Opcode: Difference",
+	"item.rhododendrite.opcode_multiply": "Opcode: Product",
+	"item.rhododendrite.opcode_divide": "Opcode: Quotient",
+	"item.rhododendrite.opcode_remainder": "Opcode: Remainder"
 }

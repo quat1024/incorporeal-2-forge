@@ -3,6 +3,7 @@ package agency.highlysuspect.rhododendrite.datagen;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
+import agency.highlysuspect.rhododendrite.item.RhoItems;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -10,7 +11,6 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -37,7 +37,7 @@ public class RhoStatesModels extends BlockStateProvider {
 	protected void registerStatesAndModels() {
 		handleWoodBlockFamily(RhoBlocks.RHODODENDRITE);
 		
-		//simpleBlock(RhoBlocks.CORE);
+		//simpleBlock(RhoBlocks.CORE); //Detailed custom model & i just did the blockstate too
 		blockItemParent(RhoBlocks.CORE);
 		
 		//Done manually since forge generates an awful blockstate for this, unfolding all 16 * 6 states into their own json objects
@@ -47,34 +47,33 @@ public class RhoStatesModels extends BlockStateProvider {
 		//directionalBlock(RhoBlocks.AWAKENED_LOG, new ModelFile.ExistingModelFile(Rho.id("block/awakened_log"), models().existingFileHelper));
 		blockItemParent(RhoBlocks.AWAKENED_LOG);
 		
-		doIt(this::opcode,
-			RhoBlocks.PUSH,
-			RhoBlocks.PULL,
-			RhoBlocks.DUP,
-			RhoBlocks.PUSH_ZERO,
-			RhoBlocks.PUSH_ONE,
-			RhoBlocks.ADD,
-			RhoBlocks.SUBTRACT,
-			RhoBlocks.MULTIPLY,
-			RhoBlocks.DIVIDE,
-			RhoBlocks.REMAINDER);
-		reorientOpcode(RhoBlocks.REORIENT);
+		blockItemParent(RhoBlocks.OPCODE);
+		
+		doIt(this::itemGenerated,
+			RhoItems.NOP,
+			RhoItems.TEST1,
+			RhoItems.TEST2,
+			RhoItems.PUSH,
+			RhoItems.PULL,
+			RhoItems.DUP,
+			RhoItems.PUSH_ZERO,
+			RhoItems.PUSH_ONE,
+			RhoItems.ADD,
+			RhoItems.SUBTRACT,
+			RhoItems.MULTIPLY,
+			RhoItems.DIVIDE,
+			RhoItems.REMAINDER);
+		
+		coreTumbler(RhoBlocks.CORE_TUMBLER);
 	}
 	
-	protected void doIt(Consumer<Block> yes, Block... blocks) {
-		for(Block b : blocks) yes.accept(b);
+	protected <T> void doIt(Consumer<T> yes, T... blocks) {
+		for(T b : blocks) yes.accept(b);
 	}
 	
-	protected void opcode(Block b) {
-		//for now
-		simpleBlock(b);
-		blockItemParent(b);
-	}
-	
-	protected void reorientOpcode(Block b) {
-		//for now
+	protected void coreTumbler(Block b) {
 		ResourceLocation tex = blockTexture(b);
-		directionalBlock(b, models().cubeColumn(n(b), tex, extend(tex, "_end")));
+		directionalBlock(b, models().cubeBottomTop(n(b), tex, extend(tex, "_bottom"), extend(tex, "_top")));
 		blockItemParent(b);
 	}
 	
@@ -150,6 +149,7 @@ public class RhoStatesModels extends BlockStateProvider {
 		itemModels().withExistingParent(n(i.asItem()), Rho.id("block/" + n(i.asItem())));
 	}
 	
+	//this is a mess im sorry. this is the wrong way to do it
 	private void itemGenerated(IItemProvider asd) {
 		IForgeRegistryEntry<?> thingie = asd.asItem();
 		assert thingie.getRegistryName() != null; //no u

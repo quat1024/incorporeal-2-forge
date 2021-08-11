@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:block/cube_column",
+	"textures": {
+		"side": "rhododendrite:block/opcode_side",
+		"end": "rhododendrite:block/opcode_end"
+	}
+}

@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "side": "rhododendrite:block/reorient",
-    "end": "rhododendrite:block/reorient_end"
-  }
-}

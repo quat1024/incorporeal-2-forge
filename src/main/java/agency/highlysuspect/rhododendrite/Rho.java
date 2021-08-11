@@ -53,9 +53,10 @@ public class Rho {
 		return new ResourceLocation(MODID, path);
 	}
 	
-	public static <T extends ForgeRegistryEntry<T>> void reg(IForgeRegistry<T> r, String name, T thing) {
+	public static <T extends ForgeRegistryEntry<T>> T reg(IForgeRegistry<T> r, String name, T thing) {
 		thing.setRegistryName(id(name));
 		r.register(thing);
+		return thing;
 	}
 	
 	public static void simpleBlockItems(IForgeRegistry<Item> r, Block... bs) {

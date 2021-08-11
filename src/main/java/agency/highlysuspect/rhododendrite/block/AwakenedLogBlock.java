@@ -25,18 +25,17 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class AwakenedLogBlock extends DirectionalBlock {
+public class AwakenedLogBlock extends DirectionalBlockButBetter.PlacesLikeLogs {
 	public AwakenedLogBlock(Properties properties) {
 		super(properties);
 	}
 	
-	public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
+	public static final EnumProperty<Direction> FACING = DirectionalBlockButBetter.FACING;
 	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, CorePathTracing.MAX_RANGE);
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		//yeah you have to add FACING manually, DirectionalBlock doesnt do it for you, good job
-		super.fillStateContainer(builder.add(FACING, DISTANCE));
+		super.fillStateContainer(builder.add(DISTANCE));
 	}
 	
 	@Override
@@ -45,7 +44,6 @@ public class AwakenedLogBlock extends DirectionalBlock {
 		//but it's nice to be able to do it in creative mode et al
 		BlockState state = super.getStateForPlacement(context);
 		if(state == null) return null;
-		state = state.with(FACING, context.getFace().getOpposite());
 		return CorePathTracing.scanForCore(context.getWorld(), context.getPos(), state.get(FACING))
 			.map(r -> r.toAwakenedLogState(this))
 			.orElse(unawakenedState(state));

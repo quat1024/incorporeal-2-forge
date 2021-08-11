@@ -9,10 +9,15 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class FrameReader {
-	//Pretty much copied from TileCorporeaFunnel.
 	public static List<ItemStack> readFramesRestingOn(World world, BlockPos pos) {
+		return readFramesRestingOnAndMatching(world, pos, stack -> true);
+	}
+	
+	//Pretty much copied from TileCorporeaFunnel.
+	public static List<ItemStack> readFramesRestingOnAndMatching(World world, BlockPos pos, Predicate<ItemStack> test) {
 		List<ItemStack> stacks = new ArrayList<>();
 		
 		for (Direction dir : Direction.values()) {
@@ -21,7 +26,7 @@ public class FrameReader {
 				Direction orientation = frame.getHorizontalFacing();
 				if (orientation == dir) {
 					ItemStack stack = frame.getDisplayedItem();
-					if (!stack.isEmpty()) {
+					if (!stack.isEmpty() && test.test(stack)) {
 						stacks.add(stack.copy());
 					}
 				}
