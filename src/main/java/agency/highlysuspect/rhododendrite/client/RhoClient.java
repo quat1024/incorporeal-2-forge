@@ -5,10 +5,14 @@ import agency.highlysuspect.rhododendrite.RhoProxy;
 import agency.highlysuspect.rhododendrite.block.AwakenedLogBlock;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import agency.highlysuspect.rhododendrite.computer.CorePathTracing;
+import net.minecraft.client.renderer.Atlases;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class RhoClient implements RhoProxy {
@@ -16,12 +20,15 @@ public class RhoClient implements RhoProxy {
 	public void setup() {
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
-		//TODO uncomment when the sign is readded
-//		modBus.addListener((FMLClientSetupEvent e) -> {
+		modBus.addListener((FMLClientSetupEvent e) -> {
+			//TODO uncomment when the sign is readded
 //			e.enqueueWork(() -> {
 //				Atlases.addWoodType(RhoBlocks.RHODODENDRITE.woodType);
 //			});
-//		});
+			
+			RenderTypeLookup.setRenderLayer(RhoBlocks.CORE, RenderType.getTranslucent());
+			RenderTypeLookup.setRenderLayer(RhoBlocks.AWAKENED_LOG, RenderType.getCutout());
+		});
 		
 		modBus.addListener((ColorHandlerEvent.Block event) -> {
 			BlockColors colors = event.getBlockColors();

@@ -10,6 +10,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -32,18 +33,18 @@ public class RhoStatesModels extends BlockStateProvider {
 		return b.getRegistryName().getPath();
 	}
 	
-	@SuppressWarnings("ConstantConditions")
 	@Override
 	protected void registerStatesAndModels() {
 		handleWoodBlockFamily(RhoBlocks.RHODODENDRITE);
 		
-		simpleBlock(RhoBlocks.CORE);
+		//simpleBlock(RhoBlocks.CORE);
 		blockItemParent(RhoBlocks.CORE);
 		
-		directionalBlock(RhoBlocks.AWAKENED_LOG, models()
-			.cubeColumn(n(RhoBlocks.AWAKENED_LOG),
-				RhoBlocks.AWAKENED_LOG.getRegistryName(),
-				extend(RhoBlocks.AWAKENED_LOG.getRegistryName(), "_top")));
+		//Done manually since forge generates an awful blockstate for this, unfolding all 16 * 6 states into their own json objects
+		//Again just USE the damn VANILLA system.....
+		//(I also needed to flip every other orientation so it lines up with the regular log.. this has 6 states, the log has 3)
+		//(so awakening a log would sometimes flip the texture and look weird)
+		//directionalBlock(RhoBlocks.AWAKENED_LOG, new ModelFile.ExistingModelFile(Rho.id("block/awakened_log"), models().existingFileHelper));
 		blockItemParent(RhoBlocks.AWAKENED_LOG);
 		
 		doIt(this::opcode,

@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "side": "rhododendrite:awakened_log",
-    "end": "rhododendrite:awakened_log_top"
-  }
-}

@@ -74,7 +74,7 @@ public class OpcodeBlock extends Block implements IWandable {
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(POWERED));
+		super.fillStateContainer(builder.add(POWERED, FAILED));
 	}
 	
 	@Override

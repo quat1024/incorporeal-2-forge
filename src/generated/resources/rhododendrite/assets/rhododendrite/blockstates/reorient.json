@@ -1,53 +1,105 @@
 {
   "variants": {
-    "facing=down,powered=false": {
+    "facing=down,failed=false,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 180
     },
-    "facing=up,powered=false": {
+    "facing=up,failed=false,powered=false": {
       "model": "rhododendrite:block/reorient"
     },
-    "facing=north,powered=false": {
+    "facing=north,failed=false,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 90
     },
-    "facing=south,powered=false": {
+    "facing=south,failed=false,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 90,
       "y": 180
     },
-    "facing=west,powered=false": {
+    "facing=west,failed=false,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 90,
       "y": 270
     },
-    "facing=east,powered=false": {
+    "facing=east,failed=false,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 90,
       "y": 90
     },
-    "facing=down,powered=true": {
+    "facing=down,failed=true,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 180
     },
-    "facing=up,powered=true": {
+    "facing=up,failed=true,powered=false": {
       "model": "rhododendrite:block/reorient"
     },
-    "facing=north,powered=true": {
+    "facing=north,failed=true,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 90
     },
-    "facing=south,powered=true": {
+    "facing=south,failed=true,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 90,
       "y": 180
     },
-    "facing=west,powered=true": {
+    "facing=west,failed=true,powered=false": {
       "model": "rhododendrite:block/reorient",
       "x": 90,
       "y": 270
     },
-    "facing=east,powered=true": {
+    "facing=east,failed=true,powered=false": {
+      "model": "rhododendrite:block/reorient",
+      "x": 90,
+      "y": 90
+    },
+    "facing=down,failed=false,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 180
+    },
+    "facing=up,failed=false,powered=true": {
+      "model": "rhododendrite:block/reorient"
+    },
+    "facing=north,failed=false,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 90
+    },
+    "facing=south,failed=false,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,failed=false,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,failed=false,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 90,
+      "y": 90
+    },
+    "facing=down,failed=true,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 180
+    },
+    "facing=up,failed=true,powered=true": {
+      "model": "rhododendrite:block/reorient"
+    },
+    "facing=north,failed=true,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 90
+    },
+    "facing=south,failed=true,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,failed=true,powered=true": {
+      "model": "rhododendrite:block/reorient",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,failed=true,powered=true": {
       "model": "rhododendrite:block/reorient",
       "x": 90,
       "y": 90
