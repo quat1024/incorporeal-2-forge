@@ -11,36 +11,46 @@ import vazkii.botania.client.fx.SparkleParticleData;
 
 import java.util.function.Supplier;
 
+//Because Forge's packet handling API has been REALLY WELL THOUGHT OUT,
+//yeah. This is a thing. Botania does too, with the Runnables
+//Astonishing that you don't register client and server sides separately but hey that's Forge for you
+//The land of Proxies :sparkles:
+@SuppressWarnings("Convert2Lambda")
 public class ClientPacketHandler {
-	
 	public static void handleSparkleLine(IncNetwork.SparkleLine sparkle, Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().setPacketHandled(true);
-		ctx.get().enqueueWork(() -> {
-			Minecraft client = Minecraft.getInstance();
-			ClientWorld world = client.world;
-			if(world == null) return;
-			
-			showSparkleLine(world, sparkle);
+		ctx.get().enqueueWork(new Runnable() {
+			@Override
+			public void run() {
+				Minecraft client = Minecraft.getInstance();
+				ClientWorld world = client.world;
+				if(world == null) return;
+				
+				showSparkleLine(world, sparkle);
+			}
 		});
 	}
 	
 	public static void handleFunnyFlower(IncNetwork.FunnyFlower funny, Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().setPacketHandled(true);
-		ctx.get().enqueueWork(() -> {
-			Minecraft client = Minecraft.getInstance();
-			ClientWorld world = client.world;
-			if(world == null) return;
-			
-			showSparkleLine(world, funny.sparkleLine);
-			
-			int[] notes = funny.notes;
-			Vector3d end = funny.sparkleLine.end;
-			
-			if(notes.length == 1) {
-				world.addParticle(ParticleTypes.NOTE, end.x, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
-			} else if(notes.length == 2) {
-				world.addParticle(ParticleTypes.NOTE, end.x - 0.2, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
-				world.addParticle(ParticleTypes.NOTE, end.x + 0.2, end.y + 0.7, end.z, notes[1] / 24d, 0.0D, 0.0D);
+		ctx.get().enqueueWork(new Runnable() {
+			@Override
+			public void run() {
+				Minecraft client = Minecraft.getInstance();
+				ClientWorld world = client.world;
+				if(world == null) return;
+				
+				showSparkleLine(world, funny.sparkleLine);
+				
+				int[] notes = funny.notes;
+				Vector3d end = funny.sparkleLine.end;
+				
+				if(notes.length == 1) {
+					world.addParticle(ParticleTypes.NOTE, end.x, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
+				} else if(notes.length == 2) {
+					world.addParticle(ParticleTypes.NOTE, end.x - 0.2, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
+					world.addParticle(ParticleTypes.NOTE, end.x + 0.2, end.y + 0.7, end.z, notes[1] / 24d, 0.0D, 0.0D);
+				}
 			}
 		});
 	}
