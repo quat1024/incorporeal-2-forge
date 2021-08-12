@@ -1,8 +1,8 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.IncConfig;
 import agency.highlysuspect.incorporeal.IncNetwork;
-import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.corporea.IndexRequestFaker;
 import agency.highlysuspect.incorporeal.corporea.NearbyIndicesFinder;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;

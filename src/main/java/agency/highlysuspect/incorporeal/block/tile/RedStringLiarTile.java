@@ -2,7 +2,6 @@ package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.corporea.FrameReader;
 import agency.highlysuspect.incorporeal.corporea.LyingCorporeaNode;
-import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -18,9 +17,7 @@ import vazkii.botania.common.impl.corporea.DummyCorporeaNode;
 import vazkii.botania.common.impl.corporea.ForgeCapCorporeaNode;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RedStringLiarTile extends TileRedString {
 	public RedStringLiarTile() {
@@ -56,7 +53,7 @@ public class RedStringLiarTile extends TileRedString {
 	}
 	
 	public List<ItemStack> getSpoofedStacks() {
-		return FrameReader.readFramesRestingOn(world, pos).values().stream().map(ItemFrameEntity::getDisplayedItem).collect(Collectors.toList());
+		return FrameReader.nonEmptyItemsRestingOn(world, pos);
 	}
 	
 	public static class NodeDetector implements ICorporeaNodeDetector {

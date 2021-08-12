@@ -31,6 +31,8 @@ import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.corporea.CorporeaHelper;
 import vazkii.botania.common.lib.LibMisc;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -84,8 +86,13 @@ public class Inc {
 		r.register(thing);
 	}
 	
-	public static <T> T choose(List<T> things, Random random) {
-		return things.get(random.nextInt(things.size()));
+	public static <T> T choose(Collection<T> things, Random random) {
+		if(things instanceof List<?>) return ((List<T>) things).get(random.nextInt(things.size()));
+		else {
+			//This is shitty im sorry.
+			List<T> thingsList = new ArrayList<>(things);
+			return thingsList.get(random.nextInt(thingsList.size()));
+		}
 	}
 	
 	public static float rangeRemap(float value, float low1, float high1, float low2, float high2) {

@@ -1,7 +1,7 @@
 package agency.highlysuspect.incorporeal.client;
 
-import agency.highlysuspect.incorporeal.IncProxy;
 import agency.highlysuspect.incorporeal.Inc;
+import agency.highlysuspect.incorporeal.IncProxy;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.entity.IncEntityTypes;

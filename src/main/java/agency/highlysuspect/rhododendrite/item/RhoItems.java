@@ -4,7 +4,6 @@ import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.block.CoreBlock;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
-import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
 import agency.highlysuspect.rhododendrite.computer.CompoundCorporeaRequestMatcher;
 import agency.highlysuspect.rhododendrite.computer.CoreAction;
 import agency.highlysuspect.rhododendrite.computer.StackOps;
@@ -15,7 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import static agency.highlysuspect.rhododendrite.computer.CoreAction.Result.*;
+import static agency.highlysuspect.rhododendrite.computer.CoreAction.Result.FAILURE;
+import static agency.highlysuspect.rhododendrite.computer.CoreAction.Result.SUCCESS;
 
 public class RhoItems {
 	//Always succeeds

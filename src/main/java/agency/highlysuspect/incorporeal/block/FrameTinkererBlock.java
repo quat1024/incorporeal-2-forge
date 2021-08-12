@@ -1,16 +1,19 @@
 package agency.highlysuspect.incorporeal.block;
 
 import agency.highlysuspect.incorporeal.Inc;
+import agency.highlysuspect.incorporeal.corporea.FrameReader;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -21,11 +24,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import vazkii.botania.mixin.AccessorItemEntity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
 
 public class FrameTinkererBlock extends Block {
 	public FrameTinkererBlock(Properties properties) {
@@ -81,10 +80,9 @@ public class FrameTinkererBlock extends Block {
 				List<ItemEntity> itemChoices = world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(pos), ent -> ent.isAlive() && !ent.getItem().isEmpty() && ent.getItem().getCount() == 1);
 				
 				//When switching an item entity with an item frame, it's okay if the frame is empty (it "places the item in the frame").
-				//When I'm only taking an item out of an item frame, the frame has to be non-empty (because if not, i'd switch two empty items)
-				List<ItemFrameEntity> frameChoices = findItemFramesNearby(world, pos,
-					!itemChoices.isEmpty() ? frame -> true : frame -> !frame.getDisplayedItem().isEmpty()
-				);
+				//When I'm only taking an item out of an item frame, the frame has to be non-empty (because if not, i'd switch two empty frames with each other)
+				boolean allowEmpty = !itemChoices.isEmpty();
+				List<ItemFrameEntity> frameChoices = allowEmpty ? FrameReader.near(world, pos) : FrameReader.nonEmptyNear(world, pos);
 				
 				if(frameChoices.isEmpty()) return; //No candidate frames are present to switch with.
 				ItemFrameEntity frame = Inc.choose(frameChoices, world.rand);
@@ -96,12 +94,6 @@ public class FrameTinkererBlock extends Block {
 				}
 			}
 		}
-	}
-	
-	private static List<ItemFrameEntity> findItemFramesNearby(World world, BlockPos pos, Predicate<ItemFrameEntity> test) {
-		Set<ItemFrameEntity> nearbyFrames = new HashSet<>();
-		for(Direction dir : Direction.values()) nearbyFrames.addAll(world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(pos.offset(dir)), test.and(Entity::isAlive)));
-		return new ArrayList<>(nearbyFrames); //copying to an arraylist, since there's no good way to choose a random element from a Set >.>
 	}
 	
 	private void switchWithEntity(World world, BlockPos pos, ItemFrameEntity frame, ItemEntity switchWith) {

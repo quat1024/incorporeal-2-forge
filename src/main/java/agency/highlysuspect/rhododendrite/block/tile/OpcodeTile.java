@@ -29,7 +29,7 @@ public class OpcodeTile extends RhodoNetworkTile {
 		if(core == null) return Result.NOT_APPLICABLE;
 		
 		//Locate nearby item frames.
-		Map<Direction, ItemFrameEntity> frames = FrameReader.readFramesRestingOn(world, pos);
+		Map<Direction, ItemFrameEntity> frames = FrameReader.directionalNonEmptyRestingOn(world, pos);
 		if(frames.isEmpty()) return Result.NOT_APPLICABLE;
 		
 		Direction dir;
