@@ -42,7 +42,7 @@ public class MatcherUtils {
 		}
 	}
 	
-	//TODO: I'd love to use not-Reflection for this, but... yeah.
+	//TODO (issue #4): I'd love to use not-Reflection for this, but... yeah.
 	// An Accessor was my first choice, but since they're static fields, I need a TileCorporeaRetainer *instance* in order to call methods on the accessor.
 	// Normally for things like Blocks this isn't too painful since you can just use Blocks.AIR or whatever but this is not safe to randomly construct.
 	// ...

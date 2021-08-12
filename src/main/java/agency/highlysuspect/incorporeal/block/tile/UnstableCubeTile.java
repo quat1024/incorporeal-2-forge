@@ -63,7 +63,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 				Vector3 start = Vector3.fromBlockPos(pos);
 				Vector3 end = start.add(world.rand.nextDouble() * 2 - 1, world.rand.nextDouble() * 2 - 1, world.rand.nextDouble() * 2 - 1);
 				
-				//TODO: Why doesn't this produce any lightning
+				//TODO (issue #3): Why doesn't this produce any lightning
 				Botania.proxy.lightningFX(start, end, 5f, colorDarker, colorPacked);
 				
 				if(rotationSpeed > 1.1) {

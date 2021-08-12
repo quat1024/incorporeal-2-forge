@@ -113,10 +113,6 @@ public class WoodFamily {
 			.hardnessAndResistance(2f, 3f)
 			.sound(SoundType.WOOD));
 		
-//		pottedSapling = new FlowerPotBlock(sapling, AbstractBlock.Properties.create(Material.MISCELLANEOUS)
-//			.zeroHardnessAndResistance()
-//			.notSolid()); //TODO (needs sapling)
-		
 		button = new WoodButtonBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS)
 			.doesNotBlockMovement()
 			.hardnessAndResistance(0.5f)

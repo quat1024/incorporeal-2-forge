@@ -36,8 +36,7 @@ public class RedStringLiarTile extends TileRedString {
 	public ICorporeaNode getNode(World world, ICorporeaSpark spark) {
 		TileEntity bound = getTileAtBinding();
 		if(bound != null) {
-			//todo: this is kinda messy capabilities code, forge caps in 1.16 are wild
-			// also there's no reason to limit myself to only ForgeCapCorporeaNodes
+			//todo (issue #2): there's no reason to limit myself to only ForgeCapCorporeaNodes
 			// the new implementation of LyingCorporeaNode is generic over all corporea nodes. might be something to look at.
 			LazyOptional<IItemHandler> handler = bound.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getOrientation().getOpposite());
 			if(handler.isPresent()) {

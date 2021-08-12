@@ -33,7 +33,7 @@ public class RhoRecipes extends IncRecipes {
 		//ok because i dont have item tags set up, the recipe gen tries to make 2 recipes named "rhododendrite_planks"
 		//and blows up. its just because i cant change the name of the recipe >.>
 		//totally valid to have two recipes that give the same item but Nooo..
-		//anyway TODO just make stripped logs not give planks and hope noone notices until i fix it
+		//anyway TODO (issue #1) just make stripped logs not give planks and hope noone notices until i fix it
 		planks(r, family.planks, family.log);
 		//planks(r, family.planks, family.strippedLog);
 		
@@ -41,15 +41,15 @@ public class RhoRecipes extends IncRecipes {
 		bark(r, family.strippedWood, family.strippedLog);
 		
 		button(r, family.button, family.planks);
-		//door(r, family.door, family.planks);
+		//door(r, family.door, family.planks); //TODO (issue #1)
 		fence(r, family.fence, family.planks);
 		fenceGate(r, family.fenceGate, family.planks);
 		pressurePlate(r, family.pressurePlate, family.planks);
 		slab(r, family.slab, family.planks);
 		stairs(r, family.stairs, family.planks);
-		//trapdoor(r, family.trapdoor, family.planks);
-		//sign(r, family.sign, family.planks); //TODO
-		//boat //TODO
+		//trapdoor(r, family.trapdoor, family.planks); //TODO (issue #1)
+		//sign(r, family.sign, family.planks); //TODO (issue #1)
+		//boat //TODO (issue #1)
 	}
 	
 	//Most of these are copy pasta from vanilla because they're all PRIVATE

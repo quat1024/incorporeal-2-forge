@@ -20,8 +20,6 @@ public class RhoDatagen {
 		ExistingFileHelper dontCare = new ExistingFileHelper(Collections.emptySet(), false);
 		
 		if(e.includeServer()) {
-			//TODO: the wall sign is the 1 block that doesn't drop itself
-			//so i will actually need to use a custom datagen instead of playing off Incorporeal's
 			data.addProvider(new ModidBlockDrops(Rho.MODID, data));
 			data.addProvider(new RhoRecipes(data));
 			

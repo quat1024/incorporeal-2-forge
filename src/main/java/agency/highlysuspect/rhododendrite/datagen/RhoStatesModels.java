@@ -89,8 +89,6 @@ public class RhoStatesModels extends BlockStateProvider {
 		simpleBlock(family.planks);
 		blockItemParent(family.planks);
 		
-		//todo sapling
-		
 		logBlock(family.log);
 		blockItemParent(family.log);
 		logBlock(family.strippedLog); 
@@ -106,12 +104,13 @@ public class RhoStatesModels extends BlockStateProvider {
 		stairsBlock(family.stairs, planksTex);
 		itemModels().stairs(n(family.stairs), planksTex, planksTex, planksTex);
 		
-		//todo sign
+		//todo sign (issue #1)
 		
+		//todo door (issue #1)
 		//doorBlock(family.door, Rho.id("block/" + family.name + "_door_bottom"), Rho.id("block/" + family.name + "_door_top"));
 		//itemGenerated(family.door);
 		
-		//todo wall sign
+		//todo wall sign (issue #1)
 		
 		pressurePlate(family.pressurePlate, planksTex);
 		blockItemParent(family.pressurePlate);
@@ -119,13 +118,14 @@ public class RhoStatesModels extends BlockStateProvider {
 		fenceBlock(family.fence, planksTex);
 		itemModels().fenceInventory(n(family.fence), planksTex);
 		
+		//todo trapdoor (issue #1)
 		//trapdoorBlock(family.trapdoor, Rho.id("block/" + family.name + "_trapdoor"), true);
 		//blockItemParent(family.trapdoor);
 		
 		fenceGateBlock(family.fenceGate, planksTex);
 		itemModels().fenceGate(n(family.fenceGate), planksTex);
 		
-		//todo buttons are done with a manual JSON file copypasted from Quark
+		//buttons are done with a manual JSON file copypasted from Quark
 		// because forge datagen is kinda CBT and i cant figure out a way to do it nice
 		// Its really easy with the vanilla stuff, why didnt they just expose that?????
 		

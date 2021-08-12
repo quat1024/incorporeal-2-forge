@@ -28,10 +28,6 @@ public class CorePathTracing {
 	}
 	
 	public static Optional<Result> scanForCore(IWorldReader world, BlockPos pos, Direction scanDir) {
-		//TODO okay so the original plan was to have leaves have paths continue "through" them
-		// turns out to be Really Hard!, and kind of weird performance-wise
-		// since like, whenever a leaf block moves you have to update a bazillion blocks
-		
 		//skip the log itself by alreading moving 1 time before the loop
 		BlockPos.Mutable cursor = pos.toMutable().move(scanDir);
 		for(int dist = 1; dist < MAX_RANGE; dist++, cursor.move(scanDir)) {
@@ -182,7 +178,6 @@ public class CorePathTracing {
 			}
 		}
 		
-		//TODO: distanceSq seems to have a bias, I thought it 
 		ABSOLUTE_SCAN_OFFSETS.sort(Comparator.comparingDouble(pos -> blockPosDistSq(pos, BlockPos.ZERO)));
 		
 		Map<BlockPos, BlockPos> objectCache = new HashMap<>();

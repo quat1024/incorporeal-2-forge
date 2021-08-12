@@ -99,7 +99,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 				BlockState state = world.getBlockState(cratePos);
 				TileEntity tile = world.getTileEntity(cratePos);
 				
-				//TODO: block tag check (theres still the open crate/crafty crate issue)
+				//TODO: block tag check (theres still the open crate/crafty crate issue) (issue #5)
 				if(tile instanceof TileOpenCrate && ((TileOpenCrate) tile).canEject()) {
 					boolean redstone = isCratePowered(world, cratePos);
 					

@@ -21,7 +21,7 @@ public class RhoClient implements RhoProxy {
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
 		modBus.addListener((FMLClientSetupEvent e) -> {
-			//TODO uncomment when the sign is readded
+			//TODO (issue #1) uncomment when the sign is readded
 //			e.enqueueWork(() -> {
 //				Atlases.addWoodType(RhoBlocks.RHODODENDRITE.woodType);
 //			});

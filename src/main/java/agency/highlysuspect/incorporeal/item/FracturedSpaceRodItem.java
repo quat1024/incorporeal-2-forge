@@ -47,7 +47,7 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 		BlockState hitState = world.getBlockState(pos);
 		TileEntity hitTile = world.getTileEntity(pos);
 		
-		//TODO tag check
+		//TODO tag check (issue #5)
 		if(hitTile instanceof TileOpenCrate && hitState.getBlock() == ModBlocks.openCrate) {
 			//Clicked a crate. Remember this position.
 			ItemNBTHelper.setCompound(held, CRATE_POS_KEY, NBTUtil.writeBlockPos(pos));
@@ -76,7 +76,7 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 				BlockPos cratePos = NBTUtil.readBlockPos(cratePosNbt);
 				BlockState rememberedState = world.getBlockState(cratePos);
 				TileEntity rememberedTile = world.getTileEntity(cratePos);
-				//TODO tag check
+				//TODO tag check (issue #5)
 				if(!(rememberedTile instanceof TileOpenCrate && rememberedState.getBlock() == ModBlocks.openCrate)) {
 					player.sendStatusMessage(new TranslationTextComponent("incorporeal.fractured_space.no_crate_there").mergeStyle(TextFormatting.RED), true);
 					return ActionResultType.FAIL;

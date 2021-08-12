@@ -96,7 +96,7 @@ public class RhodoNetworkTile extends TileMod implements IWandBindable {
 			
 			TileEntity tile = world.getTileEntity(end);
 			if(tile instanceof CoreTile || tile instanceof RhodoNetworkTile)
-				//TODO make a brighter sparkle-line packet. This is very small
+				//TODO (issue #6) make a brighter sparkle-line packet. This is very small
 				IncNetwork.sendToNearby(world, pos, new IncNetwork.SparkleLine(Vector3d.copyCentered(start), Vector3d.copyCentered(end), 30));
 				//ItemTwigWand.doParticleBeamWithOffset(world, start, end);
 			if(tile instanceof RhodoNetworkTile) {
