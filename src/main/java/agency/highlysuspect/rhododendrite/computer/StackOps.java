@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -56,6 +57,11 @@ public class StackOps {
 		return new StackOps(requests.toArray(new SolidifiedRequest[0]), holders.toArray(new SolidifiedRequest.Holder[0]));
 	}
 	
+	private static final SolidifiedRequest[] BUNCHA_EMPTIES = new SolidifiedRequest[CorePathTracing.MAX_RANGE];
+	static {
+		Arrays.fill(BUNCHA_EMPTIES, SolidifiedRequest.EMPTY);
+	} 
+	
 	private final SolidifiedRequest[] requests;
 	private final SolidifiedRequest.Holder[] holders;
 	
@@ -77,7 +83,7 @@ public class StackOps {
 	public StackOps push(SolidifiedRequest replacement) {
 		//[A][B][C] -> [r][A][B]
 		if(requests.length == 0) return this;
-		if(requests.length != 1)	System.arraycopy(requests, 0, requests, 1, requests.length - 1);
+		if(requests.length != 1) System.arraycopy(requests, 0, requests, 1, requests.length - 1);
 		requests[0] = replacement;
 		return this;
 	}
@@ -91,7 +97,14 @@ public class StackOps {
 	}
 	
 	public StackOps destroy(int howMany) {
-		System.arraycopy(requests, howMany, requests, 0, requests.length - howMany);
+		//hurrr durrrr, its fast because it uses arraycopy, the "code go fast" method
+		//yeah theres definitely nicer ways to do this
+		if(howMany == 0 || requests.length == 0) return this;
+		if(requests.length == 1) requests[0] = SolidifiedRequest.EMPTY;
+		else {
+			System.arraycopy(requests, howMany, requests, 0, requests.length - howMany);
+			System.arraycopy(BUNCHA_EMPTIES, 0, requests, requests.length - howMany, howMany);
+		}
 		return this;
 	}
 	
