@@ -2,7 +2,7 @@ package agency.highlysuspect.rhododendrite.block.tile;
 
 import net.minecraft.nbt.CompoundNBT;
 
-public class AwakenedLogTile extends FragmentContainerTile {
+public class AwakenedLogTile extends RequestHolderTile {
 	public AwakenedLogTile() {
 		super(RhoTileTypes.AWAKENED_LOG);
 	}

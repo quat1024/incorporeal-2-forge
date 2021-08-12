@@ -2,129 +2,120 @@ package agency.highlysuspect.rhododendrite.item;
 
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.rhododendrite.Rho;
+import agency.highlysuspect.rhododendrite.block.CoreBlock;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
-import agency.highlysuspect.rhododendrite.computer.*;
+import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
+import agency.highlysuspect.rhododendrite.computer.CompoundCorporeaRequestMatcher;
+import agency.highlysuspect.rhododendrite.computer.CoreAction;
+import agency.highlysuspect.rhododendrite.computer.StackOps;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
-import vazkii.botania.common.impl.corporea.CorporeaItemStackMatcher;
-
-import java.math.BigInteger;
-import java.util.Optional;
 
 import static agency.highlysuspect.rhododendrite.computer.CoreAction.Result.*;
 
 public class RhoItems {
 	//Always succeeds
-	public static final OpcodeCardItem OPCODE_BLANK = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> SUCCESS);
-	//test opcode, logs to console
-	public static final OpcodeCardItem OPCODE_TEST_1 = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> {
-		Rho.LOGGER.info(core.getFragment().data);
+	public static final OpcodeCardItem OPCODE_BLANK = new OpcodeCardItem(defaultProps(), (dir, core) -> SUCCESS);
+	
+	//test opcodes, log to console, there's 2 so i can use hotswap lol
+	public static final OpcodeCardItem OPCODE_TEST_1 = new OpcodeCardItem(defaultProps(), (dir, core) -> {
+		Rho.LOGGER.info(core.getRequest());
 		return SUCCESS;
 	});
-	//test opcode to try out solidified_request type
-	public static final OpcodeCardItem OPCODE_TEST_2 = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> {
-		core.setFragment(DataTypes.SOLIDIFIED_REQUEST.uncheckedInstantiate(new SolidifiedRequest(new CorporeaItemStackMatcher(new ItemStack(Items.STONE), false), 69)));
+	public static final OpcodeCardItem OPCODE_TEST_2 = new OpcodeCardItem(defaultProps(), (dir, core) -> {
+		Rho.LOGGER.info(core.getRequest());
 		return SUCCESS;
-	});
-	//Pushes an empty fragment to the stack
-	public static final OpcodeCardItem OPCODE_PUSH = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		ops.push();
-		ops.commit();
-		return SUCCESS;
-	});
-	//Pulls data closer to the core, erasing whatever's inside
-	public static final OpcodeCardItem OPCODE_PULL = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		ops.pull();
-		ops.commit();
-		return SUCCESS;
-	});
-	//Pushes a copy of the contents of the core onto the stack
-	public static final OpcodeCardItem OPCODE_DUP = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		ops.push(ops.peek().unlink());
-		ops.commit();
-		return SUCCESS;
-	});
-	//Pushes a 0
-	public static final OpcodeCardItem OPCODE_PUSH_ZERO = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		ops.push(DataTypes.BIG_INTEGER.uncheckedInstantiate(BigInteger.ZERO));
-		ops.commit();
-		return SUCCESS;
-	});
-	//Pushes a 1
-	public static final OpcodeCardItem OPCODE_PUSH_ONE = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		ops.push(DataTypes.BIG_INTEGER.uncheckedInstantiate(BigInteger.ONE));
-		ops.commit();
-		return SUCCESS;
-	});
-	//Mathematical operations. The type of the result is the type of whatever's in the core.
-	public static final OpcodeCardItem OPCODE_ADD = new OpcodeCardItem(defaultProps(), CoreAction.binNumeric(BigInteger::add));
-	public static final OpcodeCardItem OPCODE_SUBTRACT = new OpcodeCardItem(defaultProps(), CoreAction.binNumeric(BigInteger::subtract));
-	public static final OpcodeCardItem OPCODE_MULTIPLY = new OpcodeCardItem(defaultProps(), CoreAction.binNumeric(BigInteger::multiply));
-	public static final OpcodeCardItem OPCODE_DIVIDE = new OpcodeCardItem(defaultProps(), CoreAction.binNumericOpt((x, y) -> y.equals(BigInteger.ZERO) ? Optional.empty() : Optional.of(x.divide(y))));
-	public static final OpcodeCardItem OPCODE_REMAINDER = new OpcodeCardItem(defaultProps(), CoreAction.binNumericOpt((x, y) -> y.equals(BigInteger.ZERO) ? Optional.empty() : Optional.of(x.remainder(y))));
-	//Copies the numeric value of the thing and pushes it onto the core.
-	//This lets you convert from corporea request -> number if you want.
-	public static final OpcodeCardItem OPCODE_EXTRACT_NUMBER = new OpcodeCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		Optional<BigInteger> value = ops.pull().asNumber();
-		if(value.isPresent()) {
-			Optional<Fragment<BigInteger>> hahaYes = DataTypes.BIG_INTEGER.checkedInstantiate(value.get());
-			if(hahaYes.isPresent()) {
-				ops.push(hahaYes.get());
-				ops.commit();
-				return SUCCESS;
-			}
-		}
-		
-		return FAILURE;
 	});
 	
+	//Pushes an empty corporea request to the stack
+	public static final OpcodeCardItem OPCODE_PUSH = new OpcodeCardItem(defaultProps(), CoreAction.alwaysSucceeds((dir, core) -> StackOps.read(core).push().commit()));
+	
+	//Pulls data closer to the core, erasing whatever's inside
+	public static final OpcodeCardItem OPCODE_PULL = new OpcodeCardItem(defaultProps(), CoreAction.alwaysSucceeds((dir, core) -> StackOps.read(core).destroy(1).commit()));
+	
+	//Pushes a copy of the contents of the core onto the stack
+	public static final OpcodeCardItem OPCODE_DUP = new OpcodeCardItem(defaultProps(), CoreAction.alwaysSucceeds((dir, core) -> {
+		StackOps ops = StackOps.read(core);
+		ops.push(ops.peek());
+		ops.commit();
+	}));
+	
+	//Rotates the core. Aka the reason i've been passing direction arguments around the whole time
+	public static final OpcodeCardItem OPCODE_TUMBLE = new OpcodeCardItem(defaultProps(), (dir, core) -> {
+		BlockState state = core.getBlockState();
+		if(state.getBlock() instanceof CoreBlock && core.getWorld() != null) { //hey, you never know
+			core.getWorld().setBlockState(core.getPos(), state.with(CoreBlock.FACING, dir));
+			return SUCCESS;
+		} else return FAILURE;
+	});
+	
+	//Mathematical operations! The fun part.
+	//Add unions the matchers of corporea requests and sums their counts.
+	public static final OpcodeCardItem OPCODE_ADD = new OpcodeCardItem(defaultProps(), CoreAction.alwaysSucceeds((dir, core) -> 
+		StackOps.read(core).biPullPush((head, tail) -> new SolidifiedRequest(
+			CompoundCorporeaRequestMatcher.union(head.matcher, tail.matcher), 
+			head.count + tail.count
+		)).commit()));
+	
+	//Subtract removes all of B's matchers that exist in A and finds the difference of their counts.
+	public static final OpcodeCardItem OPCODE_SUBTRACT = new OpcodeCardItem(defaultProps(), CoreAction.alwaysSucceeds((dir, core) ->
+		StackOps.read(core).biPullPush((head, tail) -> new SolidifiedRequest(
+			CompoundCorporeaRequestMatcher.minus(head.matcher, tail.matcher),
+			head.count - tail.count
+		)).commit()));
+	
+	//Multiply multiplies the counts and uhh, it just finds the union of matchers again, can't think of much else lol
+	public static final OpcodeCardItem OPCODE_MULTIPLY = new OpcodeCardItem(defaultProps(), CoreAction.alwaysSucceeds((dir, core) ->
+		StackOps.read(core).biPullPush((head, tail) -> new SolidifiedRequest(
+			CompoundCorporeaRequestMatcher.union(head.matcher, tail.matcher),
+			head.count * tail.count
+		)).commit()));
+	
+	//Divide and Remainder both take the set differences again, although they can fail when the divisor is 0
+	public static final OpcodeCardItem OPCODE_DIVIDE = new OpcodeCardItem(defaultProps(), (dir, core) -> {
+		StackOps ops = StackOps.read(core);
+		if(ops.peek(1).count == 0) return FAILURE;
+		else ops.biPullPush((head, tail) -> new SolidifiedRequest(
+			CompoundCorporeaRequestMatcher.minus(head.matcher, tail.matcher),
+			head.count / tail.count
+		)).commit();
+		return SUCCESS;
+	});
+	
+	public static final OpcodeCardItem OPCODE_REMAINDER = new OpcodeCardItem(defaultProps(), (dir, core) -> {
+		StackOps ops = StackOps.read(core);
+		if(ops.peek(1).count == 0) return FAILURE;
+		else ops.biPullPush((head, tail) -> new SolidifiedRequest(
+			CompoundCorporeaRequestMatcher.minus(head.matcher, tail.matcher),
+			head.count % tail.count
+		)).commit();
+		return SUCCESS;
+	});
+	
+	////// Conditions!!
+	
 	//Always false.
-	public static final ConditionCardItem CONDITION_BLANK = new ConditionCardItem(defaultProps(), (world, pos, state, core) -> false);
-	//True if the core contains an empty item (unit type).
-	public static final ConditionCardItem CONDITION_IS_EMPTY = new ConditionCardItem(defaultProps(), (world, pos, state, core) -> StackOps.read(core).peek().isUnit());
-	//True if the thing inside the core is the same type as the thing outside the core.
-	public static final ConditionCardItem CONDITION_EQUAL_TYPE = new ConditionCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		Fragment<?> a = ops.peek(0);
-		Fragment<?> b = ops.peek(1);
-		return a.type != DataTypes.EMPTY && a.type == b.type;
-	});
-	//True if the thing inside the core is the same type as the thing outside the core, and their values are equal too.
-	public static final ConditionCardItem CONDITION_EQUAL = new ConditionCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		Fragment<?> a = ops.peek(0);
-		Fragment<?> b = ops.peek(1);
-		return a.type != DataTypes.EMPTY && a.equals(b);
-	});
-	//True if the numeric value of the thing inside the core is less than the numeric value of the thing outside the core.
-	//False if either are nonnumeric.
-	public static final ConditionCardItem CONDITION_LESS_THAN = new ConditionCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		Optional<BigInteger> head = ops.peek(0).asNumber();
-		Optional<BigInteger> tail = ops.peek(1).asNumber();
-		if(head.isPresent() && tail.isPresent()) return head.get().compareTo(tail.get()) < 0;
-		else return false;
-	});
-	//Same thing but does "greater than", false if either are nonnumeric.
-	//There's no "numeric equals" that would check e.g. (5xStone == 5), but I think you can make it with "not less than" & "not greater than"?
-	//This is a bad design decision lol
-	public static final ConditionCardItem CONDITION_GREATER_THAN = new ConditionCardItem(defaultProps(), (world, pos, state, core) -> {
-		StackOps ops = StackOps.read(core);
-		Optional<BigInteger> head = ops.peek(0).asNumber();
-		Optional<BigInteger> tail = ops.peek(1).asNumber();
-		if(head.isPresent() && tail.isPresent()) return head.get().compareTo(tail.get()) > 0;
-		else return false;
-	});
+	public static final ConditionCardItem CONDITION_BLANK = new ConditionCardItem(defaultProps(), core ->
+		false);
+	
+	public static final ConditionCardItem CONDITION_IS_EMPTY = new ConditionCardItem(defaultProps(), core ->
+		StackOps.read(core).peek().isEmpty());
+	
+	public static final ConditionCardItem CONDITION_EQUAL = new ConditionCardItem(defaultProps(), core ->
+		StackOps.read(core).biPeekMatches(SolidifiedRequest::equals));
+	
+	public static final ConditionCardItem CONDITION_COUNT_EQUAL = new ConditionCardItem(defaultProps(), core ->
+		StackOps.read(core).biPeekMatches((head, tail) -> head.count == tail.count));
+	
+	public static final ConditionCardItem CONDITION_LESS_THAN = new ConditionCardItem(defaultProps(), core ->
+		StackOps.read(core).biPeekMatches((head, tail) -> head.count < tail.count));
+	
+	public static final ConditionCardItem CONDITION_GREATER_THAN = new ConditionCardItem(defaultProps(), core ->
+		StackOps.read(core).biPeekMatches((head, tail) -> head.count > tail.count));
 	
 	public static Item.Properties defaultProps() {
 		return new Item.Properties().group(Tab.INSTANCE);
@@ -141,8 +132,7 @@ public class RhoItems {
 		Rho.reg(r, "opcode_push", OPCODE_PUSH);
 		Rho.reg(r, "opcode_pull", OPCODE_PULL);
 		Rho.reg(r, "opcode_dup", OPCODE_DUP);
-		Rho.reg(r, "opcode_push_zero", OPCODE_PUSH_ZERO);
-		Rho.reg(r, "opcode_push_one", OPCODE_PUSH_ONE);
+		Rho.reg(r, "opcode_tumble", OPCODE_TUMBLE);
 		Rho.reg(r, "opcode_add", OPCODE_ADD);
 		Rho.reg(r, "opcode_subtract", OPCODE_SUBTRACT);
 		Rho.reg(r, "opcode_multiply", OPCODE_MULTIPLY);
@@ -151,8 +141,8 @@ public class RhoItems {
 		
 		Rho.reg(r, "condition_blank", CONDITION_BLANK);
 		Rho.reg(r, "condition_is_empty", CONDITION_IS_EMPTY);
-		Rho.reg(r, "condition_equal_type", CONDITION_EQUAL_TYPE);
 		Rho.reg(r, "condition_equal", CONDITION_EQUAL);
+		Rho.reg(r, "condition_count_equal", CONDITION_COUNT_EQUAL);
 		Rho.reg(r, "condition_less_than", CONDITION_LESS_THAN);
 		Rho.reg(r, "condition_greater_than", CONDITION_GREATER_THAN);
 		
@@ -160,7 +150,6 @@ public class RhoItems {
 			RhoBlocks.CORE,
 			RhoBlocks.AWAKENED_LOG,
 			RhoBlocks.OPCODE,
-			RhoBlocks.CORE_TUMBLER,
 			RhoBlocks.CONDITION
 		);
 	}

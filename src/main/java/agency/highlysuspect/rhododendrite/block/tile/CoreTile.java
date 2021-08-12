@@ -1,6 +1,6 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
-import agency.highlysuspect.rhododendrite.computer.Fragment;
+import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -12,7 +12,7 @@ import net.minecraftforge.common.util.Constants;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CoreTile extends FragmentContainerTile {
+public class CoreTile extends RequestHolderTile {
 	public CoreTile() {
 		super(RhoTileTypes.CORE);
 	}
@@ -21,9 +21,8 @@ public class CoreTile extends FragmentContainerTile {
 	private final Set<BlockPos> listeners = new HashSet<>();
 	
 	@Override
-	public void setFragment(Fragment<?> newFragment) {
-		Fragment<?> oldFragment = getFragment();
-		super.setFragment(newFragment);
+	public void setRequest(SolidifiedRequest newRequest) {
+		super.setRequest(newRequest);
 		
 		if(world == null) return;
 		
@@ -33,7 +32,7 @@ public class CoreTile extends FragmentContainerTile {
 			if(!world.getChunkProvider().isChunkLoaded(new ChunkPos(listener))) continue;
 			
 			TileEntity tile = world.getTileEntity(listener);
-			if(tile instanceof CoreTile.ChangeListener) ((ChangeListener) tile).whenCoreChanged(oldFragment, newFragment, this);
+			if(tile instanceof CoreTile.ChangeListener) ((ChangeListener) tile).whenCoreChanged(this);
 			else removals.add(listener);
 		}
 		
@@ -54,7 +53,7 @@ public class CoreTile extends FragmentContainerTile {
 	}
 	
 	interface ChangeListener {
-		void whenCoreChanged(Fragment<?> oldFragment, Fragment<?> newFragment, CoreTile core);
+		void whenCoreChanged(CoreTile core);
 	}
 	
 	@Override

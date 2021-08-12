@@ -1,6 +1,5 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
-import agency.highlysuspect.rhododendrite.computer.Fragment;
 import agency.highlysuspect.rhododendrite.item.ConditionCardItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -38,18 +37,14 @@ public class ConditionTile extends RhodoNetworkTile implements CoreTile.ChangeLi
 	}
 	
 	@Override
-	public void whenCoreChanged(Fragment<?> oldFragment, Fragment<?> newFragment, CoreTile core) {
-		change(core);
-	}
-	
-	private void change(CoreTile core) {
+	public void whenCoreChanged(CoreTile core) {
 		if(core == null) return;
 		
 		int oldSignal = signal;
 		
 		ItemStack conditionCard = inventory.getStackInSlot(0);
 		if(conditionCard.getItem() instanceof ConditionCardItem) {
-			signal = ((ConditionCardItem) conditionCard.getItem()).predicate.test(world, pos, getBlockState(), core) ? 15 : 0;
+			signal = ((ConditionCardItem) conditionCard.getItem()).predicate.test(core) ? 15 : 0;
 			signal = MathHelper.clamp(signal, 0, 15);
 		} else {
 			signal = 0;
@@ -74,7 +69,7 @@ public class ConditionTile extends RhodoNetworkTile implements CoreTile.ChangeLi
 		
 		@Override
 		protected void onContentsChanged(int slot) {
-			ConditionTile.this.change(ConditionTile.this.findCore());
+			ConditionTile.this.whenCoreChanged(ConditionTile.this.findCore());
 			
 			ConditionTile.this.markDirty();
 			VanillaPacketDispatcher.dispatchTEToNearbyPlayers(ConditionTile.this);

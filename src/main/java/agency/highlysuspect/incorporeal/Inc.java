@@ -5,6 +5,7 @@ import agency.highlysuspect.incorporeal.block.tile.CorporeaSoulCoreTile;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.block.tile.RedStringLiarTile;
 import agency.highlysuspect.incorporeal.client.IncClient;
+import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.datagen.IncDatagen;
 import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
@@ -52,6 +53,8 @@ public class Inc {
 		modBus.addGenericListener(EntityType.class, IncEntityTypes::register);
 		
 		modBus.addListener((FMLCommonSetupEvent event) -> {
+			SolidifiedRequest.Cap.initialize();
+			
 			BotaniaAPI botania = BotaniaAPI.instance();
 			botania.registerCorporeaNodeDetector(new RedStringLiarTile.NodeDetector());
 			

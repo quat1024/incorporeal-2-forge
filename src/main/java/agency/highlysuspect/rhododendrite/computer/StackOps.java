@@ -1,5 +1,6 @@
 package agency.highlysuspect.rhododendrite.computer;
 
+import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.rhododendrite.block.CoreBlock;
 import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
 import net.minecraft.block.BlockState;
@@ -8,19 +9,21 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class StackOps {
-	public StackOps(Fragment<?>[] fragments, Fragment.Holder[] holders) {
-		this.fragments = fragments;
+	public StackOps(SolidifiedRequest[] requests, SolidifiedRequest.Holder[] holders) {
+		this.requests = requests;
 		this.holders = holders;
 	}
 	
 	public StackOps() {
-		this(new Fragment<?>[0], new Fragment.Holder[0]);
+		this(new SolidifiedRequest[0], new SolidifiedRequest.Holder[0]);
 	}
 	
 	public static StackOps read(CoreTile tile) {
@@ -32,17 +35,17 @@ public class StackOps {
 		
 		Direction coreFacing = coreState.get(CoreBlock.FACING);
 		
-		List<Fragment<?>> fragments = new ArrayList<>();
-		List<Fragment.Holder> holders = new ArrayList<>();
+		List<SolidifiedRequest> requests = new ArrayList<>();
+		List<SolidifiedRequest.Holder> holders = new ArrayList<>();
 		
 		BlockPos.Mutable cursor = corePos.toMutable();
 		for(int i = 0; i <= CorePathTracing.MAX_RANGE; i++) { // <=: the actual max size of a conga line is MAX_RANGE + 1, counting the Core itself
 			TileEntity tile = world.getTileEntity(cursor);
 			if(tile == null) break;
 			
-			Optional<Fragment.Holder> holder = tile.getCapability(FragmentCapability.INSTANCE).resolve();
+			Optional<SolidifiedRequest.Holder> holder = tile.getCapability(SolidifiedRequest.Cap.INSTANCE).resolve();
 			if(holder.isPresent()) {
-				fragments.add(holder.get().getFragment());
+				requests.add(holder.get().getRequest());
 				holders.add(holder.get());
 				//offsetting at the end of the loop btw, so the core itself gets included in the conga line
 				cursor.move(coreFacing);
@@ -51,63 +54,63 @@ public class StackOps {
 			}
 		}
 		
-		return new StackOps(fragments.toArray(new Fragment<?>[0]), holders.toArray(new Fragment.Holder[0]));
+		return new StackOps(requests.toArray(new SolidifiedRequest[0]), holders.toArray(new SolidifiedRequest.Holder[0]));
 	}
 	
-	private final Fragment<?>[] fragments;
-	private final Fragment.Holder[] holders;
+	private final SolidifiedRequest[] requests;
+	private final SolidifiedRequest.Holder[] holders;
 	
 	/**
-	 * Apply the changes to the Fragment.Holders. Without this, you're just working off a copy
+	 * Apply the changes to the SolidifiedRequest.Holders. Without this, you're just working off a copy
 	 */
 	public void commit() {
-		for(int i = 0; i < fragments.length; i++) {
-			holders[i].setFragment(fragments[i]);
+		for(int i = 0; i < requests.length; i++) {
+			holders[i].setRequest(requests[i]);
 		}
 	}
 	
-	public void push() {
+	public StackOps push() {
 		//[A][B][C] -> [ ][A][B]. C is lost
-		push(Fragment.EMPTY);
+		push(SolidifiedRequest.EMPTY);
+		return this;
 	}
 	
-	public void push(Fragment<?> replacement) {
+	public StackOps push(SolidifiedRequest replacement) {
 		//[A][B][C] -> [r][A][B]
-		if(fragments.length == 0) return;
-		if(fragments.length != 1)	System.arraycopy(fragments, 0, fragments, 1, fragments.length - 1);
-		fragments[0] = replacement;
+		if(requests.length == 0) return this;
+		if(requests.length != 1)	System.arraycopy(requests, 0, requests, 1, requests.length - 1);
+		requests[0] = replacement;
+		return this;
 	}
 	
-	public Fragment<?> pull() {
+	public SolidifiedRequest pull() {
 		//[A][B][C] -> [B][C][ ], and A is returned
-		if(fragments.length == 0) return Fragment.EMPTY;
-		Fragment<?> first = fragments[0];
+		if(requests.length == 0) return SolidifiedRequest.EMPTY;
+		SolidifiedRequest first = requests[0];
 		destroy(1);
 		return first;
 	}
 	
-	public void destroy(int howMany) {
-		System.arraycopy(fragments, howMany, fragments, 0, fragments.length - howMany);
+	public StackOps destroy(int howMany) {
+		System.arraycopy(requests, howMany, requests, 0, requests.length - howMany);
+		return this;
 	}
 	
-	public Fragment<?> peek() {
+	public SolidifiedRequest peek() {
 		return peek(0);
 	}
 	
-	public Fragment<?> peek(int depth) {
-		if(depth < fragments.length) return fragments[depth];
-		return Fragment.EMPTY;
+	public SolidifiedRequest peek(int depth) {
+		if(depth < requests.length) return requests[depth];
+		return SolidifiedRequest.EMPTY;
 	}
 	
-	@Nullable public <T> Fragment<T> peekMatching(DataType<T> type) {
-		return peekMatching(0, type);
+	public boolean biPeekMatches(BiPredicate<SolidifiedRequest, SolidifiedRequest> peeker) {
+		return peeker.test(peek(0), peek(1));
 	}
 	
-	//returns null instead of empty on type mismatch b/c empty fragments are Fragment<Unit> and bla bla heap pollution
-	@Nullable public <T> Fragment<T> peekMatching(int depth, DataType<T> type) {
-		Fragment<?> unk = peek(depth);
-		if(unk.getType() == type) //noinspection unchecked
-			return (Fragment<T>) unk;
-		else return null;
+	public StackOps biPullPush(BiFunction<SolidifiedRequest, SolidifiedRequest, SolidifiedRequest> mapper) {
+		push(mapper.apply(pull(), pull()));
+		return this;
 	}
 }

@@ -1,8 +1,6 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
-import agency.highlysuspect.rhododendrite.computer.DataTypes;
-import agency.highlysuspect.rhododendrite.computer.Fragment;
-import agency.highlysuspect.rhododendrite.computer.FragmentCapability;
+import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -14,42 +12,42 @@ import vazkii.botania.common.block.tile.TileMod;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class FragmentContainerTile extends TileMod implements Fragment.Holder {
-	public FragmentContainerTile(TileEntityType<?> type) {
+public abstract class RequestHolderTile extends TileMod implements SolidifiedRequest.Holder {
+	public RequestHolderTile(TileEntityType<?> type) {
 		super(type);
 	}
 	
-	protected Fragment<?> fragment = Fragment.EMPTY;
+	protected SolidifiedRequest request = SolidifiedRequest.EMPTY;
 	
 	@Override
 	public void writePacketNBT(CompoundNBT cmp) {
 		super.writePacketNBT(cmp);
-		cmp.put("Fragment", fragment.toNbt(DataTypes.REGISTRY));
+		cmp.put("Request", request.toTag());
 	}
 	
 	@Override
 	public void readPacketNBT(CompoundNBT cmp) {
 		super.readPacketNBT(cmp);
-		fragment = Fragment.fromNbtOrEmpty(DataTypes.REGISTRY, cmp.getCompound("Fragment"));
-		
-		//TODO probably shouldnt do this on the client *and* server, desyncs if you make something invalid on the server.
-		if(!fragment.validate()) fragment = Fragment.EMPTY;
+		request = SolidifiedRequest.fromNbtOrEmpty(cmp.getCompound("Request"));
 	}
 	
 	@Nonnull
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-		if(cap == FragmentCapability.INSTANCE) return LazyOptional.of(() -> this).cast();
+		if(cap == SolidifiedRequest.Cap.INSTANCE) return LazyOptional.of(() -> this).cast();
 		else return super.getCapability(cap, side);
 	}
 	
-	public Fragment<?> getFragment() {
-		return fragment;
+	@Nonnull
+	@Override
+	public SolidifiedRequest getRequest() {
+		return request;
 	}
 	
-	public void setFragment(Fragment<?> newFragment) {
-		if(!fragment.equals(newFragment)) {
-			fragment = newFragment;
+	@Override
+	public void setRequest(@Nonnull SolidifiedRequest newRequest) {
+		if(!newRequest.equals(request)) {
+			this.request = newRequest;
 			
 			markDirty(); //also calls updateComparator
 			VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
@@ -57,6 +55,6 @@ public abstract class FragmentContainerTile extends TileMod implements Fragment.
 	}
 	
 	public int signalStrength() {
-		return fragment.signalStrength();
+		return request.signalStrength();
 	}
 }

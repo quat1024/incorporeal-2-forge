@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "rhododendrite:core_tumbler"
+          "name": "rhododendrite:condition"
         }
       ],
       "conditions": [

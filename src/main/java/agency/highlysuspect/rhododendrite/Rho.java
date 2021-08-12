@@ -3,8 +3,7 @@ package agency.highlysuspect.rhododendrite;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import agency.highlysuspect.rhododendrite.client.RhoClient;
-import agency.highlysuspect.rhododendrite.computer.DataTypes;
-import agency.highlysuspect.rhododendrite.computer.FragmentCapability;
+import agency.highlysuspect.rhododendrite.computer.CompoundCorporeaRequestMatcher;
 import agency.highlysuspect.rhododendrite.datagen.RhoDatagen;
 import agency.highlysuspect.rhododendrite.item.RhoItems;
 import com.google.common.base.Preconditions;
@@ -16,7 +15,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.GenericEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -26,6 +24,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import vazkii.botania.api.corporea.CorporeaHelper;
 
 @Mod("rhododendrite")
 public class Rho {
@@ -45,9 +44,8 @@ public class Rho {
 		modBus.addGenericListener(Feature.class, (RegistryEvent.Register<Feature<?>> e) -> RhoBlocks.RHODODENDRITE.registerFeature(e.getRegistry()));
 		
 		modBus.addListener((FMLCommonSetupEvent e) -> {
-			FragmentCapability.initialize();
-			
-			DataTypes.initialize();
+			CorporeaHelper helper = CorporeaHelper.instance();
+			helper.registerRequestMatcher(Rho.id("compound"), CompoundCorporeaRequestMatcher.class, CompoundCorporeaRequestMatcher::fromTag);
 		});
 		
 		proxy.setup();

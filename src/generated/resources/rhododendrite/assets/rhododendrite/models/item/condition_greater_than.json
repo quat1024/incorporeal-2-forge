@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "rhododendrite:item/opcode_push_zero"
+    "layer0": "rhododendrite:item/condition_greater_than"
   }
 }

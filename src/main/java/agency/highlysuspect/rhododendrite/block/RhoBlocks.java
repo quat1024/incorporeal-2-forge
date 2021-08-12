@@ -36,7 +36,6 @@ public class RhoBlocks {
 		.notSolid());
 	
 	public static final OpcodeBlock OPCODE = new OpcodeBlock(Properties.from(ModBlocks.corporeaFunnel));
-	public static final CoreTumblerBlock CORE_TUMBLER = new CoreTumblerBlock(Properties.from(ModBlocks.corporeaFunnel));
 	public static final ConditionBlock CONDITION = new ConditionBlock(Properties.create(Material.IRON).hardnessAndResistance(5.5F).sound(SoundType.METAL));
 	
 	public static void register(RegistryEvent.Register<Block> event) {
@@ -48,7 +47,6 @@ public class RhoBlocks {
 		Rho.reg(r, "awakened_log", AWAKENED_LOG);
 		
 		Rho.reg(r, "opcode", OPCODE);
-		Rho.reg(r, "core_tumbler", CORE_TUMBLER);
 		Rho.reg(r, "condition", CONDITION);
 	}
 }

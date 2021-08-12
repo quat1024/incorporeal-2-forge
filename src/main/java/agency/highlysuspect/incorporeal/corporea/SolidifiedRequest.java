@@ -1,16 +1,18 @@
 package agency.highlysuspect.incorporeal.corporea;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.INBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.text.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import vazkii.botania.api.corporea.CorporeaHelper;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
-import vazkii.botania.common.block.tile.corporea.TileCorporeaRetainer;
 
-import java.lang.reflect.Field;
-import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class SolidifiedRequest {
 	public SolidifiedRequest(ICorporeaRequestMatcher matcher, int count) {
@@ -21,59 +23,38 @@ public class SolidifiedRequest {
 	public final ICorporeaRequestMatcher matcher;
 	public final int count;
 	
+	public static final SolidifiedRequest EMPTY = new SolidifiedRequest(ICorporeaRequestMatcher.Dummy.INSTANCE, 0);
+	
 	public CompoundNBT toTag() {
-		CompoundNBT tag = new CompoundNBT();
-		
-		//type
-		tag.putString("type", getSerializers().get(matcher.getClass()).toString());
-		
-		//properties (technically this writes to the same namespace as type/count, but it's okay)
-		matcher.writeToNBT(tag);
+		CompoundNBT tag = MatcherUtils.toTag(matcher);
 		
 		//count
 		tag.putInt("count", count);
 		return tag;
 	}
 	
+	public static Optional<SolidifiedRequest> tryFromTag(CompoundNBT tag) {
+		return MatcherUtils.tryFromTag(tag).map(matcher -> {
+			int count = tag.getInt("count");
+			return new SolidifiedRequest(matcher, count);
+		});
+	}
+	
+	public static SolidifiedRequest fromNbtOrEmpty(CompoundNBT tag) {
+		return tryFromTag(tag).orElse(EMPTY);
+	}
+	
+	//Slightly different semantics from ItemStack#isEmpty; totally valid for the count to be 0, for example
+	public boolean isEmpty() {
+		return matcher == ICorporeaRequestMatcher.Dummy.INSTANCE && count == 0;
+	}
+	
 	public ITextComponent toText() {
 		return new TranslationTextComponent("incorporeal.solidified_request", count, matcher.getRequestName());
 	}
 	
-	public static Optional<SolidifiedRequest> tryFromTag(CompoundNBT tag) {
-		int count = tag.getInt("count");
-		if(count == 0) return Optional.empty();
-		
-		return Optional.ofNullable(ResourceLocation.tryCreate(tag.getString("type")))
-			.flatMap(type -> Optional.ofNullable(getDeserializers().get(type))) //deserializers aren't as guaranteed to exist (e.g. uninstalling an addon)
-			.map(de -> new SolidifiedRequest(de.apply(tag), count));
-	}
-	
-	//TODO: I'd love to use not-Reflection for this, but... yeah.
-	// An Accessor was my first choice, but since they're static fields, I need a TileCorporeaRetainer *instance* in order to call methods on the accessor.
-	// Normally for things like Blocks this isn't too painful since you can just use Blocks.AIR or whatever but this is not safe to randomly construct.
-	// ...
-	// Can I codecpill the botania devs abt this, it will really be handy
-	
-	private static Map<ResourceLocation, Function<CompoundNBT, ? extends ICorporeaRequestMatcher>> getDeserializers() {
-		try {
-			Field f = TileCorporeaRetainer.class.getDeclaredField("corporeaMatcherDeserializers");
-			f.setAccessible(true);
-			//noinspection unchecked
-			return (Map<ResourceLocation, Function<CompoundNBT, ? extends ICorporeaRequestMatcher>>) f.get(null);
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException("Problem reflecting!", e);
-		}
-	}
-	
-	private static Map<Class<? extends ICorporeaRequestMatcher>, ResourceLocation> getSerializers() {
-		try {
-			Field f = TileCorporeaRetainer.class.getDeclaredField("corporeaMatcherSerializers");
-			f.setAccessible(true);
-			//noinspection unchecked
-			return (Map<Class<? extends ICorporeaRequestMatcher>, ResourceLocation>) f.get(null);
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException("Problem reflecting!", e);
-		}
+	public int signalStrength() {
+		return CorporeaHelper.instance().signalStrengthForRequestSize(count);
 	}
 	
 	public SolidifiedRequest withCount(int newCount) {
@@ -88,17 +69,56 @@ public class SolidifiedRequest {
 		SolidifiedRequest that = (SolidifiedRequest) o;
 		
 		if(count != that.count) return false;
-		return compareRequestMatcher(matcher, that.matcher);
+		return MatcherUtils.equals(matcher, that.matcher);
 	}
 	
-	public static boolean compareRequestMatcher(ICorporeaRequestMatcher a, ICorporeaRequestMatcher b) {
-		if(a == null && b == null) return true;
-		if((a == null) != (b == null)) return false;
-		if(!a.getClass().equals(b.getClass())) return false;
+	@Override
+	public String toString() {
+		return "SolidifiedRequest[" + count + "x " + matcher.getRequestName().getString() + "]";
+	}
+	
+	public interface Holder {
+		@Nonnull SolidifiedRequest getRequest();
+		void setRequest(@Nonnull SolidifiedRequest newRequest);
+	}
+	
+	//TODO: This is mainly used in Rhododendrite, might be beneficial to use this capability to interact with Botania too though.
+	// e.g. stuff like the retainer evaporator could benefit from this.
+	// Especially the NonNull semantics - in botania, nullable requests are all over the place
+	public static class Cap {
+		@CapabilityInject(SolidifiedRequest.Holder.class)
+		public static Capability<SolidifiedRequest.Holder> INSTANCE;
 		
-		//So I should probably pester Botania devs to implement equals and hashcode for these, huh...
-		CompoundNBT aNbt = new CompoundNBT(); a.writeToNBT(aNbt);
-		CompoundNBT bNbt = new CompoundNBT(); b.writeToNBT(bNbt);
-		return aNbt.equals(bNbt);
+		public static void initialize() {
+			CapabilityManager.INSTANCE.register(SolidifiedRequest.Holder.class, Default.INSTANCE, () -> Default.INSTANCE);
+		}
+		
+		//I'm hearing that the "default capability" stuff is getting removed in Forge 1.17 anyways, so I'm not gonna miss it too badly
+		public static class Default implements SolidifiedRequest.Holder, Capability.IStorage<SolidifiedRequest.Holder> {
+			public static final Default INSTANCE = new Default();
+			
+			@Nonnull
+			@Override
+			public SolidifiedRequest getRequest() {
+				return SolidifiedRequest.EMPTY;
+			}
+			
+			@Override
+			public void setRequest(@Nonnull SolidifiedRequest fragment) {
+				//No
+			}
+			
+			@Nullable
+			@Override
+			public INBT writeNBT(Capability<Holder> capability, Holder instance, Direction side) {
+				//No
+				return null;
+			}
+			
+			@Override
+			public void readNBT(Capability<Holder> capability, Holder instance, Direction side, INBT nbt) {
+				//No
+			}
+		}
 	}
 }

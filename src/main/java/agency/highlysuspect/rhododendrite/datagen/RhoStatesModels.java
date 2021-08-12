@@ -56,8 +56,7 @@ public class RhoStatesModels extends BlockStateProvider {
 			RhoItems.OPCODE_PUSH,
 			RhoItems.OPCODE_PULL,
 			RhoItems.OPCODE_DUP,
-			RhoItems.OPCODE_PUSH_ZERO,
-			RhoItems.OPCODE_PUSH_ONE,
+			RhoItems.OPCODE_TUMBLE,
 			RhoItems.OPCODE_ADD,
 			RhoItems.OPCODE_SUBTRACT,
 			RhoItems.OPCODE_MULTIPLY,
@@ -66,22 +65,14 @@ public class RhoStatesModels extends BlockStateProvider {
 			RhoItems.CONDITION_BLANK,
 			RhoItems.CONDITION_IS_EMPTY,
 			RhoItems.CONDITION_EQUAL,
-			RhoItems.CONDITION_EQUAL_TYPE,
+			RhoItems.CONDITION_COUNT_EQUAL,
 			RhoItems.CONDITION_GREATER_THAN,
 			RhoItems.CONDITION_LESS_THAN
 		);
-		
-		coreTumbler(RhoBlocks.CORE_TUMBLER);
 	}
 	
 	protected <T> void doIt(Consumer<T> yes, T... blocks) {
 		for(T b : blocks) yes.accept(b);
-	}
-	
-	protected void coreTumbler(Block b) {
-		ResourceLocation tex = blockTexture(b);
-		directionalBlock(b, models().cubeBottomTop(n(b), tex, extend(tex, "_bottom"), extend(tex, "_top")));
-		blockItemParent(b);
 	}
 	
 	//LITERALLY copy paste from Forge code. Including the PRIVATE modifier. WHAT
