@@ -88,7 +88,12 @@ public class IncItems {
 	private static class Tab extends ItemGroup {
 		public static final Tab INSTANCE = new Tab();
 		
-		public Tab() { super(Inc.MODID); }
+		public Tab() {
+			super(Inc.MODID);
+			setNoTitle();
+			//noinspection deprecation (forge extends this, but this works fine too)
+			setBackgroundImageName(Inc.MODID + ".png");
+		}
 		
 		@Override
 		public ItemStack createIcon() {

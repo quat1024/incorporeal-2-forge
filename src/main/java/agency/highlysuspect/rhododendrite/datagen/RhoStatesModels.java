@@ -102,7 +102,7 @@ public class RhoStatesModels extends BlockStateProvider {
 		axisBlock(family.strippedWood, strippedLogTex, strippedLogTex);
 		blockItemParent(family.strippedWood);
 		
-		simpleBlock(family.leaves);
+		//simpleBlock(family.leaves); //done manually
 		blockItemParent(family.leaves);
 		
 		stairsBlock(family.stairs, planksTex);

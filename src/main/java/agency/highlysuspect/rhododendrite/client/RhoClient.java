@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,6 +31,8 @@ public class RhoClient implements RhoProxy {
 			RenderTypeLookup.setRenderLayer(RhoBlocks.AWAKENED_LOG, RenderType.getCutout());
 		});
 		
+		//0xce7a9c
+		
 		modBus.addListener((ColorHandlerEvent.Block event) -> {
 			BlockColors colors = event.getBlockColors();
 			
@@ -38,6 +41,15 @@ public class RhoClient implements RhoProxy {
 				int factor = MathHelper.floor(Inc.rangeRemap(distance, 1, CorePathTracing.MAX_RANGE, 0xFF, 0x99));
 				return (factor << 16) | (factor << 8) | factor;
 			}, RhoBlocks.AWAKENED_LOG);
+			
+			//This looked like GARBAGE so i just colorized them in an image editor, sue me lol
+			//colors.register((state, world, pos, what) -> 0xfe7acc, RhoBlocks.RHODODENDRITE.leaves);
+		});
+		
+		modBus.addListener((ColorHandlerEvent.Item event) -> {
+			ItemColors colors = event.getItemColors();
+			
+			//colors.register((p_getColor_1_, p_getColor_2_) -> 0xfe7acc, RhoBlocks.RHODODENDRITE.leaves);
 		});
 	}
 }

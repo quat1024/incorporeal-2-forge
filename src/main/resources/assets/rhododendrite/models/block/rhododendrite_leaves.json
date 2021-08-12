@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:block/leaves",
+	"textures": {
+		"all": "rhododendrite:block/rhododendrite_leaves" 
+	}
+}

@@ -136,7 +136,7 @@ public class WoodFamily {
 	public void okDoTheTreeNow() {
 		//this is literally just a straight-up copy of the birch tree with some numbers fudged a bit
 		//yeah idk how this works
-		//i tried making it bigger but it was just ugly
+		//i tried making it bigger so it was slightly creative but it just looked ugly
 		treeFeature = Feature.TREE.withConfiguration(new BaseTreeFeatureConfig.Builder(
 			new SimpleBlockStateProvider(log.getDefaultState()),
 			new SimpleBlockStateProvider(leaves.getDefaultState()),

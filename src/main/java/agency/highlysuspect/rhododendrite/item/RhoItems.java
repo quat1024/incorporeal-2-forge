@@ -1,5 +1,6 @@
 package agency.highlysuspect.rhododendrite.item;
 
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
@@ -98,7 +99,12 @@ public class RhoItems {
 	private static class Tab extends ItemGroup {
 		public static final Tab INSTANCE = new Tab();
 		
-		public Tab() { super(Rho.MODID); }
+		public Tab() {
+			super(Rho.MODID);
+			setNoTitle();
+			//noinspection deprecation (forge extends this, but this works fine too)
+			setBackgroundImageName(Rho.MODID + ".png");
+		}
 		
 		@Override
 		public ItemStack createIcon() {

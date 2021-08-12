@@ -33,6 +33,7 @@ public class TileCorporeaRetainerMixin implements CorporeaRetainerEvaporatorBloc
 		request = null;
 		requestCount = 0;
 		compValue = 0;
+		//Botania doesn't clear requestPos either. Kinda odd.
 		((TileCorporeaRetainer) (Object) this).markDirty();
 	}
 	

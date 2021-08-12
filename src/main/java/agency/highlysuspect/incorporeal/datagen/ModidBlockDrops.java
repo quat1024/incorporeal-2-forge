@@ -48,7 +48,7 @@ public class ModidBlockDrops extends BlockLootTables implements IDataProvider  {
 				save(cache, b, slab(b));
 			} else if(b instanceof LeavesBlock) {
 				Preconditions.checkArgument(b.getRegistryName().equals(Rho.id("rhododendrite_leaves")), "fix ur shit");
-				save(cache, b, leaves(b, RhoBlocks.RHODODENDRITE.planks)); //TODO actually drop the sapling when i add that.
+				save(cache, b, leaves(b, RhoBlocks.RHODODENDRITE.sapling));
 			} else {
 				//all other blocks drop themselves
 				save(cache, b, self(b));
