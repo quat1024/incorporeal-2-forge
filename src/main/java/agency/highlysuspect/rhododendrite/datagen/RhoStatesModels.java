@@ -108,8 +108,8 @@ public class RhoStatesModels extends BlockStateProvider {
 		
 		//todo sign
 		
-		doorBlock(family.door, Rho.id("block/" + family.name + "_door_bottom"), Rho.id("block/" + family.name + "_door_top"));
-		itemGenerated(family.door);
+		//doorBlock(family.door, Rho.id("block/" + family.name + "_door_bottom"), Rho.id("block/" + family.name + "_door_top"));
+		//itemGenerated(family.door);
 		
 		//todo wall sign
 		
@@ -119,8 +119,8 @@ public class RhoStatesModels extends BlockStateProvider {
 		fenceBlock(family.fence, planksTex);
 		itemModels().fenceInventory(n(family.fence), planksTex);
 		
-		trapdoorBlock(family.trapdoor, Rho.id("block/" + family.name + "_trapdoor"), true);
-		blockItemParent(family.trapdoor);
+		//trapdoorBlock(family.trapdoor, Rho.id("block/" + family.name + "_trapdoor"), true);
+		//blockItemParent(family.trapdoor);
 		
 		fenceGateBlock(family.fenceGate, planksTex);
 		itemModels().fenceGate(n(family.fenceGate), planksTex);

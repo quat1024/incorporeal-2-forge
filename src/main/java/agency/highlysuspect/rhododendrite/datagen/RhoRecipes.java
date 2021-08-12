@@ -41,13 +41,13 @@ public class RhoRecipes extends IncRecipes {
 		bark(r, family.strippedWood, family.strippedLog);
 		
 		button(r, family.button, family.planks);
-		door(r, family.door, family.planks);
+		//door(r, family.door, family.planks);
 		fence(r, family.fence, family.planks);
 		fenceGate(r, family.fenceGate, family.planks);
 		pressurePlate(r, family.pressurePlate, family.planks);
 		slab(r, family.slab, family.planks);
 		stairs(r, family.stairs, family.planks);
-		trapdoor(r, family.trapdoor, family.planks);
+		//trapdoor(r, family.trapdoor, family.planks);
 		//sign(r, family.sign, family.planks); //TODO
 		//boat //TODO
 	}

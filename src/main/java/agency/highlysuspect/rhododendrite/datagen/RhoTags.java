@@ -29,11 +29,11 @@ public class RhoTags {
 			getOrCreateBuilder(BlockTags.PLANKS).add(family.planks);
 			getOrCreateBuilder(BlockTags.WOODEN_FENCES).add(family.fence);
 			getOrCreateBuilder(BlockTags.WOODEN_BUTTONS).add(family.button);
-			getOrCreateBuilder(BlockTags.WOODEN_DOORS).add(family.door);
+			//getOrCreateBuilder(BlockTags.WOODEN_DOORS).add(family.door);
 			getOrCreateBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(family.pressurePlate);
 			getOrCreateBuilder(BlockTags.WOODEN_SLABS).add(family.slab);
 			getOrCreateBuilder(BlockTags.WOODEN_STAIRS).add(family.stairs);
-			getOrCreateBuilder(BlockTags.WOODEN_TRAPDOORS).add(family.trapdoor);
+			//getOrCreateBuilder(BlockTags.WOODEN_TRAPDOORS).add(family.trapdoor);
 			getOrCreateBuilder(BlockTags.LEAVES).add(family.leaves);
 		}
 	}
@@ -49,11 +49,11 @@ public class RhoTags {
 			copy(BlockTags.PLANKS, ItemTags.PLANKS);
 			copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
 			copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
-			copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
+			//copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
 			copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
 			copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
 			copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
-			copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
+			//copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
 			copy(BlockTags.LEAVES, ItemTags.LEAVES);
 		}
 	}

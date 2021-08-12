@@ -82,10 +82,10 @@ public class WoodFamily {
 //			.sound(SoundType.WOOD),
 //			woodType);
 		
-		door = new DoorBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.hardnessAndResistance(3)
-			.sound(SoundType.WOOD)
-			.notSolid());
+//		door = new DoorBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
+//			.hardnessAndResistance(3)
+//			.sound(SoundType.WOOD)
+//			.notSolid());
 		
 //		wallSign = new WallSignBlock(AbstractBlock.Properties.create(Material.WOOD)
 //			.doesNotBlockMovement()
@@ -103,11 +103,11 @@ public class WoodFamily {
 			.hardnessAndResistance(2f, 3f)
 			.sound(SoundType.WOOD));
 		
-		trapdoor = new TrapDoorBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.hardnessAndResistance(3f)
-			.sound(SoundType.WOOD)
-			.notSolid()
-			.setAllowsSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false));
+//		trapdoor = new TrapDoorBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
+//			.hardnessAndResistance(3f)
+//			.sound(SoundType.WOOD)
+//			.notSolid()
+//			.setAllowsSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false));
 		
 		fenceGate = new FenceGateBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
 			.hardnessAndResistance(2f, 3f)
@@ -172,11 +172,11 @@ public class WoodFamily {
 	public Block leaves;
 	public StairsBlock stairs;
 	//public StandingSignBlock sign;
-	public DoorBlock door;
+	//public DoorBlock door;
 	//public WallSignBlock wallSign;
 	public PressurePlateBlock pressurePlate;
 	public FenceBlock fence;
-	public TrapDoorBlock trapdoor;
+	//public TrapDoorBlock trapdoor;
 	public FenceGateBlock fenceGate;
 	public WoodButtonBlock button;
 	public SlabBlock slab;
@@ -199,11 +199,11 @@ public class WoodFamily {
 		Rho.reg(r, name + "_leaves", leaves);
 		Rho.reg(r, name + "_stairs", stairs);
 		//Rho.reg(r, name + "_sign", sign);
-		Rho.reg(r, name + "_door", door);
+		//Rho.reg(r, name + "_door", door);
 		//Rho.reg(r, name + "_wall_sign", wallSign);
 		Rho.reg(r, name + "_pressure_plate", pressurePlate);
 		Rho.reg(r, name + "_fence", fence);
-		Rho.reg(r, name + "_trapdoor", trapdoor);
+		//Rho.reg(r, name + "_trapdoor", trapdoor);
 		Rho.reg(r, name + "_fence_gate", fenceGate);
 		Rho.reg(r, name + "_button", button);
 		Rho.reg(r, name + "_slab", slab);
@@ -212,7 +212,23 @@ public class WoodFamily {
 	}
 	
 	public void registerItems(IForgeRegistry<Item> r) {
-		Rho.simpleBlockItems(r, planks, log, strippedLog, wood, strippedWood, leaves, stairs, door, pressurePlate, fence, trapdoor, fenceGate, button, slab, sapling);
+		Rho.simpleBlockItems(r,
+			planks,
+			log,
+			strippedLog,
+			wood,
+			strippedWood,
+			leaves,
+			stairs,
+			//door,
+			pressurePlate,
+			fence,
+			//trapdoor,
+			fenceGate,
+			button,
+			slab,
+			sapling
+		);
 		
 		//Rho.reg(r, name + "_sign", new SignItem(RhoItems.defaultProps(), sign, wallSign));
 		//Rho.reg(r, name + "_boat", boat);
