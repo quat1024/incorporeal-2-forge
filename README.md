@@ -51,10 +51,6 @@ I hesitate because Rhododendrite will not be very useful without Botania/a corpo
 
 Move more things to datagen, i really dont like forge datagens though
 
-Rhodo: remove CorePredicate/CoreAction and make them just Predicate<CoreTile>. They took the world/pos/state parameters back when opcodes were individual blocks and the Core Tumbler was just a rotatable opcode. ORRRRR make then biconsumer<coretile, direction> and keep track of which face the item frame is on (Lol)
-
-Rhodo: If an animated torch is on top of the Operator use its face to determine which item frame to read. Could be interesting
-
 # rhododendrite wood things i have to do
 
 trapdoor texture, door item and block texture, sign texture

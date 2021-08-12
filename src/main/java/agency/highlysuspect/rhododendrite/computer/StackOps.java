@@ -1,60 +1,26 @@
 package agency.highlysuspect.rhododendrite.computer;
 
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
-import agency.highlysuspect.rhododendrite.block.CoreBlock;
 import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
 public class StackOps {
-	public StackOps(SolidifiedRequest[] requests, SolidifiedRequest.Holder[] holders) {
-		this.requests = requests;
-		this.holders = holders;
+	public StackOps(Collection<SolidifiedRequest> requests, Collection<SolidifiedRequest.Holder> holders) {
+		this.requests = requests.toArray(new SolidifiedRequest[0]);
+		this.holders = holders.toArray(new SolidifiedRequest.Holder[0]);
 	}
 	
 	public StackOps() {
-		this(new SolidifiedRequest[0], new SolidifiedRequest.Holder[0]);
+		this(Collections.emptyList(), Collections.emptyList());
 	}
 	
 	public static StackOps read(CoreTile tile) {
-		return read(tile.getWorld(), tile.getPos(), tile.getBlockState());
-	}
-	
-	public static StackOps read(World world, BlockPos corePos, BlockState coreState) {
-		if(!(coreState.getBlock() instanceof CoreBlock)) return new StackOps();
-		
-		Direction coreFacing = coreState.get(CoreBlock.FACING);
-		
-		List<SolidifiedRequest> requests = new ArrayList<>();
-		List<SolidifiedRequest.Holder> holders = new ArrayList<>();
-		
-		BlockPos.Mutable cursor = corePos.toMutable();
-		for(int i = 0; i <= CorePathTracing.MAX_RANGE; i++) { // <=: the actual max size of a conga line is MAX_RANGE + 1, counting the Core itself
-			TileEntity tile = world.getTileEntity(cursor);
-			if(tile == null) break;
-			
-			Optional<SolidifiedRequest.Holder> holder = tile.getCapability(SolidifiedRequest.Cap.INSTANCE).resolve();
-			if(holder.isPresent()) {
-				requests.add(holder.get().getRequest());
-				holders.add(holder.get());
-				//offsetting at the end of the loop btw, so the core itself gets included in the conga line
-				cursor.move(coreFacing);
-			} else {
-				break;
-			}
-		}
-		
-		return new StackOps(requests.toArray(new SolidifiedRequest[0]), holders.toArray(new SolidifiedRequest.Holder[0]));
+		return CorePathTracing.readStackOps(tile.getWorld(), tile.getPos(), tile.getBlockState());
 	}
 	
 	private static final SolidifiedRequest[] BUNCHA_EMPTIES = new SolidifiedRequest[CorePathTracing.MAX_RANGE];
@@ -97,11 +63,10 @@ public class StackOps {
 	}
 	
 	public StackOps destroy(int howMany) {
-		//hurrr durrrr, its fast because it uses arraycopy, the "code go fast" method
-		//yeah theres definitely nicer ways to do this
 		if(howMany == 0 || requests.length == 0) return this;
 		if(requests.length == 1) requests[0] = SolidifiedRequest.EMPTY;
 		else {
+			//hurrr durrrr, its fast because it uses arraycopy, the "code go fast" method
 			System.arraycopy(requests, howMany, requests, 0, requests.length - howMany);
 			System.arraycopy(BUNCHA_EMPTIES, 0, requests, requests.length - howMany, howMany);
 		}

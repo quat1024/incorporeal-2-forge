@@ -1,12 +1,16 @@
 package agency.highlysuspect.rhododendrite.computer;
 
+import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.block.AwakenedLogBlock;
 import agency.highlysuspect.rhododendrite.block.CoreBlock;
+import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import net.minecraft.block.BlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 
 import java.util.*;
 import java.util.function.Function;
@@ -28,22 +32,60 @@ public class CorePathTracing {
 		// turns out to be Really Hard!, and kind of weird performance-wise
 		// since like, whenever a leaf block moves you have to update a bazillion blocks
 		
-		BlockState stateThere = world.getBlockState(pos.offset(scanDir));
-		//If we're right next to a core? Well hot damn that's great
-		if(stateThere.getBlock() instanceof CoreBlock) return Optional.of(new Result(scanDir, 1));
-		//If we're one block away from an already awakened log, note that too
-		if(stateThere.getBlock() instanceof AwakenedLogBlock) {
-			Direction theirFacing = stateThere.get(AwakenedLogBlock.FACING);
-			if(theirFacing != scanDir) return Optional.empty();
+		//skip the log itself by alreading moving 1 time before the loop
+		BlockPos.Mutable cursor = pos.toMutable().move(scanDir);
+		for(int dist = 1; dist < MAX_RANGE; dist++, cursor.move(scanDir)) {
+			BlockState stateThere = world.getBlockState(cursor);
 			
-			int nextDistance = stateThere.get(AwakenedLogBlock.DISTANCE) + 1;
-			if(nextDistance > MAX_RANGE) return Optional.empty();
+			//If we're right next to a core? Well hot damn that's great
+			if(stateThere.getBlock() instanceof CoreBlock) return Optional.of(new Result(scanDir, 1));
 			
-			return Optional.of(new Result(scanDir, nextDistance));
+			//If we're one block away from an already awakened log, note that too
+			if(stateThere.getBlock() instanceof AwakenedLogBlock) {
+				Direction theirFacing = stateThere.get(AwakenedLogBlock.FACING);
+				if(theirFacing != scanDir) return Optional.empty();
+				
+				int nextDistance = stateThere.get(AwakenedLogBlock.DISTANCE) + dist;
+				if(nextDistance > MAX_RANGE) return Optional.empty();
+				
+				return Optional.of(new Result(scanDir, nextDistance));
+			}
+			
+			//If we're next to leaves, skip this block and continue through it
+			if(stateThere.getBlock() == RhoBlocks.RHODODENDRITE.leaves) continue;
+			
+			//Otherwise we're not next to a core at all
+			return Optional.empty();
 		}
 		
-		//Otherwise we're not next to a core at all
+		//Maxed out the entire range and still didn't find a core. Oh well
 		return Optional.empty();
+	}
+	
+	public static StackOps readStackOps(World world, BlockPos corePos, BlockState coreState) {
+		if(!(coreState.getBlock() instanceof CoreBlock)) return new StackOps();
+		
+		Direction coreFacing = coreState.get(CoreBlock.FACING);
+		
+		List<SolidifiedRequest> requests = new ArrayList<>();
+		List<SolidifiedRequest.Holder> holders = new ArrayList<>();
+		
+		BlockPos.Mutable cursor = corePos.toMutable();
+		for(int i = 0; i <= MAX_RANGE; i++, cursor.move(coreFacing)) { // <=: the actual max size of a conga line is MAX_RANGE + 1, counting the Core itself
+			BlockState state = world.getBlockState(cursor);
+			if(state.getBlock() == RhoBlocks.RHODODENDRITE.leaves) continue;
+			
+			TileEntity tile = world.getTileEntity(cursor);
+			if(tile == null) break;
+			
+			Optional<SolidifiedRequest.Holder> holder = tile.getCapability(SolidifiedRequest.Cap.INSTANCE).resolve();
+			if(holder.isPresent()) {
+				requests.add(holder.get().getRequest());
+				holders.add(holder.get());
+			} else break;
+		}
+		
+		return new StackOps(requests, holders);
 	}
 	
 //	

@@ -60,7 +60,6 @@ initial -> pull -> face left
 initial -> pull -> face left -> push
 #1]#]##
 ```
-There might be "charged" versions of certain opcodes/conditions (mainly conditions), that peek past the value inside the core and look at the thing its pointing at, just to make things a bit more convenient.
 
 ---
 
