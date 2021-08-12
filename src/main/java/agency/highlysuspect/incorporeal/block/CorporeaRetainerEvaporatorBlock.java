@@ -1,5 +1,7 @@
 package agency.highlysuspect.incorporeal.block;
 
+import agency.highlysuspect.incorporeal.corporea.RetainerDuck;
+import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -10,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.corporea.TileCorporeaRetainer;
 
@@ -47,31 +50,15 @@ public class CorporeaRetainerEvaporatorBlock extends Block {
 			if(shouldPower) {
 				for(Direction horiz : Direction.Plane.HORIZONTAL) {
 					TileEntity tile = world.getTileEntity(pos.offset(horiz));
-					if(tile instanceof TileCorporeaRetainer) {
-						TileCorporeaRetainer retainer = (TileCorporeaRetainer) tile;
-						if(!retainer.hasPendingRequest()) continue;
-						
-						Duck duck = (Duck) tile;
-						
-						//reduce the request size by 1, or clear it if that would make the request empty
-						int newCount = duck.inc$getRequestCount() - 1;
-						if(newCount > 0) duck.inc$setRequestCount(newCount);
-						else duck.inc$clearRequest();
-						
-						//if the comparator signal is different, send comparator updates
-						if(duck.inc$updateComparator()) world.updateComparatorOutputLevel(pos.offset(horiz), ModBlocks.corporeaRetainer);
+					if(tile != null) {
+						tile.getCapability(SolidifiedRequest.Cap.INSTANCE).ifPresent(holder -> {
+							SolidifiedRequest solid = holder.getRequest();
+							SolidifiedRequest shrunk = solid.withCount(solid.count - 1);
+							if(shrunk.count >= 0) holder.setRequest(shrunk);
+						});
 					}
 				}
 			}
 		}
-	}
-	
-	//Quack.
-	public interface Duck {
-		int inc$getRequestCount();
-		void inc$setRequestCount(int newCount);
-		void inc$clearRequest();
-		
-		boolean inc$updateComparator();
 	}
 }

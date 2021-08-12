@@ -5,6 +5,7 @@ import agency.highlysuspect.incorporeal.block.tile.CorporeaSoulCoreTile;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.block.tile.RedStringLiarTile;
 import agency.highlysuspect.incorporeal.client.IncClient;
+import agency.highlysuspect.incorporeal.corporea.CorporeaCaps;
 import agency.highlysuspect.incorporeal.corporea.EmptyCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
@@ -15,6 +16,7 @@ import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -71,6 +73,8 @@ public class Inc {
 			
 			MinecraftForge.EVENT_BUS.addListener(CorporeaSoulCoreTile::corporeaIndexRequestEvent);
 			MinecraftForge.EVENT_BUS.addListener(TicketConjurerItem::chatEvent);
+			
+			MinecraftForge.EVENT_BUS.addGenericListener(TileEntity.class, CorporeaCaps::attachTileCapabilities);
 			
 			IncNetwork.setup();
 		});

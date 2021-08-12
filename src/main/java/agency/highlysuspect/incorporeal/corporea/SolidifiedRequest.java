@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public class SolidifiedRequest {
 	public SolidifiedRequest(ICorporeaRequestMatcher matcher, int count) {
-		this.matcher = matcher;
+		this.matcher = (matcher == null || matcher == ICorporeaRequestMatcher.Dummy.INSTANCE) ? EmptyCorporeaRequestMatcher.INSTANCE : matcher;
 		this.count = count;
 	}
 	
