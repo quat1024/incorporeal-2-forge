@@ -64,5 +64,7 @@
 	
 	"death.attack.incorporeal.soul": "%s's soul withered away",
 	
-	"entity.incorporeal.fractured_space_collector": "Fractured Space (collector)"
+	"entity.incorporeal.fractured_space_collector": "Fractured Space (collector)",
+	
+	"incorporeal.empty_matcher": "Nothing"
 }

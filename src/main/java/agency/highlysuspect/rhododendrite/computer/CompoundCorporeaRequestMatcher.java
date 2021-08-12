@@ -1,8 +1,8 @@
 package agency.highlysuspect.rhododendrite.computer;
 
+import agency.highlysuspect.incorporeal.corporea.EmptyCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.corporea.MatcherUtils;
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -16,22 +16,22 @@ import java.util.stream.Collectors;
 public class CompoundCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	private CompoundCorporeaRequestMatcher(List<ICorporeaRequestMatcher> others) {
 		Preconditions.checkArgument(others.stream().noneMatch(other -> other instanceof CompoundCorporeaRequestMatcher), "Tried to nest compound requests");
-		Preconditions.checkArgument(others.stream().noneMatch(other -> other == Dummy.INSTANCE), "Empty corporea request matcher snuck into a compound request");
+		Preconditions.checkArgument(others.stream().noneMatch(other -> other == EmptyCorporeaRequestMatcher.INSTANCE), "Empty corporea request matcher snuck into a compound request");
 		
 		this.others = others;
 	}
 	
 	public static ICorporeaRequestMatcher create(Collection<ICorporeaRequestMatcher> others) {
-		if(others.size() == 0) return Dummy.INSTANCE;
+		if(others.size() == 0) return EmptyCorporeaRequestMatcher.INSTANCE;
 		if(others.size() == 1) return others.iterator().next();
 		else return new CompoundCorporeaRequestMatcher(new ArrayList<>(others));
 	}
 	
 	public static ICorporeaRequestMatcher union(ICorporeaRequestMatcher a, ICorporeaRequestMatcher b) {
-		if(a == Dummy.INSTANCE) return b;
-		if(b == Dummy.INSTANCE) return a;
+		if(a == EmptyCorporeaRequestMatcher.INSTANCE) return b;
+		if(b == EmptyCorporeaRequestMatcher.INSTANCE) return a;
 		
-		Set<ICorporeaRequestMatcher> matcherPool = new ObjectOpenCustomHashSet<>(MatcherUtils.HASH_STRATEGY);
+		Set<ICorporeaRequestMatcher> matcherPool = new HashSet<>();
 		if(a instanceof CompoundCorporeaRequestMatcher) matcherPool.addAll(((CompoundCorporeaRequestMatcher) a).others);
 		else matcherPool.add(a);
 		
@@ -44,10 +44,10 @@ public class CompoundCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	//i think the actual set theory term is "relative compliment" but i can't wrap my head around which is the complement and which is being complemented
 	//So im calling it minus()
 	public static ICorporeaRequestMatcher minus(ICorporeaRequestMatcher a, ICorporeaRequestMatcher b) {
-		if(a == Dummy.INSTANCE) return b;
-		if(b == Dummy.INSTANCE) return a;
+		if(a == EmptyCorporeaRequestMatcher.INSTANCE) return b;
+		if(b == EmptyCorporeaRequestMatcher.INSTANCE) return a;
 		
-		Set<ICorporeaRequestMatcher> matcherPool = new ObjectOpenCustomHashSet<>(MatcherUtils.HASH_STRATEGY);
+		Set<ICorporeaRequestMatcher> matcherPool = new HashSet<>();
 		if(a instanceof CompoundCorporeaRequestMatcher) matcherPool.addAll(((CompoundCorporeaRequestMatcher) a).others);
 		else matcherPool.add(a);
 		
@@ -90,5 +90,20 @@ public class CompoundCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	public ITextComponent getRequestName() {
 		//TODO this just comma-separates them, is that cool
 		return TextComponentUtils.func_240649_b_(others, ICorporeaRequestMatcher::getRequestName);
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		
+		CompoundCorporeaRequestMatcher that = (CompoundCorporeaRequestMatcher) o;
+		
+		return others.equals(that.others);
+	}
+	
+	@Override
+	public int hashCode() {
+		return others.hashCode();
 	}
 }

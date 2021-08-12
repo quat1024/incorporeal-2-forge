@@ -5,6 +5,7 @@ import agency.highlysuspect.incorporeal.block.tile.CorporeaSoulCoreTile;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.block.tile.RedStringLiarTile;
 import agency.highlysuspect.incorporeal.client.IncClient;
+import agency.highlysuspect.incorporeal.corporea.EmptyCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.datagen.IncDatagen;
@@ -39,7 +40,7 @@ import java.util.Random;
 @Mod("incorporeal")
 public class Inc {
 	public static final String MODID = "incorporeal";
-	public static final Logger LOG = LogManager.getLogger(MODID);
+	public static final Logger LOGGER = LogManager.getLogger(MODID);
 	
 	//"WE HAVE CLIENT ENTRYPOINTS AT HOME"
 	public static final IncProxy proxy = DistExecutor.safeRunForDist(() -> IncClient::new, () -> IncProxy.Server::new);
@@ -62,6 +63,7 @@ public class Inc {
 			
 			CorporeaHelper corporeaHelper = CorporeaHelper.instance();
 			corporeaHelper.registerRequestMatcher(id("wildcard"), WildcardCorporeaRequestMatcher.class, nbt -> WildcardCorporeaRequestMatcher.INSTANCE);
+			corporeaHelper.registerRequestMatcher(id("empty"), EmptyCorporeaRequestMatcher.class, nbt -> EmptyCorporeaRequestMatcher.INSTANCE);
 			
 			MinecraftForge.EVENT_BUS.addListener(CorporeaSoulCoreTile::corporeaIndexRequestEvent);
 			MinecraftForge.EVENT_BUS.addListener(TicketConjurerItem::chatEvent);

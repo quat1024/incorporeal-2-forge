@@ -13,6 +13,7 @@ import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Optional;
 
 public class SolidifiedRequest {
@@ -24,7 +25,7 @@ public class SolidifiedRequest {
 	public final ICorporeaRequestMatcher matcher;
 	public final int count;
 	
-	public static final SolidifiedRequest EMPTY = new SolidifiedRequest(ICorporeaRequestMatcher.Dummy.INSTANCE, 0);
+	public static final SolidifiedRequest EMPTY = new SolidifiedRequest(EmptyCorporeaRequestMatcher.INSTANCE, 0);
 	
 	public CompoundNBT toTag() {
 		CompoundNBT tag = MatcherUtils.toTag(matcher);
@@ -45,9 +46,9 @@ public class SolidifiedRequest {
 		return tryFromTag(tag).orElse(EMPTY);
 	}
 	
-	//Slightly different semantics from ItemStack#isEmpty; totally valid for the count to be 0, for example
+	//Slightly different semantics from ItemStack#isEmpty; it's totally valid for the count to be 0, for example
 	public boolean isEmpty() {
-		return matcher == ICorporeaRequestMatcher.Dummy.INSTANCE && count == 0;
+		return matcher == EmptyCorporeaRequestMatcher.INSTANCE && count == 0;
 	}
 	
 	public ITextComponent toText() {
@@ -70,7 +71,7 @@ public class SolidifiedRequest {
 		SolidifiedRequest that = (SolidifiedRequest) o;
 		
 		if(count != that.count) return false;
-		return MatcherUtils.equals(matcher, that.matcher);
+		return Objects.equals(matcher, that.matcher);
 	}
 	
 	@Override

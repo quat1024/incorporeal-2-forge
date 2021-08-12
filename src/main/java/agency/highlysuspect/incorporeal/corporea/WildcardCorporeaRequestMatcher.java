@@ -25,4 +25,6 @@ public class WildcardCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	public ITextComponent getRequestName() {
 		return new TranslationTextComponent("incorporeal.request.anything");
 	}
+	
+	//no equals/hashcode since it's a singleton
 }
