@@ -29,9 +29,10 @@ public class RhoClient implements RhoProxy {
 			
 			RenderTypeLookup.setRenderLayer(RhoBlocks.CORE, RenderType.getTranslucent());
 			RenderTypeLookup.setRenderLayer(RhoBlocks.AWAKENED_LOG, RenderType.getCutout());
+			
+			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.leaves, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.sapling, RenderType.getCutout());
 		});
-		
-		//0xce7a9c
 		
 		modBus.addListener((ColorHandlerEvent.Block event) -> {
 			BlockColors colors = event.getBlockColors();
