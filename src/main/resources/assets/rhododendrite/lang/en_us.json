@@ -26,6 +26,7 @@
 	"block.rhododendrite.opcode": "Rhododendric Operator",
 	"block.rhododendrite.core_tumbler": "Core Tumbler",
 	
+	"item.rhododendrite.opcode_blank": "Blank Opcode",
 	"item.rhododendrite.opcode_test_1": "Opcode: Print to the server console lol",
 	"item.rhododendrite.opcode_test_2": "Opcode: hmm idk what this one does actualy",
 	"item.rhododendrite.opcode_push": "Opcode: Push",
