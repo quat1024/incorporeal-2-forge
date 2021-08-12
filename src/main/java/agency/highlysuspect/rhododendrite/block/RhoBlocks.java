@@ -36,7 +36,7 @@ public class RhoBlocks {
 		.notSolid());
 	
 	public static final OpcodeBlock OPCODE = new OpcodeBlock(Properties.from(ModBlocks.corporeaFunnel));
-	public static final ConditionBlock CONDITION = new ConditionBlock(Properties.create(Material.IRON).hardnessAndResistance(5.5F).sound(SoundType.METAL));
+	public static final ConditionBlock CONDITION = new ConditionBlock(Properties.create(Material.IRON).hardnessAndResistance(5.5F).sound(SoundType.METAL).notSolid());
 	
 	public static void register(RegistryEvent.Register<Block> event) {
 		IForgeRegistry<Block> r = event.getRegistry();

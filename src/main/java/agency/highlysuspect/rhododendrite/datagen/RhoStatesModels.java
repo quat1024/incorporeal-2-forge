@@ -47,7 +47,10 @@ public class RhoStatesModels extends BlockStateProvider {
 		//directionalBlock(RhoBlocks.AWAKENED_LOG, new ModelFile.ExistingModelFile(Rho.id("block/awakened_log"), models().existingFileHelper));
 		blockItemParent(RhoBlocks.AWAKENED_LOG);
 		
+		//also manually
 		blockItemParent(RhoBlocks.OPCODE);
+		
+		//condition block & item is done manually
 		
 		doIt(this::itemGenerated,
 			RhoItems.OPCODE_BLANK,

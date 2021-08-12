@@ -24,7 +24,6 @@
 	"block.rhododendrite.core": "Awakened Rhododendrite Core",
 	"block.rhododendrite.awakened_log": "Awakened Rhododendrite Log",
 	"block.rhododendrite.opcode": "Rhododendric Operator",
-	"block.rhododendrite.core_tumbler": "Core Tumbler",
 	
 	"item.rhododendrite.opcode_blank": "Blank Opcode",
 	"item.rhododendrite.opcode_test_1": "Opcode: Print to the server console lol",
@@ -34,6 +33,7 @@
 	"item.rhododendrite.opcode_dup": "Opcode: Clone",
 	"item.rhododendrite.opcode_push_zero": "Opcode: Push Zero",
 	"item.rhododendrite.opcode_push_one": "Opcode: Push One",
+	"item.rhododendrite.opcode_tumble": "Opcode: Tumble Core",
 	"item.rhododendrite.opcode_add": "Opcode: Sum",
 	"item.rhododendrite.opcode_subtract": "Opcode: Difference",
 	"item.rhododendrite.opcode_multiply": "Opcode: Product",
@@ -41,6 +41,13 @@
 	"item.rhododendrite.opcode_remainder": "Opcode: Remainder",
 	
 	"block.rhododendrite.condition": "Rhododendric Crystal Cube",
+	
+	"item.rhododendrite.condition_blank": "Blank Condition",
+	"item.rhododendrite.condition_is_empty": "Condition: No Request",
+	"item.rhododendrite.condition_equal": "Condition: Equal",
+	"item.rhododendrite.condition_count_equal": "Condition: Equal Count",
+	"item.rhododendrite.condition_less_than": "Condition: Less Than",
+	"item.rhododendrite.condition_greater_than": "Condition: Greater Than",
 	
 	"rhododendrite.im_sorry": "yea i know the texture sucks"
 }
