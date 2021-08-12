@@ -37,13 +37,6 @@ public interface DataType<T> {
 	}
 	
 	/**
-	 * Whether this "has zeroness", i.e. it's the number 0, an empty item stack, etc.
-	 */
-	default boolean isZero(T thing) {
-		return isUnit();
-	}
-	
-	/**
 	 * Converts the thing to a comparator signal strength. Must be within 0 and 15.
 	 */
 	default int signalStrength(T thing) {
@@ -77,29 +70,6 @@ public interface DataType<T> {
 	 */
 	default Optional<T> injectNumber(T thing, BigInteger number) {
 		return Optional.of(thing);
-	}
-	
-	/**
-	 * Compares some aspect of the items with compareTo semantics, i.e.
-	 * - a negative number when A is less then B
-	 * - zero when A equals B
-	 * - a positive number when A is greater than B.
-	 * 
-	 * By "some aspect", I mean that dataCompareTo(a, b) == 0 doesn't imply that dataEquals(a, b).
-	 * Item stack comparison compares the size of the stacks only, for example.
-	 * If the stacks are of different items but the sizes are the same, it returns 0.
-	 * 
-	 * The default implementation allocates a bunch of BigIntegers.
-	 */
-	default int dataCompareTo(T a, T b) {
-		Optional<BigInteger> x = asNumber(a);
-		if(x.isPresent()) {
-			Optional<BigInteger> y = asNumber(b);
-			if(y.isPresent()) {
-				return x.get().compareTo(y.get());
-			}
-		}
-		return 0;
 	}
 	
 	/**

@@ -50,19 +50,26 @@ public class RhoStatesModels extends BlockStateProvider {
 		blockItemParent(RhoBlocks.OPCODE);
 		
 		doIt(this::itemGenerated,
-			RhoItems.NOP,
-			RhoItems.TEST1,
-			RhoItems.TEST2,
-			RhoItems.PUSH,
-			RhoItems.PULL,
-			RhoItems.DUP,
-			RhoItems.PUSH_ZERO,
-			RhoItems.PUSH_ONE,
-			RhoItems.ADD,
-			RhoItems.SUBTRACT,
-			RhoItems.MULTIPLY,
-			RhoItems.DIVIDE,
-			RhoItems.REMAINDER);
+			RhoItems.OPCODE_BLANK,
+			RhoItems.OPCODE_TEST_1,
+			RhoItems.OPCODE_TEST_2,
+			RhoItems.OPCODE_PUSH,
+			RhoItems.OPCODE_PULL,
+			RhoItems.OPCODE_DUP,
+			RhoItems.OPCODE_PUSH_ZERO,
+			RhoItems.OPCODE_PUSH_ONE,
+			RhoItems.OPCODE_ADD,
+			RhoItems.OPCODE_SUBTRACT,
+			RhoItems.OPCODE_MULTIPLY,
+			RhoItems.OPCODE_DIVIDE,
+			RhoItems.OPCODE_REMAINDER,
+			RhoItems.CONDITION_BLANK,
+			RhoItems.CONDITION_IS_EMPTY,
+			RhoItems.CONDITION_EQUAL,
+			RhoItems.CONDITION_EQUAL_TYPE,
+			RhoItems.CONDITION_GREATER_THAN,
+			RhoItems.CONDITION_LESS_THAN
+		);
 		
 		coreTumbler(RhoBlocks.CORE_TUMBLER);
 	}

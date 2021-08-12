@@ -24,11 +24,6 @@ public class SolidifiedRequestType implements DataType<SolidifiedRequest> {
 	}
 	
 	@Override
-	public boolean isZero(SolidifiedRequest thing) {
-		return thing.count == 0;
-	}
-	
-	@Override
 	public int signalStrength(SolidifiedRequest thing) {
 		return CorporeaHelper.instance().signalStrengthForRequestSize(thing.count);
 	}
@@ -56,10 +51,5 @@ public class SolidifiedRequestType implements DataType<SolidifiedRequest> {
 		} catch (ArithmeticException e) {
 			return Optional.empty();
 		}
-	}
-	
-	@Override
-	public int dataCompareTo(SolidifiedRequest a, SolidifiedRequest b) {
-		return Integer.compare(a.count, b.count);
 	}
 }

@@ -3,7 +3,7 @@ package agency.highlysuspect.rhododendrite.block;
 import agency.highlysuspect.rhododendrite.block.tile.OpcodeTile;
 import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import agency.highlysuspect.rhododendrite.block.tile.RhodoNetworkTile;
-import agency.highlysuspect.rhododendrite.item.OpcodeCardItem;
+import agency.highlysuspect.rhododendrite.computer.CoreAction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -51,8 +51,8 @@ public class OpcodeBlock extends Block implements IWandable {
 			if(!world.isRemote && shouldPower) {
 				OpcodeTile tile = RhoTileTypes.OPCODE.getIfExists(world, pos);
 				if(tile != null) {
-					OpcodeCardItem.CoreAction.Result result = tile.runAction();
-					state = state.with(FAILED, result == OpcodeCardItem.CoreAction.Result.FAILURE);
+					CoreAction.Result result = tile.runAction();
+					state = state.with(FAILED, result == CoreAction.Result.FAILURE);
 					world.setBlockState(pos, state);
 				}
 			}
@@ -64,7 +64,7 @@ public class OpcodeBlock extends Block implements IWandable {
 	public boolean onUsedByWand(PlayerEntity player, ItemStack stack, World world, BlockPos pos, Direction side) {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof RhodoNetworkTile) {
-			((RhodoNetworkTile) tile).sparkle();
+			((RhodoNetworkTile) tile).whenWanded();
 			return true;
 		} else return false;
 	}
@@ -72,7 +72,7 @@ public class OpcodeBlock extends Block implements IWandable {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof RhodoNetworkTile) ((RhodoNetworkTile) tile).tryAutobind();
+		if(tile instanceof RhodoNetworkTile) ((RhodoNetworkTile) tile).whenPlaced();
 	}
 	
 	@Override

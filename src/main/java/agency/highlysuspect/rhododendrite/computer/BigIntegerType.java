@@ -36,11 +36,6 @@ public class BigIntegerType implements DataType<BigInteger> {
 		return MAX.compareTo(thing) >= 0 && MIN.compareTo(thing) <= 0;
 	}
 	
-	@Override
-	public boolean isZero(BigInteger thing) {
-		return BigInteger.ZERO.equals(thing);
-	}
-	
 	public static final BigInteger COMPARATOR_MIN = BigInteger.ZERO;
 	public static final BigInteger COMPARATOR_MAX = BigInteger.valueOf(16384); // log2(16384) == 15
 	
@@ -64,10 +59,5 @@ public class BigIntegerType implements DataType<BigInteger> {
 	@Override
 	public boolean dataEquals(BigInteger a, BigInteger b) {
 		return a.equals(b);
-	}
-	
-	@Override
-	public int dataCompareTo(BigInteger a, BigInteger b) {
-		return a.compareTo(b);
 	}
 }

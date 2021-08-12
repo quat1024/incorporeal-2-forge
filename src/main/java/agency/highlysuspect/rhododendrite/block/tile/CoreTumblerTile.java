@@ -17,7 +17,7 @@ public class CoreTumblerTile extends RhodoNetworkTile {
 		if(core != null) {
 			BlockState coreState = core.getBlockState();
 			if(coreState.getBlock() instanceof CoreBlock && getBlockState().getBlock() instanceof CoreTumblerBlock) { //u never know????
-				sparkle();
+				whenWanded();
 				world.setBlockState(core.getPos(), coreState.with(CoreBlock.FACING, getBlockState().get(DirectionalBlockButBetter.FACING)));
 			}
 		}

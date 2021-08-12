@@ -1,7 +1,6 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
 import agency.highlysuspect.incorporeal.IncNetwork;
-import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.computer.CorePathTracing;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -32,7 +31,7 @@ public class RhodoNetworkTile extends TileMod implements IWandBindable {
 			this.uplink = bindTo.getPos();
 			markDirty();
 			VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
-			sparkle();
+			whenWanded();
 			return true;
 		} else return false;
 	}
@@ -45,7 +44,7 @@ public class RhodoNetworkTile extends TileMod implements IWandBindable {
 			CorePathTracing.withinWirelessRange(this.pos, tile.getPos());
 	}
 	
-	public void tryAutobind() {
+	public void whenPlaced() {
 		if(world != null && uplink == null) {
 			//Try binding to cores first.
 			if(CorePathTracing.iterateWirelessRange(pos, p -> {
@@ -84,7 +83,7 @@ public class RhodoNetworkTile extends TileMod implements IWandBindable {
 		}
 	}
 	
-	public void sparkle() {
+	public void whenWanded() {
 		if(world == null || uplink == null) return;
 		
 		HashSet<BlockPos> cycleCheck = new HashSet<>();

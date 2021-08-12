@@ -38,5 +38,9 @@
 	"item.rhododendrite.opcode_subtract": "Opcode: Difference",
 	"item.rhododendrite.opcode_multiply": "Opcode: Product",
 	"item.rhododendrite.opcode_divide": "Opcode: Quotient",
-	"item.rhododendrite.opcode_remainder": "Opcode: Remainder"
+	"item.rhododendrite.opcode_remainder": "Opcode: Remainder",
+	
+	"block.rhododendrite.condition": "Rhododendric Crystal Cube",
+	
+	"rhododendrite.im_sorry": "yea i know the texture sucks"
 }

@@ -6,7 +6,7 @@ import agency.highlysuspect.rhododendrite.item.OpcodeCardItem;
 import net.minecraft.item.ItemStack;
 import java.util.List;
 
-import static agency.highlysuspect.rhododendrite.item.OpcodeCardItem.CoreAction.Result;
+import static agency.highlysuspect.rhododendrite.computer.CoreAction.Result;
 
 public class OpcodeTile extends RhodoNetworkTile {
 	public OpcodeTile() {
@@ -22,7 +22,7 @@ public class OpcodeTile extends RhodoNetworkTile {
 			CoreTile core = findCore();
 			if(core == null) return Result.NOT_APPLICABLE;
 			
-			sparkle();
+			whenWanded();
 			
 			OpcodeCardItem choice = (OpcodeCardItem) Inc.choose(choices, world.rand).getItem();
 			return choice.action.act(world, pos, getBlockState(), core);

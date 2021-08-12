@@ -8,6 +8,7 @@ import net.minecraft.util.registry.Registry;
 import javax.annotation.Nonnull;
 import java.math.BigInteger;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -78,10 +79,6 @@ public class Fragment<T> {
 		return type.isUnit();
 	}
 	
-	public boolean isZero() {
-		return type.isZero(data);
-	}
-	
 	public int signalStrength() {
 		return type.signalStrength(data);
 	}
@@ -96,6 +93,14 @@ public class Fragment<T> {
 	
 	public Optional<Fragment<T>> injectNumber(BigInteger number) {
 		return flatMap(d -> type.injectNumber(d, number));
+	}
+	
+	public OptionalInt compareTo(Fragment<?> other) {
+		Optional<BigInteger> selfNumber = asNumber();
+		Optional<BigInteger> otherNumber = other.asNumber();
+		if(selfNumber.isPresent() && otherNumber.isPresent()) {
+			return OptionalInt.of(selfNumber.get().compareTo(otherNumber.get()));
+		} else return OptionalInt.empty();
 	}
 	
 	@Override

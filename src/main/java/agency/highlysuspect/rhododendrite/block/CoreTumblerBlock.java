@@ -62,7 +62,7 @@ public class CoreTumblerBlock extends DirectionalBlockButBetter.PlacesLikePiston
 	public boolean onUsedByWand(PlayerEntity player, ItemStack stack, World world, BlockPos pos, Direction side) {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof RhodoNetworkTile) {
-			((RhodoNetworkTile) tile).sparkle();
+			((RhodoNetworkTile) tile).whenWanded();
 			return true;
 		} else return false;
 	}
@@ -70,6 +70,6 @@ public class CoreTumblerBlock extends DirectionalBlockButBetter.PlacesLikePiston
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof RhodoNetworkTile) ((RhodoNetworkTile) tile).tryAutobind();
+		if(tile instanceof RhodoNetworkTile) ((RhodoNetworkTile) tile).whenPlaced();
 	}
 }
