@@ -31,6 +31,7 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 	
 	private static final ResourceLocation texture = Inc.id("textures/entity/unstable_cube.png");
 	private final DyeColor color;
+	private final CubeModel model = new CubeModel();
 	
 	@Override
 	public void render(@Nullable UnstableCubeTile te, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
@@ -50,10 +51,8 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 		float green = ((colorPacked & 0x00FF00) >> 8) / 255f;
 		float blue = (colorPacked & 0x0000FF) / 255f;
 		
-		//todo dont make a new one every frame, it's for debuging
-		CubeModel poot = new CubeModel();
 		IVertexBuilder builder = buf.getBuffer(RenderType.getEntityCutout(texture));
-		poot.render(ms, builder, light, overlay, red, green, blue, 1f);
+		model.render(ms, builder, light, overlay, red, green, blue, 1f);
 		
 		ms.pop();
 	}

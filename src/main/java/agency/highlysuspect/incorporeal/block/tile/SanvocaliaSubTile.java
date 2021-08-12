@@ -91,7 +91,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 				TranslationTextComponent msg = new TranslationTextComponent("chat.type.text", displayName == null ? new TranslationTextComponent("block.incorporeal.sanvocalia") : displayName, request.toText());
 				
 				Inc.LOGGER.info("Sanvocalia chat message triggered at " + pos.getCoordinatesAsString() + " in dimension " + world.getDimensionKey().getLocation());
-				if(IncConfig.everyoneHearsSanvocalia) {
+				if(IncConfig.INST.everyoneHearsSanvocalia.get()) {
 					server.getPlayerList().func_232641_a_(msg, ChatType.CHAT, CHAT_SEND_UUID);
 				} else {
 					ServerPlayerEntity placer = server.getPlayerList().getPlayerByUUID(placerUuid); 
