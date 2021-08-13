@@ -26,6 +26,8 @@ public class RhoDatagen {
 			RhoTags.BlockProvider b = new RhoTags.BlockProvider(data, dontCare);
 			data.addProvider(b);
 			data.addProvider(new RhoTags.ItemProvider(data, b, dontCare));
+			
+			data.addProvider(new RhoManaInfusion(data));
 		}
 		
 		if(e.includeClient()) {

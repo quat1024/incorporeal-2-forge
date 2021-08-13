@@ -58,6 +58,10 @@ public class IncRecipes extends RecipeProvider {
 			.build(consumer);
 	}
 	
+	protected ShapelessRecipeBuilder shapeless(IItemProvider item, int count) {
+		return ShapelessRecipeBuilder.shapelessRecipe(item, count);
+	}
+	
 	protected ShapedRecipeBuilder shaped(IItemProvider item, int count, String... lines) {
 		ShapedRecipeBuilder shaped = ShapedRecipeBuilder.shapedRecipe(item, count);
 		for(String line : lines) shaped.patternLine(line);

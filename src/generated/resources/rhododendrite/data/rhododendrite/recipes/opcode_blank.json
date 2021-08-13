@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:crafting_table"
+    },
+    {
+      "item": "botania:metamorphic_mountain_stone"
+    }
+  ],
+  "result": {
+    "item": "rhododendrite:opcode_blank",
+    "count": 32
+  }
+}

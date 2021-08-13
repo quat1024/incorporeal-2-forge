@@ -1,0 +1,15 @@
+{
+  "type": "botania:mana_infusion",
+  "input": {
+    "item": "rhododendrite:condition_count_equal"
+  },
+  "output": {
+    "item": "rhododendrite:condition_greater_than"
+  },
+  "mana": 200,
+  "group": "rhododendrite:condition_cycle",
+  "catalyst": {
+    "type": "block",
+    "block": "botania:alchemy_catalyst"
+  }
+}

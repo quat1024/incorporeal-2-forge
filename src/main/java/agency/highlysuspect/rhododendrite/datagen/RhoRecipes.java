@@ -3,6 +3,7 @@ package agency.highlysuspect.rhododendrite.datagen;
 import agency.highlysuspect.incorporeal.datagen.IncRecipes;
 import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
+import agency.highlysuspect.rhododendrite.item.RhoItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
@@ -10,6 +11,10 @@ import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.registry.Registry;
+import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.block.ModFluffBlocks;
+import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.lib.ModTags;
 
 import java.util.function.Consumer;
 
@@ -26,6 +31,34 @@ public class RhoRecipes extends IncRecipes {
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> r) {
 		doWoodFamily(r, RhoBlocks.RHODODENDRITE);
+		
+		shapeless(RhoItems.OPCODE_BLANK, 32)
+			.addIngredient(Items.CRAFTING_TABLE)
+			.addIngredient(ModFluffBlocks.biomeStoneMountain)
+			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
+			.addCriterion("has_ugly_stone", hasItem(ModFluffBlocks.biomeStoneMountain))
+			.build(r);
+		
+		shapeless(RhoItems.CONDITION_BLANK, 32)
+			.addIngredient(Items.CRAFTING_TABLE)
+			.addIngredient(ModFluffBlocks.biomeStoneForest)
+			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
+			.addCriterion("has_ugly_stone", hasItem(ModFluffBlocks.biomeStoneForest))
+			.build(r);
+		
+		shaped(RhoBlocks.OPCODE, 1, "#S#", "#X#", "###")
+			.key('S', ModItems.corporeaSpark)
+			.key('X', ModBlocks.corporeaBlock)
+			.key('#', RhoBlocks.RHODODENDRITE.planks)
+			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
+			.build(r);
+		
+		shaped(RhoBlocks.CONDITION, 1, "#S#", "#X#", "###")
+			.key('S', ModItems.corporeaSpark)
+			.key('X', Items.DROPPER)
+			.key('#', RhoBlocks.RHODODENDRITE.planks)
+			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
+			.build(r);
 	}
 	
 	@SuppressWarnings("SameParameterValue")

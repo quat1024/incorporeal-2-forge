@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "rhododendrite:opcode_blank"
+    ]
+  },
+  "criteria": {
+    "has_rhodo": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "rhododendrite:rhododendrite_log"
+          }
+        ]
+      }
+    },
+    "has_ugly_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "botania:metamorphic_mountain_stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "rhododendrite:opcode_blank"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_rhodo",
+      "has_ugly_stone",
+      "has_the_recipe"
+    ]
+  ]
+}

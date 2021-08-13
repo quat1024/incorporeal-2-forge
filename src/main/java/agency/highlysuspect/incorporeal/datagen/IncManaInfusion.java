@@ -16,6 +16,7 @@ import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.core.helper.ItemNBTHelper;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.crafting.StateIngredientHelper;
+import vazkii.botania.data.recipes.ManaInfusionProvider;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -39,20 +40,29 @@ public class IncManaInfusion extends RecipeProvider {
 	}
 	
 	//Copypaste
-	private static FinishedRecipe mini(IItemProvider mini, IItemProvider full) {
+	public static FinishedRecipe mini(IItemProvider mini, IItemProvider full) {
 		return FinishedRecipe.alchemy(id(Registry.ITEM.getKey(mini.asItem()).getPath()), new ItemStack(mini), ingr(full), 2500, "botania:flower_shrinking");
 	}
 	
-	private static ResourceLocation id(String s) {
+	public static ResourceLocation id(String s) {
 		return prefix("mana_infusion/" + s);
 	}
 	
-	private static Ingredient ingr(IItemProvider i) {
+	public static Ingredient ingr(IItemProvider i) {
 		return Ingredient.fromItems(i);
 	}
 	
+	public static void cycle(Consumer<IFinishedRecipe> consumer, int cost, String group, IItemProvider... items) {
+		for (int i = 0; i < items.length; i++) {
+			Ingredient in = ingr(items[i]);
+			ItemStack out = new ItemStack(i == items.length - 1 ? items[0] : items[i + 1]);
+			String id = String.format("%s_to_%s", Registry.ITEM.getKey(items[i].asItem()).getPath(), Registry.ITEM.getKey(out.getItem()).getPath());
+			consumer.accept(FinishedRecipe.alchemy(id(id), out, in, cost, group));
+		}
+	}
+	
 	//Copypaste
-	private static class FinishedRecipe implements IFinishedRecipe {
+	public static class FinishedRecipe implements IFinishedRecipe {
 		private static final StateIngredient CONJURATION = StateIngredientHelper.of(ModBlocks.conjurationCatalyst);
 		private static final StateIngredient ALCHEMY = StateIngredientHelper.of(ModBlocks.alchemyCatalyst);
 		
