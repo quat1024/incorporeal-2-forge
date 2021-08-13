@@ -20,10 +20,11 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import vazkii.botania.api.wand.IWandable;
+import vazkii.botania.common.block.BlockModWaterloggable;
 
 import javax.annotation.Nullable;
 
-public class UnstableCubeBlock extends Block implements IWandable {
+public class UnstableCubeBlock extends BlockModWaterloggable implements IWandable {
 	public UnstableCubeBlock(Properties properties, DyeColor color) {
 		super(properties);
 		this.color = color;

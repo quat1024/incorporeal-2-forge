@@ -21,10 +21,11 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
 import vazkii.botania.api.wand.IWandable;
+import vazkii.botania.common.block.BlockModWaterloggable;
 
 import javax.annotation.Nullable;
 
-public class ConditionBlock extends Block implements IWandable {
+public class ConditionBlock extends BlockModWaterloggable implements IWandable {
 	public ConditionBlock(Properties properties) {
 		super(properties);
 	}

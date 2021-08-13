@@ -22,11 +22,12 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import vazkii.botania.common.block.BlockModWaterloggable;
 import vazkii.botania.mixin.AccessorItemEntity;
 
 import java.util.List;
 
-public class FrameTinkererBlock extends Block {
+public class FrameTinkererBlock extends BlockModWaterloggable {
 	public FrameTinkererBlock(Properties properties) {
 		super(properties);
 		setDefaultState(getDefaultState().with(BlockStateProperties.POWERED, false));
