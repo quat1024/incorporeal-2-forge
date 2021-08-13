@@ -2,15 +2,11 @@
 	"name": "block.incorporeal.frame_tinkerer",
 	"category": "botania:devices",
 	"icon": "incorporeal:frame_tinkerer",
-	"entry_color": "174555",
+	"entry_color": "194a5c",
 	"pages": [
 		{
 			"type": "text",
 			"text": "incorporeal.entry.frame_tinkerer0"
-		},
-		{
-			"type": "text",
-			"text": "incorporeal.entry.frame_tinkerer1"
 		},
 		{
 			"type": "crafting",

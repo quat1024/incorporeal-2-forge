@@ -2,7 +2,7 @@
 	"name": "incorporeal.entry.unstable_cube",
 	"category": "botania:misc",
 	"icon": "incorporeal:red_unstable_cube",
-	"entry_color": "174555",
+	"entry_color": "194a5c",
 	"pages": [
 		{
 			"type": "text",
