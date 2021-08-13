@@ -32,8 +32,6 @@ public class CorporeaItemStackMatcherEqualsHashcode {
 	
 	@Override
 	public int hashCode() {
-		int result = match.hashCode();
-		result = 31 * result + (checkNBT ? 1 : 0);
-		return result;
+		return Objects.hash(match.getItem().getRegistryName(), match.getTag(), checkNBT);
 	}
 }
