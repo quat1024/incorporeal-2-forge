@@ -13,7 +13,7 @@ import vazkii.botania.common.block.tile.corporea.TileCorporeaRetainer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CorporeaCaps {
+public class IncCapEvents {
 	public static void attachTileCapabilities(AttachCapabilitiesEvent<TileEntity> e) {
 		TileEntity tile = e.getObject();
 		if(tile instanceof TileCorporeaRetainer) {

@@ -13,6 +13,7 @@ public class RhoTileTypes {
 	
 	public static final TileEntityType<OpcodeTile> OPCODE = TileEntityType.Builder.create(OpcodeTile::new, RhoBlocks.OPCODE).build(null);
 	public static final TileEntityType<ConditionTile> CONDITION = TileEntityType.Builder.create(ConditionTile::new, RhoBlocks.CONDITION).build(null);
+	public static final TileEntityType<FunnelTile> FUNNEL = TileEntityType.Builder.create(FunnelTile::new, RhoBlocks.FUNNEL).build(null);
 	
 	public static void register(RegistryEvent.Register<TileEntityType<?>> event) {
 		IForgeRegistry<TileEntityType<?>> r = event.getRegistry();
@@ -22,5 +23,6 @@ public class RhoTileTypes {
 		
 		Rho.reg(r, "opcode", OPCODE);
 		Rho.reg(r, "condition", CONDITION);
+		Rho.reg(r, "funnel", FUNNEL);
 	}
 }

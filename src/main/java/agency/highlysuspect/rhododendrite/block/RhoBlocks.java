@@ -37,6 +37,7 @@ public class RhoBlocks {
 	
 	public static final OpcodeBlock OPCODE = new OpcodeBlock(Properties.from(ModBlocks.corporeaFunnel));
 	public static final ConditionBlock CONDITION = new ConditionBlock(Properties.create(Material.IRON).hardnessAndResistance(5.5F).sound(SoundType.METAL).notSolid());
+	public static final FunnelBlock FUNNEL = new FunnelBlock(Properties.create(Material.WOOD).hardnessAndResistance(3F).sound(SoundType.WOOD));
 	
 	public static void register(RegistryEvent.Register<Block> event) {
 		IForgeRegistry<Block> r = event.getRegistry();
@@ -48,5 +49,6 @@ public class RhoBlocks {
 		
 		Rho.reg(r, "opcode", OPCODE);
 		Rho.reg(r, "condition", CONDITION);
+		Rho.reg(r, "funnel", FUNNEL);
 	}
 }

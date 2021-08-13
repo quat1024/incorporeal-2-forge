@@ -1,6 +1,8 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
+import agency.highlysuspect.rhododendrite.computer.RhodoFunnelable;
+import agency.highlysuspect.rhododendrite.computer.RhodoFunnelableCapability;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -18,6 +20,7 @@ public abstract class RequestHolderTile extends TileMod implements SolidifiedReq
 	}
 	
 	protected SolidifiedRequest request = SolidifiedRequest.EMPTY;
+	protected final RhodoFunnelable funnelable = new RhodoFunnelable.ForRequestHolder(this);
 	
 	@Override
 	public void writePacketNBT(CompoundNBT cmp) {
@@ -35,6 +38,7 @@ public abstract class RequestHolderTile extends TileMod implements SolidifiedReq
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 		if(cap == SolidifiedRequest.Cap.INSTANCE) return LazyOptional.of(() -> this).cast();
+		else if(cap == RhodoFunnelableCapability.INSTANCE) return LazyOptional.of(() -> funnelable).cast();
 		else return super.getCapability(cap, side);
 	}
 	

@@ -17,6 +17,10 @@ public class CorporeaTicketItem extends Item {
 	
 	private static final String KEY = "solidified_corporea_request"; 
 	
+	public ItemStack produce(SolidifiedRequest request) {
+		return produceForRequest(request.matcher, request.count);
+	}
+	
 	public ItemStack produceForRequest(ICorporeaRequestMatcher request, int count) {
 		ItemStack stack = new ItemStack(this);
 		

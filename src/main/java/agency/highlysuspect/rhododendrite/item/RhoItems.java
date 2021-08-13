@@ -150,7 +150,8 @@ public class RhoItems {
 			RhoBlocks.CORE,
 			RhoBlocks.AWAKENED_LOG,
 			RhoBlocks.OPCODE,
-			RhoBlocks.CONDITION
+			RhoBlocks.CONDITION,
+			RhoBlocks.FUNNEL
 		);
 	}
 	

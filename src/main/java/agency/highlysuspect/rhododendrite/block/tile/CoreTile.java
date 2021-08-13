@@ -1,6 +1,8 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
+import agency.highlysuspect.rhododendrite.computer.RhodoFunnelable;
+import agency.highlysuspect.rhododendrite.computer.StackOps;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -9,12 +11,46 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-public class CoreTile extends RequestHolderTile {
+public class CoreTile extends RequestHolderTile implements RhodoFunnelable {
 	public CoreTile() {
 		super(RhoTileTypes.CORE);
+	}
+	
+	@Override
+	public boolean canRhodoExtract() {
+		return true;
+	}
+	
+	@Override
+	public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
+		if(simulate) {
+			return Optional.of(StackOps.read(this).peek());
+		} else {
+			StackOps ops = StackOps.read(this);
+			SolidifiedRequest result = ops.pull();
+			ops.commit();
+			return Optional.of(result);
+		}
+	}
+	
+	@Override
+	public boolean canRhodoInsert() {
+		return true;
+	}
+	
+	@Override
+	public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
+		if(!simulate) {
+			StackOps ops = StackOps.read(this);
+			ops.push(request);
+			ops.commit();
+		}
+		return true;
 	}
 	
 	//TODO: Reimplement the Listener system. This is intended to allow Condition blocks to be nonticking. It had some problems (see #8)
