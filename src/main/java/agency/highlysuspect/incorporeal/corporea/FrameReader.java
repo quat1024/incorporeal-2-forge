@@ -74,7 +74,7 @@ public class FrameReader {
 		for(Direction dir : Direction.values()) {
 			BlockPos off = pos.offset(dir);
 			for(ItemFrameEntity frame : world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(off, off.add(1, 1, 1)))) {
-				if(frame.isAlive() && (test != null && test.test(frame, dir))) {
+				if(frame.isAlive() && (test == null || test.test(frame, dir))) {
 					items.add(frame.getDisplayedItem());
 				}
 			}
@@ -89,7 +89,7 @@ public class FrameReader {
 		for(Direction dir : Direction.values()) {
 			BlockPos off = pos.offset(dir);
 			for(ItemFrameEntity frame : world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(off, off.add(1, 1, 1)))) {
-				if(frame.isAlive() && (test != null && test.test(frame, dir))) {
+				if(frame.isAlive() && (test == null || test.test(frame, dir))) {
 					frames.add(frame);
 				}
 			}
@@ -104,7 +104,7 @@ public class FrameReader {
 		for(Direction dir : Direction.values()) {
 			BlockPos off = pos.offset(dir);
 			for(ItemFrameEntity frame : world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(off, off.add(1, 1, 1)))) {
-				if(frame.isAlive() && frame.getHorizontalFacing() == dir && (test != null && test.test(frame, dir))) {
+				if(frame.isAlive() && frame.getHorizontalFacing() == dir && (test == null || test.test(frame, dir))) {
 					frames.put(dir, frame);
 				}
 			}
