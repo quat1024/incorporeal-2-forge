@@ -3,55 +3,46 @@ package agency.highlysuspect.rhododendrite.block.tile;
 import agency.highlysuspect.rhododendrite.item.ConditionCardItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 
 import javax.annotation.Nonnull;
 
-public class ConditionTile extends RhodoNetworkTile implements CoreTile.ChangeListener {
+public class ConditionTile extends RhodoNetworkTile implements ITickableTileEntity {
 	public ConditionTile() {
 		super(RhoTileTypes.CONDITION);
 	}
 	
 	int signal = 0;
 	
-	@Override
-	public void whenPlaced() {
-		super.whenPlaced();
-		CoreTile core = findCore();
-		if(core != null) core.registerListener(pos);
-	}
-	
-	@Override
-	public void whenWanded() {
-		super.whenWanded();
-		
-		//idk just in case.. if it gets broken this lets you fix it w/o breaking and replacing
-		CoreTile core = findCore();
-		if(core != null) core.registerListener(pos);
-	}
-	
 	public int getComparator() {
 		return signal;
 	}
 	
 	@Override
-	public void whenCoreChanged(CoreTile core) {
-		if(core == null) return;
-		
-		int oldSignal = signal;
+	public void tick() {
+		CoreTile core = findCore();
+		if(core == null) {
+			setSignalTo(0);
+			return;
+		}
 		
 		ItemStack conditionCard = inventory.getStackInSlot(0);
 		if(conditionCard.getItem() instanceof ConditionCardItem) {
-			signal = ((ConditionCardItem) conditionCard.getItem()).predicate.test(core) ? 15 : 0;
-			signal = MathHelper.clamp(signal, 0, 15);
+			int x = ((ConditionCardItem) conditionCard.getItem()).predicate.test(core) ? 15 : 0;
+			setSignalTo(MathHelper.clamp(x, 0, 15));
 		} else {
-			signal = 0;
+			setSignalTo(0);
 		}
-		
-		if(oldSignal != signal) {
-			markDirty(); //schedules comparator updates as well
+	}
+	
+	private void setSignalTo(int newSignal) {
+		int oldSignal = signal;
+		signal = newSignal;
+		if(oldSignal != newSignal) {
+			markDirty(); //schedules comparator updates
 		}
 	}
 	
@@ -69,7 +60,7 @@ public class ConditionTile extends RhodoNetworkTile implements CoreTile.ChangeLi
 		
 		@Override
 		protected void onContentsChanged(int slot) {
-			ConditionTile.this.whenCoreChanged(ConditionTile.this.findCore());
+			//ConditionTile.this.whenCoreChanged(ConditionTile.this.findCore());
 			
 			ConditionTile.this.markDirty();
 			VanillaPacketDispatcher.dispatchTEToNearbyPlayers(ConditionTile.this);
