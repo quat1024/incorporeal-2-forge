@@ -31,6 +31,7 @@
 	
 	"block.incorporeal.ender_soul_core": "Ender Soul Core",
 	"block.incorporeal.corporea_soul_core": "Corporea Soul Core",
+	"block.incorporeal.potion_soul_core": "Blood Soul Core",
 	
 	"block.incorporeal.sanvocalia": "Sanvocalia",
 	"block.incorporeal.sanvocalia_chibi": "Sanvocalia Petite",
@@ -65,6 +66,7 @@
 	"death.attack.incorporeal.soul": "%s's soul withered away",
 	
 	"entity.incorporeal.fractured_space_collector": "Fractured Space (collector)",
+	"entity.incorporeal.potion_soul_core_collector": "Blood Soul Core (collector)",
 	
 	"incorporeal.empty_matcher": "Nothing"
 }
