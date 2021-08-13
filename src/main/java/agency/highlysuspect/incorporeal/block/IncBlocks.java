@@ -42,6 +42,7 @@ public class IncBlocks {
 		.notSolid();
 	public static final Block ENDER_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.ENDER_SOUL_CORE);
 	public static final Block CORPOREA_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.CORPOREA_SOUL_CORE);
+	public static final Block POTION_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.POTION_SOUL_CORE);
 	
 	public static final Block.Properties flowerProps = AbstractBlock.Properties.from(Blocks.POPPY);
 	public static final Block.Properties floatingProps = ModBlocks.FLOATING_PROPS;
@@ -69,6 +70,7 @@ public class IncBlocks {
 		
 		Inc.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
 		Inc.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);
+		Inc.reg(r, "potion_soul_core", POTION_SOUL_CORE);
 		
 		//flowers
 		//this is the block ID scheme that botania uses

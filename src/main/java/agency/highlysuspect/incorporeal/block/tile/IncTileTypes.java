@@ -22,6 +22,7 @@ public class IncTileTypes {
 	
 	public static final TileEntityType<EnderSoulCoreTile> ENDER_SOUL_CORE = TileEntityType.Builder.create(EnderSoulCoreTile::new, IncBlocks.ENDER_SOUL_CORE).build(null);
 	public static final TileEntityType<CorporeaSoulCoreTile> CORPOREA_SOUL_CORE = TileEntityType.Builder.create(CorporeaSoulCoreTile::new, IncBlocks.CORPOREA_SOUL_CORE).build(null);
+	public static final TileEntityType<PotionSoulCoreTile> POTION_SOUL_CORE = TileEntityType.Builder.create(PotionSoulCoreTile::new, IncBlocks.POTION_SOUL_CORE).build(null);
 	
 	public static final TileEntityType<SanvocaliaSubTile> SANVOCALIA_BIG = TileEntityType.Builder.create(SanvocaliaSubTile::big, IncBlocks.SANVOCALIA, IncBlocks.FLOATING_SANVOCALIA).build(null);
 	public static final TileEntityType<SanvocaliaSubTile> SANVOCALIA_SMALL = TileEntityType.Builder.create(SanvocaliaSubTile::small, IncBlocks.SMALL_SANVOCALIA, IncBlocks.SMALL_FLOATING_SANVOCALIA).build(null);
@@ -37,6 +38,7 @@ public class IncTileTypes {
 		
 		Inc.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
 		Inc.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);
+		Inc.reg(r, "potion_soul_core", POTION_SOUL_CORE);
 		
 		Inc.reg(r, "sanvocalia", SANVOCALIA_BIG);
 		Inc.reg(r, "sanvocalia_small", SANVOCALIA_SMALL);

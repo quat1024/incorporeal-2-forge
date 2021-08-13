@@ -63,6 +63,7 @@ public class IncStatesModels extends BlockStateProvider {
 		
 		particleOnly(IncBlocks.ENDER_SOUL_CORE, Inc.id("entity/ender_soul_core"));
 		particleOnly(IncBlocks.CORPOREA_SOUL_CORE, Inc.id("entity/corporea_soul_core"));
+		particleOnly(IncBlocks.POTION_SOUL_CORE, Inc.id("entity/potion_soul_core"));
 		
 		for(UnstableCubeBlock u : IncBlocks.UNSTABLE_CUBES.values()) particleOnly(u, Inc.id("entity/unstable_cube"));
 		

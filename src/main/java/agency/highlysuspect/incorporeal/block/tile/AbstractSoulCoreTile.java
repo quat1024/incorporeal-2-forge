@@ -106,10 +106,14 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 		
 		if(mana <= 0 && hasOwnerProfile()) {
 			//uh oh!
-			findPlayer().ifPresent(p -> p.attackEntityFrom(SOUL, 5f));
-			setOwnerProfile(null);
-			world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, .5f, 1.2f);
+			onExpire();
 		}
+	}
+	
+	public void onExpire() {
+		findPlayer().ifPresent(p -> p.attackEntityFrom(SOUL, 5f));
+		setOwnerProfile(null);
+		if(world != null) world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, .5f, 1.2f);
 	}
 	
 	public int getComparator() {

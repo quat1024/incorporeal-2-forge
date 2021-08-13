@@ -11,6 +11,7 @@ import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.datagen.IncDatagen;
 import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
+import agency.highlysuspect.incorporeal.entity.PotionSoulCoreCollectorEntity;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
 import net.minecraft.block.Block;
@@ -61,6 +62,8 @@ public class Inc {
 		modBus.addGenericListener(TileEntityType.class, IncTileTypes::register);
 		modBus.addGenericListener(EntityType.class, IncEntityTypes::register);
 		
+		modBus.addListener(PotionSoulCoreCollectorEntity::attributeEvent);
+		
 		modBus.addListener((FMLCommonSetupEvent event) -> {
 			SolidifiedRequest.Cap.initialize();
 			
@@ -75,6 +78,9 @@ public class Inc {
 			MinecraftForge.EVENT_BUS.addListener(TicketConjurerItem::chatEvent);
 			
 			MinecraftForge.EVENT_BUS.addGenericListener(TileEntity.class, CorporeaCaps::attachTileCapabilities);
+			
+			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::healEvent);
+			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::attackEvent);
 			
 			IncNetwork.setup();
 		});

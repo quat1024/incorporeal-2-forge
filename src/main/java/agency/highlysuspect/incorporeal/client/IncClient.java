@@ -46,7 +46,8 @@ public class IncClient implements IncProxy {
 			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_FUNNY, RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_FUNNY, RenderType.getCutout());
 			
-			RenderingRegistry.registerEntityRenderingHandler(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, RenderNoop::new);
+			RenderingRegistry.registerEntityRenderingHandler(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, NotQuiteNoopRender::new);
+			RenderingRegistry.registerEntityRenderingHandler(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, NotQuiteNoopRender::new);
 		});
 		
 		modBus.addListener((ModelRegistryEvent e) -> {
@@ -56,6 +57,7 @@ public class IncClient implements IncProxy {
 			
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.ENDER_SOUL_CORE, d -> new SoulCoreRenderer(d, Inc.id("textures/entity/ender_soul_core.png")));
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.CORPOREA_SOUL_CORE, d -> new SoulCoreRenderer(d, Inc.id("textures/entity/corporea_soul_core.png")));
+			ClientRegistry.bindTileEntityRenderer(IncTileTypes.POTION_SOUL_CORE, d -> new SoulCoreRenderer(d, Inc.id("textures/entity/potion_soul_core.png")));
 			
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.SANVOCALIA_BIG, RenderTileSpecialFlower::new);
 			ClientRegistry.bindTileEntityRenderer(IncTileTypes.SANVOCALIA_SMALL, RenderTileSpecialFlower::new);
@@ -67,6 +69,7 @@ public class IncClient implements IncProxy {
 		forgeBus.addListener(EventPriority.LOW, IncHudHandler::onDrawScreenPost); //make sure we're after Botania
 	}
 	
+	//Forge what the hell is this>?????????? What is this shit??>>?/
 	@Override
 	public Item.Properties soulCoreFrameIster(Item.Properties in) {
 		return in.setISTER(() -> SoulCoreFrameIster::new);

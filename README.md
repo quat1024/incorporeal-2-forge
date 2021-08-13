@@ -13,7 +13,6 @@ I hesitate because Rhododendrite will not be very useful without Botania/a corpo
 
 * recipes Lol
 * documentation Loooll
-* potion soul core
 * natural redstone circuitry from redstone root plants
 * frame screw
 
@@ -31,6 +30,7 @@ I hesitate because Rhododendrite will not be very useful without Botania/a corpo
 * rod of the fractured space
 * corporea retainer evaporator (possssibly obsolete???)
 * unstable cube
+* potion soul core
 
 ## Things that will not be ported
 

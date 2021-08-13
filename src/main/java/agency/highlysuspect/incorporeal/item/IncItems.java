@@ -32,6 +32,7 @@ public class IncItems {
 	//thanks botania for having this little utility, Lol
 	public static final BlockItem ENDER_SOUL_CORE = new BlockItem(IncBlocks.ENDER_SOUL_CORE, Botania.proxy.propertiesWithRenderer(defaultProps(), IncBlocks.ENDER_SOUL_CORE));
 	public static final BlockItem CORPOREA_SOUL_CORE = new BlockItem(IncBlocks.CORPOREA_SOUL_CORE, Botania.proxy.propertiesWithRenderer(defaultProps(), IncBlocks.CORPOREA_SOUL_CORE));
+	public static final BlockItem POTION_SOUL_CORE = new BlockItem(IncBlocks.POTION_SOUL_CORE, Botania.proxy.propertiesWithRenderer(defaultProps(), IncBlocks.POTION_SOUL_CORE));
 	
 	public static final ItemBlockSpecialFlower SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SANVOCALIA, defaultProps());
 	public static final ItemBlockSpecialFlower SMALL_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SMALL_SANVOCALIA, defaultProps());
@@ -66,6 +67,7 @@ public class IncItems {
 		
 		regBlockItem(r, ENDER_SOUL_CORE);
 		regBlockItem(r, CORPOREA_SOUL_CORE);
+		regBlockItem(r, POTION_SOUL_CORE);
 		
 		//flowers
 		regBlockItem(r, SANVOCALIA);
