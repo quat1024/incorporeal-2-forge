@@ -68,5 +68,13 @@
 	"entity.incorporeal.fractured_space_collector": "Fractured Space (collector)",
 	"entity.incorporeal.potion_soul_core_collector": "Blood Soul Core (collector)",
 	
-	"incorporeal.empty_matcher": "Nothing"
+	"incorporeal.empty_matcher": "Nothing",
+	
+	"incorporeal.entry.frame_tinkerer0": "The $(item)Frame Tinkerer$(0) is an indispensible tool for any advanced corporeticist, or really anyone who likes to redecorate often. It acts like a $(item)Spark Tinkerer$(0) - drop an item on it, give it a redstone signal, and the item will change places with one in a random nearby $(item)Item Frame$(0).",
+	"incorporeal.entry.frame_tinkerer1": "Note that it doesn't have a dedicated inventory; just dropping items on top will suffice. They are pushable via $(item)Piston$(0).",
+	"incorporeal.entry.frame_tinkerer.flavor": "Symbiotic Hematophage",
+	
+	"incorporeal.entry.unstable_cube": "Unstable Cubes",
+	"incorporeal.entry.unstable_cube0": "$(item)Unstable Cubes$(0) are curious little critters. They cracke pleasantly and spin in a satisfying way when touched, but other than emitting a redstone signal when that happens, don't seem to do anything useful.",
+	"incorporeal.entry.unstable_cube.flavor": "Decorative relic from a bygone era"
 }
