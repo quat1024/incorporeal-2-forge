@@ -46,7 +46,5 @@ public class RhoManaInfusion extends IncManaInfusion {
 		);
 		
 		consumer.accept(IncManaInfusion.FinishedRecipe.alchemy(Rho.id("core"), new ItemStack(RhoBlocks.CORE), ingr(RhoBlocks.RHODODENDRITE.log), 50_000));
-		
-		super.registerRecipes(consumer);
 	}
 }
