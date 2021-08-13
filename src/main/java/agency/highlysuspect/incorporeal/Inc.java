@@ -97,6 +97,10 @@ public class Inc {
 		return new ResourceLocation(LibMisc.MOD_ID, path);
 	}
 	
+	public static ResourceLocation forgeId(String path) {
+		return new ResourceLocation("forge", path);
+	}
+	
 	public static <T extends ForgeRegistryEntry<T>> void reg(IForgeRegistry<T> r, String name, T thing) {
 		thing.setRegistryName(id(name));
 		r.register(thing);

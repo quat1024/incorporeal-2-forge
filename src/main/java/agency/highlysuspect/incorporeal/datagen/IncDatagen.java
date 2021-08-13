@@ -33,6 +33,10 @@ public class IncDatagen {
 			IncTags.BlockProvider b = new IncTags.BlockProvider(data, dontCare);
 			data.addProvider(b);
 			data.addProvider(new IncTags.ItemProvider(data, b, dontCare));
+			
+			data.addProvider(new IncManaInfusion(data));
+			data.addProvider(new IncPetalRecipes(data));
+			data.addProvider(new IncRuneRecipes(data));
 		}
 		
 		if(e.includeClient()) {

@@ -4,14 +4,13 @@ import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.block.Blocks;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.ModFluffBlocks;
 import vazkii.botania.common.item.ModItems;
@@ -41,6 +40,22 @@ public class IncRecipes extends RecipeProvider {
 		rodOfTheFracturedSpace().build(r);
 		corporeaSolidifier().build(r);
 		corporeaRetainerEvaporator().build(r);
+		
+		createFloatingFlowerRecipe(r, IncItems.SANVOCALIA);
+		createFloatingFlowerRecipe(r, IncItems.FUNNY);
+		createFloatingFlowerRecipe(r, IncItems.SMALL_SANVOCALIA);
+		createFloatingFlowerRecipe(r, IncItems.SMALL_FUNNY);
+	}
+	
+	//Copypaste
+	private void createFloatingFlowerRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider input) {
+		ResourceLocation inputName = Registry.ITEM.getKey(input.asItem());
+		Item output = Registry.ITEM.getOptional(new ResourceLocation(inputName.getNamespace(), "floating_" + inputName.getPath())).get();
+		ShapelessRecipeBuilder.shapelessRecipe(output)
+			.addIngredient(ModTags.Items.FLOATING_FLOWERS)
+			.addIngredient(input)
+			.addCriterion("has_item", hasItem(input))
+			.build(consumer);
 	}
 	
 	protected ShapedRecipeBuilder shaped(IItemProvider item, int count, String... lines) {
