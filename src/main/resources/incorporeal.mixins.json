@@ -6,7 +6,8 @@
 	"refmap": "incorporeal.refmap.json",
 	"mixins": [
 		"TileCorporeaInterceptorMixin",
-		"TileCorporeaRetainerMixin"
+		"TileCorporeaRetainerMixin",
+		"TileCorporeaRetainerAccessor"
 	],
 	"client": [
 		"client.HUDHandlerMixin"
