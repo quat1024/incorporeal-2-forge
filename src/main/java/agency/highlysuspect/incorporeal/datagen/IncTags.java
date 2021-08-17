@@ -2,6 +2,7 @@ package agency.highlysuspect.incorporeal.datagen;
 
 import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
+import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
@@ -31,6 +32,8 @@ public class IncTags {
 		@Override
 		protected void registerTags() {
 			copy(ModTags.Blocks.SPECIAL_FLOATING_FLOWERS, ModTags.Items.SPECIAL_FLOATING_FLOWERS);
+			
+			getOrCreateBuilder(ModTags.Items.RODS).add(IncItems.FRACTURED_SPACE_ROD);
 		}
 	}
 }
