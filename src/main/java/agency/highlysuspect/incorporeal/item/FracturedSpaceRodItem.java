@@ -1,5 +1,6 @@
 package agency.highlysuspect.incorporeal.item;
 
+import agency.highlysuspect.incorporeal.IncTags;
 import agency.highlysuspect.incorporeal.entity.FracturedSpaceCollectorEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -47,14 +48,12 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 		BlockState hitState = world.getBlockState(pos);
 		TileEntity hitTile = world.getTileEntity(pos);
 		
-		//TODO tag check (issue #5)
-		if(hitTile instanceof TileOpenCrate && hitState.getBlock() == ModBlocks.openCrate) {
+		if(hitState.isIn(IncTags.Blocks.OPEN_CRATES) && hitTile instanceof TileOpenCrate) {
 			//Clicked a crate. Remember this position.
 			ItemNBTHelper.setCompound(held, CRATE_POS_KEY, NBTUtil.writeBlockPos(pos));
 			ItemNBTHelper.setString(held, CRATE_DIMENSION_KEY, world.getDimensionKey().getLocation().toString());
 			
 			player.sendStatusMessage(new TranslationTextComponent("incorporeal.fractured_space.saved").mergeStyle(TextFormatting.DARK_PURPLE), true);
-			return ActionResultType.SUCCESS;
 		} else {
 			//you didnt click a crate. Spawn an entity.
 			if(context.getFace() != Direction.UP) return ActionResultType.PASS; //Click the top of the block
@@ -76,8 +75,8 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 				BlockPos cratePos = NBTUtil.readBlockPos(cratePosNbt);
 				BlockState rememberedState = world.getBlockState(cratePos);
 				TileEntity rememberedTile = world.getTileEntity(cratePos);
-				//TODO tag check (issue #5)
-				if(!(rememberedTile instanceof TileOpenCrate && rememberedState.getBlock() == ModBlocks.openCrate)) {
+				
+				if(!(rememberedState.isIn(IncTags.Blocks.OPEN_CRATES) && rememberedTile instanceof TileOpenCrate)) {
 					player.sendStatusMessage(new TranslationTextComponent("incorporeal.fractured_space.no_crate_there").mergeStyle(TextFormatting.RED), true);
 					return ActionResultType.FAIL;
 				}
@@ -87,9 +86,9 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 				fsc.setPosition(context.getHitVec().x, pos.getY() + 1, context.getHitVec().z);
 				world.addEntity(fsc);
 			}
-			
-			return ActionResultType.SUCCESS;
 		}
+		
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Nullable

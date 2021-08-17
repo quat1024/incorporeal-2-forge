@@ -30,9 +30,9 @@ public class IncDatagen {
 			data.addProvider(new ModidBlockDrops(Inc.MODID, data));
 			data.addProvider(new IncRecipes(data));
 			
-			IncTags.BlockProvider b = new IncTags.BlockProvider(data, dontCare);
+			IncTagProvider.BlockProvider b = new IncTagProvider.BlockProvider(data, dontCare);
 			data.addProvider(b);
-			data.addProvider(new IncTags.ItemProvider(data, b, dontCare));
+			data.addProvider(new IncTagProvider.ItemProvider(data, b, dontCare));
 			
 			data.addProvider(new IncManaInfusion(data));
 			data.addProvider(new IncPetalRecipes(data));

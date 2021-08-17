@@ -1,5 +1,6 @@
 package agency.highlysuspect.incorporeal.entity;
 
+import agency.highlysuspect.incorporeal.IncTags;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -99,8 +100,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 				BlockState state = world.getBlockState(cratePos);
 				TileEntity tile = world.getTileEntity(cratePos);
 				
-				//TODO: block tag check (theres still the open crate/crafty crate issue) (issue #5)
-				if(tile instanceof TileOpenCrate && ((TileOpenCrate) tile).canEject()) {
+				if(state.isIn(IncTags.Blocks.OPEN_CRATES) && tile instanceof TileOpenCrate && ((TileOpenCrate) tile).canEject()) {
 					boolean redstone = isCratePowered(world, cratePos);
 					
 					//delete all items and emit them from the crate
