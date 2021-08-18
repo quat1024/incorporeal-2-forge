@@ -28,6 +28,7 @@ public class RhoDatagen {
 			data.addProvider(new RhoTags.ItemProvider(data, b, dontCare));
 			
 			data.addProvider(new RhoManaInfusion(data));
+			data.addProvider(new RhoRuneRecipes(data));
 		}
 		
 		if(e.includeClient()) {

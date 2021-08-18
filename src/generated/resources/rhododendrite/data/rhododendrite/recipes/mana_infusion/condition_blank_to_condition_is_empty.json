@@ -1,12 +1,12 @@
 {
   "type": "botania:mana_infusion",
   "input": {
-    "item": "rhododendrite:condition_less_than"
-  },
-  "output": {
     "item": "rhododendrite:condition_blank"
   },
-  "mana": 200,
+  "output": {
+    "item": "rhododendrite:condition_is_empty"
+  },
+  "mana": 20,
   "group": "rhododendrite:condition_cycle",
   "catalyst": {
     "type": "block",

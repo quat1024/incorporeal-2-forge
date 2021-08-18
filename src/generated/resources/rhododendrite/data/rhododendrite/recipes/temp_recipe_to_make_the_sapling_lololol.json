@@ -1,0 +1,18 @@
+{
+  "type": "botania:runic_altar",
+  "output": {
+    "item": "rhododendrite:rhododendrite_sapling"
+  },
+  "mana": 5200,
+  "ingredients": [
+    {
+      "tag": "minecraft:saplings"
+    },
+    {
+      "item": "minecraft:pink_dye"
+    },
+    {
+      "item": "incorporeal:soul_core_frame"
+    }
+  ]
+}

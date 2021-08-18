@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 public class RhoManaInfusion extends IncManaInfusion {
 	public RhoManaInfusion(DataGenerator pee) {
-		super(pee);
+		super(Rho.MODID, pee);
 	}
 	
 	@Override
@@ -23,7 +23,8 @@ public class RhoManaInfusion extends IncManaInfusion {
 	
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-		cycle(consumer, 200, "rhododendrite:opcode_cycle",
+		//honestly these are just here because the scroll-wheel stuff is a bit janky
+		cycle(consumer, 20, "rhododendrite:opcode_cycle",
 			RhoItems.OPCODE_BLANK,
 			RhoItems.OPCODE_PUSH,
 			RhoItems.OPCODE_PULL,
@@ -36,7 +37,7 @@ public class RhoManaInfusion extends IncManaInfusion {
 			RhoItems.OPCODE_REMAINDER
 		);
 		
-		cycle(consumer, 200, "rhododendrite:condition_cycle",
+		cycle(consumer, 20, "rhododendrite:condition_cycle",
 			RhoItems.CONDITION_BLANK,
 			RhoItems.CONDITION_IS_EMPTY,
 			RhoItems.CONDITION_EQUAL,

@@ -6,7 +6,7 @@
   "output": {
     "item": "rhododendrite:opcode_push"
   },
-  "mana": 200,
+  "mana": 20,
   "group": "rhododendrite:opcode_cycle",
   "catalyst": {
     "type": "block",

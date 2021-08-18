@@ -1,12 +1,12 @@
 {
   "type": "botania:mana_infusion",
   "input": {
-    "item": "rhododendrite:opcode_dup"
+    "item": "rhododendrite:opcode_pull"
   },
   "output": {
-    "item": "rhododendrite:opcode_tumble"
+    "item": "rhododendrite:opcode_dup"
   },
-  "mana": 200,
+  "mana": 20,
   "group": "rhododendrite:opcode_cycle",
   "catalyst": {
     "type": "block",

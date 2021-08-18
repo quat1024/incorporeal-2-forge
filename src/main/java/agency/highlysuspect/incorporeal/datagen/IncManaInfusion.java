@@ -1,5 +1,6 @@
 package agency.highlysuspect.incorporeal.datagen;
 
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
@@ -21,12 +22,18 @@ import vazkii.botania.data.recipes.ManaInfusionProvider;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import static vazkii.botania.common.lib.ResourceLocationHelper.prefix;
-
 public class IncManaInfusion extends RecipeProvider {
-	public IncManaInfusion(DataGenerator bwbwbuwbubwuw) {
+	public IncManaInfusion(String modid, DataGenerator bwbwbuwbubwuw) {
 		super(bwbwbuwbubwuw);
+		this.modid = modid;
 	}
+	
+	public IncManaInfusion(DataGenerator ajsdlkasd) {
+		this(Inc.MODID, ajsdlkasd);
+	}
+	
+	//having a great time writing maintainable, easy to understand code, on my computer
+	protected final String modid;
 	
 	@Override
 	public String getName() {
@@ -40,19 +47,19 @@ public class IncManaInfusion extends RecipeProvider {
 	}
 	
 	//Copypaste
-	public static FinishedRecipe mini(IItemProvider mini, IItemProvider full) {
+	public FinishedRecipe mini(IItemProvider mini, IItemProvider full) {
 		return FinishedRecipe.alchemy(id(Registry.ITEM.getKey(mini.asItem()).getPath()), new ItemStack(mini), ingr(full), 2500, "botania:flower_shrinking");
 	}
 	
-	public static ResourceLocation id(String s) {
-		return prefix("mana_infusion/" + s);
+	public ResourceLocation id(String s) {
+		return new ResourceLocation(modid, "mana_infusion/" + s);
 	}
 	
-	public static Ingredient ingr(IItemProvider i) {
+	public Ingredient ingr(IItemProvider i) {
 		return Ingredient.fromItems(i);
 	}
 	
-	public static void cycle(Consumer<IFinishedRecipe> consumer, int cost, String group, IItemProvider... items) {
+	public void cycle(Consumer<IFinishedRecipe> consumer, int cost, String group, IItemProvider... items) {
 		for (int i = 0; i < items.length; i++) {
 			Ingredient in = ingr(items[i]);
 			ItemStack out = new ItemStack(i == items.length - 1 ? items[0] : items[i + 1]);
