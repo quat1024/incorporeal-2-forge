@@ -46,6 +46,7 @@ public class IncBlocks {
 	public static final Block POTION_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.POTION_SOUL_CORE);
 	
 	public static final Block NATURAL_REPEATER = new CrappyRepeaterBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.WOOD).notSolid());
+	public static final Block NATURAL_COMPARATOR = new CrappyComparatorBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.WOOD).notSolid());
 	
 	public static final Block.Properties flowerProps = AbstractBlock.Properties.from(Blocks.POPPY);
 	public static final Block.Properties floatingProps = ModBlocks.FLOATING_PROPS;
@@ -76,6 +77,7 @@ public class IncBlocks {
 		Inc.reg(r, "potion_soul_core", POTION_SOUL_CORE);
 		
 		Inc.reg(r, "natural_repeater", NATURAL_REPEATER);
+		Inc.reg(r, "natural_comparator", NATURAL_COMPARATOR);
 		
 		//flowers
 		//this is the block ID scheme that botania uses

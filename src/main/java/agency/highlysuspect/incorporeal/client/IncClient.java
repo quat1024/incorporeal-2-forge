@@ -19,7 +19,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import vazkii.botania.client.render.entity.RenderNoop;
 import vazkii.botania.client.render.tile.RenderTileRedString;
 import vazkii.botania.client.render.tile.RenderTileSpecialFlower;
 
@@ -35,6 +34,10 @@ public class IncClient implements IncProxy {
 			
 			RenderTypeLookup.setRenderLayer(IncBlocks.ENDER_SOUL_CORE, RenderType.getTranslucent());
 			RenderTypeLookup.setRenderLayer(IncBlocks.CORPOREA_SOUL_CORE, RenderType.getTranslucent());
+			RenderTypeLookup.setRenderLayer(IncBlocks.POTION_SOUL_CORE, RenderType.getTranslucent());
+			
+			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_REPEATER, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_COMPARATOR, RenderType.getCutout());
 			
 			RenderTypeLookup.setRenderLayer(IncBlocks.SANVOCALIA, RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_SANVOCALIA, RenderType.getCutout());
