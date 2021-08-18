@@ -54,10 +54,6 @@ Move more things to datagen, i really dont like forge datagens though
 
 ## things i need to make
 
-* rhodo funnel needs model, texture, recipe, maybe some debugging work
-* rhodo sapling needs some recipe, so you can get to it from botania
-  * i should add jei to the instance and give the recipes a once-over, make sure they look ok tbh
-  * Feel silly for making a whole new tree and wood type when livingwood is RIGHT THERE lol
 * Gotta write the Patchouli category
 
 ## wood things i have to do

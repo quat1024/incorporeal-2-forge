@@ -10,13 +10,13 @@
       "item": "botania:corporea_spark"
     },
     "X": {
-      "item": "botania:quartz_elven"
+      "item": "minecraft:dropper"
     },
     "#": {
       "item": "rhododendrite:rhododendrite_planks"
     }
   },
   "result": {
-    "item": "rhododendrite:condition"
+    "item": "rhododendrite:funnel"
   }
 }

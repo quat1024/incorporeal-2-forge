@@ -4,6 +4,7 @@ import agency.highlysuspect.incorporeal.datagen.IncRecipes;
 import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import agency.highlysuspect.rhododendrite.item.RhoItems;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
@@ -55,7 +56,14 @@ public class RhoRecipes extends IncRecipes {
 		
 		shaped(RhoBlocks.CONDITION, 1, "#S#", "#X#", "###")
 			.key('S', ModItems.corporeaSpark)
-			.key('X', Items.DROPPER)
+			.key('X', ModItems.elfQuartz)
+			.key('#', RhoBlocks.RHODODENDRITE.planks)
+			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
+			.build(r);
+		
+		shaped(RhoBlocks.FUNNEL, 1, "#S#", "#X#", "###")
+			.key('S', ModItems.corporeaSpark)
+			.key('X', Blocks.DROPPER)
 			.key('#', RhoBlocks.RHODODENDRITE.planks)
 			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
 			.build(r);
