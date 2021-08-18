@@ -1,6 +1,7 @@
 package agency.highlysuspect.rhododendrite.mixin.eqHash;
 
 import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import vazkii.botania.common.impl.corporea.CorporeaStringMatcher;
@@ -12,6 +13,7 @@ public class CorporeaStringMatcherEqualsHashcode {
 	@Shadow(remap = false) @Final private String[] expression;
 	
 	@Override
+	@Intrinsic
 	public boolean equals(Object o) {
 		if(this == o) return true;
 		if(o == null || getClass() != o.getClass()) return false;
@@ -22,6 +24,7 @@ public class CorporeaStringMatcherEqualsHashcode {
 	}
 	
 	@Override
+	@Intrinsic
 	public int hashCode() {
 		return Arrays.hashCode(expression);
 	}
