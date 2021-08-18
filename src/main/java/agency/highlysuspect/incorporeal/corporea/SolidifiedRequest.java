@@ -1,5 +1,6 @@
 package agency.highlysuspect.incorporeal.corporea;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -20,6 +21,10 @@ public class SolidifiedRequest {
 	public SolidifiedRequest(ICorporeaRequestMatcher matcher, int count) {
 		this.matcher = (matcher == null || matcher == ICorporeaRequestMatcher.Dummy.INSTANCE) ? EmptyCorporeaRequestMatcher.INSTANCE : matcher;
 		this.count = count;
+	}
+	
+	public SolidifiedRequest(ItemStack stack, int count) {
+		this(stack.isEmpty() ? EmptyCorporeaRequestMatcher.INSTANCE : CorporeaHelper.instance().createMatcher(stack, true), count);
 	}
 	
 	public final ICorporeaRequestMatcher matcher;

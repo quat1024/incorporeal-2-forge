@@ -22,9 +22,7 @@ public class MiscFunnelables {
 		
 		@Override
 		public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-			return Optional.of(new SolidifiedRequest(
-				CorporeaHelper.instance().createMatcher(new ItemStack(Items.REDSTONE), true),
-				state.get(RedstoneWireBlock.POWER)));
+			return Optional.of(new SolidifiedRequest(new ItemStack(Items.REDSTONE), state.get(RedstoneWireBlock.POWER)));
 		}
 	} : null;
 	
@@ -36,9 +34,7 @@ public class MiscFunnelables {
 		
 		@Override
 		public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-			return Optional.of(new SolidifiedRequest(
-				CorporeaHelper.instance().createMatcher(new ItemStack(Blocks.REPEATER), true),
-				state.get(RepeaterBlock.DELAY)));
+			return Optional.of(new SolidifiedRequest(new ItemStack(Blocks.REPEATER), state.get(RepeaterBlock.DELAY)));
 		}
 		
 		@Override

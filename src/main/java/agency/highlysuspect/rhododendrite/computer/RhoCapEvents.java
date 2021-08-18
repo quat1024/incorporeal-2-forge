@@ -115,10 +115,7 @@ public class RhoCapEvents {
 			ItemStack displayed1 = displayed.copy();
 			displayed1.setCount(1);
 			
-			return Optional.of(new SolidifiedRequest(
-				CorporeaHelper.instance().createMatcher(displayed1, true),
-				cube.getItemCount()
-			));
+			return Optional.of(new SolidifiedRequest(displayed1, cube.getItemCount()));
 		}
 		
 		@Override
@@ -185,8 +182,7 @@ public class RhoCapEvents {
 			else {
 				ItemStack copy = stack.copy();
 				copy.setCount(1);
-				ICorporeaRequestMatcher matcher = copy.isEmpty() ? EmptyCorporeaRequestMatcher.INSTANCE : CorporeaHelper.instance().createMatcher(copy, true);
-				return Optional.of(new SolidifiedRequest(matcher, requestSize()));
+				return Optional.of(new SolidifiedRequest(copy, requestSize()));
 			}
 		}
 		

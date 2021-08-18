@@ -58,7 +58,7 @@ public class OpcodeTile extends RhodoNetworkTile {
 			//If it's not an opcode card act like we're a corporea funnel, push a request for that item onto the stack
 			int count = new int[] {1, 2, 4, 8, 16, 32, 48, 64}[frame.getRotation()];
 			StackOps ops = StackOps.read(core);
-			ops.push(new SolidifiedRequest(CorporeaHelper.instance().createMatcher(displayed, true), count));
+			ops.push(new SolidifiedRequest(displayed, count));
 			ops.commit();
 			return Result.SUCCESS;
 		}
