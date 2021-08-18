@@ -3,18 +3,9 @@ package agency.highlysuspect.rhododendrite.block.tile;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.rhododendrite.computer.RhodoFunnelable;
 import agency.highlysuspect.rhododendrite.computer.StackOps;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 public class CoreTile extends RequestHolderTile implements RhodoFunnelable {
 	public CoreTile() {

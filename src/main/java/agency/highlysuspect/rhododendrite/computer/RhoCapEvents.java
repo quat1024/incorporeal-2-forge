@@ -1,6 +1,6 @@
 package agency.highlysuspect.rhododendrite.computer;
 
-import agency.highlysuspect.incorporeal.Inc;
+import agency.highlysuspect.incorporeal.corporea.EmptyCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.corporea.RetainerDuck;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.item.IncItems;
@@ -18,6 +18,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import vazkii.botania.api.corporea.CorporeaHelper;
+import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
 import vazkii.botania.api.corporea.ICorporeaRequestor;
 import vazkii.botania.api.corporea.ICorporeaSpark;
 import vazkii.botania.common.block.tile.corporea.*;
@@ -43,7 +44,7 @@ public class RhoCapEvents {
 	
 	public static void entCaps(AttachCapabilitiesEvent<Entity> e) {
 		if(e.getObject() instanceof ItemEntity) {
-			e.addCapability(ITEM_FRAME_CAP, new ItemStackFunnelable.Ent((ItemEntity) e.getObject()));
+			e.addCapability(ITEM_ENTITY_CAP, new ItemStackFunnelable.Ent((ItemEntity) e.getObject()));
 		}
 		
 		if(e.getObject() instanceof ItemFrameEntity) {
@@ -58,7 +59,15 @@ public class RhoCapEvents {
 	private static final ResourceLocation ITEM_ENTITY_CAP = Rho.id("item_entity_cap");
 	private static final ResourceLocation ITEM_FRAME_CAP = Rho.id("item_frame_cap");
 	
-	public static class RetainerFunnelable implements RhodoFunnelable, ICapabilityProvider {
+	public static abstract class FunnelableBase implements RhodoFunnelable, ICapabilityProvider {
+		@Nonnull
+		@Override
+		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+			return RhodoFunnelableCapability.INSTANCE.orEmpty(cap, LazyOptional.of(() -> this));
+		}
+	}
+	
+	public static class RetainerFunnelable extends FunnelableBase {
 		public RetainerFunnelable(RetainerDuck duck) {
 			this.duck = duck;
 		}
@@ -85,15 +94,9 @@ public class RhoCapEvents {
 			if(!simulate) duck.inc$liquidateRequest(request);
 			return true;
 		}
-		
-		@Nonnull
-		@Override
-		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-			return RhodoFunnelableCapability.INSTANCE.orEmpty(cap, LazyOptional.of(() -> this));
-		}
 	}
 	
-	public static class CrystalCubeFunnelable implements RhodoFunnelable, ICapabilityProvider {
+	public static class CrystalCubeFunnelable extends FunnelableBase {
 		public CrystalCubeFunnelable(TileCorporeaCrystalCube cube) {
 			this.cube = cube;
 		}
@@ -102,7 +105,7 @@ public class RhoCapEvents {
 		
 		@Override
 		public boolean canRhodoExtract() {
-			return true;
+			return !cube.getRequestTarget().isEmpty();
 		}
 		
 		@Override
@@ -130,30 +133,14 @@ public class RhoCapEvents {
 				return true;
 			} else return false;
 		}
-		
-		@Nonnull
-		@Override
-		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-			return RhodoFunnelableCapability.INSTANCE.orEmpty(cap, LazyOptional.of(() -> this));
-		}
 	}
 	
-	public static class RequestorFunnelable<T extends TileEntity & ICorporeaRequestor> implements RhodoFunnelable, ICapabilityProvider {
+	public static class RequestorFunnelable<T extends TileEntity & ICorporeaRequestor> extends FunnelableBase {
 		public RequestorFunnelable(T tile) {
 			this.tile = tile;
 		}
 		
 		protected final T tile;
-		
-		@Override
-		public boolean canRhodoExtract() {
-			return false;
-		}
-		
-		@Override
-		public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-			return Optional.empty();
-		}
 		
 		@Override
 		public boolean canRhodoInsert() {
@@ -171,36 +158,46 @@ public class RhoCapEvents {
 			
 			return true;
 		}
-		
-		@Nonnull
-		@Override
-		public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
-			return RhodoFunnelableCapability.INSTANCE.orEmpty(cap, LazyOptional.of(() -> this));
-		}
 	}
 	
 	public interface ItemStackFunnelable extends RhodoFunnelable, ICapabilityProvider {
 		ItemStack getStack();
 		void setStack(ItemStack stack);
 		
+		default int requestSize() {
+			return getStack().getCount();
+		}
+		
+		default boolean isTicket() {
+			ItemStack stack = getStack();
+			return !stack.isEmpty() && stack.getItem() == IncItems.CORPOREA_TICKET;
+		}
+		
 		@Override
 		default boolean canRhodoExtract() {
-			ItemStack stack = getStack();
-			return !stack.isEmpty() && stack.getItem() == IncItems.CORPOREA_TICKET && IncItems.CORPOREA_TICKET.hasRequest(stack);
-		}
-		
-		@Override
-		default Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-			return IncItems.CORPOREA_TICKET.getRequest(getStack());
-		}
-		
-		@Override
-		default boolean canRhodoInsert() {
 			return true;
 		}
 		
 		@Override
+		default Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
+			ItemStack stack = getStack();
+			if(isTicket()) return IncItems.CORPOREA_TICKET.getRequest(stack);
+			else {
+				ItemStack copy = stack.copy();
+				copy.setCount(1);
+				ICorporeaRequestMatcher matcher = copy.isEmpty() ? EmptyCorporeaRequestMatcher.INSTANCE : CorporeaHelper.instance().createMatcher(copy, true);
+				return Optional.of(new SolidifiedRequest(matcher, requestSize()));
+			}
+		}
+		
+		@Override
+		default boolean canRhodoInsert() {
+			return isTicket();
+		}
+		
+		@Override
 		default boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
+			if(!isTicket()) return false;
 			if(!simulate) setStack(IncItems.CORPOREA_TICKET.produce(request));
 			return true;
 		}
@@ -246,6 +243,11 @@ public class RhoCapEvents {
 			@Override
 			public void setStack(ItemStack stack) {
 				frame.setDisplayedItem(stack);
+			}
+			
+			@Override
+			public int requestSize() {
+				return new int[] {1, 2, 4, 8, 16, 32, 48, 64}[frame.getRotation()];
 			}
 		}
 	}

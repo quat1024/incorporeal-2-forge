@@ -11,11 +11,21 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 public interface RhodoFunnelable {
-	boolean canRhodoExtract();
-	Optional<SolidifiedRequest> rhodoExtract(boolean simulate);
+	default boolean canRhodoExtract() {
+		return false;
+	}
 	
-	boolean canRhodoInsert();
-	boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate);
+	default Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
+		return Optional.empty();
+	}
+	
+	default boolean canRhodoInsert() {
+		return false;
+	}
+	
+	default boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
+		return false;
+	}
 	
 	interface Loose {
 		@Nullable RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face);

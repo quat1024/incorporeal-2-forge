@@ -89,26 +89,6 @@ public class RhodoFunnelableCapability {
 	public static class Hooooooooooooooooo implements RhodoFunnelable, Capability.IStorage<RhodoFunnelable> {
 		public static final Hooooooooooooooooo INSTANCE = new Hooooooooooooooooo();
 		
-		@Override
-		public boolean canRhodoExtract() {
-			return false;
-		}
-		
-		@Override
-		public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-			return Optional.empty();
-		}
-		
-		@Override
-		public boolean canRhodoInsert() {
-			return false;
-		}
-		
-		@Override
-		public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
-			return false;
-		}
-		
 		@Nullable
 		@Override
 		public INBT writeNBT(Capability<RhodoFunnelable> capability, RhodoFunnelable instance, Direction side) {

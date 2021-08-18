@@ -26,16 +26,6 @@ public class MiscFunnelables {
 				CorporeaHelper.instance().createMatcher(new ItemStack(Items.REDSTONE), true),
 				state.get(RedstoneWireBlock.POWER)));
 		}
-		
-		@Override
-		public boolean canRhodoInsert() {
-			return false;
-		}
-		
-		@Override
-		public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
-			return false;
-		}
 	} : null;
 	
 	public static final RhodoFunnelable.Loose REPEATER = (world, pos, state, face) -> state.getBlock() == Blocks.REPEATER ? new RhodoFunnelable() {
