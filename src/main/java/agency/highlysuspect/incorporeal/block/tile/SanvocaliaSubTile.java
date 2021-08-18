@@ -142,7 +142,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 			Vector3d here = ticket.getPositionVec();
 			for(BlockPos pos : indexPositions) {
 				Vector3d there = Vector3d.copyCentered(pos);
-				IncNetwork.sendToNearby(world, pos, new IncNetwork.SparkleLine(here, there, 4));
+				IncNetwork.sendToNearby(world, pos, new IncNetwork.SparkleLine(here, there, 4, 1f));
 			}
 		}
 		

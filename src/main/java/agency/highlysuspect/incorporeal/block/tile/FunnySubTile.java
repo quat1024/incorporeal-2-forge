@@ -2,6 +2,7 @@ package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.Despacito;
 import agency.highlysuspect.incorporeal.IncNetwork;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -16,6 +17,8 @@ import vazkii.botania.api.subtile.RadiusDescriptor;
 import vazkii.botania.api.subtile.TileEntityFunctionalFlower;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FunnySubTile extends TileEntityFunctionalFlower {
 	protected FunnySubTile(int range, int ticksBetweenNotes, int pitchShift, double sparkleHeight, TileEntityType<?> type) {
@@ -102,20 +105,24 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 			//play music
 			Vector3d particleSrc = world.getBlockState(pos).getOffset(world, pos).add(pos.getX() + .5, pos.getY() + sparkleHeight, pos.getZ() + .5);
 			
-			boolean dirtyMana = doIt(world, pos, tick, particleSrc, flutePos, NoteBlockInstrument.FLUTE);
-			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, snarePos, NoteBlockInstrument.SNARE);
-			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, basedrumPos, NoteBlockInstrument.BASEDRUM);
-			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, bassPos, NoteBlockInstrument.BASS);
+			List<Pair<IncNetwork.SparkleLine, byte[]>> sparkleData = new ArrayList<>();
+			
+			boolean dirtyMana = doIt(world, pos, tick, particleSrc, flutePos, NoteBlockInstrument.FLUTE, sparkleData);
+			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, snarePos, NoteBlockInstrument.SNARE, sparkleData);
+			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, basedrumPos, NoteBlockInstrument.BASEDRUM, sparkleData);
+			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, bassPos, NoteBlockInstrument.BASS, sparkleData);
 			if(dirtyMana) sync();
+			
+			if(!sparkleData.isEmpty()) IncNetwork.sendToNearby(world, pos, new IncNetwork.FunnyFlower(sparkleData));
 		}
 	}
 	
-	private boolean doIt(World world, BlockPos pos, int tick, Vector3d particleSrc, BlockPos noteblockPos, NoteBlockInstrument inst) {
+	private boolean doIt(World world, BlockPos pos, int tick, Vector3d particleSrc, BlockPos noteblockPos, NoteBlockInstrument inst, List<Pair<IncNetwork.SparkleLine, byte[]>> sparkleLines) {
 		if(noteblockPos == null) return false;
 		
-		int[] notes = Despacito.notesForTick(tick, inst);
+		byte[] notes = Despacito.notesForTick(tick, inst);
 		if(notes != null) {
-			IncNetwork.sendToNearby(world, pos, new IncNetwork.FunnyFlower(particleSrc, Vector3d.copyCentered(noteblockPos), 2, notes));
+			sparkleLines.add(Pair.of(new IncNetwork.SparkleLine(particleSrc, Vector3d.copyCentered(noteblockPos), 2, 1f), notes));
 			for(int note : notes) {
 				if(getMana() > NOTE_MANA_COST) {
 					addMana(-NOTE_MANA_COST);

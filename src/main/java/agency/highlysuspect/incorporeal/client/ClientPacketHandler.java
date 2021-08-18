@@ -1,6 +1,7 @@
 package agency.highlysuspect.incorporeal.client;
 
 import agency.highlysuspect.incorporeal.IncNetwork;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.ParticleTypes;
@@ -40,23 +41,25 @@ public class ClientPacketHandler {
 				ClientWorld world = client.world;
 				if(world == null) return;
 				
-				showSparkleLine(world, funny.sparkleLine);
-				
-				int[] notes = funny.notes;
-				Vector3d end = funny.sparkleLine.end;
-				
-				if(notes.length == 1) {
-					world.addParticle(ParticleTypes.NOTE, end.x, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
-				} else if(notes.length == 2) {
-					world.addParticle(ParticleTypes.NOTE, end.x - 0.2, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
-					world.addParticle(ParticleTypes.NOTE, end.x + 0.2, end.y + 0.7, end.z, notes[1] / 24d, 0.0D, 0.0D);
+				for(Pair<IncNetwork.SparkleLine, byte[]> item : funny.data) {
+					showSparkleLine(world, item.getFirst());
+					
+					Vector3d end = item.getFirst().end;
+					byte[] notes = item.getSecond();
+					
+					if(notes.length == 1) {
+						world.addParticle(ParticleTypes.NOTE, end.x, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
+					} else if(notes.length == 2) {
+						world.addParticle(ParticleTypes.NOTE, end.x - 0.2, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
+						world.addParticle(ParticleTypes.NOTE, end.x + 0.2, end.y + 0.7, end.z, notes[1] / 24d, 0.0D, 0.0D);
+					}
 				}
 			}
 		});
 	}
 	
 	private static void showSparkleLine(World world, IncNetwork.SparkleLine sparkle) {
-		//Loosely based on PacketBotaniaEffect's SPARK_NET_INDICATOR (is the comment i wrote back in 2018)
+		//Loosely based on PacketBotaniaEffect's SPARK_NET_INDICATOR (...is the comment i wrote back in 2018)
 		Vector3d diff = sparkle.end.subtract(sparkle.start);
 		Vector3d movement = diff.normalize().scale(.2);
 		int iters = (int) (diff.length() / movement.length());
@@ -74,7 +77,7 @@ public class ClientPacketHandler {
 			float g = Math.min(1F, ((color & 0x00FF00) >> 8) / 255F + 0.4F);
 			float b = Math.min(1F, (color & 0x0000FF) / 255F + 0.4F);
 			
-			world.addParticle(SparkleParticleData.noClip(1f, r, g, b, sparkle.decay), currentPos.x, currentPos.y, currentPos.z, 0, 0, 0);
+			world.addParticle(SparkleParticleData.noClip(sparkle.size, r, g, b, sparkle.decay), currentPos.x, currentPos.y, currentPos.z, 0, 0, 0);
 			
 			currentPos = currentPos.add(movement);
 		}
