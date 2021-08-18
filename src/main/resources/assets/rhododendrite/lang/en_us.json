@@ -49,5 +49,7 @@
 	"item.rhododendrite.condition_less_than": "Condition: Less Than",
 	"item.rhododendrite.condition_greater_than": "Condition: Greater Than",
 	
+	"block.rhododendrite.funnel": "Rhododendric Funnel",
+	
 	"rhododendrite.im_sorry": "yea i know the texture sucks"
 }

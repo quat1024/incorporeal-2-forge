@@ -1,0 +1,108 @@
+{
+	"variants": {
+		"facing=down,back=false,front=false": {
+			"model": "rhododendrite:block/funnel_neither",
+			"x": 180
+		},
+		"facing=up,back=false,front=false": {
+			"model": "rhododendrite:block/funnel_neither"
+		},
+		"facing=north,back=false,front=false": {
+			"model": "rhododendrite:block/funnel_neither",
+			"x": 90
+		},
+		"facing=south,back=false,front=false": {
+			"model": "rhododendrite:block/funnel_neither",
+			"x": 90,
+			"y": 180
+		},
+		"facing=west,back=false,front=false": {
+			"model": "rhododendrite:block/funnel_neither",
+			"x": 90,
+			"y": 270
+		},
+		"facing=east,back=false,front=false": {
+			"model": "rhododendrite:block/funnel_neither",
+			"x": 90,
+			"y": 90
+		},
+		"facing=down,back=true,front=false": {
+			"model": "rhododendrite:block/funnel_back",
+			"x": 180
+		},
+		"facing=up,back=true,front=false": {
+			"model": "rhododendrite:block/funnel_back"
+		},
+		"facing=north,back=true,front=false": {
+			"model": "rhododendrite:block/funnel_back",
+			"x": 90
+		},
+		"facing=south,back=true,front=false": {
+			"model": "rhododendrite:block/funnel_back",
+			"x": 90,
+			"y": 180
+		},
+		"facing=west,back=true,front=false": {
+			"model": "rhododendrite:block/funnel_back",
+			"x": 90,
+			"y": 270
+		},
+		"facing=east,back=true,front=false": {
+			"model": "rhododendrite:block/funnel_back",
+			"x": 90,
+			"y": 90
+		},
+		"facing=down,back=false,front=true": {
+			"model": "rhododendrite:block/funnel_front",
+			"x": 180
+		},
+		"facing=up,back=false,front=true": {
+			"model": "rhododendrite:block/funnel_front"
+		},
+		"facing=north,back=false,front=true": {
+			"model": "rhododendrite:block/funnel_front",
+			"x": 90
+		},
+		"facing=south,back=false,front=true": {
+			"model": "rhododendrite:block/funnel_front",
+			"x": 90,
+			"y": 180
+		},
+		"facing=west,back=false,front=true": {
+			"model": "rhododendrite:block/funnel_front",
+			"x": 90,
+			"y": 270
+		},
+		"facing=east,back=false,front=true": {
+			"model": "rhododendrite:block/funnel_front",
+			"x": 90,
+			"y": 90
+		},
+		"facing=down,back=true,front=true": {
+			"model": "rhododendrite:block/funnel_both",
+			"x": 180
+		},
+		"facing=up,back=true,front=true": {
+			"model": "rhododendrite:block/funnel_both"
+		},
+		"facing=north,back=true,front=true": {
+			"model": "rhododendrite:block/funnel_both",
+			"x": 90
+		},
+		"facing=south,back=true,front=true": {
+			"model": "rhododendrite:block/funnel_both",
+			"x": 90,
+			"y": 180
+		},
+		"facing=west,back=true,front=true": {
+			"model": "rhododendrite:block/funnel_both",
+			"x": 90,
+			"y": 270
+		},
+		"facing=east,back=true,front=true": {
+			"model": "rhododendrite:block/funnel_both",
+			"x": 90,
+			"y": 90
+		}
+	}
+}
