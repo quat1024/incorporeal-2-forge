@@ -87,7 +87,6 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 		find().ifPresent(pair -> {
 			//Transfer long-lasting potion effects to the player
 			for(EffectInstance effect : getActivePotionEffects()) {
-				Inc.LOGGER.info("transferring potion effect " + effect);
 				pair.getSecond().addPotionEffect(effect);
 				pair.getFirst().drainMana(200);
 			}
@@ -103,7 +102,6 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 		Optional<Pair<PotionSoulCoreTile, ServerPlayerEntity>> found = find();
 		
 		found.ifPresent(pair -> {
-			Inc.LOGGER.info("onHeal");
 			pair.getSecond().heal(howMuch);
 			pair.getFirst().drainMana(200);
 		});
@@ -116,7 +114,6 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 		Optional<Pair<PotionSoulCoreTile, ServerPlayerEntity>> found = find();
 		
 		if(found.isPresent()) {
-			Inc.LOGGER.info("onAttack");
 			boolean happened = found.get().getSecond().attackEntityFrom(source, howMuch);
 			if(happened) {
 				found.get().getFirst().drainMana(200);

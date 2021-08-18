@@ -34,7 +34,6 @@ public class PotionSoulCoreTile extends AbstractSoulCoreTile {
 		}
 		
 		if(collectors.isEmpty() && playerOp.isPresent()) {
-			Inc.LOGGER.info("ADDING POTION SOUL CORE ENTITY");
 			world.addEntity(new PotionSoulCoreCollectorEntity(world, getPos()));
 		}
 	}
