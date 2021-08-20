@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
@@ -27,8 +26,8 @@ import net.minecraftforge.common.PlantType;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import vazkii.botania.common.item.ModItems;
 
-public class NaturalDeviceCropBlock extends CropsBlock implements IPlantable {
-	public NaturalDeviceCropBlock(Properties builder) {
+public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
+	public RedstoneRootCropBlock(Properties builder) {
 		super(builder);
 	}
 	
@@ -97,9 +96,9 @@ public class NaturalDeviceCropBlock extends CropsBlock implements IPlantable {
 			if(e.getPlayer().canPlayerEdit(targetPos, hit.getFace(), stack) &&
 				world.getBlockState(targetPos).isReplaceable(haha) &&
 				//weird forge extension
-				world.getBlockState(targetPos.down()).canSustainPlant(world, targetPos.down(), Direction.UP, IncBlocks.NATURAL_CROP)) {
+				world.getBlockState(targetPos.down()).canSustainPlant(world, targetPos.down(), Direction.UP, IncBlocks.REDSTONE_ROOT_CROP)) {
 				
-				world.setBlockState(targetPos, IncBlocks.NATURAL_CROP.getDefaultState());
+				world.setBlockState(targetPos, IncBlocks.REDSTONE_ROOT_CROP.getDefaultState());
 				
 				SoundType type = SoundType.PLANT;
 				SoundEvent sound = type.getPlaceSound(); 
