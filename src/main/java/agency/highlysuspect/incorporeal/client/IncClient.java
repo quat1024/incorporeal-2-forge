@@ -38,6 +38,7 @@ public class IncClient implements IncProxy {
 			
 			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_REPEATER, RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_COMPARATOR, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.REDSTONE_ROOT_CROP, RenderType.getCutout());
 			
 			RenderTypeLookup.setRenderLayer(IncBlocks.SANVOCALIA, RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_SANVOCALIA, RenderType.getCutout());

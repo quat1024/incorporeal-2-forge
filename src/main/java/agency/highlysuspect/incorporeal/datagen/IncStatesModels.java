@@ -93,6 +93,8 @@ public class IncStatesModels extends BlockStateProvider {
 				return;
 			}
 			
+			if(i == IncBlocks.NATURAL_COMPARATOR.asItem() || i == IncBlocks.NATURAL_REPEATER.asItem()) return;
+			
 			itemModels().withExistingParent(n(i), Inc.id("block/" + n(i)));
 		});
 		

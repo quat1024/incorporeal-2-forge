@@ -45,8 +45,8 @@ public class IncBlocks {
 	public static final Block CORPOREA_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.CORPOREA_SOUL_CORE);
 	public static final Block POTION_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.POTION_SOUL_CORE);
 	
-	public static final Block NATURAL_REPEATER = new CrappyRepeaterBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.WOOD).notSolid());
-	public static final Block NATURAL_COMPARATOR = new CrappyComparatorBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.WOOD).notSolid());
+	public static final Block NATURAL_REPEATER = new CrappyRepeaterBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.CROP).notSolid());
+	public static final Block NATURAL_COMPARATOR = new CrappyComparatorBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.CROP).notSolid());
 	public static final RedstoneRootCropBlock REDSTONE_ROOT_CROP = new RedstoneRootCropBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.CROP).notSolid());
 	
 	public static final Block.Properties flowerProps = AbstractBlock.Properties.from(Blocks.POPPY);
