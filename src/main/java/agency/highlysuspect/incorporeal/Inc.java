@@ -1,5 +1,6 @@
 package agency.highlysuspect.incorporeal;
 
+import agency.highlysuspect.incorporeal.block.NaturalDeviceCropBlock;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.tile.CorporeaSoulCoreTile;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
@@ -81,6 +82,8 @@ public class Inc {
 			
 			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::healEvent);
 			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::attackEvent);
+			
+			MinecraftForge.EVENT_BUS.addListener(NaturalDeviceCropBlock::interactEvent);
 			
 			IncNetwork.setup();
 		});
