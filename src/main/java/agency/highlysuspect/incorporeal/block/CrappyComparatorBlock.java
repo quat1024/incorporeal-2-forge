@@ -2,15 +2,10 @@ package agency.highlysuspect.incorporeal.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.RedstoneDiodeBlock;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.ComparatorMode;
-import net.minecraft.tileentity.ComparatorTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +23,7 @@ import java.util.Random;
 //It's not practically possible to extend ComparatorBlock I think, things are a bit strange.
 //Mainly the comparator uses a block entity to store its signal strength, but that's not
 //needed here since there are only 2 strength options/no subtraction mode.
-public class CrappyComparatorBlock extends RedstoneDiodeBlock {
+public class CrappyComparatorBlock extends CrappyRedstoneDiodeBlock {
 	public CrappyComparatorBlock(Properties builder) {
 		super(builder);
 		

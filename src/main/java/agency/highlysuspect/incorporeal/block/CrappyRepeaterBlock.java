@@ -2,7 +2,6 @@ package agency.highlysuspect.incorporeal.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.RedstoneDiodeBlock;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.state.BooleanProperty;
@@ -20,7 +19,7 @@ import java.util.Random;
 
 //Mostly a paste of RepeaterBlock, less the stuff about changing the delay.
 //Oh compared to 1.12, i also added the repeater-locking. Why not, right?
-public class CrappyRepeaterBlock extends RedstoneDiodeBlock {
+public class CrappyRepeaterBlock extends CrappyRedstoneDiodeBlock {
 	public CrappyRepeaterBlock(Properties properties) {
 		super(properties);
 		
