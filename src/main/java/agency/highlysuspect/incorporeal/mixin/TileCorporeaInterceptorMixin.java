@@ -24,10 +24,7 @@ public class TileCorporeaInterceptorMixin {
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
-		),
-		//TODO: Well, interceptRequestLast doesn't need to get remapped, but setBlockState most certainly does.
-		// Does setting remap = false give the correct behavior?
-		remap = false
+		)
 	)
 	private void whenIntercepting(ICorporeaRequestMatcher request, int count, ICorporeaSpark spark, ICorporeaSpark source, List<ItemStack> stacks, List<ICorporeaNode> nodes, boolean doit, CallbackInfo ci) {
 		World world = ((TileCorporeaInterceptor) (Object) this).getWorld(); assert world != null;
