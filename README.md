@@ -9,7 +9,6 @@ Two mods for the price of one: Incorporeal 2, a fairly straightforward port of I
 
 ## Things left to port
 
-* that thing where you can plant redstone roots
 * frame screw
 
 ## Things that have been ported
@@ -30,6 +29,7 @@ Two mods for the price of one: Incorporeal 2, a fairly straightforward port of I
 * recipes Lol
 * documentation Loooll
 * natural redstone circuitry
+* that thing where you can plant redstone roots
 
 ## Things that will not be ported
 
