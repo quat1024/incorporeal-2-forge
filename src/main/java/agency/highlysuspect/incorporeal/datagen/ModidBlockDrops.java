@@ -41,6 +41,7 @@ public class ModidBlockDrops extends BlockLootTables implements IDataProvider  {
 			
 			if(b instanceof WallSignBlock) continue; //by convention these all "dropsLike" the regular block, no need for an extra table
 			if(b == RhoBlocks.AWAKENED_LOG) continue;
+			if(b instanceof CropsBlock) continue; //no u
 			
 			if(b instanceof DoorBlock) {
 				save(cache, b, door(b));
