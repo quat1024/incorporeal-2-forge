@@ -7,6 +7,7 @@ import agency.highlysuspect.rhododendrite.computer.CorePathTracing;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.BlockItemUseContext;
@@ -28,25 +29,28 @@ import vazkii.botania.api.wand.IWandHUD;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class AwakenedLogBlock extends DirectionalBlockButBetter.PlacesLikeLogs implements IWandHUD {
+public class AwakenedLogBlock extends DirectionalBlock implements IWandHUD {
 	public AwakenedLogBlock(Properties properties) {
 		super(properties);
 	}
 	
-	public static final EnumProperty<Direction> FACING = DirectionalBlockButBetter.FACING;
+	public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
 	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, CorePathTracing.MAX_RANGE);
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(DISTANCE));
+		super.fillStateContainer(builder.add(DISTANCE, FACING));
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		//This is like, not *really* an item that you're supposed to place (this block drops the non-awakened version)
-		//but it's nice to be able to do it in creative mode et al
+		//but it's nice to be able to do it in creative mode etc
 		BlockState state = super.getStateForPlacement(context);
 		if(state == null) return null;
+		
+		state = state.with(FACING, context.getFace().getOpposite());
+		
 		return CorePathTracing.scanForCore(context.getWorld(), context.getPos(), state.get(FACING))
 			.map(r -> r.toAwakenedLogState(this))
 			.orElse(unawakenedState(state));

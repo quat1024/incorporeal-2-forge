@@ -9,10 +9,13 @@ import agency.highlysuspect.rhododendrite.computer.RhodoFunnelable;
 import agency.highlysuspect.rhododendrite.computer.RhodoFunnelableCapability;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.DirectionalBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -26,23 +29,31 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class FunnelBlock extends DirectionalBlockButBetter.PlacesLikeLogs implements IWandable {
+public class FunnelBlock extends DirectionalBlock implements IWandable {
 	public FunnelBlock(Properties builder) {
 		super(builder);
 		
 		setDefaultState(getDefaultState()
 			.with(POWERED, false)
+			.with(FACING, Direction.UP)
 			.with(BACK, false)
 			.with(FRONT, false));
 	}
 	
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
 	public static final BooleanProperty BACK = BooleanProperty.create("back");
 	public static final BooleanProperty FRONT = BooleanProperty.create("front");
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(POWERED, BACK, FRONT));
+		super.fillStateContainer(builder.add(POWERED, FACING, BACK, FRONT));
+	}
+	
+	@Nullable
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		return getDefaultState().with(FACING, context.getFace().getOpposite());
 	}
 	
 	public void updateArrowStatus(World world, BlockPos pos, BlockState state) {

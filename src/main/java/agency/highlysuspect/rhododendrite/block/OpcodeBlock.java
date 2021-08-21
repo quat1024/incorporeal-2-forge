@@ -26,26 +26,25 @@ public class OpcodeBlock extends Block implements IWandable {
 		super(properties);
 		
 		setDefaultState(getDefaultState()
-			.with(POWERED, false)
+			.with(BlockStateProperties.POWERED, false)
 			.with(FAILED, false));
 	}
 	
-	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final BooleanProperty FAILED = BooleanProperty.create("failed");
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(POWERED, FAILED));
+		super.fillStateContainer(builder.add(BlockStateProperties.POWERED, FAILED));
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-		setDefaultState(getDefaultState().with(POWERED, false));
+		setDefaultState(getDefaultState().with(BlockStateProperties.POWERED, false));
 		
 		boolean shouldPower = world.getRedstonePowerFromNeighbors(pos) > 0;
-		boolean isPowered = state.get(POWERED);
+		boolean isPowered = state.get(BlockStateProperties.POWERED);
 		if(isPowered != shouldPower) {
-			state = state.with(POWERED, shouldPower);
+			state = state.with(BlockStateProperties.POWERED, shouldPower);
 			world.setBlockState(pos, state);
 			
 			if(!world.isRemote && shouldPower) {
