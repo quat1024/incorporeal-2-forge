@@ -53,7 +53,7 @@ public class FunnelBlock extends DirectionalBlock implements IWandable {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return getDefaultState().with(FACING, context.getFace().getOpposite());
+		return getDefaultState().with(FACING, context.getNearestLookingDirection());
 	}
 	
 	public void updateArrowStatus(World world, BlockPos pos, BlockState state) {

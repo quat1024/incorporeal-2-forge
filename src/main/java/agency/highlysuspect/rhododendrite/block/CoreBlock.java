@@ -30,7 +30,7 @@ public class CoreBlock extends DirectionalBlock {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return getDefaultState().with(FACING, context.getFace().getOpposite());
+		return getDefaultState().with(FACING, context.getNearestLookingDirection());
 	}
 	
 	@Override
