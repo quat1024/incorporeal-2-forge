@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
@@ -47,14 +48,19 @@ public class MatcherRenderer {
 		if(matcher == EmptyCorporeaRequestMatcher.INSTANCE || matcher instanceof CorporeaStringMatcher) {
 			return new StringWidget(matcher.getRequestName().getString(), matcherColor(matcher));
 		} else if(matcher instanceof CorporeaItemStackMatcher) {
-			return new ItemStackWidget(((AccessorCorporeaItemStackMatcher) matcher).rho$getMatcher());
+			ItemStack stack = ((AccessorCorporeaItemStackMatcher) matcher).rho$getMatcher();
+			return new HorizontalStackWidget(
+				new ItemStackWidget(stack),
+				new PaddingWidget(5, 0),
+				new StringWidget(stack.getDisplayName().getString(), matcherColor(matcher))
+			);
 		} else if(matcher instanceof CompoundCorporeaRequestMatcher) {
 			List<Widget> widgets = new ArrayList<>();
 			((CompoundCorporeaRequestMatcher) matcher).getChildren().forEach(child -> widgets.add(matcherWidget(child)));
 			return new VerticalStackWidget(widgets);
 		}
 		
-		return new PaddingWidget(9, 9);
+		return new PaddingWidget(16, 16);
 	}
 	
 	public void drawInGui(SolidifiedRequest request, Minecraft mc, MatrixStack ms, World world) {
@@ -91,6 +97,7 @@ public class MatcherRenderer {
 		abstract void draw(Minecraft mc, MatrixStack ms, int x, int y, int light, int overlay, IRenderTypeBuffer bufs, Context ctx);
 	}
 	
+	//TODO make this TextComponent but i dunno how the fuck to draw those.
 	public static class StringWidget extends Widget {
 		public StringWidget(String msg, int color) {
 			this.msg = msg;
