@@ -70,8 +70,8 @@ public class WoodFamily {
 			.sound(SoundType.PLANT)
 			.notSolid()
 			.setAllowsSpawn((state, reader, pos, entity) -> entity == EntityType.OCELOT || entity == EntityType.PARROT) //inlined allowsSpawnOnLeaves
-			.setSuffocates((state1, reader1, pos1) -> false) //inlined isntSolid
-			.setBlocksVision((state2, reader2, pos2) -> false));
+			.setSuffocates((state, reader, pos) -> false) //inlined isntSolid
+			.setBlocksVision((state, reader, pos) -> false));
 		
 		//supplier is a forge extension
 		stairs = new StairsBlock(planks::getDefaultState, AbstractBlock.Properties.from(planks));

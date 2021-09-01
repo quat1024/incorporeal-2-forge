@@ -15,9 +15,10 @@ import vazkii.botania.common.block.ModBlocks;
 
 public class RhoBlocks {
 	public static final WoodFamily RHODODENDRITE = Util.make(new WoodFamily("rhododendrite", MaterialColor.PINK, MaterialColor.OBSIDIAN), family -> {
-		//replace the log with a different implementation
+		//replace some of the blocks with a different implementation
 		//leaky abstractions! this is my fault! yay
 		family.log = new RhododendriteLogBlock(Properties.from(family.log));
+		family.leaves = new RhododendriteLeavesBlock(Properties.from(family.leaves));
 		
 		family.okDoTheTreeNow();
 	});

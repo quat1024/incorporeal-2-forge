@@ -27,6 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.botania.api.wand.IWandHUD;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.Random;
 
 public class AwakenedLogBlock extends DirectionalBlock implements IWandHUD {
@@ -49,11 +50,11 @@ public class AwakenedLogBlock extends DirectionalBlock implements IWandHUD {
 		BlockState state = super.getStateForPlacement(context);
 		if(state == null) return null;
 		
-		state = state.with(FACING, context.getFace().getOpposite());
+		final BlockState state2 = state.with(FACING, context.getFace().getOpposite());
 		
-		return CorePathTracing.scanForCore(context.getWorld(), context.getPos(), state.get(FACING))
+		return CorePathTracing.scanForCore(context.getWorld(), context.getPos(), state2.get(FACING))
 			.map(r -> r.toAwakenedLogState(this))
-			.orElse(unawakenedState(state));
+			.orElseGet(() -> unawakenedState(state2)); //java pls
 	}
 	
 	@Override
