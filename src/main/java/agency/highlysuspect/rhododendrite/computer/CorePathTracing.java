@@ -30,31 +30,23 @@ public class CorePathTracing {
 	public static Optional<Result> scanForCore(IWorldReader world, BlockPos pos, Direction scanDir) {
 		//skip the log itself by alreading moving 1 time before the loop
 		BlockPos.Mutable cursor = pos.toMutable().move(scanDir);
-		for(int dist = 1; dist < MAX_RANGE; dist++, cursor.move(scanDir)) {
-			BlockState stateThere = world.getBlockState(cursor);
+		BlockState stateThere = world.getBlockState(cursor);
+		
+		//If we're right next to a core? Well hot damn that's great
+		if(stateThere.getBlock() instanceof CoreBlock) return Optional.of(new Result(scanDir, 1));
+		
+		//If we're one block away from an already awakened log, note that too
+		if(stateThere.getBlock() instanceof AwakenedLogBlock) {
+			Direction theirFacing = stateThere.get(AwakenedLogBlock.FACING);
+			if(theirFacing != scanDir) return Optional.empty();
 			
-			//If we're right next to a core? Well hot damn that's great
-			if(stateThere.getBlock() instanceof CoreBlock) return Optional.of(new Result(scanDir, 1));
+			int nextDistance = stateThere.get(AwakenedLogBlock.DISTANCE) + 1;
+			if(nextDistance > MAX_RANGE) return Optional.empty();
 			
-			//If we're one block away from an already awakened log, note that too
-			if(stateThere.getBlock() instanceof AwakenedLogBlock) {
-				Direction theirFacing = stateThere.get(AwakenedLogBlock.FACING);
-				if(theirFacing != scanDir) return Optional.empty();
-				
-				int nextDistance = stateThere.get(AwakenedLogBlock.DISTANCE) + dist;
-				if(nextDistance > MAX_RANGE) return Optional.empty();
-				
-				return Optional.of(new Result(scanDir, nextDistance));
-			}
-			
-			//If we're next to leaves, skip this block and continue through it
-			if(stateThere.getBlock() == RhoBlocks.RHODODENDRITE.leaves) continue;
-			
-			//Otherwise we're not next to a core at all
-			return Optional.empty();
+			return Optional.of(new Result(scanDir, nextDistance));
 		}
 		
-		//Maxed out the entire range and still didn't find a core. Oh well
+		//Otherwise we're not next to a core at all
 		return Optional.empty();
 	}
 	
@@ -68,9 +60,6 @@ public class CorePathTracing {
 		
 		BlockPos.Mutable cursor = corePos.toMutable();
 		for(int i = 0; i <= MAX_RANGE; i++, cursor.move(coreFacing)) { // <=: the actual max size of a conga line is MAX_RANGE + 1, counting the Core itself
-			BlockState state = world.getBlockState(cursor);
-			if(state.getBlock() == RhoBlocks.RHODODENDRITE.leaves) continue;
-			
 			TileEntity tile = world.getTileEntity(cursor);
 			if(tile == null) break;
 			
@@ -83,26 +72,6 @@ public class CorePathTracing {
 		
 		return new StackOps(requests, holders);
 	}
-	
-//	
-//	public static Optional<Result> scanForCore(World world, BlockPos pos, Direction scanDir) {
-//		//search "out" from myself, in the direction of scanDir, for a core
-//		BlockPos.Mutable scanPos = pos.toMutable();
-//		for(int distance = 1; distance < MAX_RANGE; distance++) { //starting at 1
-//			scanPos.move(scanDir);
-//			BlockState stateThere = world.getBlockState(scanPos);
-//			
-//			//skip over blocks that are okay to have in the path of a rhododendrite stack
-//			if(stateThere.getBlock() instanceof AwakenedLogBlock) continue;
-//			
-//			if(stateThere.getBlock() instanceof CoreBlock) return Optional.of(new Result(scanDir, distance));
-//			else return Optional.empty(); //no other unapproved blocks allowed between this and the core.
-//		}
-//		
-//		//managed to scan MAX_RANGE blocks towards the core and they were all valid blocks, but still no core.
-//		//here, MAX_RANGE has its effect.
-//		return Optional.empty();
-//	}
 	
 	public static boolean stillValid(IWorldReader world, BlockPos pos, Direction coreDir, int distance) {
 		//Well if there's no core there, it's definitely not still valid
