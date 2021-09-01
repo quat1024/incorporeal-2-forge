@@ -61,6 +61,10 @@ public class CompoundCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	//Immutable, please. Also, do not nest these inside each other.
 	private final List<ICorporeaRequestMatcher> others;
 	
+	public List<ICorporeaRequestMatcher> getChildren() {
+		return others;
+	}
+	
 	@Override
 	public boolean test(ItemStack stack) {
 		for(ICorporeaRequestMatcher matcher : others) {

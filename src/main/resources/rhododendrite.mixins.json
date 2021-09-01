@@ -6,7 +6,9 @@
 	"refmap": "incorporeal.refmap.json",
 	"mixins": [
 		"eqHash.CorporeaItemStackMatcherEqualsHashcode",
-		"eqHash.CorporeaStringMatcherEqualsHashcode"
+		"eqHash.CorporeaStringMatcherEqualsHashcode",
+		"self.CoreAndAwakenedLogMixin",
+		"AccessorCorporeaItemStackMatcher"
 	],
 	"injectors": {
 		"defaultRequire": 1

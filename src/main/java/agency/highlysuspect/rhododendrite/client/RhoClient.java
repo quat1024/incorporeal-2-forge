@@ -1,7 +1,6 @@
 package agency.highlysuspect.rhododendrite.client;
 
 import agency.highlysuspect.incorporeal.Inc;
-import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.RhoProxy;
 import agency.highlysuspect.rhododendrite.block.AwakenedLogBlock;
@@ -21,13 +20,12 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import vazkii.botania.client.core.handler.ModelHandler;
-
-import static vazkii.botania.common.lib.ResourceLocationHelper.prefix;
 
 public class RhoClient implements RhoProxy {
 	@Override
 	public void setup() {
+		MatcherColors.registerBuiltinColors();
+		
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
 		modBus.addListener((FMLClientSetupEvent e) -> {
