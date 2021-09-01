@@ -25,7 +25,7 @@ apply plugin: "org.spongepowered.mixin"
 
 ////////////////
 
-version = "0.9.1"
+version = "0.9.2"
 group = "agency.highlysuspect.incorporeal" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "incorporeal"
 
