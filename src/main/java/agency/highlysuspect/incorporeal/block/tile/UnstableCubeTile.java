@@ -1,12 +1,14 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.Inc;
+import agency.highlysuspect.incorporeal.IncSoundEvents;
 import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
 import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.common.Botania;
@@ -78,7 +80,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 				float pitch = basePitch + (rotationSpeed / 600f);
 				if(rotationSpeed > 83) pitch += 0.1;
 				
-				//world.playSound(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5, SoulCoresSounds.UNSTABLE, SoundCategory.BLOCKS, volume, pitch, false);
+				world.playSound(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5, IncSoundEvents.UNSTABLE, SoundCategory.BLOCKS, volume, pitch, false);
 			}
 		}
 	}

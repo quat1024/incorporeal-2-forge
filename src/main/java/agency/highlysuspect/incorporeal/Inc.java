@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -62,6 +63,7 @@ public class Inc {
 		modBus.addGenericListener(Item.class, IncItems::register);
 		modBus.addGenericListener(TileEntityType.class, IncTileTypes::register);
 		modBus.addGenericListener(EntityType.class, IncEntityTypes::register);
+		modBus.addGenericListener(SoundEvent.class, IncSoundEvents::register);
 		
 		modBus.addListener(PotionSoulCoreCollectorEntity::attributeEvent);
 		
