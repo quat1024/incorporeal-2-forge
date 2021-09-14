@@ -1,14 +1,14 @@
 package agency.highlysuspect.rhododendrite.computer;
 
+import agency.highlysuspect.incorporeal.block.CorporeaSolidifierBlock;
+import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.block.RepeaterBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.MathHelper;
-import vazkii.botania.api.corporea.CorporeaHelper;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -51,6 +51,19 @@ public class MiscFunnelables {
 				}
 				return true;
 			} else return false;
+		}
+	} : null;
+	
+	public static final RhodoFunnelable.Loose CORPOREA_SOLIDIFIER = (world, pos, state, face) -> state.getBlock() == IncBlocks.CORPOREA_SOLIDIFIER ? new RhodoFunnelable() {
+		@Override
+		public boolean canRhodoInsert() {
+			return true;
+		}
+		
+		@Override
+		public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
+			if(!simulate)	((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(world, pos, state, request.matcher, request.count);
+			return true;
 		}
 	} : null;
 }

@@ -47,10 +47,12 @@ public class RhodoFunnelableCapability {
 	public static void registerBuiltinLooseFunnelables() {
 		registerLooseFunnelable(MiscFunnelables.DUST);
 		registerLooseFunnelable(MiscFunnelables.REPEATER);
+		registerLooseFunnelable(MiscFunnelables.CORPOREA_SOLIDIFIER);
 	}
 	
 	public static @Nullable RhodoFunnelable findFunnelable(World world, BlockPos pos, Direction face) {
 		//If the block implements RhodoFunnelable
+		//TODO this is kind of useless, no world/state/pos params
 		BlockState state = world.getBlockState(pos);
 		if(state.getBlock() instanceof RhodoFunnelable) {
 			return (RhodoFunnelable) state.getBlock();
