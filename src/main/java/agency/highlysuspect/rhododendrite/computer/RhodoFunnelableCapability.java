@@ -19,6 +19,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class RhodoFunnelableCapability {
@@ -66,7 +68,9 @@ public class RhodoFunnelableCapability {
 		}
 		
 		//entity moment
-		for(Entity e : world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos))) {
+		List<Entity> nearbyEntities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos));
+		Collections.shuffle(nearbyEntities, world.rand); //(scramble the list so there's no preference based off entity iteration order or w/e)
+		for(Entity e : nearbyEntities) {
 			//If the entity implements RhodoFunnelable
 			if(e instanceof RhodoFunnelable) return (RhodoFunnelable) e;
 			
