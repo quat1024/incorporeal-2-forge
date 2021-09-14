@@ -48,7 +48,8 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 	public void render(@Nullable AbstractSoulCoreTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int combinedLight, int combinedOverlay) {
 		int hash = positionalHash(tile);
 		//Using getRenderPartialTicks instead of trusting the partialTicks parameter - Botania's "TEISR" utility passes 0 always. I should PR that.
-		float ticks = ClientTickHandler.ticksInGame + Minecraft.getInstance().getRenderPartialTicks();
+		//TODO: I did PR that! Not released rn though.
+		float ticks = ClientTickHandler.total;
 		
 		ms.push();
 		initialWobble(ms, hash, ticks);

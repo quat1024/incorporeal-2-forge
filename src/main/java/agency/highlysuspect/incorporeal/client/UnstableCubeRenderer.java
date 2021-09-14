@@ -37,12 +37,11 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 	public void render(@Nullable UnstableCubeTile te, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
 		ms.push();
 		
-		partialTicks = Minecraft.getInstance().getRenderPartialTicks();
+		partialTicks = ClientTickHandler.partialTicks;
 		
 		if(te == null) {
 			roll(ms, partialTicks);
 		} else {
-			
 			roll(ms, partialTicks, te.rotationAngle, te.rotationSpeed, te.bump, te.bumpDecay, MathHelper.hash(MathHelper.hash(te.getPos().hashCode())) % 50000);
 		}
 		
