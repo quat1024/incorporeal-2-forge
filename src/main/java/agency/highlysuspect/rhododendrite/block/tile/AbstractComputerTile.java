@@ -32,6 +32,16 @@ public abstract class AbstractComputerTile extends TileMod {
 		return null;
 	}
 	
+	public static class ChainBindResult {
+		public ChainBindResult(BlockPos direct, BlockPos root) {
+			this.direct = direct;
+			this.root = root;
+		}
+		
+		public final BlockPos direct;
+		public final BlockPos root;
+	}
+	
 	//Perform a bind with a "root-extraction" algorithm.
 	//I scan forwards and at every position, ask you "so, if I bound to this block, what would the root be?"
 	//You may return null (so i won't bind to that block), or return *any* blockpos, which i will bind to.
@@ -40,7 +50,7 @@ public abstract class AbstractComputerTile extends TileMod {
 	//The idea here - if you are a RhodoOp, and want to bind to blocks of type RhodoCell while allowing
 	//the bind to "chain" through more RhodoOp blocks; if you find an already-bound RhodoOp, there's no need
 	//to perform more expensive block-by-block scanning, because you can just copy-paste its bind position.
-	protected @Nullable BlockPos rootExtractingChainBind(Direction dir, ChainBindRootExtactor chainRoot) {
+	protected @Nullable ChainBindResult rootExtractingChainBind(Direction dir, ChainBindRootExtactor chainRoot) {
 		assert world != null;
 		
 		BlockPos.Mutable cursor = pos.toMutable();
@@ -48,7 +58,7 @@ public abstract class AbstractComputerTile extends TileMod {
 			cursor.move(dir);
 			@Nullable TileEntity tile = world.getTileEntity(cursor);
 			@Nullable BlockPos root = chainRoot.getRootBind(cursor, tile);
-			if(root != null) return root.toImmutable();
+			if(root != null) return new ChainBindResult(cursor.toImmutable(), root.toImmutable());
 		}
 		return null;
 	}

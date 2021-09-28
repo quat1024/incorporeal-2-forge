@@ -21,7 +21,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 		super(RhoTileTypes.OP);
 	}
 	
-	protected transient @Nullable BlockPos coreBinding;
+	protected transient @Nullable ChainBindResult binding;
 	public int comparatorSignal;
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {
 		@Override
@@ -41,10 +41,18 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 		}
 	};
 	
+	public @Nullable BlockPos getDirectBind() {
+		return binding == null ? null : binding.direct;
+	}
+	
+	public @Nullable BlockPos getRootBind() {
+		return binding == null ? null : binding.root;
+	}
+	
 	public @Nullable RhodoCellTile getBoundCell() {
-		if(coreBinding == null) return null;
+		if(binding == null) return null;
 		assert world != null;
-		TileEntity tile = world.getTileEntity(coreBinding);
+		TileEntity tile = world.getTileEntity(binding.root);
 		return tile instanceof RhodoCellTile ? (RhodoCellTile) tile : null;
 	}
 	
@@ -52,12 +60,11 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	public void tick() {
 		if(world == null) return;
 		
-		coreBinding = rootExtractingChainBind(
+		binding = rootExtractingChainBind(
 			getBlockState().get(BlockStateProperties.FACING),
 			(cursor, tile) -> {
-				if(tile instanceof RhodoCellTile) return pos;
-				else if(tile instanceof RhodoOpTile) return ((RhodoOpTile) tile).coreBinding;
-				else if(tile instanceof RhodoFunnelTile) return ((RhodoFunnelTile) tile).foreBinding;
+				if(tile instanceof RhodoCellTile) return cursor;
+				else if(tile instanceof RhodoOpTile) return ((RhodoOpTile) tile).getRootBind();
 				else return null;
 			}
 		);
@@ -70,7 +77,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	}
 	
 	protected void doIt(boolean isCondition) {
-		if(coreBinding == null) return;
+		if(binding == null) return;
 		
 		ItemStack stack = getCard();
 		if(stack.isEmpty()) {

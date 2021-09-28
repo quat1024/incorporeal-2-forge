@@ -34,6 +34,18 @@ The red-stringiness of the funnel here is predicated on it only binding to block
 * An alternative is making some kind of "interface" block that the funnels can bind to, and it does the more fancy funnelable checks.. Dunno actually
   * Realy not as nice though.
 
-## code cleanup
+## missing
 
-Merge OpcodeCardItem and ConditionCardItem, they're now both items that take a cell/op tile pair and do something with either. I can just call methods on the op tile to do things with it, like set the comparator output level. 
+[13:43:41] [Render thread/WARN] [ne.mi.re.GameData/REGISTRIES]: Missing minecraft:item:
+rhododendrite:awakened_log
+rhododendrite:condition
+rhododendrite:core
+rhododendrite:funnel
+rhododendrite:opcode
+
+Missing minecraft:block:
+rhododendrite:awakened_log
+rhododendrite:condition
+rhododendrite:core
+rhododendrite:funnel
+rhododendrite:opcode

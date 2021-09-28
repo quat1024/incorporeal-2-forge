@@ -14,8 +14,24 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 		super(RhoTileTypes.FUNNEL);
 	}
 	
-	protected transient @Nullable BlockPos foreBinding;
-	protected transient @Nullable BlockPos aftBinding;
+	protected transient @Nullable ChainBindResult foreBinding;
+	protected transient @Nullable ChainBindResult aftBinding;
+	
+	public BlockPos getForeDirectBind() {
+		return foreBinding == null ? null : foreBinding.direct;
+	}
+	
+	public BlockPos getForeRootBind() {
+		return foreBinding == null ? null : foreBinding.root;
+	}
+	
+	public BlockPos getAftDirectBind() {
+		return aftBinding == null ? null : aftBinding.direct;
+	}
+	
+	public BlockPos getAftRootBind() {
+		return aftBinding == null ? null : aftBinding.root;
+	}
 	
 	@Override
 	public void tick() {
@@ -25,7 +41,8 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			(cursor, tile) -> {
 				if(tile == null) return null;
 				else if(tile.getCapability(RhodoFunnelableCapability.INSTANCE).map(RhodoFunnelable::canRhodoInsert).isPresent()) return cursor;
-				else if(tile instanceof RhodoFunnelTile) return ((RhodoFunnelTile) tile).foreBinding;
+				else if(tile instanceof RhodoCellTile) return cursor;
+				else if(tile instanceof RhodoFunnelTile) return ((RhodoFunnelTile) tile).getForeRootBind();
 				else return null;
 			});
 		
@@ -33,7 +50,8 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			(cursor, tile) -> {
 				if(tile == null) return null;
 				else if(tile.getCapability(RhodoFunnelableCapability.INSTANCE).map(RhodoFunnelable::canRhodoExtract).isPresent()) return cursor;
-				else if(tile instanceof RhodoFunnelTile) return ((RhodoFunnelTile) tile).foreBinding;
+				else if(tile instanceof RhodoCellTile) return cursor;
+				else if(tile instanceof RhodoFunnelTile) return ((RhodoFunnelTile) tile).getAftRootBind();
 				else return null;
 			});
 	}

@@ -2,9 +2,12 @@ package agency.highlysuspect.rhododendrite.client;
 
 import agency.highlysuspect.rhododendrite.RhoProxy;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
+import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -29,16 +32,10 @@ public class RhoClient implements RhoProxy {
 			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.sapling, RenderType.getCutout());
 		});
 		
-//		modBus.addListener((ColorHandlerEvent.Block event) -> {
-//			BlockColors colors = event.getBlockColors();
-//			//This looked like GARBAGE so i just colorized them in an image editor, sue me lol
-//			//colors.register((state, world, pos, what) -> 0xfe7acc, RhoBlocks.RHODODENDRITE.leaves);
-//		});
-		
-//		modBus.addListener((ColorHandlerEvent.Item event) -> {
-//			ItemColors colors = event.getItemColors();
-//			
-//			//colors.register((p_getColor_1_, p_getColor_2_) -> 0xfe7acc, RhoBlocks.RHODODENDRITE.leaves);
-//		});
+		modBus.addListener((ModelRegistryEvent e) -> {
+			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.CELL, ComputerTileRenderer.Cell::new);
+			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.OP, ComputerTileRenderer.Op::new);
+			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.FUNNEL, ComputerTileRenderer.Funnel::new);
+		});
 	}
 }

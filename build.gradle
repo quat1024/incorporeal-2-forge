@@ -159,8 +159,8 @@ dependencies {
 	//jei only at runtime
 	runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58")
 	
-	//idk what the fuck this is
-	if(System.getProperty("idea.sync.active") != true) {
+	//:intellithonk:
+	if(System.getProperty("idea.sync.active") != "true") {
 		annotationProcessor "org.spongepowered:mixin:0.8.2:processor"
 	}
 }
