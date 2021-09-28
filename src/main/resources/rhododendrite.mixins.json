@@ -7,7 +7,6 @@
 	"mixins": [
 		"eqHash.CorporeaItemStackMatcherEqualsHashcode",
 		"eqHash.CorporeaStringMatcherEqualsHashcode",
-		"self.CoreAndAwakenedLogMixin",
 		"AccessorCorporeaItemStackMatcher"
 	],
 	"injectors": {

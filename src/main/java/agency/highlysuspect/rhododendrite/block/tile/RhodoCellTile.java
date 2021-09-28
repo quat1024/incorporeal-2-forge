@@ -18,7 +18,7 @@ import java.util.*;
 
 public class RhodoCellTile extends AbstractComputerTile implements ITickableTileEntity {
 	public RhodoCellTile() {
-		super(null);
+		super(RhoTileTypes.CELL);
 	}
 	
 	protected transient @Nullable BlockPos binding; //Not serialized.
@@ -32,7 +32,6 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	
 	public @Nullable RhodoCellTile getBoundCell() {
 		if(binding == null) return null;
-		
 		assert world != null;
 		TileEntity tile = world.getTileEntity(binding);
 		return tile instanceof RhodoCellTile ? (RhodoCellTile) tile : null;

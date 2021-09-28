@@ -1,8 +1,0 @@
-{
-	"parent": "botania:item/corporea_crystal_cube",
-	"textures": {
-		"cloth": "rhododendrite:block/condition_cloth",
-		"glass": "rhododendrite:block/condition_glass",
-		"particle": "#base"
-	}
-}

@@ -1,6 +1,14 @@
+# Before releasing
+
+- `funnel2` is intentionally named to trigger FML missing mappings warning, work out what to do with that.
+
+- actually remove test1 and test2 this time lmao
+
+### solidified request.cap
+
 * The purpose of SolidifiedRequest.Cap ("solidified request holder").
   * Used for the Retainer Evaporator
-  * Used for `CorePathTracing#readStackOps` but CorePathTracing is going away.
+  * Used for `CorePathTracing#readStackOps` but CorePathTracing is gone.
   * Totally possible to make the evaporator-thingie work using funnelables, I think.
 
 Should I add data travel time (womp womp) like, it'll look nice, though???? Idk if making data travel time "purely a visual thing" would be hard.
@@ -25,3 +33,7 @@ The red-stringiness of the funnel here is predicated on it only binding to block
   * This is harder than it sounds. What goes in that supplier<rhodofunnelable> when its, say, a tile entity.
 * An alternative is making some kind of "interface" block that the funnels can bind to, and it does the more fancy funnelable checks.. Dunno actually
   * Realy not as nice though.
+
+## code cleanup
+
+Merge OpcodeCardItem and ConditionCardItem, they're now both items that take a cell/op tile pair and do something with either. I can just call methods on the op tile to do things with it, like set the comparator output level. 

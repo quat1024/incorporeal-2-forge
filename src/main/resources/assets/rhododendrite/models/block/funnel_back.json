@@ -1,8 +1,0 @@
-{
-	"parent": "minecraft:block/cube_bottom_top",
-	"textures": {
-		"side": "rhododendrite:block/funnel_back",
-		"bottom": "rhododendrite:block/funnel_bottom_active",
-		"top": "rhododendrite:block/funnel_top"
-	}
-}

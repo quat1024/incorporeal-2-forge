@@ -47,26 +47,26 @@ public class RhoRecipes extends IncRecipes {
 			.addCriterion("has_ugly_stone", hasItem(ModFluffBlocks.biomeStoneForest))
 			.build(r);
 		
-		shaped(RhoBlocks.OPCODE, 1, "#S#", "#X#", "###")
-			.key('S', ModItems.corporeaSpark)
-			.key('X', ModBlocks.corporeaBlock)
-			.key('#', RhoBlocks.RHODODENDRITE.planks)
-			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
-			.build(r);
-		
-		shaped(RhoBlocks.CONDITION, 1, "#S#", "#X#", "###")
-			.key('S', ModItems.corporeaSpark)
-			.key('X', ModItems.elfQuartz)
-			.key('#', RhoBlocks.RHODODENDRITE.planks)
-			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
-			.build(r);
-		
-		shaped(RhoBlocks.FUNNEL, 1, "#S#", "#X#", "###")
-			.key('S', ModItems.corporeaSpark)
-			.key('X', Blocks.DROPPER)
-			.key('#', RhoBlocks.RHODODENDRITE.planks)
-			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
-			.build(r);
+//		shaped(RhoBlocks.OPCODE, 1, "#S#", "#X#", "###")
+//			.key('S', ModItems.corporeaSpark)
+//			.key('X', ModBlocks.corporeaBlock)
+//			.key('#', RhoBlocks.RHODODENDRITE.planks)
+//			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
+//			.build(r);
+//		
+//		shaped(RhoBlocks.CONDITION, 1, "#S#", "#X#", "###")
+//			.key('S', ModItems.corporeaSpark)
+//			.key('X', ModItems.elfQuartz)
+//			.key('#', RhoBlocks.RHODODENDRITE.planks)
+//			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
+//			.build(r);
+//		
+//		shaped(RhoBlocks.FUNNEL, 1, "#S#", "#X#", "###")
+//			.key('S', ModItems.corporeaSpark)
+//			.key('X', Blocks.DROPPER)
+//			.key('#', RhoBlocks.RHODODENDRITE.planks)
+//			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
+//			.build(r);
 	}
 	
 	@SuppressWarnings("SameParameterValue")

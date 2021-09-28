@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTileEntity {
 	public RhodoFunnelTile() {
-		super(null); //TODO
+		super(RhoTileTypes.FUNNEL);
 	}
 	
 	protected transient @Nullable BlockPos foreBinding;

@@ -8,21 +8,15 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 @SuppressWarnings("ConstantConditions")
 public class RhoTileTypes {
-	public static final TileEntityType<CoreTile> CORE = TileEntityType.Builder.create(CoreTile::new, RhoBlocks.CORE).build(null);
-	public static final TileEntityType<AwakenedLogTile> AWAKENED_LOG = TileEntityType.Builder.create(AwakenedLogTile::new, RhoBlocks.AWAKENED_LOG).build(null);
-	
-	public static final TileEntityType<OpcodeTile> OPCODE = TileEntityType.Builder.create(OpcodeTile::new, RhoBlocks.OPCODE).build(null);
-	public static final TileEntityType<ConditionTile> CONDITION = TileEntityType.Builder.create(ConditionTile::new, RhoBlocks.CONDITION).build(null);
-	public static final TileEntityType<FunnelTile> FUNNEL = TileEntityType.Builder.create(FunnelTile::new, RhoBlocks.FUNNEL).build(null);
+	public static final TileEntityType<RhodoCellTile> CELL = TileEntityType.Builder.create(RhodoCellTile::new, RhoBlocks.CELL).build(null);
+	public static final TileEntityType<RhodoOpTile> OP = TileEntityType.Builder.create(RhodoOpTile::new, RhoBlocks.OP).build(null);
+	public static final TileEntityType<RhodoFunnelTile> FUNNEL = TileEntityType.Builder.create(RhodoFunnelTile::new, RhoBlocks.FUNNEL).build(null);
 	
 	public static void register(RegistryEvent.Register<TileEntityType<?>> event) {
 		IForgeRegistry<TileEntityType<?>> r = event.getRegistry();
 		
-		Rho.reg(r, "core", CORE);
-		Rho.reg(r, "awakened_log", AWAKENED_LOG);
-		
-		Rho.reg(r, "opcode", OPCODE);
-		Rho.reg(r, "condition", CONDITION);
+		Rho.reg(r, "cell", CELL);
+		Rho.reg(r, "op", OP);
 		Rho.reg(r, "funnel", FUNNEL);
 	}
 }

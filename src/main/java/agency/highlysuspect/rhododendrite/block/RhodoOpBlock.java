@@ -7,8 +7,11 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class RhodoOpBlock extends AbstractComputerBlock {
 	public RhodoOpBlock(Properties properties) {
@@ -45,5 +48,16 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 	public int getComparatorInputOverride(BlockState blockState, World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		return tile instanceof RhodoOpTile ? ((RhodoOpTile) tile).getComparatorSignal() : 0;
+	}
+	
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+	
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		return new RhodoOpTile();
 	}
 }

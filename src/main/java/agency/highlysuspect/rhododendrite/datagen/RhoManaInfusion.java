@@ -45,7 +45,5 @@ public class RhoManaInfusion extends IncManaInfusion {
 			RhoItems.CONDITION_GREATER_THAN,
 			RhoItems.CONDITION_LESS_THAN
 		);
-		
-		consumer.accept(IncManaInfusion.FinishedRecipe.alchemy(Rho.id("core"), new ItemStack(RhoBlocks.CORE), ingr(RhoBlocks.RHODODENDRITE.log), 50_000));
 	}
 }

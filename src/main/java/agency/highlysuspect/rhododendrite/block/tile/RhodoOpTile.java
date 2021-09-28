@@ -1,11 +1,11 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
-import agency.highlysuspect.rhododendrite.item.ConditionCardItem;
-import agency.highlysuspect.rhododendrite.item.OpcodeCardItem;
+import agency.highlysuspect.rhododendrite.item.RhoCardItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEntity {
 	public RhodoOpTile() {
-		super(null); //TODO
+		super(RhoTileTypes.OP);
 	}
 	
 	protected transient @Nullable BlockPos coreBinding;
@@ -26,7 +26,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {
 		@Override
 		public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-			return stack.getItem() instanceof ConditionCardItem || stack.getItem() instanceof OpcodeCardItem;
+			return stack.getItem() instanceof RhoCardItem;
 		}
 		
 		@Override
@@ -40,6 +40,13 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 			VanillaPacketDispatcher.dispatchTEToNearbyPlayers(RhodoOpTile.this);
 		}
 	};
+	
+	public @Nullable RhodoCellTile getBoundCell() {
+		if(coreBinding == null) return null;
+		assert world != null;
+		TileEntity tile = world.getTileEntity(coreBinding);
+		return tile instanceof RhodoCellTile ? (RhodoCellTile) tile : null;
+	}
 	
 	@Override
 	public void tick() {
@@ -55,23 +62,34 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 			}
 		);
 		
-		if(coreBinding != null) {
-			ItemStack card = getCard();
-			if(card.isEmpty()) {
-				setComparatorSignal(0);
-			} else if(card.getItem() instanceof ConditionCardItem) {
-				//TODO handle condition.
-			}
-		}
+		doIt(true);
 	}
 	
 	public void onRedstonePower() {
-		if(coreBinding != null) {
-			ItemStack card = getCard();
-			if(!card.isEmpty() && card.getItem() instanceof OpcodeCardItem) {
-				//TODO handle opcode. (and write comparator signal on failure.)
-			}
+		doIt(false);
+	}
+	
+	protected void doIt(boolean isCondition) {
+		if(coreBinding == null) return;
+		
+		ItemStack stack = getCard();
+		if(stack.isEmpty()) {
+			setComparatorSignal(0);
+			return;
 		}
+		
+		RhoCardItem item = RhoCardItem.extract(stack);
+		if(item == null || item.isCondition != isCondition) return;
+		
+		RhodoCellTile cell = getBoundCell();
+		if(cell == null) return;
+		
+		item.action.run(cell, this);
+	}
+	
+	//opcode fail
+	public void fail() {
+		setComparatorSignal(15);
 	}
 	
 	public void setComparatorSignal(int comparatorSignal) {

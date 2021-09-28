@@ -37,21 +37,6 @@ public class RhoStatesModels extends BlockStateProvider {
 	protected void registerStatesAndModels() {
 		handleWoodBlockFamily(RhoBlocks.RHODODENDRITE);
 		
-		//simpleBlock(RhoBlocks.CORE); //Detailed custom model & i just did the blockstate too
-		blockItemParent(RhoBlocks.CORE);
-		
-		//Done manually since forge generates an awful blockstate for this, unfolding all 16 * 6 states into their own json objects
-		//Again just USE the damn VANILLA system.....
-		//(I also needed to flip every other orientation so it lines up with the regular log.. this has 6 states, the log has 3)
-		//(so awakening a log would sometimes flip the texture and look weird)
-		//directionalBlock(RhoBlocks.AWAKENED_LOG, new ModelFile.ExistingModelFile(Rho.id("block/awakened_log"), models().existingFileHelper));
-		blockItemParent(RhoBlocks.AWAKENED_LOG);
-		
-		//also manually
-		blockItemParent(RhoBlocks.OPCODE);
-		
-		//condition block & item is done manually
-		
 		doIt(this::itemGenerated,
 			RhoItems.OPCODE_BLANK,
 			RhoItems.OPCODE_TEST_1,
@@ -74,7 +59,8 @@ public class RhoStatesModels extends BlockStateProvider {
 		);
 	}
 	
-	protected <T> void doIt(Consumer<T> yes, T... blocks) {
+	@SafeVarargs
+	protected final <T> void doIt(Consumer<T> yes, T... blocks) {
 		for(T b : blocks) yes.accept(b);
 	}
 	

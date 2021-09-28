@@ -2,8 +2,6 @@ package agency.highlysuspect.rhododendrite.client;
 
 import agency.highlysuspect.incorporeal.corporea.EmptyCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
-import agency.highlysuspect.rhododendrite.block.tile.AwakenedLogTile;
-import agency.highlysuspect.rhododendrite.block.tile.CoreTile;
 import agency.highlysuspect.rhododendrite.computer.CompoundCorporeaRequestMatcher;
 import agency.highlysuspect.rhododendrite.mixin.AccessorCorporeaItemStackMatcher;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -14,7 +12,6 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
@@ -26,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 //I could make this more extensible but im lazy
+//This class is probably going by the wayside anyways
 public class MatcherRenderer {
 	public static final MatcherRenderer INSTANCE = new MatcherRenderer();
 	
@@ -75,14 +73,6 @@ public class MatcherRenderer {
 		AbstractGui.fill(ms, x - 4, y - 4, x + width + 4, y + height + 4, 0x44000000);
 		
 		widget.draw(mc, ms, x, y, LightTexture.packLight(15, 15), OverlayTexture.NO_OVERLAY, null, Context.GUI);
-	}
-	
-	public void drawOnLog(Minecraft mc, MatrixStack ms, World world, AwakenedLogTile tile, IRenderTypeBuffer buf, int light, int overlay) {
-		
-	}
-	
-	public void drawInCore(Minecraft mc, MatrixStack ms, World world, CoreTile tile, IRenderTypeBuffer buf, int light, int overlay) {
-		
 	}
 	
 	public enum Context {
