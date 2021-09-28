@@ -16,14 +16,12 @@ import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.helper.RenderHelper;
 import vazkii.botania.common.core.helper.Vector3;
 
-import java.util.Random;
-
 public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEntityRenderer<T> {
 	public ComputerTileRenderer(TileEntityRendererDispatcher dispatcher) {
 		super(dispatcher);
 	}
 	
-	protected void renderBinding(MatrixStack ms, IRenderTypeBuffer buffers, Vector3 start, Vector3 end, int color, int hash, float sizeStart, float sizeEnd, Random random, float turnSpeed) {
+	protected void renderBinding(MatrixStack ms, IRenderTypeBuffer buffers, Vector3 start, Vector3 end, int color, int hash, float sizeStart, float sizeEnd, float twistiness) {
 		Vector3 path = end.subtract(start);
 		float pathMag = (float) path.mag();
 		if(pathMag < 0.01) return;
@@ -39,26 +37,27 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 		Vector3 frameZ = path.crossProduct(frameX).normalize();
 		
 		//The distance to step along the path vector for each vertex, or, the distance between each vertex.
-		Vector3 step = path.normalize().multiply(0.025);
+		Vector3 step = path.normalize().multiply(0.03);
 		float stepMag = (float) step.mag();
 		//How many steps I will take along the path in total.
 		int stepCount = (int) (path.mag() / step.mag());
 		if(stepCount == 0) return;
 		
 		float[] positions = new float[stepCount * 3];
-		float magic = -ClientTickHandler.ticksInGame / 100F + (hash % 10000);
+		float magic = -ClientTickHandler.total / 100F + (hash % 10000);
 		for(int i = 0; i < stepCount; i++) {
 			//How far along the path vector this vertex is, as a percentage.
 			float lerp = i / (float) stepCount;
 			
 			//The current size of the beam.
 			float size = Inc.rangeRemap(lerp, 0, 1, sizeStart, sizeEnd);
-			//Perturb that size a bit with this magic formula!!!
-			magic += stepMag * turnSpeed;
+			//Perturb that size a bit with this magic formula!!! Idk its copied from botania lol
+			magic += stepMag * twistiness;
 			float ampl = (0.15f * (MathHelper.sin(magic * 2f) * 0.5f + 0.5f) + 0.1f) * size;
-			//The X and Z components of the spiral
-			float xComponent = MathHelper.sin(magic * 20) * ampl + (random.nextFloat() * 0.05f);
-			float zComponent = MathHelper.cos(magic * 20) * ampl + (random.nextFloat() * 0.05f);
+			//The X and Z components of the spiral.
+			//Original botania added randomness here, but i want a smoother look
+			float xComponent = MathHelper.sin(magic * 20) * ampl;
+			float zComponent = MathHelper.cos(magic * 20) * ampl;
 			
 			//Urrrrgh this allocates a ton im sorry
 			Vector3 finalPos = step.multiply(i).add(frameX.multiply(xComponent)).add(frameZ.multiply(zComponent));
@@ -104,7 +103,6 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 					MathHelper.hash(tile.getPos().hashCode()),
 					1.7f,
 					0.1f,
-					tile.getWorld().rand,
 					0.5f
 				);
 			}
@@ -129,7 +127,6 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 					MathHelper.hash(tile.getPos().hashCode()),
 					1f,
 					0.5f,
-					tile.getWorld().rand,
 					1f
 				);
 			}
@@ -154,7 +151,6 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 					MathHelper.hash(tile.getPos().hashCode()),
 					1.3f,
 					0.1f,
-					tile.getWorld().rand,
 					2f
 				);
 			}
@@ -168,7 +164,6 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 					MathHelper.hash(tile.getPos().hashCode()),
 					0.1f,
 					1.3f,
-					tile.getWorld().rand,
 					-2f
 				);
 			}

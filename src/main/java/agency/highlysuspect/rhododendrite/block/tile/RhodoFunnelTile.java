@@ -5,6 +5,7 @@ import agency.highlysuspect.rhododendrite.computer.RhodoFunnelableCapability;
 import net.minecraft.block.DirectionalBlock;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -54,6 +55,14 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 				else if(tile instanceof RhodoFunnelTile) return ((RhodoFunnelTile) tile).getAftRootBind();
 				else return null;
 			});
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		if(foreBinding == null && aftBinding == null) return new AxisAlignedBB(pos);
+		if(foreBinding == null) return new AxisAlignedBB(pos, aftBinding.direct);
+		if(aftBinding == null) return new AxisAlignedBB(pos, foreBinding.direct);
+		else return new AxisAlignedBB(foreBinding.direct, aftBinding.direct);
 	}
 	
 	//todo: something like FunnelBinding(supplier<funnelable>, supplier<vec3d>) so i can bind to entities etc.

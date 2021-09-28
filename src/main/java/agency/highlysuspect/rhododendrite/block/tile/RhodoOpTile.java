@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -114,6 +115,11 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	
 	public ItemStack getCard() {
 		return inventory.getStackInSlot(0);
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return binding == null ? new AxisAlignedBB(pos) : new AxisAlignedBB(pos, binding.direct);
 	}
 	
 	@Nonnull

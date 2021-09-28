@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -105,6 +106,11 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
 		if(cap == RhodoFunnelableCapability.INSTANCE) return LazyOptional.of(() -> funnelable).cast();
 		else return super.getCapability(cap);
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return binding == null ? new AxisAlignedBB(pos) : new AxisAlignedBB(pos, binding);
 	}
 	
 	@Override

@@ -32,16 +32,6 @@ public abstract class AbstractComputerTile extends TileMod {
 		return null;
 	}
 	
-	public static class ChainBindResult {
-		public ChainBindResult(BlockPos direct, BlockPos root) {
-			this.direct = direct;
-			this.root = root;
-		}
-		
-		public final BlockPos direct;
-		public final BlockPos root;
-	}
-	
 	//Perform a bind with a "root-extraction" algorithm.
 	//I scan forwards and at every position, ask you "so, if I bound to this block, what would the root be?"
 	//You may return null (so i won't bind to that block), or return *any* blockpos, which i will bind to.
@@ -63,27 +53,15 @@ public abstract class AbstractComputerTile extends TileMod {
 		return null;
 	}
 	
-//	//Perform a bind with a "block by block" algorithm.
-//	//I scan forwards and at every position, ask you if this is a block you want to bind to.
-//	//If not, I ask you which direction scanning should proceed in. If you return a direction, scanning
-//	//continues block-by-block in that direction, and the range is reset.
-//	protected @Nullable BlockPos blockByBlockChainBind(Direction dir, DirectBindPredicate bindPredicate, ChainBindDirectionExtractor nextDirExtractor) {
-//		assert world != null;
-//		
-//		BlockPos.Mutable cursor = pos.toMutable();
-//		for(int i = 0; i < RANGE; i++) {
-//			cursor.move(dir);
-//			TileEntity tile = world.getTileEntity(cursor);
-//			if(bindPredicate.bindsTo(cursor, tile)) return cursor.toImmutable();
-//			
-//			@Nullable Direction nextDir = nextDirExtractor.getNextDirection(cursor, tile);
-//			if(nextDir != null) {
-//				i = 0;
-//				dir = nextDir;
-//			}
-//		}
-//		return null;
-//	}
+	public static class ChainBindResult {
+		public ChainBindResult(BlockPos direct, BlockPos root) {
+			this.direct = direct;
+			this.root = root;
+		}
+		
+		public final BlockPos direct;
+		public final BlockPos root;
+	}
 	
 	protected interface DirectBindPredicate {
 		boolean bindsTo(BlockPos.Mutable cursor, @Nullable TileEntity tile);
@@ -92,8 +70,4 @@ public abstract class AbstractComputerTile extends TileMod {
 	protected interface ChainBindRootExtactor {
 		@Nullable BlockPos getRootBind(BlockPos.Mutable cursor, @Nullable TileEntity tile);
 	}
-	
-//	protected interface ChainBindDirectionExtractor {
-//		@Nullable Direction getNextDirection(BlockPos.Mutable cursor, @Nullable TileEntity tile);
-//	}
 }
