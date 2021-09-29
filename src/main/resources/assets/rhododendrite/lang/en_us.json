@@ -23,7 +23,7 @@
 	
 	"block.rhododendrite.cell": "Rhododendric Cell",
 	"block.rhododendrite.op": "Rhododendric Op",
-	"block.rhododendrite.funnel": "Rhododendric Funnel",
+	"block.rhododendrite.funnel2": "Rhododendric Funnel",
 	
 	"item.rhododendrite.opcode_blank": "Blank Opcode",
 	"item.rhododendrite.opcode_test_1": "Opcode: Print to the server console lol",

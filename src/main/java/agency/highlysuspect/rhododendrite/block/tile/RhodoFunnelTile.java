@@ -117,7 +117,7 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			for(Entity e : nearbyEntities) {
 				LazyOptional<RhodoFunnelable> cap = e.getCapability(RhodoFunnelableCapability.INSTANCE);
 				if(cap.isPresent() && funnelableCond.test(cap.resolve().get())) {
-					Vector3 p = Vector3.fromEntityCenter(e);
+					Vector3 p = Vector3.fromEntityCenter(e).add(0, -0.25, 0);
 					return new FunnelBindResult(p, p, fromLazyOpt(cap));
 				}
 			}
@@ -136,7 +136,7 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			for(RhodoFunnelable.Loose loose : RhodoFunnelableCapability.LOOSE_FUNNELABLES) {
 				RhodoFunnelable yes = loose.getFunnelable(world, cursor, state, dir);
 				if(yes != null && funnelableCond.test(yes)) {
-					Vector3 p = Vector3.fromBlockPos(cursor).add(.5, .5, .5);
+					Vector3 p = loose.bindPosition(cursor);
 					return new FunnelBindResult(p, p, fromLoose(world, cursor.toImmutable(), state, dir, loose));
 				}
 			}

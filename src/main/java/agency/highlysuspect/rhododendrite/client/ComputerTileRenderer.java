@@ -143,11 +143,15 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 			if(tile.getWorld() == null) return;
 			
 			Vector3 foreBinding = tile.getForeDirectBind();
+			Vector3 aftBinding = tile.getAftDirectBind();
+			
+			int color = (foreBinding != null && aftBinding != null) ? 0xFF22EE44 : 0xFF119944; 
+			
 			if(foreBinding != null) {
 				renderBinding(ms, buf,
 					Vector3.fromTileEntityCenter(tile),
 					foreBinding,
-					0xFF22CC44,
+					color,
 					MathHelper.hash(tile.getPos().hashCode()),
 					1.3f,
 					0.1f,
@@ -155,12 +159,11 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 				);
 			}
 			
-			Vector3 aftBinding = tile.getAftDirectBind();
 			if(aftBinding != null) {
 				renderBinding(ms, buf,
 					Vector3.fromTileEntityCenter(tile),
 					aftBinding,
-					0xFF22CC44,
+					color,
 					MathHelper.hash(tile.getPos().hashCode()),
 					0.1f,
 					1.3f,
