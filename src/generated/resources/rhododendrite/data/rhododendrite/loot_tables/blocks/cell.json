@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "rhododendrite:funnel"
+          "name": "rhododendrite:cell"
         }
       ],
       "conditions": [

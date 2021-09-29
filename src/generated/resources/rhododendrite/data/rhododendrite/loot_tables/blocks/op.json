@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "rhododendrite:opcode"
+          "name": "rhododendrite:op"
         }
       ],
       "conditions": [
