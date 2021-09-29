@@ -83,7 +83,9 @@ public class MatcherRenderer {
 	
 	public static abstract class Widget {
 		abstract int getWidth(Minecraft mc);
+		
 		abstract int getHeight(Minecraft mc);
+		
 		abstract void draw(Minecraft mc, MatrixStack ms, int x, int y, int light, int overlay, IRenderTypeBuffer bufs, Context ctx);
 	}
 	

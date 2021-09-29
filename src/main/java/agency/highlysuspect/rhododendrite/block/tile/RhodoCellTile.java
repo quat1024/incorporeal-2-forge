@@ -31,11 +31,13 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 		binding = directBind(getBlockState().get(BlockStateProperties.FACING), (cursor, tile) -> tile instanceof RhodoCellTile);
 	}
 	
-	public @Nullable BlockPos getBind() {
+	public @Nullable
+	BlockPos getBind() {
 		return binding;
 	}
 	
-	public @Nullable RhodoCellTile getBoundCell() {
+	public @Nullable
+	RhodoCellTile getBoundCell() {
 		if(binding == null) return null;
 		assert world != null;
 		TileEntity tile = world.getTileEntity(binding);

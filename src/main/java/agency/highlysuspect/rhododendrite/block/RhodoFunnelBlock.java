@@ -1,7 +1,6 @@
 package agency.highlysuspect.rhododendrite.block;
 
 import agency.highlysuspect.rhododendrite.block.tile.RhodoFunnelTile;
-import agency.highlysuspect.rhododendrite.block.tile.RhodoOpTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.StateContainer;

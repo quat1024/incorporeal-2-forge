@@ -61,7 +61,7 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 			
 			//Urrrrgh this allocates a ton im sorry. a mutable Vector3 class would come in handy here.
 			Vector3 finalPos = step.multiply(i).add(frameX.multiply(xComponent)).add(frameZ.multiply(zComponent));
-			positions[i * 3]     = (float) finalPos.x;
+			positions[i * 3] = (float) finalPos.x;
 			positions[i * 3 + 1] = (float) finalPos.y;
 			positions[i * 3 + 2] = (float) finalPos.z;
 		}
@@ -145,7 +145,7 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 			Vector3 foreBinding = tile.getForeDirectBind();
 			Vector3 aftBinding = tile.getAftDirectBind();
 			
-			int color = (foreBinding != null && aftBinding != null) ? 0xFF22EE44 : 0xFF119944; 
+			int color = (foreBinding != null && aftBinding != null) ? 0xFF22EE44 : 0xFF119944;
 			
 			if(foreBinding != null) {
 				renderBinding(ms, buf,

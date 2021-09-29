@@ -7,11 +7,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Util;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
-import vazkii.botania.common.block.ModBlocks;
 
 public class RhoBlocks {
 	public static final WoodFamily RHODODENDRITE = Util.make(new WoodFamily("rhododendrite", MaterialColor.PINK, MaterialColor.OBSIDIAN), family -> {
@@ -39,7 +37,6 @@ public class RhoBlocks {
 		
 		RHODODENDRITE.registerBlocks(r);
 		
-
 		
 		Rho.reg(r, "cell", CELL);
 		Rho.reg(r, "op", OP);

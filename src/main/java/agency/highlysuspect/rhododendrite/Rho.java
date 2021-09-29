@@ -87,7 +87,7 @@ public class Rho {
 	public static Direction positive(Direction.Axis axis) {
 		if(axis == Direction.Axis.X) return Direction.EAST;
 		else if(axis == Direction.Axis.Y) return Direction.UP;
-		else return Direction.SOUTH; 
+		else return Direction.SOUTH;
 	}
 	
 	public static Direction negative(Direction.Axis axis) {

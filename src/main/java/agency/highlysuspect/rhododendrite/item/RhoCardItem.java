@@ -23,7 +23,8 @@ public class RhoCardItem extends Item {
 	}
 	
 	//Convenience
-	public static @Nullable RhoCardItem extract(ItemStack stack) {
+	public static @Nullable
+	RhoCardItem extract(ItemStack stack) {
 		if(stack.getItem() instanceof RhoCardItem) return (RhoCardItem) stack.getItem();
 		else return null;
 	}

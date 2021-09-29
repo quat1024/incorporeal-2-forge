@@ -18,7 +18,8 @@ public abstract class AbstractComputerTile extends TileMod {
 	
 	//Perform a bind with a "direct" algorithm.
 	//I scan forwards and look for the first block that passes the predicate.
-	protected @Nullable BlockPos directBind(Direction dir, DirectBindPredicate directBind) {
+	protected @Nullable
+	BlockPos directBind(Direction dir, DirectBindPredicate directBind) {
 		//return rootExtractingChainBind(dir, (cursor, tile) -> directBind.bindsTo(poss, tile) ? poss : null); //Wasteful
 		assert world != null;
 		
@@ -40,7 +41,8 @@ public abstract class AbstractComputerTile extends TileMod {
 	//The idea here - if you are a RhodoOp, and want to bind to blocks of type RhodoCell while allowing
 	//the bind to "chain" through more RhodoOp blocks; if you find an already-bound RhodoOp, there's no need
 	//to perform more expensive block-by-block scanning, because you can just copy-paste its bind position.
-	protected @Nullable ChainBindResult rootExtractingChainBind(Direction dir, ChainBindRootExtactor chainRoot) {
+	protected @Nullable
+	ChainBindResult rootExtractingChainBind(Direction dir, ChainBindRootExtactor chainRoot) {
 		assert world != null;
 		
 		BlockPos.Mutable cursor = pos.toMutable();
@@ -68,6 +70,7 @@ public abstract class AbstractComputerTile extends TileMod {
 	}
 	
 	protected interface ChainBindRootExtactor {
-		@Nullable BlockPos getRootBind(BlockPos.Mutable cursor, @Nullable TileEntity tile);
+		@Nullable
+		BlockPos getRootBind(BlockPos.Mutable cursor, @Nullable TileEntity tile);
 	}
 }

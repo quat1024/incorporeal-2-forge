@@ -12,7 +12,8 @@ public class LegacyRho {
 				case "awakened_log":
 				case "opcode":
 				case "condition":
-				case "funnel": map.ignore();
+				case "funnel":
+					map.ignore();
 				default: //nothin
 			}
 		}

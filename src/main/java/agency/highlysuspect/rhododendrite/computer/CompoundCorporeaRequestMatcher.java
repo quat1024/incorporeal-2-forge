@@ -52,7 +52,8 @@ public class CompoundCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 		else matcherPool.add(a);
 		
 		//intellij told me not to use a removeAll here because it's slow, ok, sure, i can do that
-		if(b instanceof CompoundCorporeaRequestMatcher) ((CompoundCorporeaRequestMatcher) b).others.forEach(matcherPool::remove);
+		if(b instanceof CompoundCorporeaRequestMatcher)
+			((CompoundCorporeaRequestMatcher) b).others.forEach(matcherPool::remove);
 		else matcherPool.remove(b);
 		
 		return create(matcherPool);

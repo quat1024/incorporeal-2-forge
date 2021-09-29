@@ -42,15 +42,18 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 		}
 	};
 	
-	public @Nullable BlockPos getDirectBind() {
+	public @Nullable
+	BlockPos getDirectBind() {
 		return binding == null ? null : binding.direct;
 	}
 	
-	public @Nullable BlockPos getRootBind() {
+	public @Nullable
+	BlockPos getRootBind() {
 		return binding == null ? null : binding.root;
 	}
 	
-	public @Nullable RhodoCellTile getBoundCell() {
+	public @Nullable
+	RhodoCellTile getBoundCell() {
 		if(binding == null) return null;
 		assert world != null;
 		TileEntity tile = world.getTileEntity(binding.root);

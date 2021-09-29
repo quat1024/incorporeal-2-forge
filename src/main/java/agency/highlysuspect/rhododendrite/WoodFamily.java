@@ -44,7 +44,8 @@ public class WoodFamily {
 			@Nullable
 			@Override
 			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
-				if(toolType == ToolType.AXE) return strippedLog.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
+				if(toolType == ToolType.AXE)
+					return strippedLog.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
 				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
 			}
 		};
@@ -59,7 +60,8 @@ public class WoodFamily {
 			@Nullable
 			@Override
 			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
-				if(toolType == ToolType.AXE) return strippedWood.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
+				if(toolType == ToolType.AXE)
+					return strippedWood.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
 				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
 			}
 		};
@@ -75,18 +77,18 @@ public class WoodFamily {
 		
 		//supplier is a forge extension
 		stairs = new StairsBlock(planks::getDefaultState, AbstractBlock.Properties.from(planks));
-		
+
 //		sign = new StandingSignBlock(AbstractBlock.Properties.create(Material.WOOD)
 //			.doesNotBlockMovement()
 //			.hardnessAndResistance(1f)
 //			.sound(SoundType.WOOD),
 //			woodType);
-		
+
 //		door = new DoorBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
 //			.hardnessAndResistance(3)
 //			.sound(SoundType.WOOD)
 //			.notSolid());
-		
+
 //		wallSign = new WallSignBlock(AbstractBlock.Properties.create(Material.WOOD)
 //			.doesNotBlockMovement()
 //			.hardnessAndResistance(1f)
@@ -102,7 +104,7 @@ public class WoodFamily {
 		fence = new FenceBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
 			.hardnessAndResistance(2f, 3f)
 			.sound(SoundType.WOOD));
-		
+
 //		trapdoor = new TrapDoorBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
 //			.hardnessAndResistance(3f)
 //			.sound(SoundType.WOOD)

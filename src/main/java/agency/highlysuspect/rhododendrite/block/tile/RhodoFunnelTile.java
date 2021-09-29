@@ -94,7 +94,8 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 	}
 	
 	//Similar to the one in AbstractComputerTile but adapted to how funnels work specifically.
-	private @Nullable FunnelBindResult rootExtractingChainBindFunnelable(Direction dir, boolean fore) {
+	private @Nullable
+	FunnelBindResult rootExtractingChainBindFunnelable(Direction dir, boolean fore) {
 		assert world != null;
 		
 		Predicate<RhodoFunnelable> funnelableCond = fore ? RhodoFunnelable::canRhodoInsert : RhodoFunnelable::canRhodoExtract;
@@ -108,7 +109,8 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			//Chain through other rhodo funnels
 			if(t instanceof RhodoFunnelTile) {
 				FunnelBindResult otherBind = fore ? ((RhodoFunnelTile) t).foreBinding : ((RhodoFunnelTile) t).aftBinding;
-				if(otherBind != null) return new FunnelBindResult(Vector3.fromTileEntityCenter(t), otherBind.root, otherBind.funnelableProvider);
+				if(otherBind != null)
+					return new FunnelBindResult(Vector3.fromTileEntityCenter(t), otherBind.root, otherBind.funnelableProvider);
 			}
 			
 			//Bind directly to entities

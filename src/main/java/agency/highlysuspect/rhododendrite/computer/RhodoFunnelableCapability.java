@@ -1,8 +1,6 @@
 package agency.highlysuspect.rhododendrite.computer;
 
-import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -16,12 +14,10 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class RhodoFunnelableCapability {
 	@CapabilityInject(RhodoFunnelable.class)
@@ -50,7 +46,8 @@ public class RhodoFunnelableCapability {
 		registerLooseFunnelable(MiscFunnelables.CORPOREA_SOLIDIFIER);
 	}
 	
-	public static @Nullable RhodoFunnelable findFunnelable(World world, BlockPos pos, Direction face) {
+	public static @Nullable
+	RhodoFunnelable findFunnelable(World world, BlockPos pos, Direction face) {
 		//If the block implements RhodoFunnelable
 		//TODO this is kind of useless, no world/state/pos params
 		BlockState state = world.getBlockState(pos);

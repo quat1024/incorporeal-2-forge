@@ -7,5 +7,6 @@ import vazkii.botania.common.impl.corporea.CorporeaItemStackMatcher;
 
 @Mixin(CorporeaItemStackMatcher.class)
 public interface AccessorCorporeaItemStackMatcher {
-	@Accessor(remap = false, value = "match") ItemStack rho$getMatcher();
+	@Accessor(remap = false, value = "match")
+	ItemStack rho$getMatcher();
 }

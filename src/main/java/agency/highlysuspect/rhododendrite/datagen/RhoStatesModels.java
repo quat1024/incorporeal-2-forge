@@ -80,7 +80,7 @@ public class RhoStatesModels extends BlockStateProvider {
 		
 		logBlock(family.log);
 		blockItemParent(family.log);
-		logBlock(family.strippedLog); 
+		logBlock(family.strippedLog);
 		blockItemParent(family.strippedLog);
 		axisBlock(family.wood, logTex, logTex);
 		blockItemParent(family.wood);

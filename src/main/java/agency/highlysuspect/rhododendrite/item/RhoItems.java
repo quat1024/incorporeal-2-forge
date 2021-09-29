@@ -103,11 +103,11 @@ public class RhoItems {
 	
 	////// Conditions!!
 	
-	public static final RhoCardItem CONDITION_BLANK        = RhoCardItem.cond(defaultProps(), (cell, op) -> false);
-	public static final RhoCardItem CONDITION_IS_EMPTY     = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().isEmpty());
-	public static final RhoCardItem CONDITION_EQUAL        = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().equals(cell.peekNext()));
-	public static final RhoCardItem CONDITION_COUNT_EQUAL  = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count == cell.peekNext().count);
-	public static final RhoCardItem CONDITION_LESS_THAN    = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count < cell.peekNext().count);
+	public static final RhoCardItem CONDITION_BLANK = RhoCardItem.cond(defaultProps(), (cell, op) -> false);
+	public static final RhoCardItem CONDITION_IS_EMPTY = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().isEmpty());
+	public static final RhoCardItem CONDITION_EQUAL = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().equals(cell.peekNext()));
+	public static final RhoCardItem CONDITION_COUNT_EQUAL = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count == cell.peekNext().count);
+	public static final RhoCardItem CONDITION_LESS_THAN = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count < cell.peekNext().count);
 	public static final RhoCardItem CONDITION_GREATER_THAN = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count > cell.peekNext().count);
 	
 	public static Item.Properties defaultProps() {

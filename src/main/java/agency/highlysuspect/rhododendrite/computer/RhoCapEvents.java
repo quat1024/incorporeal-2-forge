@@ -19,7 +19,10 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import vazkii.botania.api.corporea.CorporeaHelper;
 import vazkii.botania.api.corporea.ICorporeaRequestor;
 import vazkii.botania.api.corporea.ICorporeaSpark;
-import vazkii.botania.common.block.tile.corporea.*;
+import vazkii.botania.common.block.tile.corporea.TileCorporeaCrystalCube;
+import vazkii.botania.common.block.tile.corporea.TileCorporeaFunnel;
+import vazkii.botania.common.block.tile.corporea.TileCorporeaIndex;
+import vazkii.botania.common.block.tile.corporea.TileCorporeaRetainer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -99,7 +102,7 @@ public class RhoCapEvents {
 			this.cube = cube;
 		}
 		
-		protected final TileCorporeaCrystalCube cube; 
+		protected final TileCorporeaCrystalCube cube;
 		
 		@Override
 		public boolean canRhodoExtract() {
@@ -124,7 +127,8 @@ public class RhoCapEvents {
 		@Override
 		public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
 			if(request.matcher instanceof AccessorCorporeaItemStackMatcher) {
-				if(!simulate) cube.setRequestTarget(((AccessorCorporeaItemStackMatcher) request.matcher).rho$getMatcher().copy());
+				if(!simulate)
+					cube.setRequestTarget(((AccessorCorporeaItemStackMatcher) request.matcher).rho$getMatcher().copy());
 				return true;
 			} else return false;
 		}
@@ -157,6 +161,7 @@ public class RhoCapEvents {
 	
 	public interface ItemStackFunnelable extends RhodoFunnelable, ICapabilityProvider {
 		ItemStack getStack();
+		
 		void setStack(ItemStack stack);
 		
 		default int requestSize() {
@@ -198,7 +203,7 @@ public class RhoCapEvents {
 		
 		@Nonnull
 		@Override
-		default  <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		default <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 			return RhodoFunnelableCapability.INSTANCE.orEmpty(cap, LazyOptional.of(() -> this));
 		}
 		
@@ -241,7 +246,7 @@ public class RhoCapEvents {
 			
 			@Override
 			public int requestSize() {
-				return new int[] {1, 2, 4, 8, 16, 32, 48, 64}[frame.getRotation()];
+				return new int[]{1, 2, 4, 8, 16, 32, 48, 64}[frame.getRotation()];
 			}
 		}
 	}

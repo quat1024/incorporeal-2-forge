@@ -90,7 +90,8 @@ public class MiscFunnelables {
 		
 		@Override
 		public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
-			if(!simulate)	((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(world, pos, state, request.matcher, request.count);
+			if(!simulate)
+				((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(world, pos, state, request.matcher, request.count);
 			return true;
 		}
 	} : null;
