@@ -59,7 +59,7 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 			float xComponent = MathHelper.sin(magic * 20) * ampl;
 			float zComponent = MathHelper.cos(magic * 20) * ampl;
 			
-			//Urrrrgh this allocates a ton im sorry
+			//Urrrrgh this allocates a ton im sorry. a mutable Vector3 class would come in handy here.
 			Vector3 finalPos = step.multiply(i).add(frameX.multiply(xComponent)).add(frameZ.multiply(zComponent));
 			positions[i * 3]     = (float) finalPos.x;
 			positions[i * 3 + 1] = (float) finalPos.y;
@@ -142,11 +142,11 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 		public void render(RhodoFunnelTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
 			if(tile.getWorld() == null) return;
 			
-			BlockPos foreBinding = tile.getForeDirectBind();
+			Vector3 foreBinding = tile.getForeDirectBind();
 			if(foreBinding != null) {
 				renderBinding(ms, buf,
 					Vector3.fromTileEntityCenter(tile),
-					Vector3.fromBlockPos(foreBinding).add(.5, .5, .5),
+					foreBinding,
 					0xFF22CC44,
 					MathHelper.hash(tile.getPos().hashCode()),
 					1.3f,
@@ -155,11 +155,11 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 				);
 			}
 			
-			BlockPos aftBinding = tile.getAftDirectBind();
+			Vector3 aftBinding = tile.getAftDirectBind();
 			if(aftBinding != null) {
 				renderBinding(ms, buf,
 					Vector3.fromTileEntityCenter(tile),
-					Vector3.fromBlockPos(aftBinding).add(.5, .5, .5),
+					aftBinding,
 					0xFF22CC44,
 					MathHelper.hash(tile.getPos().hashCode()),
 					0.1f,

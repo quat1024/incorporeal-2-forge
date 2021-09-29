@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import vazkii.botania.common.core.helper.Vector3;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,34 +30,8 @@ public interface RhodoFunnelable {
 	
 	interface Loose {
 		@Nullable RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face);
-	}
-	
-	class ForRequestHolder implements RhodoFunnelable {
-		public ForRequestHolder(SolidifiedRequest.Holder holder) {
-			this.holder = holder;
-		}
-		
-		final SolidifiedRequest.Holder holder;
-		
-		@Override
-		public boolean canRhodoExtract() {
-			return true;
-		}
-		
-		@Override
-		public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-			return Optional.of(holder.getRequest());
-		}
-		
-		@Override
-		public boolean canRhodoInsert() {
-			return true;
-		}
-		
-		@Override
-		public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
-			holder.setRequest(request);
-			return true;
+		default Vector3 bindPosition(BlockPos pos) {
+			return Vector3.fromBlockPos(pos).add(.5, .5, .5);
 		}
 	}
 }
