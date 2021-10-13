@@ -1,0 +1,6 @@
+{
+	"parent": "rhododendrite:block/computer/base",
+	"textures": {
+		"corner": "rhododendrite:block/computer/cell"
+	}
+}

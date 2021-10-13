@@ -1,0 +1,27 @@
+{
+	"variants": {
+		"facing=down": {
+			"model": "rhododendrite:block/computer/funnel",
+			"x": 90
+		},
+		"facing=up": {
+			"model": "rhododendrite:block/computer/funnel",
+			"x": 270
+		},
+		"facing=north": {
+			"model": "rhododendrite:block/computer/funnel"
+		},
+		"facing=south": {
+			"model": "rhododendrite:block/computer/funnel",
+			"y": 180
+		},
+		"facing=west": {
+			"model": "rhododendrite:block/computer/funnel",
+			"y": 270
+		},
+		"facing=east": {
+			"model": "rhododendrite:block/computer/funnel",
+			"y": 90
+		}
+	}
+}

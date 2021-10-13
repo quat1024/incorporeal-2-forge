@@ -4,7 +4,7 @@ I think the cygnus system in Incorporeal is really janky and bad, so here's the 
 
 First of all - it's a tree now. The pun here (rhododendron, a type of tree / dendrite, meaning neuron communication) is too fucking perfect lmao.. craft the sapling at the runic altar with like corporea sparks and a sapling or something, definitely No fuckiNG SKYTUCHING
 
-It's like an average-sized tree with dark chocolately (livingwood-esque) and pink leaves, you can use it for decoration. But the tree can be "activated" via wand of the forest on one of the logs. The activated block turns into a Rhododendrite Core, a block with a transparent inner bit. Rhododendrite opcodes are blocks placed in-world and assigned to the core in the same way cygnus opcodes are assigned to the master cygnus spark; cores can be dyed 16 colors (just like corporea sparks). Cores also have a 6-way ffacing direction.
+It's like an average-sized tree with dark chocolately (livingwood-esque) and pink leaves, you can use it for decoration. But the tree can be "activated" via wand of the forest on one of the logs. The activated block turns into a Rhododendrite Core, a block with a transparent inner bit. Rhododendrite opcodes are blocks placed in-world and assigned to the core in the same way cygnus opcodes are assigned to the master cygnus spark; cores can be dyed 16 colors (just like corporea sparks). Cores also have a 6-way facing direction.
 
 here [ [ is the rhodo core facing right, # means an empty log
 ```
