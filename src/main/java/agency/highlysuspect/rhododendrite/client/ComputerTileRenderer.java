@@ -18,6 +18,13 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 	}
 	
 	protected void renderBinding(MatrixStack ms, IRenderTypeBuffer buffers, Vector3 start, Vector3 end, int color, int hash, float sizeStart, float sizeEnd, float twistiness) {
+		//HEY Maybe don't copy this... Lol
+		//The intention was to draw vertices in world space (?) but it doesn't actually work.
+		//For one, the "start" vec3 is kind of ignored.
+		//It's only used to calculate the length/direction of the path, and the spiral always stems from 0, 0, 0.
+		//Found that out when i tried to make the spirals stem from the front side of the block instead of the center.
+		//One day when I'm less burnt out on rendering this would be worth taking another look at.
+		
 		Vector3 path = end.subtract(start);
 		float pathMag = (float) path.mag();
 		if(pathMag < 0.01) return;
@@ -64,14 +71,13 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 		
 		//Submit everything to the IVertexBuilder
 		ms.push();
-		ms.translate(0.5, 0.5, 0.5); //TODO why do I need the .5 offset lol?? I already added that in the vector3d
+		ms.translate(0.5, 0.5, 0.5); //lame hack because it's not actually in world space
 		
 		int a = (color >> 24) & 0xFF;
 		int r = (color >> 16) & 0xFF;
 		int g = (color >> 8) & 0xFF;
 		int b = color & 0xFF;
 		
-		//Todo, can i use a LINE_STRIP.
 		IVertexBuilder buffer = buffers.getBuffer(RenderHelper.LINE_1);
 		for(int i = 3; i < positions.length; i += 3) {
 			buffer.pos(ms.getLast().getMatrix(), positions[i - 3], positions[i - 2], positions[i - 1]).color(r, g, b, a).endVertex();
