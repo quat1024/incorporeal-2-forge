@@ -34,18 +34,14 @@ public abstract class AbstractComputerBlock extends Block {
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return SORTA_DETAILED_SHAPE;
+		return SHAPE;
 	}
 	
-	//A bounding box.
-	//private static final VoxelShape VERY_ROUGH_SHAPE = VoxelShapes.create(1 / 16d, 1 / 16d, 1 / 16d, 15 / 16d, 15 / 16d, 15 / 16d);
-	//A solid box decorated with 8 corners.
-	private static final VoxelShape SORTA_DETAILED_SHAPE;
+	private static final VoxelShape SHAPE;
 	
 	static {
 		//shoutouts to the "VoxelShape Generator" blockbench plugin lol.
 		VoxelShape shape = VoxelShapes.empty();
-		//Eight corners
 		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.0625, 0.0625, 0.9375, 0.25, 0.25), IBooleanFunction.OR);
 		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.0625, 0.0625, 0.0625, 0.25, 0.25, 0.25), IBooleanFunction.OR);
 		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.0625, 0.75, 0.9375, 0.25, 0.9375), IBooleanFunction.OR);
@@ -54,25 +50,8 @@ public abstract class AbstractComputerBlock extends Block {
 		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.75, 0.0625, 0.9375, 0.9375, 0.25), IBooleanFunction.OR);
 		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.75, 0.75, 0.9375, 0.9375, 0.9375), IBooleanFunction.OR);
 		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.0625, 0.75, 0.75, 0.25, 0.9375, 0.9375), IBooleanFunction.OR);
-		
 		//Big block in the middle because actually having a hole in the middle of the block was annoying.
-		VoxelShape sortaDetailedUnsimplified = VoxelShapes.combine(shape, VoxelShapes.create(3/16d, 3/16d, 3/16d, 13/16d, 13/16d, 13/16d), IBooleanFunction.OR);
-		SORTA_DETAILED_SHAPE = sortaDetailedUnsimplified.simplify();
-		
-		//Twelve edges.
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.25, 0.125, 0.125, 0.75, 0.25, 0.25), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.25, 0.125, 0.75, 0.75, 0.25, 0.875), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.125, 0.125, 0.25, 0.25, 0.25, 0.75), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.125, 0.25, 0.125, 0.25, 0.75, 0.25), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.25, 0.125, 0.875, 0.75, 0.25), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.25, 0.75, 0.875, 0.75, 0.875), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.125, 0.25, 0.75, 0.25, 0.75, 0.875), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.125, 0.25, 0.875, 0.25, 0.75), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.25, 0.75, 0.125, 0.75, 0.875, 0.25), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.125, 0.75, 0.25, 0.25, 0.875, 0.75), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.25, 0.75, 0.75, 0.75, 0.875, 0.875), IBooleanFunction.OR);
-//		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.75, 0.25, 0.875, 0.875, 0.75), IBooleanFunction.OR);
-//		
-//		VERY_DETAILED_SHAPE = shape.simplify();
+		shape = VoxelShapes.combine(shape, VoxelShapes.create(3/16d, 3/16d, 3/16d, 13/16d, 13/16d, 13/16d), IBooleanFunction.OR);
+		SHAPE = shape.simplify();
 	}
 }
