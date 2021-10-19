@@ -28,7 +28,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {
 		@Override
 		public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-			return stack.isEmpty() || stack.getItem() instanceof RhoCardItem;
+			return stack.getItem() instanceof RhoCardItem;
 		}
 		
 		@Override
