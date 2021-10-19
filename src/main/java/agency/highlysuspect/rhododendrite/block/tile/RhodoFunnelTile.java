@@ -118,6 +118,7 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			Collections.shuffle(nearbyEntities, world.rand);
 			for(Entity e : nearbyEntities) {
 				LazyOptional<RhodoFunnelable> cap = e.getCapability(RhodoFunnelableCapability.INSTANCE);
+				//noinspection OptionalGetWithoutIsPresent
 				if(cap.isPresent() && funnelableCond.test(cap.resolve().get())) {
 					Vector3 p = Vector3.fromEntityCenter(e).add(0, -0.25, 0);
 					return new FunnelBindResult(p, p, fromLazyOpt(cap));
@@ -127,6 +128,7 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			//Bind directly to tile entities
 			if(t != null) {
 				LazyOptional<RhodoFunnelable> cap = t.getCapability(RhodoFunnelableCapability.INSTANCE);
+				//noinspection OptionalGetWithoutIsPresent
 				if(cap.isPresent() && funnelableCond.test(cap.resolve().get())) {
 					Vector3 p = Vector3.fromTileEntityCenter(t);
 					return new FunnelBindResult(p, p, fromLazyOpt(cap));

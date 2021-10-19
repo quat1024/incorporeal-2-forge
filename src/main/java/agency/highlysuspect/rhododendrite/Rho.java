@@ -15,7 +15,6 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.common.MinecraftForge;
@@ -82,17 +81,5 @@ public class Rho {
 		BlockItem yes = new BlockItem(b, RhoItems.defaultProps());
 		yes.setRegistryName(b.getRegistryName());
 		r.register(yes);
-	}
-	
-	public static Direction positive(Direction.Axis axis) {
-		if(axis == Direction.Axis.X) return Direction.EAST;
-		else if(axis == Direction.Axis.Y) return Direction.UP;
-		else return Direction.SOUTH;
-	}
-	
-	public static Direction negative(Direction.Axis axis) {
-		if(axis == Direction.Axis.X) return Direction.WEST;
-		else if(axis == Direction.Axis.Y) return Direction.DOWN;
-		else return Direction.NORTH;
 	}
 }

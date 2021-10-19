@@ -14,8 +14,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class RhoClient implements RhoProxy {
 	@Override
 	public void setup() {
-		MatcherColors.registerBuiltinColors();
-		
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
 		modBus.addListener((FMLClientSetupEvent e) -> {

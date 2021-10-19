@@ -23,6 +23,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+@SuppressWarnings("CanBeFinal")
 public class WoodFamily {
 	public WoodFamily(String name, MaterialColor planksColor, MaterialColor barkColor) {
 		this.name = name;
@@ -126,12 +127,7 @@ public class WoodFamily {
 		
 		//TODO enum hell (need a custom entity, ugh)
 		//boat = new BoatItem(BoatEntity.Type.DARK_OAK, RhoItems.defaultProps().maxStackSize(1));
-	}
-	
-	//cheap hack because this WoodFamily thing is a leaky as hell abstraction
-	//i need to change the log block to a different implementation for rhodo logs b/c theyre special
-	//and if i make the configured feature first it fucks up the sapling
-	public void okDoTheTreeNow() {
+		
 		//this is literally just a straight-up copy of the birch tree with some numbers fudged a bit
 		//yeah idk how this works
 		//i tried making it bigger so it was slightly creative but it just looked ugly

@@ -29,8 +29,7 @@ public interface RhodoFunnelable {
 	}
 	
 	interface Loose {
-		@Nullable
-		RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face);
+		@Nullable RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face);
 		
 		default Vector3 bindPosition(BlockPos pos) {
 			return Vector3.fromBlockPos(pos).add(.5, .5, .5);

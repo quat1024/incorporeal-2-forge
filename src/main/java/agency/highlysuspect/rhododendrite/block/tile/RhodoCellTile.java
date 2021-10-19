@@ -16,7 +16,10 @@ import vazkii.botania.api.internal.VanillaPacketDispatcher;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 public class RhodoCellTile extends AbstractComputerTile implements ITickableTileEntity {
 	public RhodoCellTile() {
@@ -25,7 +28,7 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	
 	protected transient @Nullable BlockPos binding; //Not serialized.
 	protected SolidifiedRequest request = SolidifiedRequest.EMPTY;
-	protected RhodoCellTile.Funnelable funnelable = this.new Funnelable(); //BRING OUT THE CURSED SYNTAX
+	protected final RhodoCellTile.Funnelable funnelable = this.new Funnelable(); //BRING OUT THE CURSED SYNTAX
 	
 	@Override
 	public void tick() {

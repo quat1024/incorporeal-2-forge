@@ -7,15 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.util.Util;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class RhoBlocks {
-	public static final WoodFamily RHODODENDRITE = Util.make(new WoodFamily("rhododendrite", MaterialColor.PINK, MaterialColor.OBSIDIAN), family -> {
-		//TODO remove this, if i don't need to replace any of the blocks with funky impls anymore.
-		family.okDoTheTreeNow();
-	});
+	public static final WoodFamily RHODODENDRITE = new WoodFamily("rhododendrite", MaterialColor.PINK, MaterialColor.OBSIDIAN);
 	
 	public static final RhodoCellBlock CELL = new RhodoCellBlock(Properties.create(Material.WOOD, MaterialColor.RED)
 		.hardnessAndResistance(2, 3)
