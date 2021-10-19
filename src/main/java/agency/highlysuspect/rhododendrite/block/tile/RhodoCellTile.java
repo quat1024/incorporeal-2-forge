@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -31,8 +32,7 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 		binding = directBind(getBlockState().get(BlockStateProperties.FACING), (cursor, tile) -> tile instanceof RhodoCellTile);
 	}
 	
-	public @Nullable
-	BlockPos getBind() {
+	public @Nullable BlockPos getBind() {
 		return binding;
 	}
 	
@@ -53,45 +53,36 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 		}
 	}
 	
-	//Accept this SolidifiedRequest into myself, punting the previous contents to the next rhodo cell.
-	//Written in a weird way to use constant stack space and not blow up if you form a cycle.
+	//Accept this SolidifiedRequest into myself, punting the previous contents to the next cell.
 	public void push(SolidifiedRequest head) {
-		Set<RhodoCellTile> visited = new HashSet<>();
-		RhodoCellTile visiting = this;
-		do {
-			//swap "head" for whatever's inside the visiting node
-			SolidifiedRequest a = head;
-			head = request;
-			visiting.setRequest(a);
-			
-			//visit the next node
-			visited.add(visiting);
-			visiting = getBoundCell();
-		} while(visiting != null && !visited.contains(visiting));
+		push(head, new HashSet<>());
 	}
 	
+	private void push(SolidifiedRequest head, Set<RhodoCellTile> visited) {
+		SolidifiedRequest old = peek();
+		setRequest(head);
+		
+		RhodoCellTile nextCell = visited.contains(this) ? null : getBoundCell();
+		visited.add(this);
+		if(nextCell != null) nextCell.push(old, visited);
+	}
+	
+	//Sets my contents to the next cell's contents (or EMPTY if there isn't a next cell), returning my previous contents.
+	//Um, it's like the opposite of push().
 	public SolidifiedRequest pull() {
-		//Build the chain structure.
-		//Look at my binding, and my binding's binding, etc, until finding the end (or a cycle).
-		List<RhodoCellTile> fullChain = new ArrayList<>();
-		Set<RhodoCellTile> chain_ = new HashSet<>(); //Avoid calling list.contains, and no, i didn't profile this
-		RhodoCellTile visiting = this;
-		do {
-			fullChain.add(visiting);
-			chain_.add(visiting);
-			visiting = getBoundCell();
-		} while(visiting != null && !chain_.contains(visiting));
+		return pull(new HashSet<>());
+	}
+	
+	//each step of the process returns the value that should be put in the previous cell
+	private SolidifiedRequest pull(Set<RhodoCellTile> visited) {
+		if(visited.contains(this)) return peek();
+		visited.add(this);
 		
-		//Pull each request backwards one step, leaving an empty request in the remaining cell.
-		SolidifiedRequest cursor = SolidifiedRequest.EMPTY;
-		for(int i = fullChain.size() - 1; i >= 0; i--) {
-			SolidifiedRequest a = fullChain.get(i).request;
-			fullChain.get(i).setRequest(cursor);
-			cursor = a;
-		}
-		
-		//Return the last element to be removed, which was from this cell.
-		return cursor;
+		RhodoCellTile nextCell = getBoundCell();
+		SolidifiedRequest next = nextCell == null ? SolidifiedRequest.EMPTY : nextCell.pull(visited);
+		SolidifiedRequest old = peek();
+		setRequest(next);
+		return old;
 	}
 	
 	public SolidifiedRequest peek() {
@@ -105,9 +96,9 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	
 	@Nonnull
 	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction dir) {
 		if(cap == RhodoFunnelableCapability.INSTANCE) return LazyOptional.of(() -> funnelable).cast();
-		else return super.getCapability(cap);
+		else return super.getCapability(cap, dir);
 	}
 	
 	@Override

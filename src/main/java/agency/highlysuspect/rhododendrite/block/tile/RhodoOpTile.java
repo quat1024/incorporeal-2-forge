@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -27,7 +28,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	public final ItemStackHandler inventory = new ItemStackHandler(1) {
 		@Override
 		public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-			return stack.getItem() instanceof RhoCardItem;
+			return stack.isEmpty() || stack.getItem() instanceof RhoCardItem;
 		}
 		
 		@Override
@@ -42,18 +43,15 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 		}
 	};
 	
-	public @Nullable
-	BlockPos getDirectBind() {
+	public @Nullable BlockPos getDirectBind() {
 		return binding == null ? null : binding.direct;
 	}
 	
-	public @Nullable
-	BlockPos getRootBind() {
+	public @Nullable BlockPos getRootBind() {
 		return binding == null ? null : binding.root;
 	}
 	
-	public @Nullable
-	RhodoCellTile getBoundCell() {
+	public @Nullable RhodoCellTile getBoundCell() {
 		if(binding == null) return null;
 		assert world != null;
 		TileEntity tile = world.getTileEntity(binding.root);
@@ -127,9 +125,9 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	
 	@Nonnull
 	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction dir) {
 		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return LazyOptional.of(() -> inventory).cast();
-		else return super.getCapability(cap);
+		else return super.getCapability(cap, dir);
 	}
 	
 	@Override

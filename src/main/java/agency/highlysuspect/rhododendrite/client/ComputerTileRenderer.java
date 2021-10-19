@@ -1,16 +1,12 @@
 package agency.highlysuspect.rhododendrite.client;
 
 import agency.highlysuspect.incorporeal.Inc;
-import agency.highlysuspect.rhododendrite.block.tile.RhodoCellTile;
-import agency.highlysuspect.rhododendrite.block.tile.RhodoFunnelTile;
-import agency.highlysuspect.rhododendrite.block.tile.RhodoOpTile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.helper.RenderHelper;
@@ -83,93 +79,5 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 		}
 		
 		ms.pop();
-	}
-	
-	public static class Cell extends ComputerTileRenderer<RhodoCellTile> {
-		public Cell(TileEntityRendererDispatcher dispatcher) {
-			super(dispatcher);
-		}
-		
-		@Override
-		public void render(RhodoCellTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
-			if(tile.getWorld() == null) return;
-			
-			BlockPos directBindPos = tile.getBind();
-			if(directBindPos != null) {
-				renderBinding(ms, buf,
-					Vector3.fromTileEntityCenter(tile),
-					Vector3.fromBlockPos(directBindPos).add(.5, .5, .5),
-					0xFFFF5511,
-					MathHelper.hash(tile.getPos().hashCode()),
-					1.7f,
-					0.1f,
-					0.5f
-				);
-			}
-		}
-	}
-	
-	public static class Op extends ComputerTileRenderer<RhodoOpTile> {
-		public Op(TileEntityRendererDispatcher dispatcher) {
-			super(dispatcher);
-		}
-		
-		@Override
-		public void render(RhodoOpTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
-			if(tile.getWorld() == null) return;
-			
-			BlockPos directBindPos = tile.getDirectBind();
-			if(directBindPos != null) {
-				renderBinding(ms, buf,
-					Vector3.fromTileEntityCenter(tile),
-					Vector3.fromBlockPos(directBindPos).add(.5, .5, .5),
-					0xFF2277BB,
-					MathHelper.hash(tile.getPos().hashCode()),
-					1f,
-					0.5f,
-					1f
-				);
-			}
-		}
-	}
-	
-	public static class Funnel extends ComputerTileRenderer<RhodoFunnelTile> {
-		public Funnel(TileEntityRendererDispatcher dispatcher) {
-			super(dispatcher);
-		}
-		
-		@Override
-		public void render(RhodoFunnelTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
-			if(tile.getWorld() == null) return;
-			
-			Vector3 foreBinding = tile.getForeDirectBind();
-			Vector3 aftBinding = tile.getAftDirectBind();
-			
-			int color = (foreBinding != null && aftBinding != null) ? 0xFF22EE44 : 0xFF119944;
-			
-			if(foreBinding != null) {
-				renderBinding(ms, buf,
-					Vector3.fromTileEntityCenter(tile),
-					foreBinding,
-					color,
-					MathHelper.hash(tile.getPos().hashCode()),
-					1.3f,
-					0.1f,
-					2f
-				);
-			}
-			
-			if(aftBinding != null) {
-				renderBinding(ms, buf,
-					Vector3.fromTileEntityCenter(tile),
-					aftBinding,
-					color,
-					MathHelper.hash(tile.getPos().hashCode()),
-					0.1f,
-					1.3f,
-					-2f
-				);
-			}
-		}
 	}
 }

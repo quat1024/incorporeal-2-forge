@@ -33,9 +33,9 @@ public class RhoClient implements RhoProxy {
 		});
 		
 		modBus.addListener((ModelRegistryEvent e) -> {
-			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.CELL, ComputerTileRenderer.Cell::new);
-			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.OP, ComputerTileRenderer.Op::new);
-			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.FUNNEL, ComputerTileRenderer.Funnel::new);
+			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.CELL, CellTileRenderer::new);
+			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.OP, OpTileRenderer::new);
+			ClientRegistry.bindTileEntityRenderer(RhoTileTypes.FUNNEL, FunnelTileRenderer::new);
 		});
 	}
 }
