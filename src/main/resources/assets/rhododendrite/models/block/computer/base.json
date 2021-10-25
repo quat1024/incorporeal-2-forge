@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
 	"textures": {
-		"frame": "botania:block/elf_glass",
+		"frame": "rhododendrite:block/rhodoglass",
 		"particle": "#frame"
 	},
 	"elements": [
