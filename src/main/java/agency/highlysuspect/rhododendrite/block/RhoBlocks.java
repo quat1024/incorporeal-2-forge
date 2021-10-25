@@ -11,7 +11,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class RhoBlocks {
-	public static final WoodFamily RHODODENDRITE = new WoodFamily("rhododendrite", MaterialColor.PINK, MaterialColor.OBSIDIAN);
+	public static final WoodFamily RHODODENDRITE = new WoodFamily("rhododendrite", MaterialColor.PINK, MaterialColor.OBSIDIAN).defaults();
 	
 	public static final RhodoCellBlock CELL = new RhodoCellBlock(Properties.create(Material.WOOD, MaterialColor.RED)
 		.hardnessAndResistance(2, 3)
