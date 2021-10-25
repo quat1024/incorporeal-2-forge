@@ -26,6 +26,6 @@ public class LegacyRho {
 //		Rho.reg(r, "condition", CONDITION);
 //		Rho.reg(r, "funnel", FUNNEL);             //items too
 	
-	
+	//removed items: opcode_test_1 opcode_test_2
 	//Also i removed a couple recipes? idk if those need missing mappings event anymore
 }

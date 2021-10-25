@@ -26,8 +26,6 @@
 	"block.rhododendrite.funnel2": "Rhododendric Funnel",
 	
 	"item.rhododendrite.opcode_blank": "Blank Opcode",
-	"item.rhododendrite.opcode_test_1": "Opcode: Print to the server console lol",
-	"item.rhododendrite.opcode_test_2": "Opcode: hmm idk what this one does actualy",
 	"item.rhododendrite.opcode_push": "Opcode: Push",
 	"item.rhododendrite.opcode_pull": "Opcode: Pull",
 	"item.rhododendrite.opcode_dup": "Opcode: Clone",
@@ -39,11 +37,15 @@
 	"item.rhododendrite.opcode_multiply": "Opcode: Product",
 	"item.rhododendrite.opcode_divide": "Opcode: Quotient",
 	"item.rhododendrite.opcode_remainder": "Opcode: Remainder",
+	"item.rhododendrite.opcode_matcher_union": "Opcode: Matcher Union",
+	"item.rhododendrite.opcode_matcher_difference": "Opcode: Matcher Difference",
+	"item.rhododendrite.opcode_swap": "Opcode: Swap",
 	
 	"block.rhododendrite.condition": "Rhododendric Crystal Cube",
 	
 	"item.rhododendrite.condition_blank": "Blank Condition",
 	"item.rhododendrite.condition_is_empty": "Condition: No Request",
+	"item.rhododendrite.condition_is_zero": "Condition: Zero Count",
 	"item.rhododendrite.condition_equal": "Condition: Equal",
 	"item.rhododendrite.condition_count_equal": "Condition: Equal Count",
 	"item.rhododendrite.condition_less_than": "Condition: Less Than",

@@ -16,15 +16,7 @@ public class RhoItems {
 	//Always succeeds
 	public static final RhoCardItem OPCODE_BLANK = RhoCardItem.op(defaultProps(), (dir, core) -> {});
 	
-	//test opcodes, log to console, there's 2 so i can use hotswap lol
-	public static final RhoCardItem OPCODE_TEST_1 = RhoCardItem.op(defaultProps(), (dir, core) -> {
-		
-	});
-	public static final RhoCardItem OPCODE_TEST_2 = RhoCardItem.op(defaultProps(), (dir, core) -> {
-		
-	});
-	
-	//Pushes an empty corporea request to the stack
+	//Pushes a "0x Nothing" corporea request
 	public static final RhoCardItem OPCODE_PUSH = RhoCardItem.op(defaultProps(), (cell, op) -> cell.push(SolidifiedRequest.EMPTY));
 	
 	//Pulls data closer to the core, erasing whatever's inside
@@ -45,45 +37,42 @@ public class RhoItems {
 		);
 	});
 	
-	//Mathematical operations! The fun part.
-	//Add unions the matchers of corporea requests and sums their counts.
+	//Mathematical operations. These perform the operation on the counts of the head and tail. The result's matcher is the head's matcher
 	public static final RhoCardItem OPCODE_ADD = RhoCardItem.op(defaultProps(), (cell, op) -> {
-		SolidifiedRequest head = cell.peek();
-		SolidifiedRequest tail = cell.peekNext();
+		SolidifiedRequest head = cell.pull();
+		SolidifiedRequest tail = cell.pull();
 		cell.push(new SolidifiedRequest(
-			CompoundCorporeaRequestMatcher.union(head.matcher, tail.matcher),
+			head.matcher,
 			head.count + tail.count
 		));
 	});
 	
-	//Subtract removes all of B's matchers that exist in A and finds the difference of their counts.
 	public static final RhoCardItem OPCODE_SUBTRACT = RhoCardItem.op(defaultProps(), (cell, op) -> {
-		SolidifiedRequest head = cell.peek();
-		SolidifiedRequest tail = cell.peekNext();
+		SolidifiedRequest head = cell.pull();
+		SolidifiedRequest tail = cell.pull();
 		cell.push(new SolidifiedRequest(
-			CompoundCorporeaRequestMatcher.minus(head.matcher, tail.matcher),
+			head.matcher,
 			head.count - tail.count
 		));
 	});
 	
-	//Multiply multiplies the counts and uhh, it just finds the union of matchers again, can't think of much else lol
 	public static final RhoCardItem OPCODE_MULTIPLY = RhoCardItem.op(defaultProps(), (cell, op) -> {
-		SolidifiedRequest head = cell.peek();
-		SolidifiedRequest tail = cell.peekNext();
+		SolidifiedRequest head = cell.pull();
+		SolidifiedRequest tail = cell.pull();
 		cell.push(new SolidifiedRequest(
-			CompoundCorporeaRequestMatcher.union(head.matcher, tail.matcher),
+			head.matcher,
 			head.count * tail.count
 		));
 	});
 	
-	//Divide and Remainder both take the set differences again, although they can fail when the divisor is 0
 	public static final RhoCardItem OPCODE_DIVIDE = RhoCardItem.op(defaultProps(), (cell, op) -> {
 		SolidifiedRequest tail = cell.peekNext();
 		if(tail.count == 0) op.fail();
 		else {
-			SolidifiedRequest head = cell.peek();
+			SolidifiedRequest head = cell.pull();
+			cell.pull();
 			cell.push(new SolidifiedRequest(
-				CompoundCorporeaRequestMatcher.minus(head.matcher, tail.matcher),
+				head.matcher,
 				head.count / tail.count
 			));
 		}
@@ -93,18 +82,47 @@ public class RhoItems {
 		SolidifiedRequest tail = cell.peekNext();
 		if(tail.count == 0) op.fail();
 		else {
-			SolidifiedRequest head = cell.peek();
+			SolidifiedRequest head = cell.pull();
+			cell.pull();
 			cell.push(new SolidifiedRequest(
-				CompoundCorporeaRequestMatcher.minus(head.matcher, tail.matcher),
+				head.matcher,
 				head.count % tail.count
 			));
 		}
+	});
+	
+	//Matcher operations (union/difference)
+	public static final RhoCardItem OPCODE_MATCHER_UNION = RhoCardItem.op(defaultProps(), (cell, op) -> {
+		SolidifiedRequest head = cell.pull();
+		SolidifiedRequest tail = cell.pull();
+		cell.push(new SolidifiedRequest(
+			CompoundCorporeaRequestMatcher.union(head.matcher, tail.matcher),
+			head.count
+		));
+	});
+	
+	public static final RhoCardItem OPCODE_MATCHER_DIFFERENCE = RhoCardItem.op(defaultProps(), (cell, op) -> {
+		SolidifiedRequest head = cell.pull();
+		SolidifiedRequest tail = cell.pull();
+		cell.push(new SolidifiedRequest(
+			CompoundCorporeaRequestMatcher.minus(head.matcher, tail.matcher),
+			head.count
+		));
+	});
+	
+	//Biting the bullet...
+	public static final RhoCardItem OPCODE_SWAP = RhoCardItem.op(defaultProps(), (cell, op) -> {
+		SolidifiedRequest head = cell.pull();
+		SolidifiedRequest tail = cell.pull();
+		cell.push(head);
+		cell.push(tail);
 	});
 	
 	////// Conditions!!
 	
 	public static final RhoCardItem CONDITION_BLANK = RhoCardItem.cond(defaultProps(), (cell, op) -> false);
 	public static final RhoCardItem CONDITION_IS_EMPTY = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().isEmpty());
+	public static final RhoCardItem CONDITION_IS_ZERO = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count == 0);
 	public static final RhoCardItem CONDITION_EQUAL = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().equals(cell.peekNext()));
 	public static final RhoCardItem CONDITION_COUNT_EQUAL = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count == cell.peekNext().count);
 	public static final RhoCardItem CONDITION_LESS_THAN = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count < cell.peekNext().count);
@@ -120,8 +138,6 @@ public class RhoItems {
 		RhoBlocks.RHODODENDRITE.registerItems(r);
 		
 		Rho.reg(r, "opcode_blank", OPCODE_BLANK);
-		Rho.reg(r, "opcode_test_1", OPCODE_TEST_1);
-		Rho.reg(r, "opcode_test_2", OPCODE_TEST_2);
 		Rho.reg(r, "opcode_push", OPCODE_PUSH);
 		Rho.reg(r, "opcode_pull", OPCODE_PULL);
 		Rho.reg(r, "opcode_dup", OPCODE_DUP);
@@ -131,9 +147,13 @@ public class RhoItems {
 		Rho.reg(r, "opcode_multiply", OPCODE_MULTIPLY);
 		Rho.reg(r, "opcode_divide", OPCODE_DIVIDE);
 		Rho.reg(r, "opcode_remainder", OPCODE_REMAINDER);
+		Rho.reg(r, "opcode_matcher_union", OPCODE_MATCHER_UNION);
+		Rho.reg(r, "opcode_matcher_difference", OPCODE_MATCHER_DIFFERENCE);
+		Rho.reg(r, "opcode_swap", OPCODE_SWAP);
 		
 		Rho.reg(r, "condition_blank", CONDITION_BLANK);
 		Rho.reg(r, "condition_is_empty", CONDITION_IS_EMPTY);
+		Rho.reg(r, "condition_is_zero", CONDITION_IS_ZERO);
 		Rho.reg(r, "condition_equal", CONDITION_EQUAL);
 		Rho.reg(r, "condition_count_equal", CONDITION_COUNT_EQUAL);
 		Rho.reg(r, "condition_less_than", CONDITION_LESS_THAN);

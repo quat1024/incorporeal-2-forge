@@ -21,6 +21,7 @@ public class RhoManaInfusion extends IncManaInfusion {
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 		//honestly these are just here because the scroll-wheel stuff is a bit janky
+		//I should still port it though...
 		cycle(consumer, 20, "rhododendrite:opcode_cycle",
 			RhoItems.OPCODE_BLANK,
 			RhoItems.OPCODE_PUSH,
@@ -31,12 +32,16 @@ public class RhoManaInfusion extends IncManaInfusion {
 			RhoItems.OPCODE_SUBTRACT,
 			RhoItems.OPCODE_MULTIPLY,
 			RhoItems.OPCODE_DIVIDE,
-			RhoItems.OPCODE_REMAINDER
+			RhoItems.OPCODE_REMAINDER,
+			RhoItems.OPCODE_MATCHER_UNION,
+			RhoItems.OPCODE_MATCHER_DIFFERENCE,
+			RhoItems.OPCODE_SWAP
 		);
 		
 		cycle(consumer, 20, "rhododendrite:condition_cycle",
 			RhoItems.CONDITION_BLANK,
 			RhoItems.CONDITION_IS_EMPTY,
+			RhoItems.CONDITION_IS_ZERO,
 			RhoItems.CONDITION_EQUAL,
 			RhoItems.CONDITION_COUNT_EQUAL,
 			RhoItems.CONDITION_GREATER_THAN,

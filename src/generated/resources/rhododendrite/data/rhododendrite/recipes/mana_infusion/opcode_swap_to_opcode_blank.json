@@ -1,7 +1,7 @@
 {
   "type": "botania:mana_infusion",
   "input": {
-    "item": "rhododendrite:opcode_remainder"
+    "item": "rhododendrite:opcode_swap"
   },
   "output": {
     "item": "rhododendrite:opcode_blank"
