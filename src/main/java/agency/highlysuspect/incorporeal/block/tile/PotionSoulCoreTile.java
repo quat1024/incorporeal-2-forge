@@ -1,8 +1,10 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
+import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.entity.PotionSoulCoreCollectorEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;

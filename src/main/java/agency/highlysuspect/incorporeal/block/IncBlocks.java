@@ -49,8 +49,6 @@ public class IncBlocks {
 	public static final Block NATURAL_COMPARATOR = new CrappyComparatorBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.CROP).notSolid());
 	public static final RedstoneRootCropBlock REDSTONE_ROOT_CROP = new RedstoneRootCropBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.CROP).notSolid());
 	
-	public static final Block REDSTONE_SEQUENCER = new RedstoneSequencerBlock(AbstractBlock.Properties.from(Blocks.REDSTONE_BLOCK));
-	
 	public static final Block.Properties flowerProps = AbstractBlock.Properties.from(Blocks.POPPY);
 	public static final Block.Properties floatingProps = ModBlocks.FLOATING_PROPS;
 	
@@ -82,8 +80,6 @@ public class IncBlocks {
 		Inc.reg(r, "natural_repeater", NATURAL_REPEATER);
 		Inc.reg(r, "natural_comparator", NATURAL_COMPARATOR);
 		Inc.reg(r, "redstone_root_crop", REDSTONE_ROOT_CROP);
-		
-		Inc.reg(r, "redstone_sequencer", REDSTONE_SEQUENCER);
 		
 		//flowers
 		//this is the block ID scheme that botania uses
