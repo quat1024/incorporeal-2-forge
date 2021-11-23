@@ -18,6 +18,7 @@ Let's try this again. Forge this time. Jk Fabric this time.
 * fix ISTER (probably copy botania)
 
 * fix Red String Liar logic
+* fix Corporea Retainer Evaporator logic
 
 ## other things to do
 

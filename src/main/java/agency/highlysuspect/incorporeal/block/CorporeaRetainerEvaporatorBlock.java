@@ -1,6 +1,5 @@
 package agency.highlysuspect.incorporeal.block;
 
-import agency.highlysuspect.incorporeal.corporea.RetainerDuck;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,13 +11,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LazyOptional;
-import vazkii.botania.common.block.ModBlocks;
-import vazkii.botania.common.block.tile.corporea.TileCorporeaRetainer;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class CorporeaRetainerEvaporatorBlock extends Block {
 	public CorporeaRetainerEvaporatorBlock(Properties properties) {
@@ -52,13 +46,13 @@ public class CorporeaRetainerEvaporatorBlock extends Block {
 			if(shouldPower) {
 				for(Direction horiz : Direction.Plane.HORIZONTAL) {
 					BlockEntity tile = world.getBlockEntity(pos.relative(horiz));
-					if(tile != null) {
-						tile.getCapability(SolidifiedRequest.Cap.INSTANCE).ifPresent(holder -> {
-							SolidifiedRequest solid = holder.getRequest();
-							SolidifiedRequest shrunk = solid.withCount(solid.count - 1);
-							if(shrunk.count >= 0) holder.setRequest(shrunk);
-						});
-					}
+//					if(tile != null) {
+//						tile.getCapability(SolidifiedRequest.Cap.INSTANCE).ifPresent(holder -> {
+//							SolidifiedRequest solid = holder.getRequest();
+//							SolidifiedRequest shrunk = solid.withCount(solid.count - 1);
+//							if(shrunk.count >= 0) holder.setRequest(shrunk);
+//						});
+//					}
 				}
 			}
 		}
