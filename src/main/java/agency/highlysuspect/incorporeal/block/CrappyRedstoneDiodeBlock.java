@@ -12,27 +12,29 @@ import net.minecraft.world.IWorldReader;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class CrappyRedstoneDiodeBlock extends RedstoneDiodeBlock implements IPlantable {
 	public CrappyRedstoneDiodeBlock(Properties builder) {
 		super(builder);
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
-		return world.getBlockState(pos.down()).canSustainPlant(world, pos, Direction.UP, this);
+	public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) {
+		return world.getBlockState(pos.below()).canSustainPlant(world, pos, Direction.UP, this);
 	}
 	
 	//Copy paste from several blocks that are attached to things, like BushBlock and TorchBlock
 	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		return facing == Direction.DOWN && !this.isValidPosition(stateIn, worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+		return facing == Direction.DOWN && !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 	}
 	
 	@Override
 	public BlockState getPlant(IBlockReader world, BlockPos pos) {
 		//Copied from BushBlock. Idk what this is really for
 		BlockState state = world.getBlockState(pos);
-		if (state.getBlock() != this) return getDefaultState();
+		if (state.getBlock() != this) return defaultBlockState();
 		return state;
 	}
 	

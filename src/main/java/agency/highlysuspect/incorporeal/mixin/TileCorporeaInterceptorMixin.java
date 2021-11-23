@@ -21,17 +21,18 @@ import java.util.List;
 public class TileCorporeaInterceptorMixin {
 	@Inject(
 		method = "interceptRequestLast",
+		remap = false,
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
 		)
 	)
 	private void whenIntercepting(ICorporeaRequestMatcher request, int count, ICorporeaSpark spark, ICorporeaSpark source, List<ItemStack> stacks, List<ICorporeaNode> nodes, boolean doit, CallbackInfo ci) {
-		World world = ((TileCorporeaInterceptor) (Object) this).getWorld(); assert world != null;
-		BlockPos pos = ((TileCorporeaInterceptor) (Object) this).getPos();
+		World world = ((TileCorporeaInterceptor) (Object) this).getLevel(); assert world != null;
+		BlockPos pos = ((TileCorporeaInterceptor) (Object) this).getBlockPos();
 		
 		for(Direction dir : Direction.values()) {
-			BlockPos solidifierPos = pos.offset(dir);
+			BlockPos solidifierPos = pos.relative(dir);
 			BlockState state = world.getBlockState(solidifierPos);
 			if(state.getBlock() instanceof CorporeaSolidifierBlock) {
 				((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(world, solidifierPos, state, request, count);

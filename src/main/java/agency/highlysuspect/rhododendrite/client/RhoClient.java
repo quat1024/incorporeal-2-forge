@@ -22,12 +22,12 @@ public class RhoClient implements RhoProxy {
 //				Atlases.addWoodType(RhoBlocks.RHODODENDRITE.woodType);
 //			});
 			
-			RenderTypeLookup.setRenderLayer(RhoBlocks.CELL, RenderType.getTranslucent());
-			RenderTypeLookup.setRenderLayer(RhoBlocks.OP, RenderType.getTranslucent());
-			RenderTypeLookup.setRenderLayer(RhoBlocks.FUNNEL, RenderType.getTranslucent());
+			RenderTypeLookup.setRenderLayer(RhoBlocks.CELL, RenderType.translucent());
+			RenderTypeLookup.setRenderLayer(RhoBlocks.OP, RenderType.translucent());
+			RenderTypeLookup.setRenderLayer(RhoBlocks.FUNNEL, RenderType.translucent());
 			
-			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.leaves, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.sapling, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.leaves, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.sapling, RenderType.cutout());
 		});
 		
 		modBus.addListener((ModelRegistryEvent e) -> {

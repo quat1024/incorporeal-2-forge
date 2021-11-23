@@ -19,25 +19,27 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class RhodoOpBlock extends AbstractComputerBlock {
 	public RhodoOpBlock(Properties properties) {
 		super(properties);
-		setDefaultState(getDefaultState().with(BlockStateProperties.POWERED, false));
+		registerDefaultState(defaultBlockState().setValue(BlockStateProperties.POWERED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(BlockStateProperties.POWERED));
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(BlockStateProperties.POWERED));
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World world, BlockPos pos, Block from, BlockPos fromPos, boolean isMoving) {
-		boolean shouldPower = world.getRedstonePowerFromNeighbors(pos) > 0;
-		boolean isPowered = state.get(BlockStateProperties.POWERED);
+		boolean shouldPower = world.getBestNeighborSignal(pos) > 0;
+		boolean isPowered = state.getValue(BlockStateProperties.POWERED);
 		if(shouldPower != isPowered) {
-			world.setBlockState(pos, state.with(BlockStateProperties.POWERED, shouldPower));
+			world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, shouldPower));
 			if(shouldPower) {
-				TileEntity tile = world.getTileEntity(pos);
+				TileEntity tile = world.getBlockEntity(pos);
 				if(tile instanceof RhodoOpTile) {
 					((RhodoOpTile) tile).onRedstonePower();
 				}
@@ -46,13 +48,13 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 	}
 	
 	@Override
-	public boolean hasComparatorInputOverride(BlockState state) {
+	public boolean hasAnalogOutputSignal(BlockState state) {
 		return true;
 	}
 	
 	@Override
-	public int getComparatorInputOverride(BlockState blockState, World world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
+	public int getAnalogOutputSignal(BlockState blockState, World world, BlockPos pos) {
+		TileEntity tile = world.getBlockEntity(pos);
 		return tile instanceof RhodoOpTile ? ((RhodoOpTile) tile).getComparatorSignal() : 0;
 	}
 	
@@ -68,25 +70,25 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 	}
 	
 	@Override
-	public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
 		//The lazy way, without using a block loot table.
 		//My excuse: ChestBlock does it too.
-		if(!state.isIn(newState.getBlock())) {
-			TileEntity tile = world.getTileEntity(pos);
+		if(!state.is(newState.getBlock())) {
+			TileEntity tile = world.getBlockEntity(pos);
 			if(tile instanceof RhodoOpTile) {
-				InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), ((RhodoOpTile) tile).getCard());
+				InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), ((RhodoOpTile) tile).getCard());
 			}
 		}
 		
-		super.onReplaced(state, world, pos, newState, isMoving);
+		super.onRemove(state, world, pos, newState, isMoving);
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-		TileEntity tile = world.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+		TileEntity tile = world.getBlockEntity(pos);
 		if(tile instanceof RhodoOpTile) {
 			RhodoOpTile op = (RhodoOpTile) tile;
-			ItemStack held = player.getHeldItem(hand);
+			ItemStack held = player.getItemInHand(hand);
 			
 			//This code is cursed don't touch it
 			if((hand == Hand.MAIN_HAND && held.isEmpty()) || op.inventory.isItemValid(0, held)) {
@@ -94,8 +96,8 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 				
 				ItemStack whatsInside = op.inventory.getStackInSlot(0);
 				op.inventory.setStackInSlot(0, toPut);
-				ItemHandlerHelper.giveItemToPlayer(player, whatsInside, player.inventory.currentItem);
-				player.swingArm(hand);
+				ItemHandlerHelper.giveItemToPlayer(player, whatsInside, player.inventory.selected);
+				player.swing(hand);
 			}
 		}
 		

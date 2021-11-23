@@ -17,7 +17,7 @@ public class UnstableCubeIster extends ItemStackTileEntityRenderer {
 	private final UnstableCubeRenderer renderer;
 	
 	@Override
-	public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack ms, IRenderTypeBuffer buffers, int light, int overlay) {
+	public void renderByItem(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack ms, IRenderTypeBuffer buffers, int light, int overlay) {
 		if(stack.getItem() instanceof BlockItem && (((BlockItem) stack.getItem()).getBlock()) instanceof UnstableCubeBlock) {
 			renderer.render(null, 0, ms, buffers, light, overlay);
 		}

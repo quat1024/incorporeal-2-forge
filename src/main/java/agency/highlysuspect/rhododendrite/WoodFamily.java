@@ -45,16 +45,16 @@ public class WoodFamily {
 	}
 	
 	public WoodFamily defaults() {
-		if(planks == null) planks = new Block(AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.hardnessAndResistance(2, 3)
+		if(planks == null) planks = new Block(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+			.strength(2, 3)
 			.sound(SoundType.WOOD));
 		
-		if(strippedLog == null) strippedLog = new RotatedPillarBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.hardnessAndResistance(2.0F)
+		if(strippedLog == null) strippedLog = new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+			.strength(2.0F)
 			.sound(SoundType.WOOD));
 		
-		if(log == null) log = new RotatedPillarBlock(AbstractBlock.Properties.create(Material.WOOD, state -> state.get(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? planksColor : barkColor)
-			.hardnessAndResistance(2.0F)
+		if(log == null) log = new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? planksColor : barkColor)
+			.strength(2.0F)
 			.sound(SoundType.WOOD)) {
 			//In lieu of letting you just add things to the stinkin axe-item stripping map, Forge provides... whatever this is?
 			//Yeah man I dunno.
@@ -62,37 +62,37 @@ public class WoodFamily {
 			@Override
 			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
 				if(toolType == ToolType.AXE)
-					return strippedLog.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
+					return strippedLog.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
 				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
 			}
 		};
 		
-		if(strippedWood == null) strippedWood = new RotatedPillarBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.hardnessAndResistance(2)
+		if(strippedWood == null) strippedWood = new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+			.strength(2)
 			.sound(SoundType.WOOD));
 		
-		if(wood == null) wood = new RotatedPillarBlock(AbstractBlock.Properties.create(Material.WOOD, barkColor)
-			.hardnessAndResistance(2)
+		if(wood == null) wood = new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, barkColor)
+			.strength(2)
 			.sound(SoundType.WOOD)) {
 			@Nullable
 			@Override
 			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
 				if(toolType == ToolType.AXE)
-					return strippedWood.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS));
+					return strippedWood.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
 				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
 			}
 		};
 		
-		if(leaves == null) leaves = new LeavesBlock(AbstractBlock.Properties.create(Material.LEAVES).
-			hardnessAndResistance(0.2F)
-			.tickRandomly()
-			.sound(SoundType.PLANT)
-			.notSolid()
-			.setAllowsSpawn((state, reader, pos, entity) -> entity == EntityType.OCELOT || entity == EntityType.PARROT) //inlined allowsSpawnOnLeaves
-			.setSuffocates((state, reader, pos) -> false) //inlined isntSolid
-			.setBlocksVision((state, reader, pos) -> false));
+		if(leaves == null) leaves = new LeavesBlock(AbstractBlock.Properties.of(Material.LEAVES).
+			strength(0.2F)
+			.randomTicks()
+			.sound(SoundType.GRASS)
+			.noOcclusion()
+			.isValidSpawn((state, reader, pos, entity) -> entity == EntityType.OCELOT || entity == EntityType.PARROT) //inlined allowsSpawnOnLeaves
+			.isSuffocating((state, reader, pos) -> false) //inlined isntSolid
+			.isViewBlocking((state, reader, pos) -> false));
 		
-		if(stairs == null) stairs = new StairsBlock(planks.getDefaultState(), AbstractBlock.Properties.from(planks));
+		if(stairs == null) stairs = new StairsBlock(planks.defaultBlockState(), AbstractBlock.Properties.copy(planks));
 
 //		if(sign == null) sign = new StandingSignBlock(AbstractBlock.Properties.create(Material.WOOD)
 //			.doesNotBlockMovement()
@@ -112,13 +112,13 @@ public class WoodFamily {
 //			.lootFrom(() -> sign),
 //			woodType);
 		
-		if(pressurePlate == null) pressurePlate = new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.doesNotBlockMovement()
-			.hardnessAndResistance(.5f)
+		if(pressurePlate == null) pressurePlate = new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, AbstractBlock.Properties.of(Material.WOOD, planksColor)
+			.noCollission()
+			.strength(.5f)
 			.sound(SoundType.WOOD));
 		
-		if(fence == null) fence = new FenceBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.hardnessAndResistance(2f, 3f)
+		if(fence == null) fence = new FenceBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+			.strength(2f, 3f)
 			.sound(SoundType.WOOD));
 
 //		if(trapdoor == null) trapdoor = new TrapDoorBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
@@ -127,17 +127,17 @@ public class WoodFamily {
 //			.notSolid()
 //			.setAllowsSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false));
 		
-		if(fenceGate == null) fenceGate = new FenceGateBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.hardnessAndResistance(2f, 3f)
+		if(fenceGate == null) fenceGate = new FenceGateBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+			.strength(2f, 3f)
 			.sound(SoundType.WOOD));
 		
-		if(button == null) button = new WoodButtonBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS)
-			.doesNotBlockMovement()
-			.hardnessAndResistance(0.5f)
+		if(button == null) button = new WoodButtonBlock(AbstractBlock.Properties.of(Material.DECORATION)
+			.noCollission()
+			.strength(0.5f)
 			.sound(SoundType.WOOD));
 		
-		if(slab == null) slab = new SlabBlock(AbstractBlock.Properties.create(Material.WOOD, planksColor)
-			.hardnessAndResistance(2f, 3f)
+		if(slab == null) slab = new SlabBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+			.strength(2f, 3f)
 			.sound(SoundType.WOOD));
 		
 		//TODO enum hell (need a custom entity, ugh)
@@ -146,33 +146,33 @@ public class WoodFamily {
 		//this is literally just a straight-up copy of the birch tree with some numbers fudged a bit
 		//yeah idk how this tree stuff works
 		//i tried making it larger so it was slightly creative, but it looked bad
-		if(treeFeature == null) treeFeature = Feature.TREE.withConfiguration(new BaseTreeFeatureConfig.Builder(
+		if(treeFeature == null) treeFeature = Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(
 			//Trunk blockstate provider
-			new SimpleBlockStateProvider(log.getDefaultState()),
+			new SimpleBlockStateProvider(log.defaultBlockState()),
 			//Leaves blockstate provider
-			new SimpleBlockStateProvider(leaves.getDefaultState()),
+			new SimpleBlockStateProvider(leaves.defaultBlockState()),
 			//Foliage placer
 			new BlobFoliagePlacer(
-				FeatureSpread.func_242252_a(2), //method is probably named "exactly" - 0 spread
-				FeatureSpread.func_242252_a(0),
+				FeatureSpread.fixed(2), //method is probably named "exactly" - 0 spread
+				FeatureSpread.fixed(0),
 				3
 			),
 			//Trunk placer
 			new StraightTrunkPlacer(6, 3, 0),
 			//Minimum size (limit, lower, upper)
 			new TwoLayerFeature(1, 0, 1)
-		).setIgnoreVines().build());
+		).ignoreVines().build());
 		
 		if(tree == null) tree = new Tree() {
 			@Nullable
 			@Override
-			protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getTreeFeature(Random random, boolean nearbyFlower) {
+			protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getConfiguredFeature(Random random, boolean nearbyFlower) {
 				return WoodFamily.this.treeFeature;
 			}
 		};
 		
-		if(sapling == null) sapling = new SaplingBlock(tree, AbstractBlock.Properties.from(Blocks.OAK_SAPLING));
-		if(pottedSapling == null) pottedSapling = new FlowerPotBlock(sapling, AbstractBlock.Properties.from(Blocks.POTTED_OAK_SAPLING));
+		if(sapling == null) sapling = new SaplingBlock(tree, AbstractBlock.Properties.copy(Blocks.OAK_SAPLING));
+		if(pottedSapling == null) pottedSapling = new FlowerPotBlock(sapling, AbstractBlock.Properties.copy(Blocks.POTTED_OAK_SAPLING));
 		
 		return this;
 	}

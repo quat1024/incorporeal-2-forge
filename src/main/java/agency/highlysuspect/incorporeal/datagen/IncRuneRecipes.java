@@ -31,13 +31,13 @@ public class IncRuneRecipes extends RecipeProvider {
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 		final int costTier1 = 5200;
 		final int costTier2 = 8000;
 		final int costTier3 = 12000;//Pasted
 		
-		Ingredient ice = Ingredient.fromItems(Blocks.ICE);
-		Ingredient pixieDust = Ingredient.fromItems(ModItems.pixieDust);
+		Ingredient ice = Ingredient.of(Blocks.ICE);
+		Ingredient pixieDust = Ingredient.of(ModItems.pixieDust);
 		
 		consumer.accept(new FinishedRecipe(
 			Inc.id("soul_core_frame"), new ItemStack(IncItems.SOUL_CORE_FRAME),
@@ -46,15 +46,15 @@ public class IncRuneRecipes extends RecipeProvider {
 			ice, ice, ice, ice, pixieDust
 		));
 		
-		soulCore(consumer, Inc.id("ender_soul_core"), costTier3 * 2, new ItemStack(IncItems.ENDER_SOUL_CORE), Ingredient.fromItems(ModItems.enderHand));
-		soulCore(consumer, Inc.id("corporea_soul_core"), 300, new ItemStack(IncItems.CORPOREA_SOUL_CORE), Ingredient.fromItems(ModItems.corporeaSpark));
-		soulCore(consumer, Inc.id("potion_soul_core"), costTier3 * 2, new ItemStack(IncItems.POTION_SOUL_CORE), Ingredient.fromItems(ModItems.bloodPendant));
+		soulCore(consumer, Inc.id("ender_soul_core"), costTier3 * 2, new ItemStack(IncItems.ENDER_SOUL_CORE), Ingredient.of(ModItems.enderHand));
+		soulCore(consumer, Inc.id("corporea_soul_core"), 300, new ItemStack(IncItems.CORPOREA_SOUL_CORE), Ingredient.of(ModItems.corporeaSpark));
+		soulCore(consumer, Inc.id("potion_soul_core"), costTier3 * 2, new ItemStack(IncItems.POTION_SOUL_CORE), Ingredient.of(ModItems.bloodPendant));
 	}
 	
 	protected void soulCore(Consumer<IFinishedRecipe> consumer, ResourceLocation id, int price, ItemStack output, Ingredient special) {
-		Ingredient frame = Ingredient.fromItems(IncItems.SOUL_CORE_FRAME);
-		Ingredient dragonStone = Ingredient.fromTag(ModTags.Items.GEMS_DRAGONSTONE);
-		Ingredient manaweave = Ingredient.fromItems(ModItems.manaweaveCloth);
+		Ingredient frame = Ingredient.of(IncItems.SOUL_CORE_FRAME);
+		Ingredient dragonStone = Ingredient.of(ModTags.Items.GEMS_DRAGONSTONE);
+		Ingredient manaweave = Ingredient.of(ModItems.manaweaveCloth);
 		
 		consumer.accept(new FinishedRecipe(id, output,
 			price,
@@ -80,35 +80,35 @@ public class IncRuneRecipes extends RecipeProvider {
 		}
 		
 		@Override
-		public void serialize(JsonObject json) {
+		public void serializeRecipeData(JsonObject json) {
 			json.add("output", ItemNBTHelper.serializeStack(output));
 			JsonArray ingredients = new JsonArray();
 			for (Ingredient ingr : inputs) {
-				ingredients.add(ingr.serialize());
+				ingredients.add(ingr.toJson());
 			}
 			json.addProperty("mana", mana);
 			json.add("ingredients", ingredients);
 		}
 		
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return ModRecipeTypes.RUNE_SERIALIZER;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

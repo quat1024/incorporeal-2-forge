@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public class MatcherUtils {
 	public static Optional<ICorporeaRequestMatcher> tryFromTag(CompoundNBT nbt) {
-		ResourceLocation type = ResourceLocation.tryCreate(nbt.getString("type"));
+		ResourceLocation type = ResourceLocation.tryParse(nbt.getString("type"));
 		if(type == null) return Optional.empty();
 		
 		Map<ResourceLocation, Function<CompoundNBT, ? extends ICorporeaRequestMatcher>> des = TileCorporeaRetainerAccessor.inc$getDeserializers();

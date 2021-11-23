@@ -31,11 +31,11 @@ public class IncPetalRecipes extends RecipeProvider {
 	
 	//Copypaste kinda
 	private static Ingredient tagIngr(String tag) {
-		return Ingredient.fromTag(ItemTags.makeWrapperTag(Inc.botaniaId(tag).toString()));
+		return Ingredient.of(ItemTags.bind(Inc.botaniaId(tag).toString()));
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 		//Copypaste
 		Ingredient white = tagIngr("petals/white");
 		Ingredient orange = tagIngr("petals/orange");
@@ -70,9 +70,9 @@ public class IncPetalRecipes extends RecipeProvider {
 		Ingredient runeEnvy = tagIngr("runes/envy");
 		Ingredient runePride = tagIngr("runes/pride");
 		
-		Ingredient redstoneRoot = Ingredient.fromItems(ModItems.redstoneRoot);
-		Ingredient pixieDust = Ingredient.fromItems(ModItems.pixieDust);
-		Ingredient gaiaSpirit = Ingredient.fromItems(ModItems.lifeEssence);
+		Ingredient redstoneRoot = Ingredient.of(ModItems.redstoneRoot);
+		Ingredient pixieDust = Ingredient.of(ModItems.pixieDust);
+		Ingredient gaiaSpirit = Ingredient.of(ModItems.lifeEssence);
 		
 		consumer.accept(new FinishedRecipe(Inc.id("sanvocalia"), new ItemStack(IncItems.SANVOCALIA), white, orange, orange, red, runeLust, pixieDust, redstoneRoot));
 		consumer.accept(new FinishedRecipe(Inc.id("funny"), new ItemStack(IncItems.FUNNY), red, orange, yellow, lime, lightBlue, purple, redstoneRoot));
@@ -91,34 +91,34 @@ public class IncPetalRecipes extends RecipeProvider {
 		}
 		
 		@Override
-		public void serialize(JsonObject json) {
+		public void serializeRecipeData(JsonObject json) {
 			json.add("output", ItemNBTHelper.serializeStack(output));
 			JsonArray ingredients = new JsonArray();
 			for (Ingredient ingr : inputs) {
-				ingredients.add(ingr.serialize());
+				ingredients.add(ingr.toJson());
 			}
 			json.add("ingredients", ingredients);
 		}
 		
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return ModRecipeTypes.PETAL_SERIALIZER;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

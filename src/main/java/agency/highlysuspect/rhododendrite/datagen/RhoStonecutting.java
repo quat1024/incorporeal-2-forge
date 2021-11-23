@@ -27,7 +27,7 @@ public class RhoStonecutting extends RecipeProvider {
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 		stonecutToAny(consumer,
 			RhoItems.OPCODE_BLANK,
 			RhoItems.OPCODE_PUSH,
@@ -59,8 +59,8 @@ public class RhoStonecutting extends RecipeProvider {
 	private static void stonecutToAny(Consumer<IFinishedRecipe> consumer, IItemProvider... all) {
 		List<IItemProvider> inputs = Arrays.asList(all);
 		for(IItemProvider output : all) {
-			Ingredient input = Ingredient.fromItems(inputs.stream().filter(obj -> output != obj).toArray(IItemProvider[]::new));
-			consumer.accept(new StonecuttingProvider.Result(Rho.id("stonecutting/" + Registry.ITEM.getKey(output.asItem()).getPath()), IRecipeSerializer.STONECUTTING, input, output.asItem(), 1));
+			Ingredient input = Ingredient.of(inputs.stream().filter(obj -> output != obj).toArray(IItemProvider[]::new));
+			consumer.accept(new StonecuttingProvider.Result(Rho.id("stonecutting/" + Registry.ITEM.getKey(output.asItem()).getPath()), IRecipeSerializer.STONECUTTER, input, output.asItem(), 1));
 		}
 	}
 }

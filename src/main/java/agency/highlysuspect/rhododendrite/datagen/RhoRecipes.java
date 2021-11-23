@@ -26,22 +26,22 @@ public class RhoRecipes extends IncRecipes {
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> r) {
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> r) {
 		doWoodFamily(r, RhoBlocks.RHODODENDRITE);
 		
 		shapeless(RhoItems.OPCODE_BLANK, 32)
-			.addIngredient(Items.CRAFTING_TABLE)
-			.addIngredient(ModFluffBlocks.biomeStoneMountain)
-			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
-			.addCriterion("has_ugly_stone", hasItem(ModFluffBlocks.biomeStoneMountain))
-			.build(r);
+			.requires(Items.CRAFTING_TABLE)
+			.requires(ModFluffBlocks.biomeStoneMountain)
+			.unlockedBy("has_rhodo", has(RhoBlocks.RHODODENDRITE.log))
+			.unlockedBy("has_ugly_stone", has(ModFluffBlocks.biomeStoneMountain))
+			.save(r);
 		
 		shapeless(RhoItems.CONDITION_BLANK, 32)
-			.addIngredient(Items.CRAFTING_TABLE)
-			.addIngredient(ModFluffBlocks.biomeStoneForest)
-			.addCriterion("has_rhodo", hasItem(RhoBlocks.RHODODENDRITE.log))
-			.addCriterion("has_ugly_stone", hasItem(ModFluffBlocks.biomeStoneForest))
-			.build(r);
+			.requires(Items.CRAFTING_TABLE)
+			.requires(ModFluffBlocks.biomeStoneForest)
+			.unlockedBy("has_rhodo", has(RhoBlocks.RHODODENDRITE.log))
+			.unlockedBy("has_ugly_stone", has(ModFluffBlocks.biomeStoneForest))
+			.save(r);
 
 //		shaped(RhoBlocks.OPCODE, 1, "#S#", "#X#", "###")
 //			.key('S', ModItems.corporeaSpark)
@@ -92,57 +92,57 @@ public class RhoRecipes extends IncRecipes {
 	//Most of these are copy pasta from vanilla because they're all PRIVATE
 	//changed a lot of names because mcp has em wrong lol
 	protected static void planks(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider plank, IItemProvider log) {
-		ShapelessRecipeBuilder.shapelessRecipe(plank, 4)
-			.addIngredient(log)
-			.setGroup("planks")
-			.addCriterion("has_logs", hasItem(log))
-			.build(recipeConsumer);
+		ShapelessRecipeBuilder.shapeless(plank, 4)
+			.requires(log)
+			.group("planks")
+			.unlockedBy("has_logs", has(log))
+			.save(recipeConsumer);
 	}
 	
 	protected static void bark(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider stripped, IItemProvider input) {
-		ShapedRecipeBuilder.shapedRecipe(stripped, 3)
-			.key('#', input)
-			.patternLine("##")
-			.patternLine("##")
-			.setGroup("bark")
-			.addCriterion("has_log", hasItem(input))
-			.build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(stripped, 3)
+			.define('#', input)
+			.pattern("##")
+			.pattern("##")
+			.group("bark")
+			.unlockedBy("has_log", has(input))
+			.save(recipeConsumer);
 	}
 	
 	protected static void button(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider button, IItemProvider input) {
-		ShapelessRecipeBuilder.shapelessRecipe(button).addIngredient(input).setGroup("wooden_button").addCriterion("has_planks", hasItem(input)).build(recipeConsumer);
+		ShapelessRecipeBuilder.shapeless(button).requires(input).group("wooden_button").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
 	protected static void door(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider door, IItemProvider input) {
-		ShapedRecipeBuilder.shapedRecipe(door, 3).key('#', input).patternLine("##").patternLine("##").patternLine("##").setGroup("wooden_door").addCriterion("has_planks", hasItem(input)).build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(door, 3).define('#', input).pattern("##").pattern("##").pattern("##").group("wooden_door").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
 	private static void fence(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider fence, IItemProvider input) {
-		ShapedRecipeBuilder.shapedRecipe(fence, 3).key('#', Items.STICK).key('W', input).patternLine("W#W").patternLine("W#W").setGroup("wooden_fence").addCriterion("has_planks", hasItem(input)).build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(fence, 3).define('#', Items.STICK).define('W', input).pattern("W#W").pattern("W#W").group("wooden_fence").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
 	private static void fenceGate(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider fenceGate, IItemProvider input) {
-		ShapedRecipeBuilder.shapedRecipe(fenceGate).key('#', Items.STICK).key('W', input).patternLine("#W#").patternLine("#W#").setGroup("wooden_fence_gate").addCriterion("has_planks", hasItem(input)).build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(fenceGate).define('#', Items.STICK).define('W', input).pattern("#W#").pattern("#W#").group("wooden_fence_gate").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
 	private static void pressurePlate(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider pressurePlate, IItemProvider input) {
-		ShapedRecipeBuilder.shapedRecipe(pressurePlate).key('#', input).patternLine("##").setGroup("wooden_pressure_plate").addCriterion("has_planks", hasItem(input)).build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(pressurePlate).define('#', input).pattern("##").group("wooden_pressure_plate").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
 	private static void slab(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider slab, IItemProvider input) {
-		ShapedRecipeBuilder.shapedRecipe(slab, 6).key('#', input).patternLine("###").setGroup("wooden_slab").addCriterion("has_planks", hasItem(input)).build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(slab, 6).define('#', input).pattern("###").group("wooden_slab").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
 	private static void stairs(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider stairs, IItemProvider input) {
-		ShapedRecipeBuilder.shapedRecipe(stairs, 4).key('#', input).patternLine("#  ").patternLine("## ").patternLine("###").setGroup("wooden_stairs").addCriterion("has_planks", hasItem(input)).build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(stairs, 4).define('#', input).pattern("#  ").pattern("## ").pattern("###").group("wooden_stairs").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
 	private static void trapdoor(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider trapdoor, IItemProvider input) {
-		ShapedRecipeBuilder.shapedRecipe(trapdoor, 2).key('#', input).patternLine("###").patternLine("###").setGroup("wooden_trapdoor").addCriterion("has_planks", hasItem(input)).build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(trapdoor, 2).define('#', input).pattern("###").pattern("###").group("wooden_trapdoor").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
 	private static void sign(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider sign, IItemProvider input) {
 		String s = Registry.ITEM.getKey(input.asItem()).getPath();
-		ShapedRecipeBuilder.shapedRecipe(sign, 3).setGroup("sign").key('#', input).key('X', Items.STICK).patternLine("###").patternLine("###").patternLine(" X ").addCriterion("has_" + s, hasItem(input)).build(recipeConsumer);
+		ShapedRecipeBuilder.shaped(sign, 3).group("sign").define('#', input).define('X', Items.STICK).pattern("###").pattern("###").pattern(" X ").unlockedBy("has_" + s, has(input)).save(recipeConsumer);
 	}
 }

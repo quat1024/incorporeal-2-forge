@@ -11,22 +11,22 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class RhoBlocks {
-	public static final WoodFamily RHODODENDRITE = new WoodFamily("rhododendrite", MaterialColor.PINK, MaterialColor.OBSIDIAN).defaults();
+	public static final WoodFamily RHODODENDRITE = new WoodFamily("rhododendrite", MaterialColor.COLOR_PINK, MaterialColor.PODZOL).defaults();
 	
-	public static final RhodoCellBlock CELL = new RhodoCellBlock(Properties.create(Material.WOOD, MaterialColor.RED)
-		.hardnessAndResistance(2, 3)
+	public static final RhodoCellBlock CELL = new RhodoCellBlock(Properties.of(Material.WOOD, MaterialColor.COLOR_RED)
+		.strength(2, 3)
 		.sound(SoundType.WOOD)
-		.notSolid());
+		.noOcclusion());
 	
-	public static final RhodoOpBlock OP = new RhodoOpBlock(Properties.create(Material.WOOD, MaterialColor.RED)
-		.hardnessAndResistance(2, 3)
+	public static final RhodoOpBlock OP = new RhodoOpBlock(Properties.of(Material.WOOD, MaterialColor.COLOR_RED)
+		.strength(2, 3)
 		.sound(SoundType.WOOD)
-		.notSolid());
+		.noOcclusion());
 	
-	public static final RhodoFunnelBlock FUNNEL = new RhodoFunnelBlock(Properties.create(Material.WOOD, MaterialColor.RED)
-		.hardnessAndResistance(2, 3)
+	public static final RhodoFunnelBlock FUNNEL = new RhodoFunnelBlock(Properties.of(Material.WOOD, MaterialColor.COLOR_RED)
+		.strength(2, 3)
 		.sound(SoundType.WOOD)
-		.notSolid());
+		.noOcclusion());
 	
 	public static void register(RegistryEvent.Register<Block> event) {
 		IForgeRegistry<Block> r = event.getRegistry();

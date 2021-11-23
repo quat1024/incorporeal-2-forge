@@ -24,6 +24,8 @@ import vazkii.botania.common.block.BlockModWaterloggable;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class UnstableCubeBlock extends BlockModWaterloggable implements IWandable {
 	public UnstableCubeBlock(Properties properties, DyeColor color) {
 		super(properties);
@@ -31,7 +33,7 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 	}
 	
 	public final DyeColor color;
-	public static final VoxelShape BOX = VoxelShapes.create(3/16d, 3/16d, 3/16d, 1 - 3/16d, 1 - 3/16d, 1 - 3/16d);
+	public static final VoxelShape BOX = VoxelShapes.box(3/16d, 3/16d, 3/16d, 1 - 3/16d, 1 - 3/16d, 1 - 3/16d);
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
@@ -39,12 +41,12 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 	}
 	
 	@Override
-	public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+	public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player) {
 		punch(world, pos);
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		punch(world, pos);
 		return ActionResultType.SUCCESS;
 	}
@@ -56,29 +58,29 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 	}
 	
 	private void punch(World world, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos);
+		TileEntity tile = world.getBlockEntity(pos);
 		if(tile instanceof UnstableCubeTile) ((UnstableCubeTile) tile).punch();
 	}
 	
 	@Override
-	public boolean canProvidePower(BlockState state) {
+	public boolean isSignalSource(BlockState state) {
 		return true;
 	}
 	
 	@Override
-	public int getWeakPower(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		return getStrongPower(state, world, pos, side);
+	public int getSignal(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+		return getDirectSignal(state, world, pos, side);
 	}
 	
 	@Override
-	public int getStrongPower(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		TileEntity tile = world.getTileEntity(pos);
+	public int getDirectSignal(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+		TileEntity tile = world.getBlockEntity(pos);
 		if(tile instanceof UnstableCubeTile) return ((UnstableCubeTile) tile).getPower();
 		else return 0;
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	

@@ -26,9 +26,9 @@ public class RedStringLiarTile extends TileRedString {
 	
 	@Override
 	public boolean acceptBlock(BlockPos pos) {
-		assert world != null;
+		assert level != null;
 		
-		TileEntity tile = world.getTileEntity(pos);
+		TileEntity tile = level.getBlockEntity(pos);
 		if(tile == null) return false;
 		else return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getOrientation().getOpposite()).isPresent();
 	}
@@ -52,14 +52,14 @@ public class RedStringLiarTile extends TileRedString {
 	}
 	
 	public List<ItemStack> getSpoofedStacks() {
-		return FrameReader.nonEmptyItemsRestingOn(world, pos);
+		return FrameReader.nonEmptyItemsRestingOn(level, worldPosition);
 	}
 	
 	public static class NodeDetector implements ICorporeaNodeDetector {
 		@Nullable
 		@Override
 		public ICorporeaNode getNode(World world, ICorporeaSpark spark) {
-			TileEntity tile = world.getTileEntity(spark.getAttachPos());
+			TileEntity tile = world.getBlockEntity(spark.getAttachPos());
 			if(tile instanceof RedStringLiarTile) return ((RedStringLiarTile) tile).getNode(world, spark);
 			else return null;
 		}

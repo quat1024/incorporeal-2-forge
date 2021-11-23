@@ -22,10 +22,10 @@ public class NearbyIndicesFinder {
 		}
 		
 		return serverIndices.stream()
-			.filter(tile -> tile.getWorld() != null && tile.getWorld().getDimensionKey().equals(world.getDimensionKey()) &&
-				Math.abs(pos.getX() - tile.getPos().getX()) <= radius &&
-				tile.getPos().getY() == pos.getY() &&
-				Math.abs(pos.getZ() - tile.getPos().getZ()) <= radius)
+			.filter(tile -> tile.getLevel() != null && tile.getLevel().dimension().equals(world.dimension()) &&
+				Math.abs(pos.getX() - tile.getBlockPos().getX()) <= radius &&
+				tile.getBlockPos().getY() == pos.getY() &&
+				Math.abs(pos.getZ() - tile.getBlockPos().getZ()) <= radius)
 			.collect(Collectors.toList());
 	}
 }

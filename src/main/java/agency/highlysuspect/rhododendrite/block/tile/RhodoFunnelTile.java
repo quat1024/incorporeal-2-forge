@@ -49,7 +49,7 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 	
 	@Override
 	public void tick() {
-		Direction dir = getBlockState().get(DirectionalBlock.FACING);
+		Direction dir = getBlockState().getValue(DirectionalBlock.FACING);
 		
 		foreBinding = rootExtractingChainBindFunnelable(dir, true);
 		aftBinding = rootExtractingChainBindFunnelable(dir.getOpposite(), false);
@@ -82,9 +82,9 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		if(foreBinding == null && aftBinding == null) return new AxisAlignedBB(pos);
-		if(foreBinding == null) return new AxisAlignedBB(pos, conv(aftBinding.direct));
-		if(aftBinding == null) return new AxisAlignedBB(pos, conv(foreBinding.direct));
+		if(foreBinding == null && aftBinding == null) return new AxisAlignedBB(worldPosition);
+		if(foreBinding == null) return new AxisAlignedBB(worldPosition, conv(aftBinding.direct));
+		if(aftBinding == null) return new AxisAlignedBB(worldPosition, conv(foreBinding.direct));
 		else return new AxisAlignedBB(conv(foreBinding.direct), conv(aftBinding.direct));
 	}
 	
@@ -96,15 +96,15 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 	//Similar to the one in AbstractComputerTile but adapted to how funnels work specifically.
 	private @Nullable
 	FunnelBindResult rootExtractingChainBindFunnelable(Direction dir, boolean fore) {
-		assert world != null;
+		assert level != null;
 		
 		Predicate<RhodoFunnelable> funnelableCond = fore ? RhodoFunnelable::canRhodoInsert : RhodoFunnelable::canRhodoExtract;
 		
-		BlockPos.Mutable cursor = pos.toMutable();
+		BlockPos.Mutable cursor = worldPosition.mutable();
 		for(int i = 0; i < RANGE; i++) {
 			cursor.move(dir);
 			
-			TileEntity t = world.getTileEntity(cursor);
+			TileEntity t = level.getBlockEntity(cursor);
 			
 			//Chain through other rhodo funnels
 			if(t instanceof RhodoFunnelTile) {
@@ -114,8 +114,8 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			}
 			
 			//Bind directly to entities
-			List<Entity> nearbyEntities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(cursor));
-			Collections.shuffle(nearbyEntities, world.rand);
+			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AxisAlignedBB(cursor));
+			Collections.shuffle(nearbyEntities, level.random);
 			for(Entity e : nearbyEntities) {
 				LazyOptional<RhodoFunnelable> cap = e.getCapability(RhodoFunnelableCapability.INSTANCE);
 				//noinspection OptionalGetWithoutIsPresent
@@ -136,12 +136,12 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			}
 			
 			//Try loose funnelables
-			BlockState state = world.getBlockState(cursor);
+			BlockState state = level.getBlockState(cursor);
 			for(RhodoFunnelable.Loose loose : RhodoFunnelableCapability.LOOSE_FUNNELABLES) {
-				RhodoFunnelable yes = loose.getFunnelable(world, cursor, state, dir);
+				RhodoFunnelable yes = loose.getFunnelable(level, cursor, state, dir);
 				if(yes != null && funnelableCond.test(yes)) {
 					Vector3 p = loose.bindPosition(cursor);
-					return new FunnelBindResult(p, p, fromLoose(world, cursor.toImmutable(), state, dir, loose));
+					return new FunnelBindResult(p, p, fromLoose(level, cursor.immutable(), state, dir, loose));
 				}
 			}
 		}

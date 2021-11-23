@@ -19,7 +19,7 @@ public class CellTileRenderer extends ComputerTileRenderer<RhodoCellTile> {
 	
 	@Override
 	public void render(RhodoCellTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
-		if(tile.getWorld() == null) return;
+		if(tile.getLevel() == null) return;
 		
 		BlockPos directBindPos = tile.getBind();
 		if(directBindPos != null) {
@@ -27,7 +27,7 @@ public class CellTileRenderer extends ComputerTileRenderer<RhodoCellTile> {
 				Vector3.fromTileEntityCenter(tile),
 				Vector3.fromBlockPos(directBindPos).add(.5, .5, .5),
 				0xFFFF5511,
-				MathHelper.hash(tile.getPos().hashCode()),
+				MathHelper.murmurHash3Mixer(tile.getBlockPos().hashCode()),
 				1.7f,
 				0.1f,
 				0.5f
@@ -37,13 +37,13 @@ public class CellTileRenderer extends ComputerTileRenderer<RhodoCellTile> {
 		SolidifiedRequest contents = tile.peek();
 		
 		//I KNOW THIS LOOKS LIKE CRAP LOL
-		FontRenderer font = renderDispatcher.getFontRenderer();
-		ms.push();
+		FontRenderer font = renderer.getFont();
+		ms.pushPose();
 		ms.translate(0.5f, 0.5f, 0.5f);
-		ms.rotate(Vector3f.YP.rotationDegrees(-Minecraft.getInstance().player.rotationYaw + 180)); //we have billboarding at home
+		ms.mulPose(Vector3f.YP.rotationDegrees(-Minecraft.getInstance().player.yRot + 180)); //we have billboarding at home
 		ms.scale(1/64f, -1/64f, 1/64f); //troled
 		String pog = contents.toText().getString();
-		font.drawStringWithShadow(ms, pog, -font.getStringWidth(pog) / 2f, 0, 0xFF0000);
-		ms.pop();
+		font.drawShadow(ms, pog, -font.width(pog) / 2f, 0, 0xFF0000);
+		ms.popPose();
 	}
 }

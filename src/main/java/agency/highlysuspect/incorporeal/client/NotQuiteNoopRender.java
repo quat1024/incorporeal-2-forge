@@ -22,17 +22,17 @@ public class NotQuiteNoopRender<T extends Entity> extends EntityRenderer<T> {
 	}
 	
 	@Override
-	protected boolean canRenderName(T entity) {
+	protected boolean shouldShowName(T entity) {
 		return false;
 	}
 	
 	@Override
-	protected void renderName(T entityIn, ITextComponent displayNameIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+	protected void renderNameTag(T entityIn, ITextComponent displayNameIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
 		//Nope
 	}
 	
 	@Override
-	public ResourceLocation getEntityTexture(T entity) {
-		return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
+	public ResourceLocation getTextureLocation(T entity) {
+		return AtlasTexture.LOCATION_BLOCKS;
 	}
 }

@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.item.Item.Properties;
+
 public class RhoCardItem extends Item {
 	public RhoCardItem(Properties properties, CellAction action, boolean isCondition) {
 		super(properties);

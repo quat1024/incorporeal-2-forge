@@ -28,6 +28,8 @@ import vazkii.botania.common.entity.EntityDoppleganger;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoordBoundItem {
 	public FracturedSpaceRodItem(Properties properties) {
 		super(properties);
@@ -37,54 +39,54 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 	public static final String CRATE_DIMENSION_KEY = "CrateDimension";
 	
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
+	public ActionResultType useOn(ItemUseContext context) {
 		PlayerEntity player = context.getPlayer();
 		if(!EntityDoppleganger.isTruePlayer(player)) return ActionResultType.FAIL;
 		
-		World world = context.getWorld();
-		ItemStack held = context.getItem();
-		BlockPos pos = context.getPos();
+		World world = context.getLevel();
+		ItemStack held = context.getItemInHand();
+		BlockPos pos = context.getClickedPos();
 		
 		BlockState hitState = world.getBlockState(pos);
-		TileEntity hitTile = world.getTileEntity(pos);
+		TileEntity hitTile = world.getBlockEntity(pos);
 		
-		if(hitState.isIn(IncTags.Blocks.OPEN_CRATES) && hitTile instanceof TileOpenCrate) {
+		if(hitState.is(IncTags.Blocks.OPEN_CRATES) && hitTile instanceof TileOpenCrate) {
 			//Clicked a crate. Remember this position.
 			ItemNBTHelper.setCompound(held, CRATE_POS_KEY, NBTUtil.writeBlockPos(pos));
-			ItemNBTHelper.setString(held, CRATE_DIMENSION_KEY, world.getDimensionKey().getLocation().toString());
+			ItemNBTHelper.setString(held, CRATE_DIMENSION_KEY, world.dimension().location().toString());
 			
-			player.sendStatusMessage(new TranslationTextComponent("incorporeal.fractured_space.saved").mergeStyle(TextFormatting.DARK_PURPLE), true);
+			player.displayClientMessage(new TranslationTextComponent("incorporeal.fractured_space.saved").withStyle(TextFormatting.DARK_PURPLE), true);
 		} else {
 			//you didnt click a crate. Spawn an entity.
-			if(context.getFace() != Direction.UP) return ActionResultType.PASS; //Click the top of the block
+			if(context.getClickedFace() != Direction.UP) return ActionResultType.PASS; //Click the top of the block
 			
 			CompoundNBT cratePosNbt = ItemNBTHelper.getCompound(held, CRATE_POS_KEY, true);
 			String crateDimensionStr = ItemNBTHelper.getString(held, CRATE_DIMENSION_KEY, "###");
 			if(cratePosNbt == null || crateDimensionStr.equals("###")) {
-				player.sendStatusMessage(new TranslationTextComponent("incorporeal.fractured_space.no_pos").mergeStyle(TextFormatting.RED), true);
+				player.displayClientMessage(new TranslationTextComponent("incorporeal.fractured_space.no_pos").withStyle(TextFormatting.RED), true);
 				return ActionResultType.FAIL;
 			}
 			
-			if(!world.getDimensionKey().getLocation().toString().equals(crateDimensionStr)) {
-				player.sendStatusMessage(new TranslationTextComponent("incorporeal.fractured_space.wrong_dimension").mergeStyle(TextFormatting.RED), true);
+			if(!world.dimension().location().toString().equals(crateDimensionStr)) {
+				player.displayClientMessage(new TranslationTextComponent("incorporeal.fractured_space.wrong_dimension").withStyle(TextFormatting.RED), true);
 				return ActionResultType.FAIL;
 			}
 			
-			if(!world.isRemote) {
+			if(!world.isClientSide) {
 				//One final server-only sanity check, since this loads the chunk
 				BlockPos cratePos = NBTUtil.readBlockPos(cratePosNbt);
 				BlockState rememberedState = world.getBlockState(cratePos);
-				TileEntity rememberedTile = world.getTileEntity(cratePos);
+				TileEntity rememberedTile = world.getBlockEntity(cratePos);
 				
-				if(!(rememberedState.isIn(IncTags.Blocks.OPEN_CRATES) && rememberedTile instanceof TileOpenCrate)) {
-					player.sendStatusMessage(new TranslationTextComponent("incorporeal.fractured_space.no_crate_there").mergeStyle(TextFormatting.RED), true);
+				if(!(rememberedState.is(IncTags.Blocks.OPEN_CRATES) && rememberedTile instanceof TileOpenCrate)) {
+					player.displayClientMessage(new TranslationTextComponent("incorporeal.fractured_space.no_crate_there").withStyle(TextFormatting.RED), true);
 					return ActionResultType.FAIL;
 				}
 				
 				//Spawn the entity.
 				FracturedSpaceCollectorEntity fsc = new FracturedSpaceCollectorEntity(world, cratePos, player);
-				fsc.setPosition(context.getHitVec().x, pos.getY() + 1, context.getHitVec().z);
-				world.addEntity(fsc);
+				fsc.setPos(context.getClickLocation().x, pos.getY() + 1, context.getClickLocation().z);
+				world.addFreshEntity(fsc);
 			}
 		}
 		
@@ -98,7 +100,7 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 		if(cratePosCmp == null) return null;
 		
 		String dimensionStr = ItemNBTHelper.getString(stack, CRATE_DIMENSION_KEY, "###");
-		if(!world.getDimensionKey().getLocation().toString().equals(dimensionStr)) return null;
+		if(!world.dimension().location().toString().equals(dimensionStr)) return null;
 		
 		else return NBTUtil.readBlockPos(cratePosCmp);
 	}
@@ -109,24 +111,24 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag mistake) {
+	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag mistake) {
 		if(world == null) return;
 		
 		CompoundNBT cratePosCmp = ItemNBTHelper.getCompound(stack, CRATE_POS_KEY, true);
 		if(cratePosCmp == null) {
-			tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.not_bound").mergeStyle(TextFormatting.RED));
+			tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.not_bound").withStyle(TextFormatting.RED));
 		} else {
-			tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.bound").mergeStyle(TextFormatting.GREEN));
+			tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.bound").withStyle(TextFormatting.GREEN));
 			
 			String dimensionStr = ItemNBTHelper.getString(stack, CRATE_DIMENSION_KEY, "###");
-			if(!world.getDimensionKey().getLocation().toString().equals(dimensionStr)) {
-				tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.wrong_dimension").mergeStyle(TextFormatting.RED));
+			if(!world.dimension().location().toString().equals(dimensionStr)) {
+				tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.wrong_dimension").withStyle(TextFormatting.RED));
 			}
 			
 			if(mistake.isAdvanced()) {
 				BlockPos pos = NBTUtil.readBlockPos(cratePosCmp);
-				tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.debug.pos", pos.getX(), pos.getY(), pos.getZ()).mergeStyle(TextFormatting.GRAY));
-				tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.debug.dim", dimensionStr).mergeStyle(TextFormatting.GRAY));
+				tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.debug.pos", pos.getX(), pos.getY(), pos.getZ()).withStyle(TextFormatting.GRAY));
+				tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.debug.dim", dimensionStr).withStyle(TextFormatting.GRAY));
 			}
 		}
 	}

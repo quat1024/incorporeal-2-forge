@@ -32,7 +32,7 @@ public class MiscFunnelables {
 				
 				@Override
 				public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-					return Optional.of(new SolidifiedRequest(new ItemStack(Items.REDSTONE), state.get(RedstoneWireBlock.POWER)));
+					return Optional.of(new SolidifiedRequest(new ItemStack(Items.REDSTONE), state.getValue(RedstoneWireBlock.POWER)));
 				}
 			} : null;
 		}
@@ -55,7 +55,7 @@ public class MiscFunnelables {
 				
 				@Override
 				public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-					return Optional.of(new SolidifiedRequest(new ItemStack(Blocks.REPEATER), state.get(RepeaterBlock.DELAY)));
+					return Optional.of(new SolidifiedRequest(new ItemStack(Blocks.REPEATER), state.getValue(RepeaterBlock.DELAY)));
 				}
 				
 				@Override
@@ -68,7 +68,7 @@ public class MiscFunnelables {
 					int clampCount = MathHelper.clamp(request.count, 1, 4);
 					if(clampCount == request.count) {
 						if(!simulate) {
-							world.setBlockState(pos, state.with(RepeaterBlock.DELAY, clampCount));
+							world.setBlockAndUpdate(pos, state.setValue(RepeaterBlock.DELAY, clampCount));
 						}
 						return true;
 					} else return false;

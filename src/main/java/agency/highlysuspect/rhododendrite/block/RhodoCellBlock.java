@@ -7,6 +7,8 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class RhodoCellBlock extends AbstractComputerBlock {
 	public RhodoCellBlock(Properties properties) {
 		super(properties);

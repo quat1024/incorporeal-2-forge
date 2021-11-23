@@ -44,7 +44,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 		this(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, world);
 		
 		this.cratePos = cratePos;
-		this.ownerUuid = player.getUniqueID();
+		this.ownerUuid = player.getUUID();
 	}
 	
 	private int age = 0;
@@ -59,23 +59,23 @@ public class FracturedSpaceCollectorEntity extends Entity {
 	
 	@Override
 	public void tick() {
-		setMotion(0, 0, 0);
+		setDeltaMovement(0, 0, 0);
 		super.tick();
 		
 		age++;
 		
-		if(world.isRemote && age < MAX_AGE) {
+		if(level.isClientSide && age < MAX_AGE) {
 			doSparkles();
 		} else if(age > AGE_SPECIAL_START) {
-			AxisAlignedBB aabb = getBoundingBox().grow(RADIUS, 1, RADIUS);
-			List<ItemEntity> nearbyItemEnts = world.getEntitiesWithinAABB(ItemEntity.class, aabb, ent -> ent != null && Math.hypot(ent.getPosX() - getPosX(), ent.getPosZ() - getPosZ()) <= RADIUS);
+			AxisAlignedBB aabb = getBoundingBox().inflate(RADIUS, 1, RADIUS);
+			List<ItemEntity> nearbyItemEnts = level.getEntitiesOfClass(ItemEntity.class, aabb, ent -> ent != null && Math.hypot(ent.getX() - getX(), ent.getZ() - getZ()) <= RADIUS);
 			
 			for(ItemEntity ent : nearbyItemEnts) {
-				double xDifference = getPosX() - ent.getPosX();
-				double zDifference = getPosZ() - ent.getPosZ();
+				double xDifference = getX() - ent.getX();
+				double zDifference = getZ() - ent.getZ();
 				
-				ent.setMotion(ent.getMotion().add(xDifference * .3, 0, zDifference * .3));
-				ent.velocityChanged = true;
+				ent.setDeltaMovement(ent.getDeltaMovement().add(xDifference * .3, 0, zDifference * .3));
+				ent.hurtMarked = true;
 			}
 			
 			if(age >= MAX_AGE) {
@@ -85,23 +85,23 @@ public class FracturedSpaceCollectorEntity extends Entity {
 					remove(); return;
 				}
 				
-				PlayerEntity player = world.getPlayerByUuid(ownerUuid);
+				PlayerEntity player = level.getPlayerByUUID(ownerUuid);
 				
 				if(player == null) {
 					remove(); return;
 				}
 				
 				//Chunkload the immediate area for a little bit
-				if(world instanceof ServerWorld) {
+				if(level instanceof ServerWorld) {
 					ChunkPos ticketPos = new ChunkPos(cratePos);
-					((ServerWorld) world).getChunkProvider().registerTicket(TicketType.POST_TELEPORT, ticketPos, 3, player.getEntityId());
+					((ServerWorld) level).getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, ticketPos, 3, player.getId());
 				}
 				
-				BlockState state = world.getBlockState(cratePos);
-				TileEntity tile = world.getTileEntity(cratePos);
+				BlockState state = level.getBlockState(cratePos);
+				TileEntity tile = level.getBlockEntity(cratePos);
 				
-				if(state.isIn(IncTags.Blocks.OPEN_CRATES) && tile instanceof TileOpenCrate && ((TileOpenCrate) tile).canEject()) {
-					boolean redstone = isCratePowered(world, cratePos);
+				if(state.is(IncTags.Blocks.OPEN_CRATES) && tile instanceof TileOpenCrate && ((TileOpenCrate) tile).canEject()) {
+					boolean redstone = isCratePowered(level, cratePos);
 					
 					//delete all items and emit them from the crate
 					for(ItemEntity ent : nearbyItemEnts) {
@@ -114,7 +114,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 						if(ManaItemHandler.instance().requestManaExact(TOOL_STACK, player, cost, false)) {
 							//ok,now do it for real
 							ManaItemHandler.instance().requestManaExact(TOOL_STACK, player, cost, true);
-							fakeCrateEject(world, cratePos, redstone, stack);
+							fakeCrateEject(level, cratePos, redstone, stack);
 							ent.remove();
 						}
 					}
@@ -129,7 +129,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 	private static boolean isCratePowered(World world, BlockPos pos) {
 		//Uses the exact same logic open crates do to check if they're powered!
 		for(Direction dir : Direction.values()) {
-			if(world.getRedstonePower(pos.offset(dir), dir) != 0) {
+			if(world.getSignal(pos.relative(dir), dir) != 0) {
 				return true;
 			}
 		}
@@ -141,12 +141,12 @@ public class FracturedSpaceCollectorEntity extends Entity {
 		//mostly a copy of the open crate ejection logic, but doesn't touch the buffered item in the crate
 		double ejectY = pos.getY() - EntityType.ITEM.getHeight();
 		ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, ejectY, pos.getZ() + 0.5, stack);
-		item.setMotion(Vector3d.ZERO);
+		item.setDeltaMovement(Vector3d.ZERO);
 		
 		if(redstone) //noinspection ConstantConditions
 			((AccessorItemEntity) item).setAge(-200);
 		
-		world.addEntity(item);
+		world.addFreshEntity(item);
 	}
 	
 	private static final int PARTICLE_COUNT = 12;
@@ -167,41 +167,41 @@ public class FracturedSpaceCollectorEntity extends Entity {
 			float size = (float) (1 + ageFraction * 5 * Math.random());
 			
 			SparkleParticleData uwu = SparkleParticleData.sparkle(size, 0.1f, 0.85f, 0.65f, 5);
-			world.addParticle(uwu, getPosX() + x, getPosY() + height, getPosZ() + z, 0, 0, 0);
+			level.addParticle(uwu, getX() + x, getY() + height, getZ() + z, 0, 0, 0);
 		}
 		
 		double x = Math.cos(Math.random() * Math.PI * 2) * RADIUS * radiusMult;
 		double z = Math.cos(Math.random() * Math.PI * 2) * RADIUS * radiusMult;
 		
 		WispParticleData awa = WispParticleData.wisp(.5f, .1f, 85f, .65f, 0.5f);
-		world.addParticle(awa, getPosX() + x, getPosY() + height, getPosZ() + z, 0f, 0f, 0f);
+		level.addParticle(awa, getX() + x, getY() + height, getZ() + z, 0f, 0f, 0f);
 		
 		if(age >= MAX_AGE - 2) {
-			world.addParticle(ParticleTypes.LARGE_SMOKE, getPosX(), getPosY(), getPosZ(), 0, 0, 0);
+			level.addParticle(ParticleTypes.LARGE_SMOKE, getX(), getY(), getZ(), 0, 0, 0);
 			SparkleParticleData uwu = SparkleParticleData.sparkle(2f, 0.9f, 0.45f, 0.05f, 2);
 			for(int i = 0; i < 5; i++) {
-				world.addParticle(uwu, getPosX(), getPosY(), getPosZ(), 0, 0, 0);
+				level.addParticle(uwu, getX(), getY(), getZ(), 0, 0, 0);
 			}
 		}
 	}
 	
 	@Override
-	protected void registerData() {
+	protected void defineSynchedData() {
 		//Nothing
 	}
 	
 	@Override
-	protected void readAdditional(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundNBT compound) {
 		age = compound.getInt("Age");
 	}
 	
 	@Override
-	protected void writeAdditional(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundNBT compound) {
 		compound.putInt("Age", age);
 	}
 	
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

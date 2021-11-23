@@ -19,22 +19,22 @@ public class RhoTags {
 		}
 		
 		@Override
-		protected void registerTags() {
+		protected void addTags() {
 			handleWoodFamily(RhoBlocks.RHODODENDRITE);
 		}
 		
 		@SuppressWarnings("SameParameterValue")
 		protected void handleWoodFamily(WoodFamily family) {
-			getOrCreateBuilder(BlockTags.LOGS_THAT_BURN).add(family.log);
-			getOrCreateBuilder(BlockTags.PLANKS).add(family.planks);
-			getOrCreateBuilder(BlockTags.WOODEN_FENCES).add(family.fence);
-			getOrCreateBuilder(BlockTags.WOODEN_BUTTONS).add(family.button);
+			tag(BlockTags.LOGS_THAT_BURN).add(family.log);
+			tag(BlockTags.PLANKS).add(family.planks);
+			tag(BlockTags.WOODEN_FENCES).add(family.fence);
+			tag(BlockTags.WOODEN_BUTTONS).add(family.button);
 			//getOrCreateBuilder(BlockTags.WOODEN_DOORS).add(family.door);
-			getOrCreateBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(family.pressurePlate);
-			getOrCreateBuilder(BlockTags.WOODEN_SLABS).add(family.slab);
-			getOrCreateBuilder(BlockTags.WOODEN_STAIRS).add(family.stairs);
+			tag(BlockTags.WOODEN_PRESSURE_PLATES).add(family.pressurePlate);
+			tag(BlockTags.WOODEN_SLABS).add(family.slab);
+			tag(BlockTags.WOODEN_STAIRS).add(family.stairs);
 			//getOrCreateBuilder(BlockTags.WOODEN_TRAPDOORS).add(family.trapdoor);
-			getOrCreateBuilder(BlockTags.LEAVES).add(family.leaves);
+			tag(BlockTags.LEAVES).add(family.leaves);
 		}
 	}
 	
@@ -44,7 +44,7 @@ public class RhoTags {
 		}
 		
 		@Override
-		protected void registerTags() {
+		protected void addTags() {
 			copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
 			copy(BlockTags.PLANKS, ItemTags.PLANKS);
 			copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);

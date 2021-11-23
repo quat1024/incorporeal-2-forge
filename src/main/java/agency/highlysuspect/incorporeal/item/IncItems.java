@@ -14,8 +14,8 @@ import java.util.Map;
 
 public class IncItems {
 	public static final CorporeaTicketItem CORPOREA_TICKET = new CorporeaTicketItem(defaultProps());
-	public static final TicketConjurerItem TICKET_CONJURER = new TicketConjurerItem(defaultProps().maxStackSize(1));
-	public static final FracturedSpaceRodItem FRACTURED_SPACE_ROD = new FracturedSpaceRodItem(defaultProps().maxStackSize(1));
+	public static final TicketConjurerItem TICKET_CONJURER = new TicketConjurerItem(defaultProps().stacksTo(1));
+	public static final FracturedSpaceRodItem FRACTURED_SPACE_ROD = new FracturedSpaceRodItem(defaultProps().stacksTo(1));
 	
 	public static final Item SOUL_CORE_FRAME = new Item(Inc.proxy.soulCoreFrameIster(defaultProps()));
 	
@@ -48,7 +48,7 @@ public class IncItems {
 	public static final ItemBlockSpecialFlower SMALL_FLOATING_FUNNY = new ItemBlockSpecialFlower(IncBlocks.SMALL_FLOATING_FUNNY, defaultProps());
 	
 	private static Item.Properties defaultProps() {
-		return new Item.Properties().group(Tab.INSTANCE);
+		return new Item.Properties().tab(Tab.INSTANCE);
 	}
 	
 	public static void register(RegistryEvent.Register<Item> event) {
@@ -98,13 +98,13 @@ public class IncItems {
 		
 		public Tab() {
 			super(Inc.MODID);
-			setNoTitle();
+			hideTitle();
 			//noinspection deprecation (forge extends this, but this works fine too)
-			setBackgroundImageName(Inc.MODID + ".png");
+			setBackgroundSuffix(Inc.MODID + ".png");
 		}
 		
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(SOUL_CORE_FRAME);
 		}
 		

@@ -10,6 +10,8 @@ import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
 
 import java.util.Optional;
 
+import net.minecraft.item.Item.Properties;
+
 public class CorporeaTicketItem extends Item {
 	public CorporeaTicketItem(Properties props) {
 		super(props);
@@ -34,8 +36,8 @@ public class CorporeaTicketItem extends Item {
 		if(!stack.hasTag()) return Optional.empty();
 		assert stack.getTag() != null;
 		
-		if(stack.getChildTag(KEY) == null) return Optional.empty();
-		CompoundNBT requestNbt = stack.getChildTag(KEY);
+		if(stack.getTagElement(KEY) == null) return Optional.empty();
+		CompoundNBT requestNbt = stack.getTagElement(KEY);
 		assert requestNbt != null;
 		
 		return SolidifiedRequest.tryFromTag(requestNbt);
@@ -46,9 +48,9 @@ public class CorporeaTicketItem extends Item {
 	}
 	
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
+	public ITextComponent getName(ItemStack stack) {
 		return getRequest(stack)
 			.<ITextComponent>map(request -> new TranslationTextComponent("item.incorporeal.corporea_ticket.has", request.toText()))
-			.orElseGet(() -> super.getDisplayName(stack));
+			.orElseGet(() -> super.getName(stack));
 	}
 }

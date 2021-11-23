@@ -20,13 +20,13 @@ public abstract class AbstractComputerTile extends TileMod {
 	//I scan forwards and look for the first block that passes the predicate.
 	protected @Nullable BlockPos directBind(Direction dir, DirectBindPredicate directBind) {
 		//return rootExtractingChainBind(dir, (cursor, tile) -> directBind.bindsTo(poss, tile) ? poss : null); //Wasteful
-		assert world != null;
+		assert level != null;
 		
-		BlockPos.Mutable cursor = pos.toMutable();
+		BlockPos.Mutable cursor = worldPosition.mutable();
 		for(int i = 0; i < RANGE; i++) {
 			cursor.move(dir);
-			@Nullable TileEntity tile = world.getTileEntity(cursor);
-			if(directBind.bindsTo(cursor, tile)) return cursor.toImmutable();
+			@Nullable TileEntity tile = level.getBlockEntity(cursor);
+			if(directBind.bindsTo(cursor, tile)) return cursor.immutable();
 		}
 		
 		return null;
@@ -41,14 +41,14 @@ public abstract class AbstractComputerTile extends TileMod {
 	//the bind to "chain" through more RhodoOp blocks; if you find an already-bound RhodoOp, there's no need
 	//to perform more expensive block-by-block scanning, because you can just copy-paste its bind position.
 	protected @Nullable ChainBindResult rootExtractingChainBind(Direction dir, ChainBindRootExtactor chainRoot) {
-		assert world != null;
+		assert level != null;
 		
-		BlockPos.Mutable cursor = pos.toMutable();
+		BlockPos.Mutable cursor = worldPosition.mutable();
 		for(int i = 0; i < RANGE; i++) { //same as red string
 			cursor.move(dir);
-			@Nullable TileEntity tile = world.getTileEntity(cursor);
+			@Nullable TileEntity tile = level.getBlockEntity(cursor);
 			@Nullable BlockPos root = chainRoot.getRootBind(cursor, tile);
-			if(root != null) return new ChainBindResult(cursor.toImmutable(), root.toImmutable());
+			if(root != null) return new ChainBindResult(cursor.immutable(), root.immutable());
 		}
 		return null;
 	}
