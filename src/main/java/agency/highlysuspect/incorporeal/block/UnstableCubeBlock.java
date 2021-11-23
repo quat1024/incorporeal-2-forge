@@ -17,8 +17,8 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
 import vazkii.botania.api.wand.IWandable;
 import vazkii.botania.common.block.BlockModWaterloggable;
 
@@ -36,29 +36,29 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 	public static final VoxelShape BOX = VoxelShapes.box(3/16d, 3/16d, 3/16d, 1 - 3/16d, 1 - 3/16d, 1 - 3/16d);
 	
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
 		return BOX;
 	}
 	
 	@Override
-	public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-		punch(world, pos);
+	public void attack(BlockState state, Level level, BlockPos pos, PlayerEntity player) {
+		punch(level, pos);
 	}
 	
 	@Override
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-		punch(world, pos);
+	public ActionResultType use(BlockState state, Level level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+		punch(level, pos);
 		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
-	public boolean onUsedByWand(PlayerEntity player, ItemStack stack, World world, BlockPos pos, Direction side) {
-		punch(world, pos);
+	public boolean onUsedByWand(PlayerEntity player, ItemStack stack, Level level, BlockPos pos, Direction side) {
+		punch(level, pos);
 		return true;
 	}
 	
-	private void punch(World world, BlockPos pos) {
-		TileEntity tile = world.getBlockEntity(pos);
+	private void punch(Level level, BlockPos pos) {
+		TileEntity tile = level.getBlockEntity(pos);
 		if(tile instanceof UnstableCubeTile) ((UnstableCubeTile) tile).punch();
 	}
 	
@@ -68,13 +68,13 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 	}
 	
 	@Override
-	public int getSignal(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		return getDirectSignal(state, world, pos, side);
+	public int getSignal(BlockState state, IBlockReader level, BlockPos pos, Direction side) {
+		return getDirectSignal(state, level, pos, side);
 	}
 	
 	@Override
-	public int getDirectSignal(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		TileEntity tile = world.getBlockEntity(pos);
+	public int getDirectSignal(BlockState state, IBlockReader level, BlockPos pos, Direction side) {
+		TileEntity tile = level.getBlockEntity(pos);
 		if(tile instanceof UnstableCubeTile) return ((UnstableCubeTile) tile).getPower();
 		else return 0;
 	}
@@ -91,7 +91,7 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader level) {
 		return IncTileTypes.UNSTABLE_CUBES.get(color).create();
 	}
 }

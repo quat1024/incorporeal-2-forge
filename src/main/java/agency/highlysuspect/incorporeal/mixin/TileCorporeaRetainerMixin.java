@@ -32,7 +32,7 @@ public abstract class TileCorporeaRetainerMixin implements RetainerDuck {
 		this.request = solid.matcher;
 		this.requestCount = solid.count;
 		
-		//A difference between the SolidifiedRequest world and the world of regular Botania.
+		//A difference between the SolidifiedRequest level and the level of regular Botania.
 		if(requestCount == 0 || solid.matcher == EmptyCorporeaRequestMatcher.INSTANCE) request = null;
 		
 		compValue = CorporeaHelper.instance().signalStrengthForRequestSize(requestCount);

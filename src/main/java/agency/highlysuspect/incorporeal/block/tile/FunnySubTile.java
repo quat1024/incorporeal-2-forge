@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import vazkii.botania.api.subtile.RadiusDescriptor;
 import vazkii.botania.api.subtile.TileEntityFunctionalFlower;
 
@@ -117,7 +117,7 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 		}
 	}
 	
-	private boolean doIt(World world, BlockPos pos, int tick, Vector3d particleSrc, BlockPos noteblockPos, NoteBlockInstrument inst, List<Pair<IncNetwork.SparkleLine, byte[]>> sparkleLines) {
+	private boolean doIt(Level level, BlockPos pos, int tick, Vector3d particleSrc, BlockPos noteblockPos, NoteBlockInstrument inst, List<Pair<IncNetwork.SparkleLine, byte[]>> sparkleLines) {
 		if(noteblockPos == null) return false;
 		
 		byte[] notes = Despacito.notesForTick(tick, inst);
@@ -127,7 +127,7 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 				if(getMana() > NOTE_MANA_COST) {
 					addMana(-NOTE_MANA_COST);
 					float convertedPitch = (float) Math.pow(2, (note - 12 + pitchShift) / 12d);
-					world.playSound(null, pos, inst.getSoundEvent(), SoundCategory.RECORDS, 3f, convertedPitch);
+					level.playSound(null, pos, inst.getSoundEvent(), SoundCategory.RECORDS, 3f, convertedPitch);
 				}
 			}
 			return true;

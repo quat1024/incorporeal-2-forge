@@ -7,7 +7,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
@@ -20,16 +20,16 @@ public class CorporeaSolidifierBlock extends Block {
 		super(properties);
 	}
 	
-	public void receiveRequest(World world, BlockPos pos, BlockState state, ICorporeaRequestMatcher request, int count) {
-		if(world == null || world.isClientSide) return;
+	public void receiveRequest(Level level, BlockPos pos, BlockState state, ICorporeaRequestMatcher request, int count) {
+		if(level == null || level.isClientSide) return;
 		
 		ItemStack ticket = IncItems.CORPOREA_TICKET.produceForRequest(request, count);
-		IItemHandler dest = getInv(world, pos);
+		IItemHandler dest = getInv(level, pos);
 		
 		if(dest != null && ItemHandlerHelper.insertItemStacked(dest, ticket, false).isEmpty()) {
 			ItemHandlerHelper.insertItemStacked(dest, ticket, true);
 		} else {
-			world.addFreshEntity(new ItemEntity(world,
+			level.addFreshEntity(new ItemEntity(level,
 				pos.getX() + .5, pos.getY() + 1, pos.getZ() + .5,
 				ticket
 			));
@@ -37,15 +37,15 @@ public class CorporeaSolidifierBlock extends Block {
 	}
 	
 	//Modified from TileCorporeaFunnel.
-	private IItemHandler getInv(World world, BlockPos pos) {
+	private IItemHandler getInv(Level level, BlockPos pos) {
 		//Try 1 block below
-		IItemHandler ret = InventoryHelper.getInventory(world, pos.below(), Direction.UP);
-		if (ret == null) ret = InventoryHelper.getInventory(world, pos.below(), null);
+		IItemHandler ret = InventoryHelper.getInventory(level, pos.below(), Direction.UP);
+		if (ret == null) ret = InventoryHelper.getInventory(level, pos.below(), null);
 		if (ret != null) return ret;
 		
 		//Try 2 blocks below
-		ret = InventoryHelper.getInventory(world, pos.below(2), Direction.UP);
-		if (ret == null) ret = InventoryHelper.getInventory(world, pos.below(2), null);
+		ret = InventoryHelper.getInventory(level, pos.below(2), Direction.UP);
+		if (ret == null) ret = InventoryHelper.getInventory(level, pos.below(2), null);
 		
 		return ret;
 	}

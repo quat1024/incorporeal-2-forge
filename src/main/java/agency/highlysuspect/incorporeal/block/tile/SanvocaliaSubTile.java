@@ -26,8 +26,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 import vazkii.botania.api.subtile.RadiusDescriptor;
 import vazkii.botania.api.subtile.TileEntityFunctionalFlower;
 import vazkii.botania.common.block.tile.corporea.TileCorporeaIndex;
@@ -130,11 +130,11 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 		
 		//Burp
 		SoundEvent sound = level.random.nextFloat() < 0.1 ? SoundEvents.PLAYER_BURP : SoundEvents.GENERIC_EAT;
-		level.playSound(null, worldPosition, sound, SoundCategory.BLOCKS, .5f, 1);
+		level.playSound(null, levelPosition, sound, SoundCategory.BLOCKS, .5f, 1);
 		
 		//Show eating particles
-		if(level instanceof ServerWorld) {
-			((ServerWorld) level).sendParticles(new ItemParticleData(ParticleTypes.ITEM, ticket.getItem()), ticket.getX(), ticket.getY(), ticket.getZ(), 10, 0.1, 0.1, 0.1, 0.03);
+		if(level instanceof ServerLevel) {
+			((ServerLevel) level).sendParticles(new ItemParticleData(ParticleTypes.ITEM, ticket.getItem()), ticket.getX(), ticket.getY(), ticket.getZ(), 10, 0.1, 0.1, 0.1, 0.03);
 		}
 		
 		//Show sparkle lines
@@ -158,7 +158,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	@Nullable
 	@Override
 	public RadiusDescriptor getRadius() {
-		return new RadiusDescriptor.Square(worldPosition, radius);
+		return new RadiusDescriptor.Square(levelPosition, radius);
 	}
 	
 	@Override
@@ -172,7 +172,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+	public void onBlockPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
 		placerUuid = entity == null ? null : entity.getUUID();
 		if(stack.hasCustomHoverName()) displayName = stack.getHoverName();
 	}

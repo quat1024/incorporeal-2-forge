@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import vazkii.botania.api.mana.IManaUsingItem;
 import vazkii.botania.api.wand.ICoordBoundItem;
 import vazkii.botania.common.block.ModBlocks;
@@ -43,17 +43,17 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 		PlayerEntity player = context.getPlayer();
 		if(!EntityDoppleganger.isTruePlayer(player)) return ActionResultType.FAIL;
 		
-		World world = context.getLevel();
+		Level level = context.getLevel();
 		ItemStack held = context.getItemInHand();
 		BlockPos pos = context.getClickedPos();
 		
-		BlockState hitState = world.getBlockState(pos);
-		TileEntity hitTile = world.getBlockEntity(pos);
+		BlockState hitState = level.getBlockState(pos);
+		TileEntity hitTile = level.getBlockEntity(pos);
 		
 		if(hitState.is(IncTags.Blocks.OPEN_CRATES) && hitTile instanceof TileOpenCrate) {
 			//Clicked a crate. Remember this position.
 			ItemNBTHelper.setCompound(held, CRATE_POS_KEY, NBTUtil.writeBlockPos(pos));
-			ItemNBTHelper.setString(held, CRATE_DIMENSION_KEY, world.dimension().location().toString());
+			ItemNBTHelper.setString(held, CRATE_DIMENSION_KEY, level.dimension().location().toString());
 			
 			player.displayClientMessage(new TranslationTextComponent("incorporeal.fractured_space.saved").withStyle(TextFormatting.DARK_PURPLE), true);
 		} else {
@@ -67,16 +67,16 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 				return ActionResultType.FAIL;
 			}
 			
-			if(!world.dimension().location().toString().equals(crateDimensionStr)) {
+			if(!level.dimension().location().toString().equals(crateDimensionStr)) {
 				player.displayClientMessage(new TranslationTextComponent("incorporeal.fractured_space.wrong_dimension").withStyle(TextFormatting.RED), true);
 				return ActionResultType.FAIL;
 			}
 			
-			if(!world.isClientSide) {
+			if(!level.isClientSide) {
 				//One final server-only sanity check, since this loads the chunk
 				BlockPos cratePos = NBTUtil.readBlockPos(cratePosNbt);
-				BlockState rememberedState = world.getBlockState(cratePos);
-				TileEntity rememberedTile = world.getBlockEntity(cratePos);
+				BlockState rememberedState = level.getBlockState(cratePos);
+				TileEntity rememberedTile = level.getBlockEntity(cratePos);
 				
 				if(!(rememberedState.is(IncTags.Blocks.OPEN_CRATES) && rememberedTile instanceof TileOpenCrate)) {
 					player.displayClientMessage(new TranslationTextComponent("incorporeal.fractured_space.no_crate_there").withStyle(TextFormatting.RED), true);
@@ -84,9 +84,9 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 				}
 				
 				//Spawn the entity.
-				FracturedSpaceCollectorEntity fsc = new FracturedSpaceCollectorEntity(world, cratePos, player);
+				FracturedSpaceCollectorEntity fsc = new FracturedSpaceCollectorEntity(level, cratePos, player);
 				fsc.setPos(context.getClickLocation().x, pos.getY() + 1, context.getClickLocation().z);
-				world.addFreshEntity(fsc);
+				level.addFreshEntity(fsc);
 			}
 		}
 		
@@ -95,12 +95,12 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 	
 	@Nullable
 	@Override
-	public BlockPos getBinding(World world, ItemStack stack) {
+	public BlockPos getBinding(Level level, ItemStack stack) {
 		CompoundNBT cratePosCmp = ItemNBTHelper.getCompound(stack, CRATE_POS_KEY, true);
 		if(cratePosCmp == null) return null;
 		
 		String dimensionStr = ItemNBTHelper.getString(stack, CRATE_DIMENSION_KEY, "###");
-		if(!world.dimension().location().toString().equals(dimensionStr)) return null;
+		if(!level.dimension().location().toString().equals(dimensionStr)) return null;
 		
 		else return NBTUtil.readBlockPos(cratePosCmp);
 	}
@@ -111,8 +111,8 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag mistake) {
-		if(world == null) return;
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<ITextComponent> tooltip, ITooltipFlag mistake) {
+		if(level == null) return;
 		
 		CompoundNBT cratePosCmp = ItemNBTHelper.getCompound(stack, CRATE_POS_KEY, true);
 		if(cratePosCmp == null) {
@@ -121,7 +121,7 @@ public class FracturedSpaceRodItem extends Item implements IManaUsingItem, ICoor
 			tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.bound").withStyle(TextFormatting.GREEN));
 			
 			String dimensionStr = ItemNBTHelper.getString(stack, CRATE_DIMENSION_KEY, "###");
-			if(!world.dimension().location().toString().equals(dimensionStr)) {
+			if(!level.dimension().location().toString().equals(dimensionStr)) {
 				tooltip.add(new TranslationTextComponent("incorporeal.fractured_space.tooltip.wrong_dimension").withStyle(TextFormatting.RED));
 			}
 			

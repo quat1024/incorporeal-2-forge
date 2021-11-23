@@ -26,7 +26,7 @@ public class CorporeaSoulCoreTile extends AbstractSoulCoreTile {
 		if(event.getIndexSpark() == null) return;
 		
 		Set<UUID> coredUuids = CorporeaHelper.instance().getNodesOnNetwork(event.getIndexSpark()).stream()
-			.map(node -> node.getWorld().getBlockEntity(node.getPos()))
+			.map(node -> node.getLevel().getBlockEntity(node.getPos()))
 			.filter(t -> t instanceof CorporeaSoulCoreTile)
 			.map(soul -> ((CorporeaSoulCoreTile) soul).getOwnerProfile())
 			.filter(Objects::nonNull)

@@ -1,11 +1,11 @@
 package agency.highlysuspect.incorporeal.corporea;
 
-import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.entity.item.ItemFrame;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -15,65 +15,65 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 
 public class FrameReader {	
-	public static final BiPredicate<ItemFrameEntity, Direction> NON_EMPTY = (frame, dir) -> !frame.getItem().isEmpty();
-	public static final BiPredicate<ItemFrameEntity, Direction> RESTING_ON = (frame, dir) -> frame.getDirection() == dir;
+	public static final BiPredicate<ItemFrame, Direction> NON_EMPTY = (frame, dir) -> !frame.getItem().isEmpty();
+	public static final BiPredicate<ItemFrame, Direction> RESTING_ON = (frame, dir) -> frame.getDirection() == dir;
 	
 	//near: The item frame is anywhere in the 6 blocks surrounding the provided blockpos. (e.g. "frame tinkerer")
 	//resting on: The item frame is resting on the provided blockpos. (e.g. "corporea funnel")
 	
-	public static List<ItemStack> itemsNear(World world, BlockPos pos) {
-		return itemsAround(world, pos, null);
+	public static List<ItemStack> itemsNear(Level level, BlockPos pos) {
+		return itemsAround(level, pos, null);
 	}
 	
-	public static List<ItemStack> nonEmptyItemsNear(World world, BlockPos pos) {
-		return itemsAround(world, pos, NON_EMPTY);
+	public static List<ItemStack> nonEmptyItemsNear(Level level, BlockPos pos) {
+		return itemsAround(level, pos, NON_EMPTY);
 	}
 	
-	public static List<ItemStack> itemsRestingOn(World world, BlockPos pos) {
-		return itemsAround(world, pos, RESTING_ON);
+	public static List<ItemStack> itemsRestingOn(Level level, BlockPos pos) {
+		return itemsAround(level, pos, RESTING_ON);
 	}
 	
-	public static List<ItemStack> nonEmptyItemsRestingOn(World world, BlockPos pos) {
-		return itemsAround(world, pos, NON_EMPTY.and(RESTING_ON));
+	public static List<ItemStack> nonEmptyItemsRestingOn(Level level, BlockPos pos) {
+		return itemsAround(level, pos, NON_EMPTY.and(RESTING_ON));
 	}
 	
-	public static List<ItemFrameEntity> near(World world, BlockPos pos) {
-		return framesAround(world, pos, null);
+	public static List<ItemFrame> near(Level level, BlockPos pos) {
+		return framesAround(level, pos, null);
 	}
 	
-	public static List<ItemFrameEntity> nonEmptyNear(World world, BlockPos pos) {
-		return framesAround(world, pos, NON_EMPTY);
+	public static List<ItemFrame> nonEmptyNear(Level level, BlockPos pos) {
+		return framesAround(level, pos, NON_EMPTY);
 	}
 	
-	public static List<ItemFrameEntity> restingOn(World world, BlockPos pos) {
-		return framesAround(world, pos, RESTING_ON);
+	public static List<ItemFrame> restingOn(Level level, BlockPos pos) {
+		return framesAround(level, pos, RESTING_ON);
 	}
 	
-	public static List<ItemFrameEntity> nonEmptyRestingOn(World world, BlockPos pos) {
-		return framesAround(world, pos, NON_EMPTY.and(RESTING_ON));
+	public static List<ItemFrame> nonEmptyRestingOn(Level level, BlockPos pos) {
+		return framesAround(level, pos, NON_EMPTY.and(RESTING_ON));
 	}
 	
 	//directional: The item frame resting on the north side of the block, is returned in the north slot of the map.
 	// Only frames resting on the block can be returned, there can only be one in each direction.
 	
-	public static Map<Direction, ItemFrameEntity> directionalRestingOn(World world, BlockPos pos) {
-		return directionalFramesRestingOnAround(world, pos, null);
+	public static Map<Direction, ItemFrame> directionalRestingOn(Level level, BlockPos pos) {
+		return directionalFramesRestingOnAround(level, pos, null);
 	}
 	
-	public static Map<Direction, ItemFrameEntity> directionalNonEmptyRestingOn(World world, BlockPos pos) {
-		return directionalFramesRestingOnAround(world, pos, NON_EMPTY);
+	public static Map<Direction, ItemFrame> directionalNonEmptyRestingOn(Level level, BlockPos pos) {
+		return directionalFramesRestingOnAround(level, pos, NON_EMPTY);
 	}
 	
 	//i dont wanna fuckin microbenchmark this but like... how hot is this code? probably not that hot
 	// might be worth it to invest in blockpos.mutable & friends, though... use a similar approach to TE scanning in rhodo
 	// actually a better approach would probably be doing a single getEntitiesWithinAABB call lol
 	
-	public static List<ItemStack> itemsAround(World world, BlockPos pos, @Nullable BiPredicate<ItemFrameEntity, Direction> test) {
+	public static List<ItemStack> itemsAround(Level level, BlockPos pos, @Nullable BiPredicate<ItemFrame, Direction> test) {
 		List<ItemStack> items = new ArrayList<>(6);
 		
 		for(Direction dir : Direction.values()) {
 			BlockPos off = pos.relative(dir);
-			for(ItemFrameEntity frame : world.getEntitiesOfClass(ItemFrameEntity.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
+			for(ItemFrame frame : level.getEntitiesOfClass(ItemFrame.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
 				if(frame.isAlive() && (test == null || test.test(frame, dir))) {
 					items.add(frame.getItem());
 				}
@@ -83,12 +83,12 @@ public class FrameReader {
 		return items;
 	}
 	
-	public static List<ItemFrameEntity> framesAround(World world, BlockPos pos, @Nullable BiPredicate<ItemFrameEntity, Direction> test) {
-		List<ItemFrameEntity> frames = new ArrayList<>(6);
+	public static List<ItemFrame> framesAround(Level level, BlockPos pos, @Nullable BiPredicate<ItemFrame, Direction> test) {
+		List<ItemFrame> frames = new ArrayList<>(6);
 		
 		for(Direction dir : Direction.values()) {
 			BlockPos off = pos.relative(dir);
-			for(ItemFrameEntity frame : world.getEntitiesOfClass(ItemFrameEntity.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
+			for(ItemFrame frame : level.getEntitiesOfClass(ItemFrame.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
 				if(frame.isAlive() && (test == null || test.test(frame, dir))) {
 					frames.add(frame);
 				}
@@ -98,12 +98,12 @@ public class FrameReader {
 		return frames;
 	}
 	
-	public static Map<Direction, ItemFrameEntity> directionalFramesRestingOnAround(World world, BlockPos pos, @Nullable BiPredicate<ItemFrameEntity, Direction> test) {
-		Map<Direction, ItemFrameEntity> frames = new EnumMap<>(Direction.class);
+	public static Map<Direction, ItemFrame> directionalFramesRestingOnAround(Level level, BlockPos pos, @Nullable BiPredicate<ItemFrame, Direction> test) {
+		Map<Direction, ItemFrame> frames = new EnumMap<>(Direction.class);
 		
 		for(Direction dir : Direction.values()) {
 			BlockPos off = pos.relative(dir);
-			for(ItemFrameEntity frame : world.getEntitiesOfClass(ItemFrameEntity.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
+			for(ItemFrame frame : level.getEntitiesOfClass(ItemFrame.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
 				if(frame.isAlive() && frame.getDirection() == dir && (test == null || test.test(frame, dir))) {
 					frames.put(dir, frame);
 				}

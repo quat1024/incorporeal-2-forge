@@ -1,9 +1,12 @@
 Incorporeal 2 + Rhododendrite
 =============================
 
-Let's try this again. Forge this time.
+Let's try this again. ~~Forge this time.~~April fools
 
-Two mods for the price of one: Incorporeal 2, a fairly straightforward port of Incorporeal less the "cygnus network", and Rhododendrite, that mechanic's successor. Them being two separate mods is mainly for organizational purposes - eventually I want to separate the mods into their own .jars? Rhodo might get its own standalone Fabric port. Idk. I hesitate because it won't be very useful without Botania/a corporea network to power with it, and it also depends on a bit of code from incorporeal 2 and botania
+# things i have to finsh in fabric port
+
+* Fix all the compile errors Lol
+* Fix fabric.mod.json
 
 # Incorporeal 2
 

@@ -18,9 +18,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.server.TicketType;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
+import net.minecraft.level.server.TicketType;
 import net.minecraftforge.fml.network.NetworkHooks;
 import vazkii.botania.api.mana.ManaItemHandler;
 import vazkii.botania.client.fx.SparkleParticleData;
@@ -32,16 +32,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class FracturedSpaceCollectorEntity extends Entity {
-	public FracturedSpaceCollectorEntity(EntityType<?> type, World world) {
-		super(type, world);
+	public FracturedSpaceCollectorEntity(EntityType<?> type, Level level) {
+		super(type, level);
 		
 		//I guess this is a good place to do it?
 		setInvulnerable(true);
 		setNoGravity(true);
 	}
 	
-	public FracturedSpaceCollectorEntity(World world, BlockPos cratePos, PlayerEntity player) {
-		this(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, world);
+	public FracturedSpaceCollectorEntity(Level level, BlockPos cratePos, PlayerEntity player) {
+		this(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, level);
 		
 		this.cratePos = cratePos;
 		this.ownerUuid = player.getUUID();
@@ -92,9 +92,9 @@ public class FracturedSpaceCollectorEntity extends Entity {
 				}
 				
 				//Chunkload the immediate area for a little bit
-				if(level instanceof ServerWorld) {
+				if(level instanceof ServerLevel) {
 					ChunkPos ticketPos = new ChunkPos(cratePos);
-					((ServerWorld) level).getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, ticketPos, 3, player.getId());
+					((ServerLevel) level).getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, ticketPos, 3, player.getId());
 				}
 				
 				BlockState state = level.getBlockState(cratePos);
@@ -126,10 +126,10 @@ public class FracturedSpaceCollectorEntity extends Entity {
 		}
 	}
 	
-	private static boolean isCratePowered(World world, BlockPos pos) {
+	private static boolean isCratePowered(Level level, BlockPos pos) {
 		//Uses the exact same logic open crates do to check if they're powered!
 		for(Direction dir : Direction.values()) {
-			if(world.getSignal(pos.relative(dir), dir) != 0) {
+			if(level.getSignal(pos.relative(dir), dir) != 0) {
 				return true;
 			}
 		}
@@ -137,16 +137,16 @@ public class FracturedSpaceCollectorEntity extends Entity {
 		return false;
 	}
 	
-	private static void fakeCrateEject(World world, BlockPos pos, boolean redstone, ItemStack stack) {
+	private static void fakeCrateEject(Level level, BlockPos pos, boolean redstone, ItemStack stack) {
 		//mostly a copy of the open crate ejection logic, but doesn't touch the buffered item in the crate
 		double ejectY = pos.getY() - EntityType.ITEM.getHeight();
-		ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, ejectY, pos.getZ() + 0.5, stack);
+		ItemEntity item = new ItemEntity(level, pos.getX() + 0.5, ejectY, pos.getZ() + 0.5, stack);
 		item.setDeltaMovement(Vector3d.ZERO);
 		
 		if(redstone) //noinspection ConstantConditions
 			((AccessorItemEntity) item).setAge(-200);
 		
-		world.addFreshEntity(item);
+		level.addFreshEntity(item);
 	}
 	
 	private static final int PARTICLE_COUNT = 12;

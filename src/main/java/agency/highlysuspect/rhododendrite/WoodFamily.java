@@ -11,12 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
-import net.minecraft.world.gen.trunkplacer.StraightTrunkPlacer;
+import net.minecraft.util.registry.LevelGenRegistries;
+import net.minecraft.level.Level;
+import net.minecraft.level.gen.blockstateprovider.SimpleBlockStateProvider;
+import net.minecraft.level.gen.feature.*;
+import net.minecraft.level.gen.foliageplacer.BlobFoliagePlacer;
+import net.minecraft.level.gen.trunkplacer.StraightTrunkPlacer;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -60,10 +60,10 @@ public class WoodFamily {
 			//Yeah man I dunno.
 			@Nullable
 			@Override
-			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
+			public BlockState getToolModifiedState(BlockState state, Level level, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
 				if(toolType == ToolType.AXE)
 					return strippedLog.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
-				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
+				return super.getToolModifiedState(state, level, pos, player, stack, toolType);
 			}
 		};
 		
@@ -76,10 +76,10 @@ public class WoodFamily {
 			.sound(SoundType.WOOD)) {
 			@Nullable
 			@Override
-			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
+			public BlockState getToolModifiedState(BlockState state, Level level, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
 				if(toolType == ToolType.AXE)
 					return strippedWood.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
-				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
+				return super.getToolModifiedState(state, level, pos, player, stack, toolType);
 			}
 		};
 		
@@ -253,6 +253,6 @@ public class WoodFamily {
 	}
 	
 	public void registerFeature(IForgeRegistry<Feature<?>> r) {
-		Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, Rho.id(name + "_tree_feature"), treeFeature);
+		Registry.register(LevelGenRegistries.CONFIGURED_FEATURE, Rho.id(name + "_tree_feature"), treeFeature);
 	}
 }

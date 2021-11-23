@@ -19,7 +19,7 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 	
 	protected void renderBinding(MatrixStack ms, IRenderTypeBuffer buffers, Vector3 start, Vector3 end, int color, int hash, float sizeStart, float sizeEnd, float twistiness) {
 		//HEY Maybe don't copy this... Lol
-		//The intention was to draw vertices in world space (?) but it doesn't actually work.
+		//The intention was to draw vertices in level space (?) but it doesn't actually work.
 		//For one, the "start" vec3 is kind of ignored.
 		//It's only used to calculate the length/direction of the path, and the spiral always stems from 0, 0, 0.
 		//Found that out when i tried to make the spirals stem from the front side of the block instead of the center.
@@ -71,7 +71,7 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 		
 		//Submit everything to the IVertexBuilder
 		ms.pushPose();
-		ms.translate(0.5, 0.5, 0.5); //lame hack because it's not actually in world space
+		ms.translate(0.5, 0.5, 0.5); //lame hack because it's not actually in level space
 		
 		int a = (color >> 24) & 0xFF;
 		int r = (color >> 16) & 0xFF;

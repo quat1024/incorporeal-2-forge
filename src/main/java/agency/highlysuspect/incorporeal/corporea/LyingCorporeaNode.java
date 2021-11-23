@@ -2,7 +2,7 @@ package agency.highlysuspect.incorporeal.corporea;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import vazkii.botania.api.corporea.ICorporeaNode;
 import vazkii.botania.api.corporea.ICorporeaRequest;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
@@ -15,8 +15,8 @@ import java.util.List;
 
 //hey if this mod has a dupe bug, it's probably somewhere in this class
 public class LyingCorporeaNode extends AbstractCorporeaNode {
-	public LyingCorporeaNode(World world, BlockPos pos, ICorporeaSpark spark, ICorporeaNode wrapped, List<ItemStack> spoofStacks) {
-		super(world, pos, spark);
+	public LyingCorporeaNode(Level level, BlockPos pos, ICorporeaSpark spark, ICorporeaNode wrapped, List<ItemStack> spoofStacks) {
+		super(level, pos, spark);
 		
 		this.wrapped = wrapped;
 		this.spoofStacks = spoofStacks;

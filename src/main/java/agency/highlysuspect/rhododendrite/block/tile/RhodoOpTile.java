@@ -120,7 +120,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return binding == null ? new AxisAlignedBB(worldPosition) : new AxisAlignedBB(worldPosition, binding.direct);
+		return binding == null ? new AxisAlignedBB(levelPosition) : new AxisAlignedBB(levelPosition, binding.direct);
 	}
 	
 	@Nonnull

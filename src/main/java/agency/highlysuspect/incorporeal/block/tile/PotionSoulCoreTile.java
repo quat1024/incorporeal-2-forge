@@ -25,7 +25,7 @@ public class PotionSoulCoreTile extends AbstractSoulCoreTile {
 		super.tick();
 		if(level == null || level.isClientSide) return;
 		
-		List<PotionSoulCoreCollectorEntity> collectors = level.getEntitiesOfClass(PotionSoulCoreCollectorEntity.class, new AxisAlignedBB(worldPosition));
+		List<PotionSoulCoreCollectorEntity> collectors = level.getEntitiesOfClass(PotionSoulCoreCollectorEntity.class, new AxisAlignedBB(levelPosition));
 		Optional<ServerPlayerEntity> playerOp = findPlayer();
 		
 		if(collectors.size() >= 2 || !playerOp.isPresent()) {
@@ -41,6 +41,6 @@ public class PotionSoulCoreTile extends AbstractSoulCoreTile {
 	@Override
 	public void onExpire() {
 		super.onExpire();
-		if(level != null)	level.getEntitiesOfClass(PotionSoulCoreCollectorEntity.class, new AxisAlignedBB(worldPosition)).forEach(Entity::remove);
+		if(level != null)	level.getEntitiesOfClass(PotionSoulCoreCollectorEntity.class, new AxisAlignedBB(levelPosition)).forEach(Entity::remove);
 	}
 }

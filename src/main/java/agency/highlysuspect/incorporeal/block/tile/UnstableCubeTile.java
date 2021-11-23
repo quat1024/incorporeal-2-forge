@@ -51,7 +51,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 		int newPower = MathHelper.clamp(MathHelper.floor(Inc.rangeRemap(rotationSpeed, 0, 90, 0, 15)), 0, 15);
 		if(power != newPower) {
 			power = newPower;
-			level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
+			level.updateNeighborsAt(levelPosition, getBlockState().getBlock());
 		}
 		
 		if(level.isClientSide) {
@@ -62,7 +62,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 				int blue = (colorPacked & 0x0000FF);
 				int colorDarker = ((red / 2) << 16) | ((green / 2) << 8) | (blue / 2);
 				
-				Vector3 start = Vector3.fromBlockPos(worldPosition);
+				Vector3 start = Vector3.fromBlockPos(levelPosition);
 				Vector3 end = start.add(level.random.nextDouble() * 2 - 1, level.random.nextDouble() * 2 - 1, level.random.nextDouble() * 2 - 1);
 				
 				//TODO (issue #3): Why doesn't this produce any lightning
@@ -80,7 +80,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 				float pitch = basePitch + (rotationSpeed / 600f);
 				if(rotationSpeed > 83) pitch += 0.1;
 				
-				level.playLocalSound(worldPosition.getX() + .5, worldPosition.getY() + .5, worldPosition.getZ() + .5, IncSoundEvents.UNSTABLE, SoundCategory.BLOCKS, volume, pitch, false);
+				level.playLocalSound(levelPosition.getX() + .5, levelPosition.getY() + .5, levelPosition.getZ() + .5, IncSoundEvents.UNSTABLE, SoundCategory.BLOCKS, volume, pitch, false);
 			}
 		}
 	}

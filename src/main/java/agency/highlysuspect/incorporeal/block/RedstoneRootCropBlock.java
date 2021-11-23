@@ -19,8 +19,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -65,7 +65,7 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, IBlockReader levelIn, BlockPos pos, ISelectionContext context) {
 		return SHAPES[state.getValue(AGE)];
 	}
 	
@@ -78,7 +78,7 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 	
 	//Weird forge extension thing
 	@Override
-	public PlantType getPlantType(IBlockReader world, BlockPos pos) {
+	public PlantType getPlantType(IBlockReader level, BlockPos pos) {
 		return PlantType.CROP;
 	}
 	
@@ -86,9 +86,9 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 		ItemStack stack = e.getItemStack();
 		BlockRayTraceResult hit = e.getHitVec();
 		PlayerEntity player = e.getPlayer();
-		World world = e.getWorld();
+		Level level = e.getLevel();
 		
-		if(world != null && stack.getItem() == ModItems.redstoneRoot && hit != null && hit.getType() == RayTraceResult.Type.BLOCK) {
+		if(level != null && stack.getItem() == ModItems.redstoneRoot && hit != null && hit.getType() == RayTraceResult.Type.BLOCK) {
 			//see BlockItemUseContext#offsetPos
 			BlockPos targetPos = hit.getBlockPos().relative(hit.getDirection());
 			
@@ -96,15 +96,15 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 			
 			//this particular arrangement of targetPos and getFace is correct, see BucketItem
 			if(e.getPlayer().mayUseItemAt(targetPos, hit.getDirection(), stack) &&
-				world.getBlockState(targetPos).canBeReplaced(haha) &&
+				level.getBlockState(targetPos).canBeReplaced(haha) &&
 				//weird forge extension
-				world.getBlockState(targetPos.below()).canSustainPlant(world, targetPos.below(), Direction.UP, IncBlocks.REDSTONE_ROOT_CROP)) {
+				level.getBlockState(targetPos.below()).canSustainPlant(level, targetPos.below(), Direction.UP, IncBlocks.REDSTONE_ROOT_CROP)) {
 				
-				world.setBlockAndUpdate(targetPos, IncBlocks.REDSTONE_ROOT_CROP.defaultBlockState());
+				level.setBlockAndUpdate(targetPos, IncBlocks.REDSTONE_ROOT_CROP.defaultBlockState());
 				
 				SoundType type = SoundType.GRASS;
 				SoundEvent sound = type.getPlaceSound(); 
-				world.playSound(player, targetPos, sound, SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
+				level.playSound(player, targetPos, sound, SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
 				
 				if(!player.isCreative()) stack.shrink(1);
 				if(player instanceof ServerPlayerEntity) {

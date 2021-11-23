@@ -12,7 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import vazkii.botania.common.core.helper.Vector3;
 
 import javax.annotation.Nonnull;
@@ -23,7 +23,7 @@ public class MiscFunnelables {
 	public static final RhodoFunnelable.Loose DUST = new RhodoFunnelable.Loose() {
 		@Nullable
 		@Override
-		public RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face) {
+		public RhodoFunnelable getFunnelable(Level level, BlockPos pos, BlockState state, Direction face) {
 			return state.getBlock() == Blocks.REDSTONE_WIRE ? new RhodoFunnelable() {
 				@Override
 				public boolean canRhodoExtract() {
@@ -46,7 +46,7 @@ public class MiscFunnelables {
 	public static final RhodoFunnelable.Loose REPEATER = new RhodoFunnelable.Loose() {
 		@Nullable
 		@Override
-		public RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face) {
+		public RhodoFunnelable getFunnelable(Level level, BlockPos pos, BlockState state, Direction face) {
 			return state.getBlock() == Blocks.REPEATER ? new RhodoFunnelable() {
 				@Override
 				public boolean canRhodoExtract() {
@@ -68,7 +68,7 @@ public class MiscFunnelables {
 					int clampCount = MathHelper.clamp(request.count, 1, 4);
 					if(clampCount == request.count) {
 						if(!simulate) {
-							world.setBlockAndUpdate(pos, state.setValue(RepeaterBlock.DELAY, clampCount));
+							level.setBlockAndUpdate(pos, state.setValue(RepeaterBlock.DELAY, clampCount));
 						}
 						return true;
 					} else return false;
@@ -82,7 +82,7 @@ public class MiscFunnelables {
 		}
 	};
 	
-	public static final RhodoFunnelable.Loose CORPOREA_SOLIDIFIER = (world, pos, state, face) -> state.getBlock() == IncBlocks.CORPOREA_SOLIDIFIER ? new RhodoFunnelable() {
+	public static final RhodoFunnelable.Loose CORPOREA_SOLIDIFIER = (level, pos, state, face) -> state.getBlock() == IncBlocks.CORPOREA_SOLIDIFIER ? new RhodoFunnelable() {
 		@Override
 		public boolean canRhodoInsert() {
 			return true;
@@ -91,7 +91,7 @@ public class MiscFunnelables {
 		@Override
 		public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
 			if(!simulate)
-				((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(world, pos, state, request.matcher, request.count);
+				((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(level, pos, state, request.matcher, request.count);
 			return true;
 		}
 	} : null;

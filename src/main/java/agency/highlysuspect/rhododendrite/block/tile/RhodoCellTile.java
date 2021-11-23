@@ -106,7 +106,7 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return binding == null ? new AxisAlignedBB(worldPosition) : new AxisAlignedBB(worldPosition, binding);
+		return binding == null ? new AxisAlignedBB(levelPosition) : new AxisAlignedBB(levelPosition, binding);
 	}
 	
 	@Override

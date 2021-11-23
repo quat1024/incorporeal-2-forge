@@ -7,8 +7,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -30,9 +30,9 @@ public class IncNetwork {
 	}
 	
 	//Copypaste from Botania
-	public static void sendToNearby(World world, BlockPos pos, Object toSend) {
-		if (world instanceof ServerWorld) {
-			ServerWorld ws = (ServerWorld) world;
+	public static void sendToNearby(Level level, BlockPos pos, Object toSend) {
+		if (level instanceof ServerLevel) {
+			ServerLevel ws = (ServerLevel) level;
 			
 			ws.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false)
 				.filter(p -> p.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 64 * 64)

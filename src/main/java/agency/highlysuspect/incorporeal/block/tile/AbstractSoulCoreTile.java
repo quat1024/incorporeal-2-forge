@@ -13,7 +13,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
@@ -53,7 +53,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	
 	public Optional<ServerPlayerEntity> findPlayer() {
 		assert level != null; //grumble grumble
-		if(level.isClientSide) throw new IllegalStateException("findPlayer on client world");
+		if(level.isClientSide) throw new IllegalStateException("findPlayer on client level");
 		
 		if(!hasOwnerProfile()) return Optional.empty();
 		
@@ -113,7 +113,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	public void onExpire() {
 		findPlayer().ifPresent(p -> p.hurt(SOUL, 5f));
 		setOwnerProfile(null);
-		if(level != null) level.playSound(null, worldPosition, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, .5f, 1.2f);
+		if(level != null) level.playSound(null, levelPosition, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, .5f, 1.2f);
 	}
 	
 	public int getComparator() {
@@ -146,7 +146,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void renderHUD(MatrixStack ms, Minecraft mc, World world, BlockPos pos) {
+	public void renderHUD(MatrixStack ms, Minecraft mc, Level level, BlockPos pos) {
 		//lol
 		HUDHandler.drawSimpleManaHUD(ms, 0xee4444, mana, getMaxMana(), getBlockState().getBlock().getName().getString()); 
 	}

@@ -13,8 +13,8 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.botania.api.wand.IWandHUD;
@@ -42,15 +42,15 @@ public class SoulCoreBlock extends Block implements IWandHUD {
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader level) {
 		return typeS.get().create();
 	}
 	
 	@Override
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, Level level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		if(!EntityDoppleganger.isTruePlayer(player)) return ActionResultType.PASS;
 		
-		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(world, pos);
+		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(level, pos);
 		if(tile != null) return tile.activate(player, hand);
 		else return ActionResultType.PASS;
 	}
@@ -61,17 +61,17 @@ public class SoulCoreBlock extends Block implements IWandHUD {
 	}
 	
 	@Override
-	public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos) {
-		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(world, pos);
+	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(level, pos);
 		if(tile != null) return tile.getComparator();
 		else return 0;
 	}
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void renderHUD(MatrixStack ms, Minecraft mc, World world, BlockPos pos) {
-		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(world, pos);
-		if(tile != null) tile.renderHUD(ms, mc, world, pos);
+	public void renderHUD(MatrixStack ms, Minecraft mc, Level level, BlockPos pos) {
+		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(level, pos);
+		if(tile != null) tile.renderHUD(ms, mc, level, pos);
 		else HUDHandler.drawSimpleManaHUD(ms, 0xff0000, 1, 1, "Missing tile entity?");
 	}
 	

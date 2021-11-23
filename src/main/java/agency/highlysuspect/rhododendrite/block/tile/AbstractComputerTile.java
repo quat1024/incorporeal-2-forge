@@ -22,7 +22,7 @@ public abstract class AbstractComputerTile extends TileMod {
 		//return rootExtractingChainBind(dir, (cursor, tile) -> directBind.bindsTo(poss, tile) ? poss : null); //Wasteful
 		assert level != null;
 		
-		BlockPos.Mutable cursor = worldPosition.mutable();
+		BlockPos.Mutable cursor = levelPosition.mutable();
 		for(int i = 0; i < RANGE; i++) {
 			cursor.move(dir);
 			@Nullable TileEntity tile = level.getBlockEntity(cursor);
@@ -43,7 +43,7 @@ public abstract class AbstractComputerTile extends TileMod {
 	protected @Nullable ChainBindResult rootExtractingChainBind(Direction dir, ChainBindRootExtactor chainRoot) {
 		assert level != null;
 		
-		BlockPos.Mutable cursor = worldPosition.mutable();
+		BlockPos.Mutable cursor = levelPosition.mutable();
 		for(int i = 0; i < RANGE; i++) { //same as red string
 			cursor.move(dir);
 			@Nullable TileEntity tile = level.getBlockEntity(cursor);

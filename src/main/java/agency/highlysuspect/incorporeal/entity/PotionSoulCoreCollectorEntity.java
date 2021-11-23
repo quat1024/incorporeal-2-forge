@@ -13,7 +13,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -22,15 +22,15 @@ import java.util.Collections;
 import java.util.Optional;
 
 public class PotionSoulCoreCollectorEntity extends LivingEntity {
-	public PotionSoulCoreCollectorEntity(EntityType<? extends LivingEntity> type, World world) {
-		super(type, world);
+	public PotionSoulCoreCollectorEntity(EntityType<? extends LivingEntity> type, Level level) {
+		super(type, level);
 		
 		setInvulnerable(true);
 		setNoGravity(true);
 	}
 	
-	public PotionSoulCoreCollectorEntity(World world, BlockPos pos) {
-		this(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, world);
+	public PotionSoulCoreCollectorEntity(Level level, BlockPos pos) {
+		this(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, level);
 		setPos(pos.getX() + .5d, pos.getY() + 0.005d, pos.getZ() + .5d);
 	}
 	

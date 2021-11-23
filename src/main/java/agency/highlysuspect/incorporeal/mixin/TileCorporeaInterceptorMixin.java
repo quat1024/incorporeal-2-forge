@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,18 +24,18 @@ public class TileCorporeaInterceptorMixin {
 		remap = false,
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
+			target = "Lnet/minecraft/level/Level;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
 		)
 	)
 	private void whenIntercepting(ICorporeaRequestMatcher request, int count, ICorporeaSpark spark, ICorporeaSpark source, List<ItemStack> stacks, List<ICorporeaNode> nodes, boolean doit, CallbackInfo ci) {
-		World world = ((TileCorporeaInterceptor) (Object) this).getLevel(); assert world != null;
+		Level level = ((TileCorporeaInterceptor) (Object) this).getLevel(); assert level != null;
 		BlockPos pos = ((TileCorporeaInterceptor) (Object) this).getBlockPos();
 		
 		for(Direction dir : Direction.values()) {
 			BlockPos solidifierPos = pos.relative(dir);
-			BlockState state = world.getBlockState(solidifierPos);
+			BlockState state = level.getBlockState(solidifierPos);
 			if(state.getBlock() instanceof CorporeaSolidifierBlock) {
-				((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(world, solidifierPos, state, request, count);
+				((CorporeaSolidifierBlock) state.getBlock()).receiveRequest(level, solidifierPos, state, request, count);
 			}
 		}
 	}

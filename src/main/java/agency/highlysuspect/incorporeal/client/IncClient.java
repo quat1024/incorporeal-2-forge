@@ -1,39 +1,28 @@
 package agency.highlysuspect.incorporeal.client;
 
 import agency.highlysuspect.incorporeal.Inc;
-import agency.highlysuspect.incorporeal.IncProxy;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
 import agency.highlysuspect.incorporeal.item.IncItems;
-import net.minecraft.block.Block;
+import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import vazkii.botania.client.render.tile.RenderTileRedString;
 import vazkii.botania.client.render.tile.RenderTileSpecialFlower;
 
-public class IncClient implements IncProxy {
+public class IncClient implements ClientModInitializer {
 	@Override
 	public void setup() {
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
 		modBus.addListener((FMLClientSetupEvent e) -> {
 			e.enqueueWork(() -> {
-				ItemModelsProperties.register(IncItems.CORPOREA_TICKET, Inc.id("written_ticket"), (stack, world, ent) -> IncItems.CORPOREA_TICKET.hasRequest(stack) ? 1 : 0);
+				ItemModelsProperties.register(IncItems.CORPOREA_TICKET, Inc.id("written_ticket"), (stack, level, ent) -> IncItems.CORPOREA_TICKET.hasRequest(stack) ? 1 : 0);
 			});
 			
 			RenderTypeLookup.setRenderLayer(IncBlocks.ENDER_SOUL_CORE, RenderType.translucent());
@@ -76,7 +65,7 @@ public class IncClient implements IncProxy {
 		modBus.addListener((ColorHandlerEvent.Block event) -> {
 			BlockColors colors = event.getBlockColors();
 			
-			colors.register((state, world, pos, layer) -> ((UnstableCubeBlock) state.getBlock()).color.getColorValue(),
+			colors.register((state, level, pos, layer) -> ((UnstableCubeBlock) state.getBlock()).color.getColorValue(),
 				IncBlocks.UNSTABLE_CUBES.values().toArray(new Block[0]));
 		});
 		
@@ -85,12 +74,12 @@ public class IncClient implements IncProxy {
 	}
 	
 	//Forge what the hell is this>?????????? What is this shit??>>?/
-	@Override
+	
 	public Item.Properties soulCoreFrameIster(Item.Properties in) {
 		return in.setISTER(() -> SoulCoreFrameIster::new);
 	}
 	
-	@Override
+	
 	public Item.Properties unstableCubeIster(Item.Properties in, DyeColor color) {
 		return in.setISTER(() -> () -> new UnstableCubeIster(color));
 	}

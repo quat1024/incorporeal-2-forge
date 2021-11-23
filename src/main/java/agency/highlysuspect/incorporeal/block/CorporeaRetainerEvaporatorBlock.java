@@ -11,7 +11,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.corporea.TileCorporeaRetainer;
@@ -33,25 +33,25 @@ public class CorporeaRetainerEvaporatorBlock extends Block {
 	}
 	
 	@Override
-	public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		updatePoweredState(world, pos, state);
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+		updatePoweredState(level, pos, state);
 	}
 	
 	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromBlock, boolean isMoving) {
-		updatePoweredState(world, pos, state);
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromBlock, boolean isMoving) {
+		updatePoweredState(level, pos, state);
 	}
 	
-	private void updatePoweredState(World world, BlockPos pos, BlockState state) {
-		boolean shouldPower = world.hasNeighborSignal(pos); // "strong power"; it was like this in the original, idk
+	private void updatePoweredState(Level level, BlockPos pos, BlockState state) {
+		boolean shouldPower = level.hasNeighborSignal(pos); // "strong power"; it was like this in the original, idk
 		boolean isPowered = state.getValue(BlockStateProperties.POWERED);
 		
 		if(shouldPower != isPowered) {
-			world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, shouldPower));
+			level.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, shouldPower));
 			
 			if(shouldPower) {
 				for(Direction horiz : Direction.Plane.HORIZONTAL) {
-					TileEntity tile = world.getBlockEntity(pos.relative(horiz));
+					TileEntity tile = level.getBlockEntity(pos.relative(horiz));
 					if(tile != null) {
 						tile.getCapability(SolidifiedRequest.Cap.INSTANCE).ifPresent(holder -> {
 							SolidifiedRequest solid = holder.getRequest();

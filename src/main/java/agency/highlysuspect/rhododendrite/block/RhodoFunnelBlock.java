@@ -7,8 +7,8 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.Level;
 
 import javax.annotation.Nullable;
 
@@ -26,13 +26,13 @@ public class RhodoFunnelBlock extends AbstractComputerBlock {
 	}
 	
 	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block from, BlockPos fromPos, boolean isMoving) {
-		boolean shouldPower = world.getBestNeighborSignal(pos) > 0;
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block from, BlockPos fromPos, boolean isMoving) {
+		boolean shouldPower = level.getBestNeighborSignal(pos) > 0;
 		boolean isPowered = state.getValue(BlockStateProperties.POWERED);
 		if(shouldPower != isPowered) {
-			world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, shouldPower));
+			level.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, shouldPower));
 			if(shouldPower) {
-				TileEntity tile = world.getBlockEntity(pos);
+				TileEntity tile = level.getBlockEntity(pos);
 				if(tile instanceof RhodoFunnelTile) {
 					((RhodoFunnelTile) tile).onRedstonePower();
 				}
@@ -47,7 +47,7 @@ public class RhodoFunnelBlock extends AbstractComputerBlock {
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader level) {
 		return new RhodoFunnelTile();
 	}
 }

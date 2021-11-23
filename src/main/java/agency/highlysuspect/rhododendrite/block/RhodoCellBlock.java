@@ -3,7 +3,7 @@ package agency.highlysuspect.rhododendrite.block;
 import agency.highlysuspect.rhododendrite.block.tile.RhodoCellTile;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.level.IBlockReader;
 
 import javax.annotation.Nullable;
 
@@ -21,7 +21,7 @@ public class RhodoCellBlock extends AbstractComputerBlock {
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader level) {
 		return new RhodoCellTile();
 	}
 }

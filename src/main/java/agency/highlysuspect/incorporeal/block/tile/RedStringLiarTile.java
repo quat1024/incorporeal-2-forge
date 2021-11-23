@@ -5,7 +5,7 @@ import agency.highlysuspect.incorporeal.corporea.LyingCorporeaNode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -33,7 +33,7 @@ public class RedStringLiarTile extends TileRedString {
 		else return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getOrientation().getOpposite()).isPresent();
 	}
 	
-	public ICorporeaNode getNode(World world, ICorporeaSpark spark) {
+	public ICorporeaNode getNode(Level level, ICorporeaSpark spark) {
 		TileEntity bound = getTileAtBinding();
 		if(bound != null) {
 			//todo (issue #2): there's no reason to limit myself to only ForgeCapCorporeaNodes
@@ -41,26 +41,26 @@ public class RedStringLiarTile extends TileRedString {
 			LazyOptional<IItemHandler> handler = bound.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getOrientation().getOpposite());
 			if(handler.isPresent()) {
 				return new LyingCorporeaNode(
-					world, spark.getAttachPos(), spark,
-					new ForgeCapCorporeaNode(world, spark.getAttachPos(), handler.resolve().get(), spark),
+					level, spark.getAttachPos(), spark,
+					new ForgeCapCorporeaNode(level, spark.getAttachPos(), handler.resolve().get(), spark),
 					getSpoofedStacks()
 				);
 			}
 		}
 		
-		return new DummyCorporeaNode(world, spark.getAttachPos(), spark);
+		return new DummyCorporeaNode(level, spark.getAttachPos(), spark);
 	}
 	
 	public List<ItemStack> getSpoofedStacks() {
-		return FrameReader.nonEmptyItemsRestingOn(level, worldPosition);
+		return FrameReader.nonEmptyItemsRestingOn(level, levelPosition);
 	}
 	
 	public static class NodeDetector implements ICorporeaNodeDetector {
 		@Nullable
 		@Override
-		public ICorporeaNode getNode(World world, ICorporeaSpark spark) {
-			TileEntity tile = world.getBlockEntity(spark.getAttachPos());
-			if(tile instanceof RedStringLiarTile) return ((RedStringLiarTile) tile).getNode(world, spark);
+		public ICorporeaNode getNode(Level level, ICorporeaSpark spark) {
+			TileEntity tile = level.getBlockEntity(spark.getAttachPos());
+			if(tile instanceof RedStringLiarTile) return ((RedStringLiarTile) tile).getNode(level, spark);
 			else return null;
 		}
 	}

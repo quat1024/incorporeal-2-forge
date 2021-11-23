@@ -2,7 +2,7 @@ package agency.highlysuspect.incorporeal.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.entity.item.ItemFrame;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -10,10 +10,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.TickPriority;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.level.IBlockReader;
+import net.minecraft.level.TickPriority;
+import net.minecraft.level.Level;
+import net.minecraft.level.server.ServerLevel;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -50,30 +50,30 @@ public class CrappyComparatorBlock extends CrappyRedstoneDiodeBlock {
 	}
 	
 	@Override
-	protected int getOutputSignal(IBlockReader worldIn, BlockPos pos, BlockState state) {
+	protected int getOutputSignal(IBlockReader levelIn, BlockPos pos, BlockState state) {
 		return state.getValue(POWERED) ? 15 : 0;
 	}
 	
 	//Not a copypaste
-	private boolean calculateOutput(World world, BlockPos pos, BlockState state) {
-		int rawPower = getInputSignal(world, pos, state);
+	private boolean calculateOutput(Level level, BlockPos pos, BlockState state) {
+		int rawPower = getInputSignal(level, pos, state);
 		if(state.getValue(SENSITIVE)) return rawPower != 0;
 		else return rawPower == 15;
 	}
 	
 	//Copypaste
-	protected int getInputSignal(World worldIn, BlockPos pos, BlockState state) {
-		int i = super.getInputSignal(worldIn, pos, state);
+	protected int getInputSignal(Level levelIn, BlockPos pos, BlockState state) {
+		int i = super.getInputSignal(levelIn, pos, state);
 		Direction direction = state.getValue(FACING);
 		BlockPos blockpos = pos.relative(direction);
-		BlockState blockstate = worldIn.getBlockState(blockpos);
+		BlockState blockstate = levelIn.getBlockState(blockpos);
 		if (blockstate.hasAnalogOutputSignal()) {
-			i = blockstate.getAnalogOutputSignal(worldIn, blockpos);
-		} else if (i < 15 && blockstate.isRedstoneConductor(worldIn, blockpos)) {
+			i = blockstate.getAnalogOutputSignal(levelIn, blockpos);
+		} else if (i < 15 && blockstate.isRedstoneConductor(levelIn, blockpos)) {
 			blockpos = blockpos.relative(direction);
-			blockstate = worldIn.getBlockState(blockpos);
-			ItemFrameEntity itemframeentity = this.findItemFrame(worldIn, direction, blockpos);
-			int j = Math.max(itemframeentity == null ? Integer.MIN_VALUE : itemframeentity.getAnalogOutput(), blockstate.hasAnalogOutputSignal() ? blockstate.getAnalogOutputSignal(worldIn, blockpos) : Integer.MIN_VALUE);
+			blockstate = levelIn.getBlockState(blockpos);
+			ItemFrame ItemFrame = this.findItemFrame(levelIn, direction, blockpos);
+			int j = Math.max(ItemFrame == null ? Integer.MIN_VALUE : ItemFrame.getAnalogOutput(), blockstate.hasAnalogOutputSignal() ? blockstate.getAnalogOutputSignal(levelIn, blockpos) : Integer.MIN_VALUE);
 			if (j != Integer.MIN_VALUE) {
 				i = j;
 			}
@@ -84,75 +84,75 @@ public class CrappyComparatorBlock extends CrappyRedstoneDiodeBlock {
 	
 	//Copypaste
 	@Nullable
-	private ItemFrameEntity findItemFrame(World worldIn, Direction facing, BlockPos pos) {
-		List<ItemFrameEntity> list = worldIn.getEntitiesOfClass(ItemFrameEntity.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1), (frame) -> frame != null && frame.getDirection() == facing);
+	private ItemFrame findItemFrame(Level levelIn, Direction facing, BlockPos pos) {
+		List<ItemFrame> list = levelIn.getEntitiesOfClass(ItemFrame.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1), (frame) -> frame != null && frame.getDirection() == facing);
 		return list.size() == 1 ? list.get(0) : null;
 	}
 	
 	//Copypaste modified to change the other property
 	@Override
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, Level level, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(!player.abilities.mayBuild) return ActionResultType.PASS;
 		else {
 			state = state.cycle(SENSITIVE);
 			float pitch = state.getValue(SENSITIVE) ? 0.55f : 0.5f;
-			world.playSound(player, pos, SoundEvents.COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, pitch);
-			world.setBlock(pos, state, 2);
+			level.playSound(player, pos, SoundEvents.COMPARATOR_CLICK, SoundCategory.BLOCKS, 0.3f, pitch);
+			level.setBlock(pos, state, 2);
 			
-			onStateChange(world, pos, state);
+			onStateChange(level, pos, state);
 			
-			return ActionResultType.sidedSuccess(world.isClientSide);
+			return ActionResultType.sidedSuccess(level.isClientSide);
 		}
 	}
 	
 	//Based on a copypaste but modified
 	//These are some very vague and confusing MCP names btw
 	@Override
-	protected void checkTickOnNeighbor(World worldIn, BlockPos pos, BlockState state) {
-		if(!worldIn.getBlockTicks().willTickThisTick(pos, this)) {
-			//int i = this.calculateOutput(worldIn, pos, state);
-			//TileEntity tileentity = worldIn.getTileEntity(pos);
+	protected void checkTickOnNeighbor(Level levelIn, BlockPos pos, BlockState state) {
+		if(!levelIn.getBlockTicks().willTickThisTick(pos, this)) {
+			//int i = this.calculateOutput(levelIn, pos, state);
+			//TileEntity tileentity = levelIn.getTileEntity(pos);
 			//int j = tileentity instanceof ComparatorTileEntity ? ((ComparatorTileEntity)tileentity).getOutputSignal() : 0;
-			boolean i = calculateOutput(worldIn, pos, state);
+			boolean i = calculateOutput(levelIn, pos, state);
 			boolean j = state.getValue(POWERED);
-			if (i != j /*|| state.get(POWERED) != this.shouldBePowered(worldIn, pos, state)*/) {
-				TickPriority tickpriority = this.shouldPrioritize(worldIn, pos, state) ? TickPriority.HIGH : TickPriority.NORMAL;
+			if (i != j /*|| state.get(POWERED) != this.shouldBePowered(levelIn, pos, state)*/) {
+				TickPriority tickpriority = this.shouldPrioritize(levelIn, pos, state) ? TickPriority.HIGH : TickPriority.NORMAL;
 				//changed the hardcoded 2ticks to a getDelay call
-				worldIn.getBlockTicks().scheduleTick(pos, this, getDelay(state), tickpriority);
+				levelIn.getBlockTicks().scheduleTick(pos, this, getDelay(state), tickpriority);
 			}
 		}
 	}
 	
 	//Based on a copypaste but modified a lot and its barely recognizable lol
-	private void onStateChange(World world, BlockPos pos, BlockState state) {
+	private void onStateChange(Level level, BlockPos pos, BlockState state) {
 		boolean isPowered = state.getValue(POWERED);
-		boolean shouldPower = calculateOutput(world, pos, state);
+		boolean shouldPower = calculateOutput(level, pos, state);
 		
 		if (isPowered != shouldPower) {
-			world.setBlock(pos, state.setValue(POWERED, shouldPower), 2);
-			this.updateNeighborsInFront(world, pos, state);
+			level.setBlock(pos, state.setValue(POWERED, shouldPower), 2);
+			this.updateNeighborsInFront(level, pos, state);
 		}
 	}
 	
 	//Copypaste
 	@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-		this.onStateChange(worldIn, pos, state);
+	public void tick(BlockState state, ServerLevel levelIn, BlockPos pos, Random rand) {
+		this.onStateChange(levelIn, pos, state);
 	}
 	
 	// (no client-events stuff needed, thats for the tile entity)
 	
 	//Weird Forge extensions, mostly pasted as-is
 	@Override
-	public boolean getWeakChanges(BlockState state, net.minecraft.world.IWorldReader world, BlockPos pos) {
+	public boolean getWeakChanges(BlockState state, net.minecraft.level.ILevelReader level, BlockPos pos) {
 		//return state.isIn(Blocks.COMPARATOR);
 		return true;
 	}
 	
 	@Override
-	public void onNeighborChange(BlockState state, net.minecraft.world.IWorldReader world, BlockPos pos, BlockPos neighbor) {
-		if (pos.getY() == neighbor.getY() && world instanceof World && !((World)world).isClientSide()) {
-			state.neighborChanged((World)world, pos, world.getBlockState(neighbor).getBlock(), neighbor, false);
+	public void onNeighborChange(BlockState state, net.minecraft.level.ILevelReader level, BlockPos pos, BlockPos neighbor) {
+		if (pos.getY() == neighbor.getY() && level instanceof Level && !((Level)level).isClientSide()) {
+			state.neighborChanged((Level)level, pos, level.getBlockState(neighbor).getBlock(), neighbor, false);
 		}
 	}
 }

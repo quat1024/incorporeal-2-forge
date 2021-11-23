@@ -3,10 +3,10 @@ package agency.highlysuspect.incorporeal.client;
 import agency.highlysuspect.incorporeal.IncNetwork;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.level.ClientLevel;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import net.minecraftforge.fml.network.NetworkEvent;
 import vazkii.botania.client.fx.SparkleParticleData;
 
@@ -24,10 +24,10 @@ public class ClientPacketHandler {
 			@Override
 			public void run() {
 				Minecraft client = Minecraft.getInstance();
-				ClientWorld world = client.level;
-				if(world == null) return;
+				ClientLevel level = client.level;
+				if(level == null) return;
 				
-				showSparkleLine(world, sparkle);
+				showSparkleLine(level, sparkle);
 			}
 		});
 	}
@@ -38,27 +38,27 @@ public class ClientPacketHandler {
 			@Override
 			public void run() {
 				Minecraft client = Minecraft.getInstance();
-				ClientWorld world = client.level;
-				if(world == null) return;
+				ClientLevel level = client.level;
+				if(level == null) return;
 				
 				for(Pair<IncNetwork.SparkleLine, byte[]> item : funny.data) {
-					showSparkleLine(world, item.getFirst());
+					showSparkleLine(level, item.getFirst());
 					
 					Vector3d end = item.getFirst().end;
 					byte[] notes = item.getSecond();
 					
 					if(notes.length == 1) {
-						world.addParticle(ParticleTypes.NOTE, end.x, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
+						level.addParticle(ParticleTypes.NOTE, end.x, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
 					} else if(notes.length == 2) {
-						world.addParticle(ParticleTypes.NOTE, end.x - 0.2, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
-						world.addParticle(ParticleTypes.NOTE, end.x + 0.2, end.y + 0.7, end.z, notes[1] / 24d, 0.0D, 0.0D);
+						level.addParticle(ParticleTypes.NOTE, end.x - 0.2, end.y + 0.7, end.z, notes[0] / 24d, 0.0D, 0.0D);
+						level.addParticle(ParticleTypes.NOTE, end.x + 0.2, end.y + 0.7, end.z, notes[1] / 24d, 0.0D, 0.0D);
 					}
 				}
 			}
 		});
 	}
 	
-	private static void showSparkleLine(World world, IncNetwork.SparkleLine sparkle) {
+	private static void showSparkleLine(Level level, IncNetwork.SparkleLine sparkle) {
 		//Loosely based on PacketBotaniaEffect's SPARK_NET_INDICATOR (...is the comment i wrote back in 2018)
 		Vector3d diff = sparkle.end.subtract(sparkle.start);
 		Vector3d movement = diff.normalize().scale(.2);
@@ -77,7 +77,7 @@ public class ClientPacketHandler {
 			float g = Math.min(1F, ((color & 0x00FF00) >> 8) / 255F + 0.4F);
 			float b = Math.min(1F, (color & 0x0000FF) / 255F + 0.4F);
 			
-			world.addParticle(SparkleParticleData.noClip(sparkle.size, r, g, b, sparkle.decay), currentPos.x, currentPos.y, currentPos.z, 0, 0, 0);
+			level.addParticle(SparkleParticleData.noClip(sparkle.size, r, g, b, sparkle.decay), currentPos.x, currentPos.y, currentPos.z, 0, 0, 0);
 			
 			currentPos = currentPos.add(movement);
 		}

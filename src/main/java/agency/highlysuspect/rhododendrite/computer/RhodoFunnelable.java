@@ -4,7 +4,7 @@ import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.level.Level;
 import vazkii.botania.common.core.helper.Vector3;
 
 import javax.annotation.Nonnull;
@@ -29,7 +29,7 @@ public interface RhodoFunnelable {
 	}
 	
 	interface Loose {
-		@Nullable RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face);
+		@Nullable RhodoFunnelable getFunnelable(Level level, BlockPos pos, BlockState state, Direction face);
 		
 		default Vector3 bindPosition(BlockPos pos) {
 			return Vector3.fromBlockPos(pos).add(.5, .5, .5);

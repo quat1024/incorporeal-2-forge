@@ -1,42 +1,13 @@
 package agency.highlysuspect.incorporeal;
 
-import agency.highlysuspect.incorporeal.block.RedstoneRootCropBlock;
-import agency.highlysuspect.incorporeal.block.IncBlocks;
-import agency.highlysuspect.incorporeal.block.tile.CorporeaSoulCoreTile;
-import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
-import agency.highlysuspect.incorporeal.block.tile.RedStringLiarTile;
 import agency.highlysuspect.incorporeal.client.IncClient;
-import agency.highlysuspect.incorporeal.corporea.IncCapEvents;
-import agency.highlysuspect.incorporeal.corporea.EmptyCorporeaRequestMatcher;
-import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
-import agency.highlysuspect.incorporeal.corporea.WildcardCorporeaRequestMatcher;
-import agency.highlysuspect.incorporeal.datagen.IncDatagen;
-import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
-import agency.highlysuspect.incorporeal.entity.PotionSoulCoreCollectorEntity;
-import agency.highlysuspect.incorporeal.item.IncItems;
-import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.fabricmc.api.ModInitializer;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import vazkii.botania.api.BotaniaAPI;
-import vazkii.botania.api.corporea.CorporeaHelper;
+import vazkii.botania.common.core.helper.MathHelper;
 import vazkii.botania.common.lib.LibMisc;
 
 import java.util.ArrayList;
@@ -44,56 +15,55 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-@Mod("incorporeal")
-public class Inc {
+public class Inc implements ModInitializer {
 	public static final String MODID = "incorporeal";
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
 	
 	//"WE HAVE CLIENT ENTRYPOINTS AT HOME"
-	public static final IncProxy proxy = DistExecutor.safeRunForDist(() -> IncClient::new, () -> IncProxy.Server::new);
+	//public static final IncProxy proxy = DistExecutor.safeRunForDist(() -> IncClient::new, () -> IncProxy.Server::new);
 	
-	public Inc() {
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-		
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, IncConfig.SPEC);
-		
-		modBus.addListener(IncDatagen::gatherData);
-		
-		modBus.addGenericListener(Block.class, IncBlocks::register);
-		modBus.addGenericListener(Item.class, IncItems::register);
-		modBus.addGenericListener(TileEntityType.class, IncTileTypes::register);
-		modBus.addGenericListener(EntityType.class, IncEntityTypes::register);
-		modBus.addGenericListener(SoundEvent.class, IncSoundEvents::register);
-		
-		modBus.addListener(PotionSoulCoreCollectorEntity::attributeEvent);
-		
-		modBus.addListener((FMLCommonSetupEvent event) -> {
-			SolidifiedRequest.Cap.initialize();
-			
-			BotaniaAPI botania = BotaniaAPI.instance();
-			botania.registerCorporeaNodeDetector(new RedStringLiarTile.NodeDetector());
-			
-			CorporeaHelper corporeaHelper = CorporeaHelper.instance();
-			corporeaHelper.registerRequestMatcher(id("wildcard"), WildcardCorporeaRequestMatcher.class, nbt -> WildcardCorporeaRequestMatcher.INSTANCE);
-			corporeaHelper.registerRequestMatcher(id("empty"), EmptyCorporeaRequestMatcher.class, nbt -> EmptyCorporeaRequestMatcher.INSTANCE);
-			
-			MinecraftForge.EVENT_BUS.addListener(CorporeaSoulCoreTile::corporeaIndexRequestEvent);
-			MinecraftForge.EVENT_BUS.addListener(TicketConjurerItem::chatEvent);
-			
-			MinecraftForge.EVENT_BUS.addGenericListener(TileEntity.class, IncCapEvents::attachTileCapabilities);
-			
-			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::healEvent);
-			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::attackEvent);
-			
-			MinecraftForge.EVENT_BUS.addListener(RedstoneRootCropBlock::interactEvent);
-			
-			IncNetwork.setup();
-		});
-		
-		proxy.setup();
+	@Override
+	public void onInitialize() {
+//		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+//		
+//		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, IncConfig.SPEC);
+//		
+//		modBus.addListener(IncDatagen::gatherData);
+//		
+//		modBus.addGenericListener(Block.class, IncBlocks::register);
+//		modBus.addGenericListener(Item.class, IncItems::register);
+//		modBus.addGenericListener(TileEntityType.class, IncTileTypes::register);
+//		modBus.addGenericListener(EntityType.class, IncEntityTypes::register);
+//		modBus.addGenericListener(SoundEvent.class, IncSoundEvents::register);
+//		
+//		modBus.addListener(PotionSoulCoreCollectorEntity::attributeEvent);
+//		
+//		modBus.addListener((FMLCommonSetupEvent event) -> {
+//			SolidifiedRequest.Cap.initialize();
+//			
+//			BotaniaAPI botania = BotaniaAPI.instance();
+//			botania.registerCorporeaNodeDetector(new RedStringLiarTile.NodeDetector());
+//			
+//			CorporeaHelper corporeaHelper = CorporeaHelper.instance();
+//			corporeaHelper.registerRequestMatcher(id("wildcard"), WildcardCorporeaRequestMatcher.class, nbt -> WildcardCorporeaRequestMatcher.INSTANCE);
+//			corporeaHelper.registerRequestMatcher(id("empty"), EmptyCorporeaRequestMatcher.class, nbt -> EmptyCorporeaRequestMatcher.INSTANCE);
+//			
+//			MinecraftForge.EVENT_BUS.addListener(CorporeaSoulCoreTile::corporeaIndexRequestEvent);
+//			MinecraftForge.EVENT_BUS.addListener(TicketConjurerItem::chatEvent);
+//			
+//			MinecraftForge.EVENT_BUS.addGenericListener(TileEntity.class, IncCapEvents::attachTileCapabilities);
+//			
+//			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::healEvent);
+//			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::attackEvent);
+//			
+//			MinecraftForge.EVENT_BUS.addListener(RedstoneRootCropBlock::interactEvent);
+//			
+//			IncNetwork.setup();
+//		});
+//		
+//		proxy.setup();
 	}
 	
-	//making a util class is for cowards
 	public static ResourceLocation id(String path) {
 		return new ResourceLocation(MODID, path);
 	}
@@ -106,9 +76,8 @@ public class Inc {
 		return new ResourceLocation("forge", path);
 	}
 	
-	public static <T extends ForgeRegistryEntry<T>> void reg(IForgeRegistry<T> r, String name, T thing) {
-		thing.setRegistryName(id(name));
-		r.register(thing);
+	public static <T> void reg(Registry<T> r, String name, T thing) {
+		Registry.register(r, id(name), thing);
 	}
 	
 	public static <T> T choose(Collection<T> things, Random random) {
@@ -128,10 +97,10 @@ public class Inc {
 	}
 	
 	public static float sinDegrees(float in) {
-		return MathHelper.sin((in % 360) * (float) (Math.PI / 180));
+		return Mth.sin((in % 360) * (float) (Math.PI / 180));
 	}
 	
 	public static float cosDegrees(float in) {
-		return MathHelper.cos((in % 360) * (float) (Math.PI / 180));
+		return Mth.cos((in % 360) * (float) (Math.PI / 180));
 	}
 }

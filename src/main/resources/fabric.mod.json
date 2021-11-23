@@ -1,0 +1,27 @@
+{
+	"schemaVersion": 1,
+	"id": "incorporeal",
+	"version": "${version}",
+	
+	"name": "Incorporeal 2",
+	"description": "More toys and tools for large-scale corporea networks",
+	"authors": [
+		"quaternary"
+	],
+	
+	"license": "LGPL-3.0-or-later",
+	
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"agency.highlysuspect.incorporeal.Inc"
+		],
+		"client": [
+			"agency.highlysuspect.incorporeal.client.IncClient"
+		]
+	},
+	"mixins": [
+		"incorporeal.mixins.json",
+		"rhododendrite.mixins.json"
+	]
+}
