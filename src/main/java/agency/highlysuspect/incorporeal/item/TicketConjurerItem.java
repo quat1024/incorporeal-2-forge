@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.item.Item.Properties;
+
 public class TicketConjurerItem extends Item {
 	public TicketConjurerItem(Properties properties) {
 		super(properties);
@@ -40,10 +42,10 @@ public class TicketConjurerItem extends Item {
 		ServerPlayerEntity player = e.getPlayer();
 		ItemStack thisOrderStack; //when you say "2 of this", what are you referring to
 		
-		if(player.getHeldItem(Hand.MAIN_HAND).getItem() instanceof TicketConjurerItem) {
-			thisOrderStack = player.getHeldItem(Hand.OFF_HAND);
-		} else if(player.getHeldItem(Hand.OFF_HAND).getItem() instanceof TicketConjurerItem) {
-			thisOrderStack = player.getHeldItem(Hand.MAIN_HAND);
+		if(player.getItemInHand(Hand.MAIN_HAND).getItem() instanceof TicketConjurerItem) {
+			thisOrderStack = player.getItemInHand(Hand.OFF_HAND);
+		} else if(player.getItemInHand(Hand.OFF_HAND).getItem() instanceof TicketConjurerItem) {
+			thisOrderStack = player.getItemInHand(Hand.MAIN_HAND);
 		} else return;
 		
 		String chatMessage = e.getMessage().toLowerCase(Locale.ROOT).trim();
@@ -68,7 +70,7 @@ public class TicketConjurerItem extends Item {
 		
 		if(itemName.equals("this") || itemName.equals("these")) {
 			if(thisOrderStack.isEmpty()) foundMatch = false; //you said "2 of this", but weren't actually holding anything else.
-			else itemName = thisOrderStack.getDisplayName().getString().toLowerCase(Locale.ROOT).trim();
+			else itemName = thisOrderStack.getHoverName().getString().toLowerCase(Locale.ROOT).trim();
 		}
 		
 		if(foundMatch) {

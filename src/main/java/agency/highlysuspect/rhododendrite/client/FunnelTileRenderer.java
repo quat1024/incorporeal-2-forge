@@ -14,7 +14,7 @@ public class FunnelTileRenderer extends ComputerTileRenderer<RhodoFunnelTile> {
 	
 	@Override
 	public void render(RhodoFunnelTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
-		if(tile.getWorld() == null) return;
+		if(tile.getLevel() == null) return;
 		
 		Vector3 foreBinding = tile.getForeDirectBind();
 		Vector3 aftBinding = tile.getAftDirectBind();
@@ -26,7 +26,7 @@ public class FunnelTileRenderer extends ComputerTileRenderer<RhodoFunnelTile> {
 				Vector3.fromTileEntityCenter(tile),
 				foreBinding,
 				color,
-				MathHelper.hash(tile.getPos().hashCode()),
+				MathHelper.murmurHash3Mixer(tile.getBlockPos().hashCode()),
 				1.3f,
 				0.1f,
 				2f
@@ -38,7 +38,7 @@ public class FunnelTileRenderer extends ComputerTileRenderer<RhodoFunnelTile> {
 				Vector3.fromTileEntityCenter(tile),
 				aftBinding,
 				color,
-				MathHelper.hash(tile.getPos().hashCode()),
+				MathHelper.murmurHash3Mixer(tile.getBlockPos().hashCode()),
 				0.1f,
 				1.3f,
 				-2f

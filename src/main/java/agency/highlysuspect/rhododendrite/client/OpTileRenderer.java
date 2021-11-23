@@ -20,7 +20,7 @@ public class OpTileRenderer extends ComputerTileRenderer<RhodoOpTile> {
 	
 	@Override
 	public void render(RhodoOpTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
-		if(tile.getWorld() == null) return;
+		if(tile.getLevel() == null) return;
 		
 		BlockPos directBindPos = tile.getDirectBind();
 		if(directBindPos != null) {
@@ -28,7 +28,7 @@ public class OpTileRenderer extends ComputerTileRenderer<RhodoOpTile> {
 				Vector3.fromTileEntityCenter(tile),
 				Vector3.fromBlockPos(directBindPos).add(.5, .5, .5),
 				0xFF2277BB,
-				MathHelper.hash(tile.getPos().hashCode()),
+				MathHelper.murmurHash3Mixer(tile.getBlockPos().hashCode()),
 				1f,
 				0.5f,
 				1f
@@ -37,14 +37,14 @@ public class OpTileRenderer extends ComputerTileRenderer<RhodoOpTile> {
 		
 		ItemStack card = tile.getCard();
 		if(!card.isEmpty()) {
-			ms.push();
+			ms.pushPose();
 			ms.translate(0.5, 0.5, 0.5);
 			ms.scale(0.6f, 0.6f, 0.6f);
 			//ms.rotate(Vector3f.YP.rotationDegrees(ClientTickHandler.total % 360));
-			ms.rotate(Vector3f.YP.rotationDegrees(-Minecraft.getInstance().player.rotationYaw)); //we have billboarding at home
+			ms.mulPose(Vector3f.YP.rotationDegrees(-Minecraft.getInstance().player.yRot)); //we have billboarding at home
 			ms.translate(0, MathHelper.sin(ClientTickHandler.total / 10f) * 0.1f, 0);
-			Minecraft.getInstance().getItemRenderer().renderItem(card, ItemCameraTransforms.TransformType.FIXED, light, overlay, ms, buf);
-			ms.pop();
+			Minecraft.getInstance().getItemRenderer().renderStatic(card, ItemCameraTransforms.TransformType.FIXED, light, overlay, ms, buf);
+			ms.popPose();
 		}
 	}
 }

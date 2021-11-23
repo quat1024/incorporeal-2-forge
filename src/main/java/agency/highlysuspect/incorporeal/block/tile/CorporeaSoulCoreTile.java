@@ -26,7 +26,7 @@ public class CorporeaSoulCoreTile extends AbstractSoulCoreTile {
 		if(event.getIndexSpark() == null) return;
 		
 		Set<UUID> coredUuids = CorporeaHelper.instance().getNodesOnNetwork(event.getIndexSpark()).stream()
-			.map(node -> node.getWorld().getTileEntity(node.getPos()))
+			.map(node -> node.getWorld().getBlockEntity(node.getPos()))
 			.filter(t -> t instanceof CorporeaSoulCoreTile)
 			.map(soul -> ((CorporeaSoulCoreTile) soul).getOwnerProfile())
 			.filter(Objects::nonNull)
@@ -34,8 +34,8 @@ public class CorporeaSoulCoreTile extends AbstractSoulCoreTile {
 			.filter(Objects::nonNull)
 			.collect(Collectors.toSet());
 		
-		if(!coredUuids.isEmpty() && !coredUuids.contains(event.getRequester().getUniqueID())) {
-			event.getRequester().sendMessage(new TranslationTextComponent("incorporeal.no_soul_core").mergeStyle(TextFormatting.RED), CHAT_SEND_UUID);
+		if(!coredUuids.isEmpty() && !coredUuids.contains(event.getRequester().getUUID())) {
+			event.getRequester().sendMessage(new TranslationTextComponent("incorporeal.no_soul_core").withStyle(TextFormatting.RED), CHAT_SEND_UUID);
 			event.setCanceled(true);
 		}
 	}

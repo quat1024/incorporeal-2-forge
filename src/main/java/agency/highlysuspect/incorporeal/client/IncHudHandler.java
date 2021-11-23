@@ -23,42 +23,42 @@ public class IncHudHandler {
 		if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
 			Minecraft mc = Minecraft.getInstance();
 			IProfiler profiler = mc.getProfiler();
-			profiler.startSection("incorporeal-hud");
+			profiler.push("incorporeal-hud");
 			
 			if(mc.player == null) return; //idk
 			
-			ItemStack main = mc.player.getHeldItemMainhand();
-			ItemStack offhand = mc.player.getHeldItemOffhand();
+			ItemStack main = mc.player.getMainHandItem();
+			ItemStack offhand = mc.player.getOffhandItem();
 			MatrixStack ms = event.getMatrixStack();
 			
 			if(!botaniaDrewCorporeaIndexOverlay &&
-				mc.currentScreen instanceof ChatScreen &&
+				mc.screen instanceof ChatScreen &&
 				main.getItem() instanceof TicketConjurerItem || offhand.getItem() instanceof TicketConjurerItem) {
 				renderConjurerOverlay(ms);
 			}
 			
-			profiler.endSection();
+			profiler.pop();
 		}
 	}
 	
 	//Copypaste of renderNearIndexDisplay in Botania, small changes ofc
 	private static void renderConjurerOverlay(MatrixStack ms) {
 		Minecraft mc = Minecraft.getInstance();
-		String txt0 = I18n.format("incorporeal.ticket_conjurer.hold0");
-		String txt1 = TextFormatting.GRAY + I18n.format("incorporeal.ticket_conjurer.hold1");
-		String txt2 = TextFormatting.GRAY + I18n.format("incorporeal.ticket_conjurer.hold2");
+		String txt0 = I18n.get("incorporeal.ticket_conjurer.hold0");
+		String txt1 = TextFormatting.GRAY + I18n.get("incorporeal.ticket_conjurer.hold1");
+		String txt2 = TextFormatting.GRAY + I18n.get("incorporeal.ticket_conjurer.hold2");
 		
-		int l = Math.max(mc.fontRenderer.getStringWidth(txt0), Math.max(mc.fontRenderer.getStringWidth(txt1), mc.fontRenderer.getStringWidth(txt2))) + 20;
-		int x = mc.getMainWindow().getScaledWidth() - l - 20;
-		int y = mc.getMainWindow().getScaledHeight() - 60;
+		int l = Math.max(mc.font.width(txt0), Math.max(mc.font.width(txt1), mc.font.width(txt2))) + 20;
+		int x = mc.getWindow().getGuiScaledWidth() - l - 20;
+		int y = mc.getWindow().getGuiScaledHeight() - 60;
 		
 		AbstractGui.fill(ms, x - 6, y - 6, x + l + 6, y + 37, 0x44000000);
 		AbstractGui.fill(ms, x - 4, y - 4, x + l + 4, y + 35, 0x44000000);
 		RenderSystem.enableRescaleNormal();
-		mc.getItemRenderer().renderItemAndEffectIntoGUI(new ItemStack(IncItems.TICKET_CONJURER), x, y + 10);
+		mc.getItemRenderer().renderAndDecorateItem(new ItemStack(IncItems.TICKET_CONJURER), x, y + 10);
 		
-		mc.fontRenderer.drawStringWithShadow(ms, txt0, x + 20, y, 0xFFFFFF);
-		mc.fontRenderer.drawStringWithShadow(ms, txt1, x + 20, y + 14, 0xFFFFFF);
-		mc.fontRenderer.drawStringWithShadow(ms, txt2, x + 20, y + 24, 0xFFFFFF);
+		mc.font.drawShadow(ms, txt0, x + 20, y, 0xFFFFFF);
+		mc.font.drawShadow(ms, txt1, x + 20, y + 14, 0xFFFFFF);
+		mc.font.drawShadow(ms, txt2, x + 20, y + 24, 0xFFFFFF);
 	}
 }

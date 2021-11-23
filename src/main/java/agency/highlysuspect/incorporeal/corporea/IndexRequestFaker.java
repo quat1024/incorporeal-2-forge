@@ -20,7 +20,7 @@ public class IndexRequestFaker {
 		for(ItemStack stack : stacks) {
 			if(!stack.isEmpty()) {
 				ItemEntity item = new ItemEntity(world, indexPos.getX() + 0.5, indexPos.getY() + 1.5, indexPos.getZ() + 0.5, stack);
-				world.addEntity(item);
+				world.addFreshEntity(item);
 			}
 		}
 	}

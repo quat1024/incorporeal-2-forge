@@ -60,7 +60,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	@Override
 	public void tickFlower() {
 		super.tickFlower();
-		if(world == null || world.isRemote) return;
+		if(level == null || level.isClientSide) return;
 		
 		if(cooldown > 0) {
 			cooldown--;
@@ -69,8 +69,8 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 		
 		BlockPos pos = getEffectivePos(); //name shadow
 		
-		AxisAlignedBB itemDetectionBox = new AxisAlignedBB(pos.add(-radius, 0, -radius), pos.add(radius + 1, 1, radius + 1));
-		List<ItemEntity> nearbyTicketEnts = world.getEntitiesWithinAABB(ItemEntity.class, itemDetectionBox, ent -> {
+		AxisAlignedBB itemDetectionBox = new AxisAlignedBB(pos.offset(-radius, 0, -radius), pos.offset(radius + 1, 1, radius + 1));
+		List<ItemEntity> nearbyTicketEnts = level.getEntitiesOfClass(ItemEntity.class, itemDetectionBox, ent -> {
 			if(ent == null || !ent.isAlive()) return false;
 			ItemStack stack = ent.getItem();
 			return stack.getItem() == IncItems.CORPOREA_TICKET && IncItems.CORPOREA_TICKET.getRequest(stack).isPresent();
@@ -78,23 +78,23 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 		if(nearbyTicketEnts.isEmpty()) return;
 		
 		//Pick one at random and get its request
-		ItemEntity ticketEnt = nearbyTicketEnts.get(world.rand.nextInt(nearbyTicketEnts.size()));
+		ItemEntity ticketEnt = nearbyTicketEnts.get(level.random.nextInt(nearbyTicketEnts.size()));
 		
 		@SuppressWarnings("OptionalGetWithoutIsPresent") //i checked above
 		SolidifiedRequest request = IncItems.CORPOREA_TICKET.getRequest(ticketEnt.getItem()).get();
 		
-		List<TileCorporeaIndex> nearbyIndices = NearbyIndicesFinder.findNearbyIndicesReflect(world, pos, radius);
+		List<TileCorporeaIndex> nearbyIndices = NearbyIndicesFinder.findNearbyIndicesReflect(level, pos, radius);
 		if(nearbyIndices.isEmpty()) {
 			//A nod to when people write in chat while accidentally standing too far from the corporea index
-			MinecraftServer server = world.getServer();
+			MinecraftServer server = level.getServer();
 			if(server != null && getMana() >= 100) {
 				TranslationTextComponent msg = new TranslationTextComponent("chat.type.text", displayName == null ? new TranslationTextComponent("block.incorporeal.sanvocalia") : displayName, request.toText());
 				
-				Inc.LOGGER.info("Sanvocalia chat message triggered at {} in dimension {}", pos.getCoordinatesAsString(), world.getDimensionKey().getLocation());
+				Inc.LOGGER.info("Sanvocalia chat message triggered at {} in dimension {}", pos.toShortString(), level.dimension().location());
 				if(IncConfig.INST.everyoneHearsSanvocalia.get()) {
-					server.getPlayerList().func_232641_a_(msg, ChatType.CHAT, CHAT_SEND_UUID);
+					server.getPlayerList().broadcastMessage(msg, ChatType.CHAT, CHAT_SEND_UUID);
 				} else {
-					ServerPlayerEntity placer = server.getPlayerList().getPlayerByUUID(placerUuid); 
+					ServerPlayerEntity placer = server.getPlayerList().getPlayer(placerUuid); 
 					if(placer != null) placer.sendMessage(msg, CHAT_SEND_UUID);
 				}
 				
@@ -110,8 +110,8 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 			for(TileCorporeaIndex index : nearbyIndices) {
 				if(getMana() < 20) break;
 				
-				indexPositions.add(index.getPos());
-				IndexRequestFaker.requestAtIndex(world, request, index.getSpark(), index.getPos());
+				indexPositions.add(index.getBlockPos());
+				IndexRequestFaker.requestAtIndex(level, request, index.getSpark(), index.getBlockPos());
 				
 				addMana(-20);
 				didAnything = true;
@@ -126,23 +126,23 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	}
 	
 	private void consumeTicket(ItemEntity ticket, @Nullable Collection<BlockPos> indexPositions) {
-		assert world != null;
+		assert level != null;
 		
 		//Burp
-		SoundEvent sound = world.rand.nextFloat() < 0.1 ? SoundEvents.ENTITY_PLAYER_BURP : SoundEvents.ENTITY_GENERIC_EAT;
-		world.playSound(null, pos, sound, SoundCategory.BLOCKS, .5f, 1);
+		SoundEvent sound = level.random.nextFloat() < 0.1 ? SoundEvents.PLAYER_BURP : SoundEvents.GENERIC_EAT;
+		level.playSound(null, worldPosition, sound, SoundCategory.BLOCKS, .5f, 1);
 		
 		//Show eating particles
-		if(world instanceof ServerWorld) {
-			((ServerWorld) world).spawnParticle(new ItemParticleData(ParticleTypes.ITEM, ticket.getItem()), ticket.getPosX(), ticket.getPosY(), ticket.getPosZ(), 10, 0.1, 0.1, 0.1, 0.03);
+		if(level instanceof ServerWorld) {
+			((ServerWorld) level).sendParticles(new ItemParticleData(ParticleTypes.ITEM, ticket.getItem()), ticket.getX(), ticket.getY(), ticket.getZ(), 10, 0.1, 0.1, 0.1, 0.03);
 		}
 		
 		//Show sparkle lines
 		if(indexPositions != null) {
-			Vector3d here = ticket.getPositionVec();
+			Vector3d here = ticket.position();
 			for(BlockPos pos : indexPositions) {
-				Vector3d there = Vector3d.copyCentered(pos);
-				IncNetwork.sendToNearby(world, pos, new IncNetwork.SparkleLine(here, there, 4, 1f));
+				Vector3d there = Vector3d.atCenterOf(pos);
+				IncNetwork.sendToNearby(level, pos, new IncNetwork.SparkleLine(here, there, 4, 1f));
 			}
 		}
 		
@@ -158,7 +158,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	@Nullable
 	@Override
 	public RadiusDescriptor getRadius() {
-		return new RadiusDescriptor.Square(pos, radius);
+		return new RadiusDescriptor.Square(worldPosition, radius);
 	}
 	
 	@Override
@@ -173,18 +173,18 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-		placerUuid = entity == null ? null : entity.getUniqueID();
-		if(stack.hasDisplayName()) displayName = stack.getDisplayName();
+		placerUuid = entity == null ? null : entity.getUUID();
+		if(stack.hasCustomHoverName()) displayName = stack.getHoverName();
 	}
 	
 	@Override
 	public void readFromPacketNBT(CompoundNBT tag) {
 		super.readFromPacketNBT(tag);
 		
-		if(tag.contains("Placer")) placerUuid = tag.getUniqueId("Placer");
+		if(tag.contains("Placer")) placerUuid = tag.getUUID("Placer");
 		else placerUuid = null;
 		
-		if(tag.contains("Name")) displayName = ITextComponent.Serializer.getComponentFromJson(tag.getString("Name"));
+		if(tag.contains("Name")) displayName = ITextComponent.Serializer.fromJson(tag.getString("Name"));
 		else displayName = null;
 		
 		cooldown = tag.getInt("Cooldown");
@@ -194,7 +194,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	public void writeToPacketNBT(CompoundNBT tag) {
 		super.writeToPacketNBT(tag);
 		
-		if(placerUuid != null) tag.putUniqueId("Placer", placerUuid);
+		if(placerUuid != null) tag.putUUID("Placer", placerUuid);
 		if(displayName != null) tag.putString("Name", ITextComponent.Serializer.toJson(displayName));
 		tag.putInt("Cooldown", cooldown);
 	}

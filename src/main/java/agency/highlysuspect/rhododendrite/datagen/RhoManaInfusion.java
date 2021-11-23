@@ -19,7 +19,7 @@ public class RhoManaInfusion extends IncManaInfusion {
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 //		cycle(consumer, 20, "rhododendrite:opcode_cycle",
 //			RhoItems.OPCODE_BLANK,
 //			RhoItems.OPCODE_PUSH,

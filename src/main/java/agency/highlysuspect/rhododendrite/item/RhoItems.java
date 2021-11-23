@@ -30,10 +30,10 @@ public class RhoItems {
 		BlockState cellState = cell.getBlockState();
 		BlockState opState = op.getBlockState();
 		
-		assert cell.getWorld() != null;
-		cell.getWorld().setBlockState(
-			cell.getPos(),
-			cellState.with(DirectionalBlock.FACING, opState.get(DirectionalBlock.FACING))
+		assert cell.getLevel() != null;
+		cell.getLevel().setBlockAndUpdate(
+			cell.getBlockPos(),
+			cellState.setValue(DirectionalBlock.FACING, opState.getValue(DirectionalBlock.FACING))
 		);
 	});
 	
@@ -129,7 +129,7 @@ public class RhoItems {
 	public static final RhoCardItem CONDITION_GREATER_THAN = RhoCardItem.cond(defaultProps(), (cell, op) -> cell.peek().count > cell.peekNext().count);
 	
 	public static Item.Properties defaultProps() {
-		return new Item.Properties().group(Tab.INSTANCE);
+		return new Item.Properties().tab(Tab.INSTANCE);
 	}
 	
 	public static void register(RegistryEvent.Register<Item> event) {
@@ -171,13 +171,13 @@ public class RhoItems {
 		
 		public Tab() {
 			super(Rho.MODID);
-			setNoTitle();
+			hideTitle();
 			//noinspection deprecation (forge extends this, but this works fine too)
-			setBackgroundImageName(Rho.MODID + ".png");
+			setBackgroundSuffix(Rho.MODID + ".png");
 		}
 		
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(RhoBlocks.RHODODENDRITE.planks);
 		}
 		

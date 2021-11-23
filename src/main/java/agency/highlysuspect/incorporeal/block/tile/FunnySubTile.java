@@ -50,9 +50,9 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 	@Override
 	public void tickFlower() {
 		super.tickFlower();
-		assert world != null;
+		assert level != null;
 		
-		if(world.isRemote) return;
+		if(level.isClientSide) return;
 		
 		if(redstoneSignal == 15) clock = -1; //reset
 		else if(redstoneSignal > 0 || getMana() < NOTE_MANA_COST) {
@@ -60,7 +60,7 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 		}
 		else {
 			clock++;
-			markDirty();
+			setChanged();
 			
 			int ticksBetween = (ticksBetweenNotes / (overgrowth || overgrowthBoost ? 2 : 1));
 			if(ticksBetween == 0) ticksBetween = 1;
@@ -75,45 +75,45 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 			BlockPos bassPos = null;
 			BlockPos pos = getEffectivePos();
 			
-			for(BlockPos bp : BlockPos.getAllInBoxMutable(pos.add(-range, 0, -range), pos.add(range, 1, range))) {
-				BlockState state = world.getBlockState(bp);
+			for(BlockPos bp : BlockPos.betweenClosed(pos.offset(-range, 0, -range), pos.offset(range, 1, range))) {
+				BlockState state = level.getBlockState(bp);
 				if(state.getBlock() == Blocks.NOTE_BLOCK) {
-					NoteBlockInstrument inst = state.get(BlockStateProperties.NOTE_BLOCK_INSTRUMENT);
+					NoteBlockInstrument inst = state.getValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT);
 					
 					if(inst == NoteBlockInstrument.FLUTE && flutePos == null) {
-						flutePos = bp.toImmutable();
+						flutePos = bp.immutable();
 						continue;
 					}
 					
 					if(inst == NoteBlockInstrument.SNARE && snarePos == null) {
-						snarePos = bp.toImmutable();
+						snarePos = bp.immutable();
 						continue;
 					}
 					
 					if(inst == NoteBlockInstrument.BASEDRUM && basedrumPos == null) {
-						basedrumPos = bp.toImmutable();
+						basedrumPos = bp.immutable();
 						continue;
 					}
 					
 					if(inst == NoteBlockInstrument.BASS && bassPos == null) {
-						bassPos = bp.toImmutable();
+						bassPos = bp.immutable();
 						continue;
 					}
 				}
 			}
 			
 			//play music
-			Vector3d particleSrc = world.getBlockState(pos).getOffset(world, pos).add(pos.getX() + .5, pos.getY() + sparkleHeight, pos.getZ() + .5);
+			Vector3d particleSrc = level.getBlockState(pos).getOffset(level, pos).add(pos.getX() + .5, pos.getY() + sparkleHeight, pos.getZ() + .5);
 			
 			List<Pair<IncNetwork.SparkleLine, byte[]>> sparkleData = new ArrayList<>();
 			
-			boolean dirtyMana = doIt(world, pos, tick, particleSrc, flutePos, NoteBlockInstrument.FLUTE, sparkleData);
-			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, snarePos, NoteBlockInstrument.SNARE, sparkleData);
-			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, basedrumPos, NoteBlockInstrument.BASEDRUM, sparkleData);
-			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(world, pos, tick, particleSrc, bassPos, NoteBlockInstrument.BASS, sparkleData);
+			boolean dirtyMana = doIt(level, pos, tick, particleSrc, flutePos, NoteBlockInstrument.FLUTE, sparkleData);
+			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(level, pos, tick, particleSrc, snarePos, NoteBlockInstrument.SNARE, sparkleData);
+			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(level, pos, tick, particleSrc, basedrumPos, NoteBlockInstrument.BASEDRUM, sparkleData);
+			if(getMana() > NOTE_MANA_COST) dirtyMana |= doIt(level, pos, tick, particleSrc, bassPos, NoteBlockInstrument.BASS, sparkleData);
 			if(dirtyMana) sync();
 			
-			if(!sparkleData.isEmpty()) IncNetwork.sendToNearby(world, pos, new IncNetwork.FunnyFlower(sparkleData));
+			if(!sparkleData.isEmpty()) IncNetwork.sendToNearby(level, pos, new IncNetwork.FunnyFlower(sparkleData));
 		}
 	}
 	
@@ -122,12 +122,12 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 		
 		byte[] notes = Despacito.notesForTick(tick, inst);
 		if(notes != null) {
-			sparkleLines.add(Pair.of(new IncNetwork.SparkleLine(particleSrc, Vector3d.copyCentered(noteblockPos), 2, 1f), notes));
+			sparkleLines.add(Pair.of(new IncNetwork.SparkleLine(particleSrc, Vector3d.atCenterOf(noteblockPos), 2, 1f), notes));
 			for(int note : notes) {
 				if(getMana() > NOTE_MANA_COST) {
 					addMana(-NOTE_MANA_COST);
 					float convertedPitch = (float) Math.pow(2, (note - 12 + pitchShift) / 12d);
-					world.playSound(null, pos, inst.getSound(), SoundCategory.RECORDS, 3f, convertedPitch);
+					world.playSound(null, pos, inst.getSoundEvent(), SoundCategory.RECORDS, 3f, convertedPitch);
 				}
 			}
 			return true;

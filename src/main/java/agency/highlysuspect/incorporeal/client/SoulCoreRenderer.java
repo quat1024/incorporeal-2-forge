@@ -51,7 +51,7 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		//TODO: I did PR that! Not released rn though.
 		float ticks = ClientTickHandler.total;
 		
-		ms.push();
+		ms.pushPose();
 		initialWobble(ms, hash, ticks);
 		
 		if(tile == null) {
@@ -60,43 +60,43 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		} else {
 			//real tile entity
 			if(tile.hasOwnerProfile()) {
-				ms.push(); //again
+				ms.pushPose(); //again
 				wobbleSkull(ms, hash, ticks);
 				
 				IVertexBuilder builder = buf.getBuffer(getSkullRenderType(tile.getOwnerProfile()));
-				headModel.render(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
+				headModel.renderToBuffer(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
 				
-				ms.pop();
+				ms.popPose();
 			}
 		}
 		
 		wobbleCubes(ms, hash, ticks);
 		
 		//idk
-		IVertexBuilder builder = buf.getBuffer(RenderType.getEntityTranslucentCull(cubesTexture));
+		IVertexBuilder builder = buf.getBuffer(RenderType.entityTranslucentCull(cubesTexture));
 		cubeModel.expand = Inc.rangeRemap(Inc.sinDegrees(hash + 800 + ticks * 3.4f), -1, 1, 1.5f / 16f, 1.9f / 16f);
-		cubeModel.render(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, Inc.rangeRemap(Inc.sinDegrees(hash + ticks * 4), -1, 1, .7f, .95f));
+		cubeModel.renderToBuffer(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, Inc.rangeRemap(Inc.sinDegrees(hash + ticks * 4), -1, 1, .7f, .95f));
 		
-		ms.pop();
+		ms.popPose();
 	}
 	
 	private static class CubeModel extends Model {
 		public CubeModel() {
-			super(RenderType::getEntityTranslucentCull);
-			textureWidth = 64;
-			textureHeight = 32;
+			super(RenderType::entityTranslucentCull);
+			texWidth = 64;
+			texHeight = 32;
 			
 			cube = new ModelRenderer(this, 0, 0);
-			cube.setTextureSize(64, 32);
+			cube.setTexSize(64, 32);
 			cube.addBox(1.6f, 1.6f, 1.6f, 16, 16, 16);
-			cube.setRotationPoint(0, 0, 0);
+			cube.setPos(0, 0, 0);
 		}
 		
 		private final ModelRenderer cube;
 		private float expand = 1.6f;
 		
 		@Override
-		public void render(MatrixStack ms, IVertexBuilder buf, int light, int overlay, float red, float green, float blue, float alpha) {
+		public void renderToBuffer(MatrixStack ms, IVertexBuilder buf, int light, int overlay, float red, float green, float blue, float alpha) {
 //			
 //			ModelRenderer cube;
 //			cube = new ModelRenderer(this, 0, 0);
@@ -105,7 +105,7 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 //			cube.setRotationPoint(0, 0, 0);
 			
 			//I have no idea how to port this immediate-mode stuff from 1.12 lol
-			ms.push();
+			ms.pushPose();
 			ms.scale(0.45f, 0.45f, 0.45f);
 			
 			Quaternion rotater = Vector3f.YP.rotationDegrees(90);
@@ -116,15 +116,15 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 				cube.render(ms, buf, light, overlay, red, green, blue, alpha);
 				ms.translate(-expand, -expand, -expand);
 				ms.scale(1, -1, -1);
-				if(i % 2 == 0) ms.rotate(rotater);
+				if(i % 2 == 0) ms.mulPose(rotater);
 			}
 			
-			ms.pop();
+			ms.popPose();
 		}
 	}
 	
 	private static int positionalHash(@Nullable AbstractSoulCoreTile tile) {
-		return tile == null ? 0 : MathHelper.hash(MathHelper.hash(tile.getPos().hashCode())) % 150000;
+		return tile == null ? 0 : MathHelper.murmurHash3Mixer(MathHelper.murmurHash3Mixer(tile.getBlockPos().hashCode())) % 150000;
 	}
 	
 	//Much of this has been lifted straight from the 1.12 version of the mod - I don't know exactly how it works.
@@ -132,7 +132,7 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 	
 	private static void initialWobble(MatrixStack ms, int hash, float ticks) {
 		ms.translate(.5, .5, .5);
-		ms.rotate(Vector3f.YP.rotationDegrees((hash + ticks) * 2 % 360));
+		ms.mulPose(Vector3f.YP.rotationDegrees((hash + ticks) * 2 % 360));
 		ms.translate(0, 0.1 * Inc.sinDegrees((hash + ticks) * 4), 0);
 	}
 	
@@ -142,40 +142,40 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		float wobbleCos = Inc.cosDegrees(wobble);
 		float wobbleAmountDegrees = 10f;
 		
-		ms.rotate(Vector3f.XP.rotationDegrees(wobbleCos * wobbleAmountDegrees));
-		ms.rotate(Vector3f.XP.rotationDegrees(wobbleSin * wobbleAmountDegrees));
-		ms.rotate(Vector3f.ZP.rotationDegrees(-wobbleCos * wobbleAmountDegrees));
-		ms.rotate(Vector3f.ZP.rotationDegrees(-wobbleSin * wobbleAmountDegrees));
+		ms.mulPose(Vector3f.XP.rotationDegrees(wobbleCos * wobbleAmountDegrees));
+		ms.mulPose(Vector3f.XP.rotationDegrees(wobbleSin * wobbleAmountDegrees));
+		ms.mulPose(Vector3f.ZP.rotationDegrees(-wobbleCos * wobbleAmountDegrees));
+		ms.mulPose(Vector3f.ZP.rotationDegrees(-wobbleSin * wobbleAmountDegrees));
 		
 		ms.translate(0, -1/4f, 0);
 		ms.scale(-1f, -1f, 1f);
 	}
 	
 	private static void wobbleCubes(MatrixStack ms, int hash, float ticks) {
-		ms.rotate(Vector3f.YP.rotationDegrees(((-ticks + hash) / 5f) % 360));
-		ms.rotate(Vector3f.YP.rotationDegrees(MathHelper.sin((ticks + hash) / 50f) * 40));
+		ms.mulPose(Vector3f.YP.rotationDegrees(((-ticks + hash) / 5f) % 360));
+		ms.mulPose(Vector3f.YP.rotationDegrees(MathHelper.sin((ticks + hash) / 50f) * 40));
 		
 		float wobble2 = (hash + ticks) * 3;
 		float wobble2Sin = Inc.sinDegrees(wobble2);
 		float wobble2Cos = Inc.cosDegrees(wobble2);
 		float wobble2AmountDegrees = 10f;
-		ms.rotate(Vector3f.XP.rotationDegrees(-wobble2Cos * wobble2AmountDegrees));
-		ms.rotate(Vector3f.XP.rotationDegrees(-wobble2Sin * wobble2AmountDegrees));
-		ms.rotate(Vector3f.ZP.rotationDegrees(wobble2Cos * wobble2AmountDegrees));
-		ms.rotate(Vector3f.ZP.rotationDegrees(wobble2Sin * wobble2AmountDegrees));
+		ms.mulPose(Vector3f.XP.rotationDegrees(-wobble2Cos * wobble2AmountDegrees));
+		ms.mulPose(Vector3f.XP.rotationDegrees(-wobble2Sin * wobble2AmountDegrees));
+		ms.mulPose(Vector3f.ZP.rotationDegrees(wobble2Cos * wobble2AmountDegrees));
+		ms.mulPose(Vector3f.ZP.rotationDegrees(wobble2Sin * wobble2AmountDegrees));
 	}
 	
 	//based on SkullTileEntityRenderer
 	private static final UUID UNKNOWN_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 	private static RenderType getSkullRenderType(@Nullable GameProfile profile) {
 		if(profile == null) {
-			return RenderType.getEntityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UNKNOWN_UUID));
+			return RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UNKNOWN_UUID));
 		}
 		
 		Minecraft minecraft = Minecraft.getInstance();
-		Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().loadSkinFromCache(profile);
+		Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(profile);
 		return map.containsKey(MinecraftProfileTexture.Type.SKIN) ?
-			RenderType.getEntityTranslucent(minecraft.getSkinManager().loadSkin(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) :
-			RenderType.getEntityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(PlayerEntity.getUUID(profile)));
+			RenderType.entityTranslucent(minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) :
+			RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(PlayerEntity.createPlayerUUID(profile)));
 	}
 }

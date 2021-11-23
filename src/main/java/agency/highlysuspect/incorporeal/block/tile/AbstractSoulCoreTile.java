@@ -30,7 +30,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	}
 	
 	//idk where else to stick this
-	public static final DamageSource SOUL = new DamageSource("incorporeal.soul").setMagicDamage();
+	public static final DamageSource SOUL = new DamageSource("incorporeal.soul").setMagic();
 	
 	protected GameProfile ownerProfile;
 	protected int mana;
@@ -47,34 +47,34 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	
 	public void setOwnerProfile(GameProfile newProfile) {
 		ownerProfile = newProfile;
-		markDirty();
+		setChanged();
 		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
 	}
 	
 	public Optional<ServerPlayerEntity> findPlayer() {
-		assert world != null; //grumble grumble
-		if(world.isRemote) throw new IllegalStateException("findPlayer on client world");
+		assert level != null; //grumble grumble
+		if(level.isClientSide) throw new IllegalStateException("findPlayer on client world");
 		
 		if(!hasOwnerProfile()) return Optional.empty();
 		
-		MinecraftServer server = world.getServer(); assert server != null; //!isRemote
-		ServerPlayerEntity player = server.getPlayerList().getPlayerByUUID(ownerProfile.getId());
+		MinecraftServer server = level.getServer(); assert server != null; //!isRemote
+		ServerPlayerEntity player = server.getPlayerList().getPlayer(ownerProfile.getId());
 		
 		//Must be online & in the same dimension. ("same dimension" is not a technical limitation, but a gameplay one.)
-		if(player == null || player.world != world) return Optional.empty();
+		if(player == null || player.level != level) return Optional.empty();
 		
 		else return Optional.of(player);
 	}
 	
 	public ActionResultType activate(PlayerEntity player, Hand hand) {
-		assert world != null;
+		assert level != null;
 		
 		if(!player.getGameProfile().equals(ownerProfile)) {
 			//set the soul core to this player's profile
 			setOwnerProfile(player.getGameProfile());
 			
-			if(!world.isRemote) {
-				player.attackEntityFrom(SOUL, 5f);
+			if(!level.isClientSide) {
+				player.hurt(SOUL, 5f);
 				receiveInitialMana();
 			}
 			return ActionResultType.SUCCESS;
@@ -87,7 +87,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 		int n = getMaxMana() / 2;
 		if(mana < n) mana = n;
 		
-		markDirty();
+		setChanged();
 		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
 	}
 	
@@ -96,13 +96,13 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 		mana -= howMuch;
 		if(mana < 0) mana = 0;
 		
-		markDirty();
+		setChanged();
 		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
 	}
 	
 	@Override
 	public void tick() {
-		if(world == null || world.isRemote || getMaxMana() == 0) return;
+		if(level == null || level.isClientSide || getMaxMana() == 0) return;
 		
 		if(mana <= 0 && hasOwnerProfile()) {
 			//uh oh!
@@ -111,9 +111,9 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	}
 	
 	public void onExpire() {
-		findPlayer().ifPresent(p -> p.attackEntityFrom(SOUL, 5f));
+		findPlayer().ifPresent(p -> p.hurt(SOUL, 5f));
 		setOwnerProfile(null);
-		if(world != null) world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, .5f, 1.2f);
+		if(level != null) level.playSound(null, worldPosition, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, .5f, 1.2f);
 	}
 	
 	public int getComparator() {
@@ -130,7 +130,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	@Override
 	public void receiveMana(int moreMana) {
 		mana = Math.min(mana + moreMana, getMaxMana());
-		markDirty();
+		setChanged();
 		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
 	}
 	
@@ -148,7 +148,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	@Override
 	public void renderHUD(MatrixStack ms, Minecraft mc, World world, BlockPos pos) {
 		//lol
-		HUDHandler.drawSimpleManaHUD(ms, 0xee4444, mana, getMaxMana(), getBlockState().getBlock().getTranslatedName().getString()); 
+		HUDHandler.drawSimpleManaHUD(ms, 0xee4444, mana, getMaxMana(), getBlockState().getBlock().getName().getString()); 
 	}
 	
 	@Override

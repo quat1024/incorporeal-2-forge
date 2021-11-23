@@ -12,25 +12,27 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class RhodoFunnelBlock extends AbstractComputerBlock {
 	public RhodoFunnelBlock(Properties properties) {
 		super(properties);
-		setDefaultState(getDefaultState().with(BlockStateProperties.POWERED, false));
+		registerDefaultState(defaultBlockState().setValue(BlockStateProperties.POWERED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(BlockStateProperties.POWERED));
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(BlockStateProperties.POWERED));
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World world, BlockPos pos, Block from, BlockPos fromPos, boolean isMoving) {
-		boolean shouldPower = world.getRedstonePowerFromNeighbors(pos) > 0;
-		boolean isPowered = state.get(BlockStateProperties.POWERED);
+		boolean shouldPower = world.getBestNeighborSignal(pos) > 0;
+		boolean isPowered = state.getValue(BlockStateProperties.POWERED);
 		if(shouldPower != isPowered) {
-			world.setBlockState(pos, state.with(BlockStateProperties.POWERED, shouldPower));
+			world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, shouldPower));
 			if(shouldPower) {
-				TileEntity tile = world.getTileEntity(pos);
+				TileEntity tile = world.getBlockEntity(pos);
 				if(tile instanceof RhodoFunnelTile) {
 					((RhodoFunnelTile) tile).onRedstonePower();
 				}

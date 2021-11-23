@@ -41,7 +41,7 @@ public class IncManaInfusion extends RecipeProvider {
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 		consumer.accept(mini(IncBlocks.SMALL_SANVOCALIA, IncBlocks.SANVOCALIA));
 		consumer.accept(mini(IncBlocks.SMALL_FUNNY, IncBlocks.FUNNY));
 	}
@@ -56,7 +56,7 @@ public class IncManaInfusion extends RecipeProvider {
 	}
 	
 	public Ingredient ingr(IItemProvider i) {
-		return Ingredient.fromItems(i);
+		return Ingredient.of(i);
 	}
 	
 	public void cycle(Consumer<IFinishedRecipe> consumer, int cost, String group, IItemProvider... items) {
@@ -111,8 +111,8 @@ public class IncManaInfusion extends RecipeProvider {
 		}
 		
 		@Override
-		public void serialize(JsonObject json) {
-			json.add("input", input.serialize());
+		public void serializeRecipeData(JsonObject json) {
+			json.add("input", input.toJson());
 			json.add("output", ItemNBTHelper.serializeStack(output));
 			json.addProperty("mana", mana);
 			if (!group.isEmpty()) {
@@ -124,24 +124,24 @@ public class IncManaInfusion extends RecipeProvider {
 		}
 		
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return ModRecipeTypes.MANA_INFUSION_SERIALIZER;
 		}
 		
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 		
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

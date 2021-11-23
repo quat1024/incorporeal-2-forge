@@ -24,6 +24,8 @@ import vazkii.botania.common.entity.EntityDoppleganger;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class SoulCoreBlock extends Block implements IWandHUD {
 	public SoulCoreBlock(Properties properties, Supplier<TileEntityType<? extends AbstractSoulCoreTile>> typeS) {
 		super(properties);
@@ -45,22 +47,22 @@ public class SoulCoreBlock extends Block implements IWandHUD {
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		if(!EntityDoppleganger.isTruePlayer(player)) return ActionResultType.PASS;
 		
-		AbstractSoulCoreTile tile = typeS.get().getIfExists(world, pos);
+		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(world, pos);
 		if(tile != null) return tile.activate(player, hand);
 		else return ActionResultType.PASS;
 	}
 	
 	@Override
-	public boolean hasComparatorInputOverride(BlockState state) {
+	public boolean hasAnalogOutputSignal(BlockState state) {
 		return true;
 	}
 	
 	@Override
-	public int getComparatorInputOverride(BlockState state, World world, BlockPos pos) {
-		AbstractSoulCoreTile tile = typeS.get().getIfExists(world, pos);
+	public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos) {
+		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(world, pos);
 		if(tile != null) return tile.getComparator();
 		else return 0;
 	}
@@ -68,13 +70,13 @@ public class SoulCoreBlock extends Block implements IWandHUD {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderHUD(MatrixStack ms, Minecraft mc, World world, BlockPos pos) {
-		AbstractSoulCoreTile tile = typeS.get().getIfExists(world, pos);
+		AbstractSoulCoreTile tile = typeS.get().getBlockEntity(world, pos);
 		if(tile != null) tile.renderHUD(ms, mc, world, pos);
 		else HUDHandler.drawSimpleManaHUD(ms, 0xff0000, 1, 1, "Missing tile entity?");
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 }

@@ -26,6 +26,8 @@ import net.minecraftforge.common.PlantType;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import vazkii.botania.common.item.ModItems;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 	public RedstoneRootCropBlock(Properties builder) {
 		super(builder);
@@ -37,12 +39,12 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 	public static final VoxelShape[] SHAPES = Util.make(new VoxelShape[AGE_MAX + 1], arr -> {
 		for(int i = 0; i <= AGE_MAX; i++) {
 			double yea = (AGE_MAX - i) / 32d;
-			arr[i] = VoxelShapes.create(yea, 0, yea, 1 - yea, 3/16d, 1 - yea);
+			arr[i] = VoxelShapes.box(yea, 0, yea, 1 - yea, 3/16d, 1 - yea);
 		}
 	});
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		//No call to super() since that adds the cropsblock default age property.
 		builder.add(AGE);
 	}
@@ -58,13 +60,13 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 	}
 	
 	@Override
-	protected IItemProvider getSeedsItem() {
+	protected IItemProvider getBaseSeedId() {
 		return ModItems.redstoneRoot;
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return SHAPES[state.get(AGE)];
+		return SHAPES[state.getValue(AGE)];
 	}
 	
 	//the typical block -> item transformation doesn't take seeds into account, i don't think
@@ -88,19 +90,19 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 		
 		if(world != null && stack.getItem() == ModItems.redstoneRoot && hit != null && hit.getType() == RayTraceResult.Type.BLOCK) {
 			//see BlockItemUseContext#offsetPos
-			BlockPos targetPos = hit.getPos().offset(hit.getFace());
+			BlockPos targetPos = hit.getBlockPos().relative(hit.getDirection());
 			
 			BlockItemUseContext haha = new BlockItemUseContext(e.getPlayer(), e.getHand(), stack, hit);
 			
 			//this particular arrangement of targetPos and getFace is correct, see BucketItem
-			if(e.getPlayer().canPlayerEdit(targetPos, hit.getFace(), stack) &&
-				world.getBlockState(targetPos).isReplaceable(haha) &&
+			if(e.getPlayer().mayUseItemAt(targetPos, hit.getDirection(), stack) &&
+				world.getBlockState(targetPos).canBeReplaced(haha) &&
 				//weird forge extension
-				world.getBlockState(targetPos.down()).canSustainPlant(world, targetPos.down(), Direction.UP, IncBlocks.REDSTONE_ROOT_CROP)) {
+				world.getBlockState(targetPos.below()).canSustainPlant(world, targetPos.below(), Direction.UP, IncBlocks.REDSTONE_ROOT_CROP)) {
 				
-				world.setBlockState(targetPos, IncBlocks.REDSTONE_ROOT_CROP.getDefaultState());
+				world.setBlockAndUpdate(targetPos, IncBlocks.REDSTONE_ROOT_CROP.defaultBlockState());
 				
-				SoundType type = SoundType.PLANT;
+				SoundType type = SoundType.GRASS;
 				SoundEvent sound = type.getPlaceSound(); 
 				world.playSound(player, targetPos, sound, SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
 				

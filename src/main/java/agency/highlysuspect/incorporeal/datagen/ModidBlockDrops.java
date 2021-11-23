@@ -34,7 +34,7 @@ public class ModidBlockDrops extends BlockLootTables implements IDataProvider  {
 	}
 	
 	@Override
-	public void act(DirectoryCache cache) throws IOException {
+	public void run(DirectoryCache cache) throws IOException {
 		for(Block b : ForgeRegistries.BLOCKS.getValues()) {
 			ResourceLocation id = b.getRegistryName(); assert id != null; //FUCKING FORGE
 			if(!id.getNamespace().equals(modid)) continue;
@@ -60,24 +60,24 @@ public class ModidBlockDrops extends BlockLootTables implements IDataProvider  {
 		ResourceLocation id = b.getRegistryName(); assert id != null; //im gonna kms for real
 		
 		Path out = d.getOutputFolder().resolve("data/" + id.getNamespace() + "/loot_tables/blocks/" + id.getPath() + ".json");
-		IDataProvider.save(GSON, cache, LootTableManager.toJson(table), out);
+		IDataProvider.save(GSON, cache, LootTableManager.serialize(table), out);
 	}
 	
 	private static LootTable self(Block b) {
-		return LootTable.builder().addLootPool(
-			LootPool.builder().name("self").rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(b)).acceptCondition(SurvivesExplosion.builder())
-		).setParameterSet(LootParameterSets.BLOCK).build();
+		return LootTable.lootTable().withPool(
+			LootPool.lootPool().name("self").setRolls(ConstantRange.exactly(1)).add(ItemLootEntry.lootTableItem(b)).when(SurvivesExplosion.survivesExplosion())
+		).setParamSet(LootParameterSets.BLOCK).build();
 	}
 	
 	private static LootTable door(Block b) {
-		return BlockLootTables.registerDoor(b).setParameterSet(LootParameterSets.BLOCK).build();
+		return BlockLootTables.createDoorTable(b).setParamSet(LootParameterSets.BLOCK).build();
 	}
 	
 	private static LootTable slab(Block b) {
-		return droppingSlab(b).setParameterSet(LootParameterSets.BLOCK).build();
+		return createSlabItemTable(b).setParamSet(LootParameterSets.BLOCK).build();
 	}
 	
 	private static LootTable leaves(Block b, Block sapling) {
-		return droppingWithChancesAndSticks(b, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F).setParameterSet(LootParameterSets.BLOCK).build();
+		return createLeavesDrops(b, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F).setParamSet(LootParameterSets.BLOCK).build();
 	}
 }

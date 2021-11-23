@@ -7,18 +7,18 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class IncEntityTypes {
-	public static final EntityType<FracturedSpaceCollectorEntity> FRACTURED_SPACE_COLLECTOR = EntityType.Builder.<FracturedSpaceCollectorEntity>create(FracturedSpaceCollectorEntity::new, EntityClassification.MISC)
-		.size(0, 0)
-		.immuneToFire()
-		.trackingRange(10)
+	public static final EntityType<FracturedSpaceCollectorEntity> FRACTURED_SPACE_COLLECTOR = EntityType.Builder.<FracturedSpaceCollectorEntity>of(FracturedSpaceCollectorEntity::new, EntityClassification.MISC)
+		.sized(0, 0)
+		.fireImmune()
+		.clientTrackingRange(10)
 		.setUpdateInterval(5)
 		.setShouldReceiveVelocityUpdates(false)
 		.build("");
 	
-	public static final EntityType<PotionSoulCoreCollectorEntity> POTION_SOUL_CORE_COLLECTOR = EntityType.Builder.<PotionSoulCoreCollectorEntity>create(PotionSoulCoreCollectorEntity::new, EntityClassification.MISC)
-		.size(0.99f, 0.99f)
-		.immuneToFire()
-		.trackingRange(10)
+	public static final EntityType<PotionSoulCoreCollectorEntity> POTION_SOUL_CORE_COLLECTOR = EntityType.Builder.<PotionSoulCoreCollectorEntity>of(PotionSoulCoreCollectorEntity::new, EntityClassification.MISC)
+		.sized(0.99f, 0.99f)
+		.fireImmune()
+		.clientTrackingRange(10)
 		.setUpdateInterval(40)
 		.setShouldReceiveVelocityUpdates(false)
 		.build("");

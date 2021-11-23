@@ -34,8 +34,8 @@ public class IncNetwork {
 		if (world instanceof ServerWorld) {
 			ServerWorld ws = (ServerWorld) world;
 			
-			ws.getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(pos), false)
-				.filter(p -> p.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) < 64 * 64)
+			ws.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false)
+				.filter(p -> p.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 64 * 64)
 				.forEach(p -> HANDLER.send(PacketDistributor.PLAYER.with(() -> p), toSend));
 		}
 	}

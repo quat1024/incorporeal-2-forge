@@ -29,17 +29,17 @@ public class IncRecipes extends RecipeProvider {
 	}
 	
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> r) {
+	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> r) {
 		for(UnstableCubeBlock cube : IncBlocks.UNSTABLE_CUBES.values()) {
-			unstableCube(cube).build(r);
+			unstableCube(cube).save(r);
 		}
 		
-		ticketConjurer().build(r);
-		redStringLiar().build(r);
-		frameTinkerer().build(r);
-		rodOfTheFracturedSpace().build(r);
-		corporeaSolidifier().build(r);
-		corporeaRetainerEvaporator().build(r);
+		ticketConjurer().save(r);
+		redStringLiar().save(r);
+		frameTinkerer().save(r);
+		rodOfTheFracturedSpace().save(r);
+		corporeaSolidifier().save(r);
+		corporeaRetainerEvaporator().save(r);
 		
 		createFloatingFlowerRecipe(r, IncItems.SANVOCALIA);
 		createFloatingFlowerRecipe(r, IncItems.FUNNY);
@@ -51,20 +51,20 @@ public class IncRecipes extends RecipeProvider {
 	private void createFloatingFlowerRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider input) {
 		ResourceLocation inputName = Registry.ITEM.getKey(input.asItem());
 		Item output = Registry.ITEM.getOptional(new ResourceLocation(inputName.getNamespace(), "floating_" + inputName.getPath())).get();
-		ShapelessRecipeBuilder.shapelessRecipe(output)
-			.addIngredient(ModTags.Items.FLOATING_FLOWERS)
-			.addIngredient(input)
-			.addCriterion("has_item", hasItem(input))
-			.build(consumer);
+		ShapelessRecipeBuilder.shapeless(output)
+			.requires(ModTags.Items.FLOATING_FLOWERS)
+			.requires(input)
+			.unlockedBy("has_item", has(input))
+			.save(consumer);
 	}
 	
 	protected ShapelessRecipeBuilder shapeless(IItemProvider item, int count) {
-		return ShapelessRecipeBuilder.shapelessRecipe(item, count);
+		return ShapelessRecipeBuilder.shapeless(item, count);
 	}
 	
 	protected ShapedRecipeBuilder shaped(IItemProvider item, int count, String... lines) {
-		ShapedRecipeBuilder shaped = ShapedRecipeBuilder.shapedRecipe(item, count);
-		for(String line : lines) shaped.patternLine(line);
+		ShapedRecipeBuilder shaped = ShapedRecipeBuilder.shaped(item, count);
+		for(String line : lines) shaped.pattern(line);
 		return shaped;
 	}
 	
@@ -85,9 +85,9 @@ public class IncRecipes extends RecipeProvider {
 	
 	protected ShapedRecipeBuilder rodOfTheFracturedSpace() {
 		ShapedRecipeBuilder builder = shaped(IncItems.FRACTURED_SPACE_ROD, 1)
-			.patternLine(" EG")
-			.patternLine(" TE")
-			.patternLine("T  ");
+			.pattern(" EG")
+			.pattern(" TE")
+			.pattern("T  ");
 		
 		item(builder, 'E', Items.ENDER_EYE);
 		item(builder, 'G', ModItems.lifeEssence); //gaia spirit
@@ -122,7 +122,7 @@ public class IncRecipes extends RecipeProvider {
 	protected ShapedRecipeBuilder unstableCube(UnstableCubeBlock cube) {
 		Item petal = ModItems.getPetal(cube.color);
 		
-		ShapedRecipeBuilder builder = shaped(cube, 2, "OPO", "PEP", "OPO").setGroup("unstable_cube");
+		ShapedRecipeBuilder builder = shaped(cube, 2, "OPO", "PEP", "OPO").group("unstable_cube");
 		item(builder, 'O', Blocks.OBSIDIAN);
 		item(builder, 'P', petal);
 		item(builder, 'E', Items.ENDER_PEARL);
@@ -130,12 +130,12 @@ public class IncRecipes extends RecipeProvider {
 	}
 	
 	protected void item(ShapedRecipeBuilder builder, Character key, IItemProvider in) {
-		builder.key(key, in);
-		builder.addCriterion(in.asItem().getRegistryName().getPath(), hasItem(in));
+		builder.define(key, in);
+		builder.unlockedBy(in.asItem().getRegistryName().getPath(), has(in));
 	}
 	
 	protected void item(ShapedRecipeBuilder builder, Character key, ITag.INamedTag<Item> in) {
-		builder.key(key, in);
-		builder.addCriterion(in.getName().getPath(), hasItem(in));
+		builder.define(key, in);
+		builder.unlockedBy(in.getName().getPath(), has(in));
 	}
 }

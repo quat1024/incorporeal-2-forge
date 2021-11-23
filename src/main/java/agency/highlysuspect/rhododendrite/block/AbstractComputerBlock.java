@@ -15,21 +15,23 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class AbstractComputerBlock extends Block {
 	public AbstractComputerBlock(Properties properties) {
 		super(properties);
-		setDefaultState(getDefaultState().with(DirectionalBlock.FACING, Direction.UP));
+		registerDefaultState(defaultBlockState().setValue(DirectionalBlock.FACING, Direction.UP));
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(DirectionalBlock.FACING));
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(DirectionalBlock.FACING));
 	}
 	
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return getDefaultState().with(DirectionalBlock.FACING, context.getNearestLookingDirection());
+		return defaultBlockState().setValue(DirectionalBlock.FACING, context.getNearestLookingDirection());
 	}
 	
 	@Override
@@ -42,16 +44,16 @@ public abstract class AbstractComputerBlock extends Block {
 	static {
 		//shoutouts to the "VoxelShape Generator" blockbench plugin lol.
 		VoxelShape shape = VoxelShapes.empty();
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.0625, 0.0625, 0.9375, 0.25, 0.25), IBooleanFunction.OR);
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.0625, 0.0625, 0.0625, 0.25, 0.25, 0.25), IBooleanFunction.OR);
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.0625, 0.75, 0.9375, 0.25, 0.9375), IBooleanFunction.OR);
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.0625, 0.0625, 0.75, 0.25, 0.25, 0.9375), IBooleanFunction.OR);
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.0625, 0.75, 0.0625, 0.25, 0.9375, 0.25), IBooleanFunction.OR);
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.75, 0.0625, 0.9375, 0.9375, 0.25), IBooleanFunction.OR);
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.75, 0.75, 0.75, 0.9375, 0.9375, 0.9375), IBooleanFunction.OR);
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(0.0625, 0.75, 0.75, 0.25, 0.9375, 0.9375), IBooleanFunction.OR);
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.75, 0.0625, 0.0625, 0.9375, 0.25, 0.25), IBooleanFunction.OR);
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.0625, 0.0625, 0.0625, 0.25, 0.25, 0.25), IBooleanFunction.OR);
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.75, 0.0625, 0.75, 0.9375, 0.25, 0.9375), IBooleanFunction.OR);
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.0625, 0.0625, 0.75, 0.25, 0.25, 0.9375), IBooleanFunction.OR);
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.0625, 0.75, 0.0625, 0.25, 0.9375, 0.25), IBooleanFunction.OR);
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.75, 0.75, 0.0625, 0.9375, 0.9375, 0.25), IBooleanFunction.OR);
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.75, 0.75, 0.75, 0.9375, 0.9375, 0.9375), IBooleanFunction.OR);
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.0625, 0.75, 0.75, 0.25, 0.9375, 0.9375), IBooleanFunction.OR);
 		//Big block in the middle because actually having a hole in the middle of the block was annoying.
-		shape = VoxelShapes.combine(shape, VoxelShapes.create(3/16d, 3/16d, 3/16d, 13/16d, 13/16d, 13/16d), IBooleanFunction.OR);
-		SHAPE = shape.simplify();
+		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(3/16d, 3/16d, 3/16d, 13/16d, 13/16d, 13/16d), IBooleanFunction.OR);
+		SHAPE = shape.optimize();
 	}
 }

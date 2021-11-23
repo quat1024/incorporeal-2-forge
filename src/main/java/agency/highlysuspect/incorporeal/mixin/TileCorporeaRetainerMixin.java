@@ -36,7 +36,7 @@ public abstract class TileCorporeaRetainerMixin implements RetainerDuck {
 		if(requestCount == 0 || solid.matcher == EmptyCorporeaRequestMatcher.INSTANCE) request = null;
 		
 		compValue = CorporeaHelper.instance().signalStrengthForRequestSize(requestCount);
-		((TileCorporeaRetainer) (Object) this).markDirty();
+		((TileCorporeaRetainer) (Object) this).setChanged();
 	}
 	
 	@Override
@@ -45,6 +45,6 @@ public abstract class TileCorporeaRetainerMixin implements RetainerDuck {
 		requestCount = 0;
 		compValue = 0;
 		//Botania doesn't clear requestPos either. Kinda odd.
-		((TileCorporeaRetainer) (Object) this).markDirty();
+		((TileCorporeaRetainer) (Object) this).setChanged();
 	}
 }

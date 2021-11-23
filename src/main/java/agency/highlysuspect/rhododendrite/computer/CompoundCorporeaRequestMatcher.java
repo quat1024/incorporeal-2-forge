@@ -94,7 +94,7 @@ public class CompoundCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	@Override
 	public ITextComponent getRequestName() {
 		//TODO this just comma-separates them, is that cool
-		return TextComponentUtils.func_240649_b_(others, ICorporeaRequestMatcher::getRequestName);
+		return TextComponentUtils.formatList(others, ICorporeaRequestMatcher::getRequestName);
 	}
 	
 	@Override

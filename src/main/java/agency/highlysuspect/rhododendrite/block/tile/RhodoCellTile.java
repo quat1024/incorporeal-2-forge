@@ -32,7 +32,7 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	
 	@Override
 	public void tick() {
-		binding = directBind(getBlockState().get(BlockStateProperties.FACING), (cursor, tile) -> tile instanceof RhodoCellTile);
+		binding = directBind(getBlockState().getValue(BlockStateProperties.FACING), (cursor, tile) -> tile instanceof RhodoCellTile);
 	}
 	
 	public @Nullable BlockPos getBind() {
@@ -42,8 +42,8 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	public @Nullable
 	RhodoCellTile getBoundCell() {
 		if(binding == null) return null;
-		assert world != null;
-		TileEntity tile = world.getTileEntity(binding);
+		assert level != null;
+		TileEntity tile = level.getBlockEntity(binding);
 		return tile instanceof RhodoCellTile ? (RhodoCellTile) tile : null;
 	}
 	
@@ -51,7 +51,7 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 		boolean changed = !Objects.equals(this.request, request);
 		this.request = request;
 		if(changed) {
-			markDirty();
+			setChanged();
 			VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
 		}
 	}
@@ -106,7 +106,7 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return binding == null ? new AxisAlignedBB(pos) : new AxisAlignedBB(pos, binding);
+		return binding == null ? new AxisAlignedBB(worldPosition) : new AxisAlignedBB(worldPosition, binding);
 	}
 	
 	@Override

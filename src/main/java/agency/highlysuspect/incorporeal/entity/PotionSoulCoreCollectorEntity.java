@@ -31,13 +31,13 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	
 	public PotionSoulCoreCollectorEntity(World world, BlockPos pos) {
 		this(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, world);
-		setPosition(pos.getX() + .5d, pos.getY() + 0.005d, pos.getZ() + .5d);
+		setPos(pos.getX() + .5d, pos.getY() + 0.005d, pos.getZ() + .5d);
 	}
 	
 	public static void attributeEvent(EntityAttributeCreationEvent e) {
-		e.put(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, LivingEntity.registerAttributes()
-			.createMutableAttribute(Attributes.MAX_HEALTH, 200f)
-			.create());
+		e.put(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, LivingEntity.createLivingAttributes()
+			.add(Attributes.MAX_HEALTH, 200f)
+			.build());
 	}
 	
 	public static void healEvent(LivingHealEvent e) {
@@ -55,12 +55,12 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	}
 	
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.UNDEAD; //With it being a soul and all, like, ...
 	}
 	
 	private Optional<Pair<PotionSoulCoreTile, ServerPlayerEntity>> find() {
-		PotionSoulCoreTile tile = IncTileTypes.POTION_SOUL_CORE.getIfExists(world, getPosition());
+		PotionSoulCoreTile tile = IncTileTypes.POTION_SOUL_CORE.getBlockEntity(level, blockPosition());
 		if(tile == null) { remove(); return Optional.empty(); }
 		
 		Optional<ServerPlayerEntity> player = tile.findPlayer();
@@ -74,31 +74,31 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 		//This entity doesn't call super.tick() so i post the event myself
 		//Is this a bad idea???? Yes
 		if(net.minecraftforge.common.ForgeHooks.onLivingUpdate(this)) return;
-		if(world == null || world.isRemote) return;
+		if(level == null || level.isClientSide) return;
 		
-		setMotion(0, 0, 0);
-		rotationYaw = 0;
-		rotationPitch = 0;
-		rotationYawHead = 0;
+		setDeltaMovement(0, 0, 0);
+		yRot = 0;
+		xRot = 0;
+		yHeadRot = 0;
 		setHealth(getMaxHealth());
-		setAir(getMaxAir());
-		setPosition(Math.floor(getPosX()) + .5d, Math.floor(getPosY()) + 0.005d, Math.floor(getPosZ()) + .5d);
+		setAirSupply(getMaxAirSupply());
+		setPos(Math.floor(getX()) + .5d, Math.floor(getY()) + 0.005d, Math.floor(getZ()) + .5d);
 		
 		find().ifPresent(pair -> {
 			//Transfer long-lasting potion effects to the player
-			for(EffectInstance effect : getActivePotionEffects()) {
-				pair.getSecond().addPotionEffect(effect);
+			for(EffectInstance effect : getActiveEffects()) {
+				pair.getSecond().addEffect(effect);
 				pair.getFirst().drainMana(200);
 			}
 			
 			//Clean them off myself
-			clearActivePotions(); //the "right" way, fires events and removes attr modifiers and stuff
-			getActivePotionMap().clear(); //if there's any left over, kill them the hard way
+			removeAllEffects(); //the "right" way, fires events and removes attr modifiers and stuff
+			getActiveEffectsMap().clear(); //if there's any left over, kill them the hard way
 		});
 	}
 	
 	private boolean onHeal(float howMuch) {
-		if(world.isRemote) return true;
+		if(level.isClientSide) return true;
 		Optional<Pair<PotionSoulCoreTile, ServerPlayerEntity>> found = find();
 		
 		found.ifPresent(pair -> {
@@ -110,11 +110,11 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	}
 	
 	private boolean onAttack(DamageSource source, float howMuch) {
-		if(world.isRemote) return true;
+		if(level.isClientSide) return true;
 		Optional<Pair<PotionSoulCoreTile, ServerPlayerEntity>> found = find();
 		
 		if(found.isPresent()) {
-			boolean happened = found.get().getSecond().attackEntityFrom(source, howMuch);
+			boolean happened = found.get().getSecond().hurt(source, howMuch);
 			if(happened) {
 				found.get().getFirst().drainMana(200);
 				return true;
@@ -125,22 +125,22 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	}
 	
 	@Override
-	public void livingTick() {
+	public void aiStep() {
 		//No-op
 	}
 	
 	@Override
-	public Iterable<ItemStack> getArmorInventoryList() {
+	public Iterable<ItemStack> getArmorSlots() {
 		return Collections.emptyList();
 	}
 	
 	@Override
-	public ItemStack getItemStackFromSlot(EquipmentSlotType slot) {
+	public ItemStack getItemBySlot(EquipmentSlotType slot) {
 		return ItemStack.EMPTY;
 	}
 	
 	@Override
-	public void setItemStackToSlot(EquipmentSlotType slot, ItemStack stack) {
+	public void setItemSlot(EquipmentSlotType slot, ItemStack stack) {
 		//Noh
 	}
 	
@@ -155,17 +155,17 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	}
 	
 	@Override
-	protected boolean canBeRidden(Entity entityIn) {
+	protected boolean canRide(Entity entityIn) {
 		return false; //You may not
 	}
 	
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
 	
 	@Override
-	public HandSide getPrimaryHand() {
+	public HandSide getMainArm() {
 		return HandSide.LEFT;
 	}
 }

@@ -38,7 +38,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 		
 		@Override
 		protected void onContentsChanged(int slot) {
-			RhodoOpTile.this.markDirty();
+			RhodoOpTile.this.setChanged();
 			VanillaPacketDispatcher.dispatchTEToNearbyPlayers(RhodoOpTile.this);
 		}
 	};
@@ -53,17 +53,17 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	
 	public @Nullable RhodoCellTile getBoundCell() {
 		if(binding == null) return null;
-		assert world != null;
-		TileEntity tile = world.getTileEntity(binding.root);
+		assert level != null;
+		TileEntity tile = level.getBlockEntity(binding.root);
 		return tile instanceof RhodoCellTile ? (RhodoCellTile) tile : null;
 	}
 	
 	@Override
 	public void tick() {
-		if(world == null) return;
+		if(level == null) return;
 		
 		binding = rootExtractingChainBind(
-			getBlockState().get(BlockStateProperties.FACING),
+			getBlockState().getValue(BlockStateProperties.FACING),
 			(cursor, tile) -> {
 				if(tile instanceof RhodoCellTile) return cursor;
 				else if(tile instanceof RhodoOpTile) return ((RhodoOpTile) tile).getRootBind();
@@ -105,7 +105,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 		boolean changed = this.comparatorSignal != comparatorSignal;
 		this.comparatorSignal = comparatorSignal;
 		if(changed) {
-			markDirty();
+			setChanged();
 			VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
 		}
 	}
@@ -120,7 +120,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return binding == null ? new AxisAlignedBB(pos) : new AxisAlignedBB(pos, binding.direct);
+		return binding == null ? new AxisAlignedBB(worldPosition) : new AxisAlignedBB(worldPosition, binding.direct);
 	}
 	
 	@Nonnull

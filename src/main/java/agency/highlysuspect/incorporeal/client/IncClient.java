@@ -33,26 +33,26 @@ public class IncClient implements IncProxy {
 		
 		modBus.addListener((FMLClientSetupEvent e) -> {
 			e.enqueueWork(() -> {
-				ItemModelsProperties.registerProperty(IncItems.CORPOREA_TICKET, Inc.id("written_ticket"), (stack, world, ent) -> IncItems.CORPOREA_TICKET.hasRequest(stack) ? 1 : 0);
+				ItemModelsProperties.register(IncItems.CORPOREA_TICKET, Inc.id("written_ticket"), (stack, world, ent) -> IncItems.CORPOREA_TICKET.hasRequest(stack) ? 1 : 0);
 			});
 			
-			RenderTypeLookup.setRenderLayer(IncBlocks.ENDER_SOUL_CORE, RenderType.getTranslucent());
-			RenderTypeLookup.setRenderLayer(IncBlocks.CORPOREA_SOUL_CORE, RenderType.getTranslucent());
-			RenderTypeLookup.setRenderLayer(IncBlocks.POTION_SOUL_CORE, RenderType.getTranslucent());
+			RenderTypeLookup.setRenderLayer(IncBlocks.ENDER_SOUL_CORE, RenderType.translucent());
+			RenderTypeLookup.setRenderLayer(IncBlocks.CORPOREA_SOUL_CORE, RenderType.translucent());
+			RenderTypeLookup.setRenderLayer(IncBlocks.POTION_SOUL_CORE, RenderType.translucent());
 			
-			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_REPEATER, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_COMPARATOR, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.REDSTONE_ROOT_CROP, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_REPEATER, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_COMPARATOR, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.REDSTONE_ROOT_CROP, RenderType.cutout());
 			
-			RenderTypeLookup.setRenderLayer(IncBlocks.SANVOCALIA, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_SANVOCALIA, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_SANVOCALIA, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_SANVOCALIA, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.SANVOCALIA, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_SANVOCALIA, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_SANVOCALIA, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_SANVOCALIA, RenderType.cutout());
 			
-			RenderTypeLookup.setRenderLayer(IncBlocks.FUNNY, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FUNNY, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_FUNNY, RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_FUNNY, RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.FUNNY, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FUNNY, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_FUNNY, RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_FUNNY, RenderType.cutout());
 			
 			RenderingRegistry.registerEntityRenderingHandler(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, NotQuiteNoopRender::new);
 			RenderingRegistry.registerEntityRenderingHandler(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, NotQuiteNoopRender::new);

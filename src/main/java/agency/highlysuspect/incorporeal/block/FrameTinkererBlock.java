@@ -27,14 +27,16 @@ import vazkii.botania.mixin.AccessorItemEntity;
 
 import java.util.List;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class FrameTinkererBlock extends BlockModWaterloggable {
 	public FrameTinkererBlock(Properties properties) {
 		super(properties);
-		setDefaultState(getDefaultState().with(BlockStateProperties.POWERED, false));
+		registerDefaultState(defaultBlockState().setValue(BlockStateProperties.POWERED, false));
 	}
 	
 	private static final double HEIGHT = 3 / 16d;
-	private static final VoxelShape BOX = VoxelShapes.create(0, 0, 0, 1, HEIGHT, 1);
+	private static final VoxelShape BOX = VoxelShapes.box(0, 0, 0, 1, HEIGHT, 1);
 	
 	//Boring stuff
 	@Override
@@ -43,16 +45,16 @@ public class FrameTinkererBlock extends BlockModWaterloggable {
 	}
 	
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder.add(BlockStateProperties.POWERED));
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(BlockStateProperties.POWERED));
 	}
 	
 	//Depositing an item onto the frame tinkerer
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-		ItemStack held = player.getHeldItem(hand);
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+		ItemStack held = player.getItemInHand(hand);
 		if(!held.isEmpty()) {
-			if(!world.isRemote) {
+			if(!world.isClientSide) {
 				ItemStack deposit;
 				if(player.isCreative()) {
 					deposit = held.copy();
@@ -71,14 +73,14 @@ public class FrameTinkererBlock extends BlockModWaterloggable {
 	//Powering the frame tinkerer
 	@Override
 	public void neighborChanged(BlockState state, World world, BlockPos pos, Block fromBlock, BlockPos fromPos, boolean isMoving) {
-		boolean shouldPower = world.getRedstonePowerFromNeighbors(pos) > 0;
-		boolean isPowered = state.get(BlockStateProperties.POWERED);
+		boolean shouldPower = world.getBestNeighborSignal(pos) > 0;
+		boolean isPowered = state.getValue(BlockStateProperties.POWERED);
 		if(shouldPower != isPowered) {
-			world.setBlockState(pos, state.func_235896_a_(BlockStateProperties.POWERED)); //cycle
+			world.setBlockAndUpdate(pos, state.cycle(BlockStateProperties.POWERED)); //cycle
 			
-			if(!world.isRemote && shouldPower) {
+			if(!world.isClientSide && shouldPower) {
 				//Choose a random item entity resting on the frame tinkerer.
-				List<ItemEntity> itemChoices = world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(pos), ent -> ent.isAlive() && !ent.getItem().isEmpty() && ent.getItem().getCount() == 1);
+				List<ItemEntity> itemChoices = world.getEntitiesOfClass(ItemEntity.class, new AxisAlignedBB(pos), ent -> ent.isAlive() && !ent.getItem().isEmpty() && ent.getItem().getCount() == 1);
 				
 				//When switching an item entity with an item frame, it's okay if the frame is empty (it "places the item in the frame").
 				//When I'm only taking an item out of an item frame, the frame has to be non-empty (because if not, i'd switch two empty frames with each other)
@@ -86,12 +88,12 @@ public class FrameTinkererBlock extends BlockModWaterloggable {
 				List<ItemFrameEntity> frameChoices = allowEmpty ? FrameReader.near(world, pos) : FrameReader.nonEmptyNear(world, pos);
 				
 				if(frameChoices.isEmpty()) return; //No candidate frames are present to switch with.
-				ItemFrameEntity frame = Inc.choose(frameChoices, world.rand);
+				ItemFrameEntity frame = Inc.choose(frameChoices, world.random);
 				
 				if(itemChoices.isEmpty()) {
 					switchWithNothing(world, pos, frame);
 				} else {
-					switchWithEntity(world, pos, frame, Inc.choose(itemChoices, world.rand));
+					switchWithEntity(world, pos, frame, Inc.choose(itemChoices, world.random));
 				}
 			}
 		}
@@ -99,24 +101,24 @@ public class FrameTinkererBlock extends BlockModWaterloggable {
 	
 	private void switchWithEntity(World world, BlockPos pos, ItemFrameEntity frame, ItemEntity switchWith) {
 		//Take the item out of the item frame
-		ItemStack formerlyInFrame = frame.getDisplayedItem().copy();
+		ItemStack formerlyInFrame = frame.getItem().copy();
 		
 		//Copy the item entity's item into the frame
-		frame.setDisplayedItem(switchWith.getItem());
+		frame.setItem(switchWith.getItem());
 		
 		//Copy the old frame's item into the item entity
 		switchWith.setItem(formerlyInFrame);
-		switchWith.setPickupDelay(30);
+		switchWith.setPickUpDelay(30);
 		((AccessorItemEntity) switchWith).setAge(0);
 	}
 	
 	private void switchWithNothing(World world, BlockPos pos, ItemFrameEntity frame) {
 		//Take the item out of the item frame
-		ItemStack frameItem = frame.getDisplayedItem().copy();
-		frame.setDisplayedItem(ItemStack.EMPTY);
+		ItemStack frameItem = frame.getItem().copy();
+		frame.setItem(ItemStack.EMPTY);
 		
 		//(setDisplayedItem doesn't play a sound when re*moving* an item, but it does when re*placing*)
-		world.playSound(null, frame.getPosX(), frame.getPosY(), frame.getPosZ(), SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM, SoundCategory.BLOCKS, 1f, 1f);
+		world.playSound(null, frame.getX(), frame.getY(), frame.getZ(), SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundCategory.BLOCKS, 1f, 1f);
 		
 		//Spawn that item on the plate
 		spawnItem(world, pos, frameItem);
@@ -124,8 +126,8 @@ public class FrameTinkererBlock extends BlockModWaterloggable {
 	
 	private static void spawnItem(World world, BlockPos pos, ItemStack stack) {
 		ItemEntity ent = new ItemEntity(world, pos.getX() + .5, pos.getY() + HEIGHT, pos.getZ() + .5, stack);
-		ent.setMotion(0, 0, 0);
-		ent.setPickupDelay(30);
-		world.addEntity(ent);
+		ent.setDeltaMovement(0, 0, 0);
+		ent.setPickUpDelay(30);
+		world.addFreshEntity(ent);
 	}
 }

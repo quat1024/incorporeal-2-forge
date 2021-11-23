@@ -24,32 +24,34 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class IncBlocks {
-	public static final CorporeaSolidifierBlock CORPOREA_SOLIDIFIER = new CorporeaSolidifierBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
-	public static final RedStringLiarBlock RED_STRING_LIAR = new RedStringLiarBlock(AbstractBlock.Properties.from(ModBlocks.redStringContainer));
-	public static final FrameTinkererBlock FRAME_TINKERER = new FrameTinkererBlock(AbstractBlock.Properties.from(Blocks.OAK_PLANKS));
-	public static final CorporeaRetainerEvaporatorBlock CORPOREA_RETAINER_EVAPORATOR = new CorporeaRetainerEvaporatorBlock(AbstractBlock.Properties.from(ModBlocks.corporeaRetainer));
+	public static final CorporeaSolidifierBlock CORPOREA_SOLIDIFIER = new CorporeaSolidifierBlock(AbstractBlock.Properties.copy(ModBlocks.corporeaRetainer));
+	public static final RedStringLiarBlock RED_STRING_LIAR = new RedStringLiarBlock(AbstractBlock.Properties.copy(ModBlocks.redStringContainer));
+	public static final FrameTinkererBlock FRAME_TINKERER = new FrameTinkererBlock(AbstractBlock.Properties.copy(Blocks.OAK_PLANKS));
+	public static final CorporeaRetainerEvaporatorBlock CORPOREA_RETAINER_EVAPORATOR = new CorporeaRetainerEvaporatorBlock(AbstractBlock.Properties.copy(ModBlocks.corporeaRetainer));
 	
 	public static final Map<DyeColor, UnstableCubeBlock> UNSTABLE_CUBES = Util.make(new EnumMap<>(DyeColor.class), m -> {
-		for(DyeColor color : DyeColor.values()) m.put(color, new UnstableCubeBlock(AbstractBlock.Properties.create(Material.IRON, color.getMapColor())
-			.hardnessAndResistance(5f)
-			.setOpaque((state, world, pos) -> false)
-			.notSolid(), color));
+		for(DyeColor color : DyeColor.values()) m.put(color, new UnstableCubeBlock(AbstractBlock.Properties.of(Material.METAL, color.getMaterialColor())
+			.strength(5f)
+			.isRedstoneConductor((state, world, pos) -> false)
+			.noOcclusion(), color));
 	});
 	
-	public static final Block.Properties soulCoreProps = AbstractBlock.Properties.create(Material.ORGANIC)
-		.hardnessAndResistance(1f)
-		.setOpaque((state, world, pos) -> false)
-		.notSolid();
+	public static final Block.Properties soulCoreProps = AbstractBlock.Properties.of(Material.GRASS)
+		.strength(1f)
+		.isRedstoneConductor((state, world, pos) -> false)
+		.noOcclusion();
 	public static final Block ENDER_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.ENDER_SOUL_CORE);
 	public static final Block CORPOREA_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.CORPOREA_SOUL_CORE);
 	public static final Block POTION_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.POTION_SOUL_CORE);
 	
-	public static final Block NATURAL_REPEATER = new CrappyRepeaterBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.CROP).notSolid());
-	public static final Block NATURAL_COMPARATOR = new CrappyComparatorBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().sound(SoundType.CROP).notSolid());
-	public static final RedstoneRootCropBlock REDSTONE_ROOT_CROP = new RedstoneRootCropBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.CROP).notSolid());
+	public static final Block NATURAL_REPEATER = new CrappyRepeaterBlock(AbstractBlock.Properties.of(Material.DECORATION).instabreak().sound(SoundType.CROP).noOcclusion());
+	public static final Block NATURAL_COMPARATOR = new CrappyComparatorBlock(AbstractBlock.Properties.of(Material.DECORATION).instabreak().sound(SoundType.CROP).noOcclusion());
+	public static final RedstoneRootCropBlock REDSTONE_ROOT_CROP = new RedstoneRootCropBlock(AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.CROP).noOcclusion());
 	
-	public static final Block.Properties flowerProps = AbstractBlock.Properties.from(Blocks.POPPY);
+	public static final Block.Properties flowerProps = AbstractBlock.Properties.copy(Blocks.POPPY);
 	public static final Block.Properties floatingProps = ModBlocks.FLOATING_PROPS;
 	
 	public static final BlockSpecialFlower SANVOCALIA = new NotBlockSpecialFlower(Effects.GLOWING, 20, flowerProps, SanvocaliaSubTile::big);
@@ -71,7 +73,7 @@ public class IncBlocks {
 		Inc.reg(r, "frame_tinkerer", FRAME_TINKERER);
 		Inc.reg(r, "corporea_retainer_evaporator", CORPOREA_RETAINER_EVAPORATOR);
 		
-		UNSTABLE_CUBES.values().forEach(block -> Inc.reg(r, block.color.getString() + "_unstable_cube", block));
+		UNSTABLE_CUBES.values().forEach(block -> Inc.reg(r, block.color.getSerializedName() + "_unstable_cube", block));
 		
 		Inc.reg(r, "ender_soul_core", ENDER_SOUL_CORE);
 		Inc.reg(r, "corporea_soul_core", CORPOREA_SOUL_CORE);

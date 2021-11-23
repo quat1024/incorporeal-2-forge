@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 
 public class FrameReader {	
-	public static final BiPredicate<ItemFrameEntity, Direction> NON_EMPTY = (frame, dir) -> !frame.getDisplayedItem().isEmpty();
-	public static final BiPredicate<ItemFrameEntity, Direction> RESTING_ON = (frame, dir) -> frame.getHorizontalFacing() == dir;
+	public static final BiPredicate<ItemFrameEntity, Direction> NON_EMPTY = (frame, dir) -> !frame.getItem().isEmpty();
+	public static final BiPredicate<ItemFrameEntity, Direction> RESTING_ON = (frame, dir) -> frame.getDirection() == dir;
 	
 	//near: The item frame is anywhere in the 6 blocks surrounding the provided blockpos. (e.g. "frame tinkerer")
 	//resting on: The item frame is resting on the provided blockpos. (e.g. "corporea funnel")
@@ -72,10 +72,10 @@ public class FrameReader {
 		List<ItemStack> items = new ArrayList<>(6);
 		
 		for(Direction dir : Direction.values()) {
-			BlockPos off = pos.offset(dir);
-			for(ItemFrameEntity frame : world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(off, off.add(1, 1, 1)))) {
+			BlockPos off = pos.relative(dir);
+			for(ItemFrameEntity frame : world.getEntitiesOfClass(ItemFrameEntity.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
 				if(frame.isAlive() && (test == null || test.test(frame, dir))) {
-					items.add(frame.getDisplayedItem());
+					items.add(frame.getItem());
 				}
 			}
 		}
@@ -87,8 +87,8 @@ public class FrameReader {
 		List<ItemFrameEntity> frames = new ArrayList<>(6);
 		
 		for(Direction dir : Direction.values()) {
-			BlockPos off = pos.offset(dir);
-			for(ItemFrameEntity frame : world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(off, off.add(1, 1, 1)))) {
+			BlockPos off = pos.relative(dir);
+			for(ItemFrameEntity frame : world.getEntitiesOfClass(ItemFrameEntity.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
 				if(frame.isAlive() && (test == null || test.test(frame, dir))) {
 					frames.add(frame);
 				}
@@ -102,9 +102,9 @@ public class FrameReader {
 		Map<Direction, ItemFrameEntity> frames = new EnumMap<>(Direction.class);
 		
 		for(Direction dir : Direction.values()) {
-			BlockPos off = pos.offset(dir);
-			for(ItemFrameEntity frame : world.getEntitiesWithinAABB(ItemFrameEntity.class, new AxisAlignedBB(off, off.add(1, 1, 1)))) {
-				if(frame.isAlive() && frame.getHorizontalFacing() == dir && (test == null || test.test(frame, dir))) {
+			BlockPos off = pos.relative(dir);
+			for(ItemFrameEntity frame : world.getEntitiesOfClass(ItemFrameEntity.class, new AxisAlignedBB(off, off.offset(1, 1, 1)))) {
+				if(frame.isAlive() && frame.getDirection() == dir && (test == null || test.test(frame, dir))) {
 					frames.put(dir, frame);
 				}
 			}

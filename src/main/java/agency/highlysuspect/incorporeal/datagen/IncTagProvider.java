@@ -21,18 +21,18 @@ public class IncTagProvider {
 		}
 		
 		@Override
-		protected void registerTags() {
-			getOrCreateBuilder(ModTags.Blocks.CORPOREA_SPARK_OVERRIDE).add(IncBlocks.RED_STRING_LIAR, IncBlocks.CORPOREA_SOUL_CORE);
+		protected void addTags() {
+			tag(ModTags.Blocks.CORPOREA_SPARK_OVERRIDE).add(IncBlocks.RED_STRING_LIAR, IncBlocks.CORPOREA_SOUL_CORE);
 			
 			Block[] functionalNotFloating = new Block[]{IncBlocks.FUNNY, IncBlocks.SMALL_FUNNY, IncBlocks.SANVOCALIA, IncBlocks.SMALL_SANVOCALIA};
 			Block[] functionalFloating = new Block[]{IncBlocks.FLOATING_FUNNY, IncBlocks.SMALL_FLOATING_FUNNY, IncBlocks.FLOATING_SANVOCALIA, IncBlocks.SMALL_FLOATING_SANVOCALIA};
 			Block[] smallNotFloating = new Block[]{IncBlocks.SMALL_SANVOCALIA, IncBlocks.SMALL_FUNNY};
 			
-			getOrCreateBuilder(ModTags.Blocks.FUNCTIONAL_SPECIAL_FLOWERS).add(functionalNotFloating);
-			getOrCreateBuilder(ModTags.Blocks.SPECIAL_FLOATING_FLOWERS).add(functionalFloating);
-			getOrCreateBuilder(ModTags.Blocks.MINI_FLOWERS).add(smallNotFloating); //Looks like an unused tag?
+			tag(ModTags.Blocks.FUNCTIONAL_SPECIAL_FLOWERS).add(functionalNotFloating);
+			tag(ModTags.Blocks.SPECIAL_FLOATING_FLOWERS).add(functionalFloating);
+			tag(ModTags.Blocks.MINI_FLOWERS).add(smallNotFloating); //Looks like an unused tag?
 			
-			getOrCreateBuilder(IncTags.Blocks.OPEN_CRATES).add(ModBlocks.openCrate);
+			tag(IncTags.Blocks.OPEN_CRATES).add(ModBlocks.openCrate);
 		}
 	}
 	
@@ -42,12 +42,12 @@ public class IncTagProvider {
 		}
 		
 		@Override
-		protected void registerTags() {
+		protected void addTags() {
 			copy(ModTags.Blocks.FUNCTIONAL_SPECIAL_FLOWERS, ModTags.Items.FUNCTIONAL_SPECIAL_FLOWERS);
 			copy(ModTags.Blocks.SPECIAL_FLOATING_FLOWERS, ModTags.Items.SPECIAL_FLOATING_FLOWERS);
 			copy(ModTags.Blocks.MINI_FLOWERS, ModTags.Items.MINI_FLOWERS);
 			
-			getOrCreateBuilder(ModTags.Items.RODS).add(IncItems.FRACTURED_SPACE_ROD);
+			tag(ModTags.Items.RODS).add(IncItems.FRACTURED_SPACE_ROD);
 		}
 	}
 }

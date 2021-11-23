@@ -143,12 +143,12 @@ public class RhoCapEvents {
 		
 		@Override
 		public boolean canRhodoInsert() {
-			return CorporeaHelper.instance().getSparkForBlock(tile.getWorld(), tile.getPos()) != null;
+			return CorporeaHelper.instance().getSparkForBlock(tile.getLevel(), tile.getBlockPos()) != null;
 		}
 		
 		@Override
 		public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
-			ICorporeaSpark spork = CorporeaHelper.instance().getSparkForBlock(tile.getWorld(), tile.getPos());
+			ICorporeaSpark spork = CorporeaHelper.instance().getSparkForBlock(tile.getLevel(), tile.getBlockPos());
 			if(spork == null) return false;
 			
 			if(!simulate) {
@@ -236,12 +236,12 @@ public class RhoCapEvents {
 			
 			@Override
 			public ItemStack getStack() {
-				return frame.getDisplayedItem();
+				return frame.getItem();
 			}
 			
 			@Override
 			public void setStack(ItemStack stack) {
-				frame.setDisplayedItem(stack);
+				frame.setItem(stack);
 			}
 			
 			@Override

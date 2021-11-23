@@ -30,7 +30,7 @@ public class EnderSoulCoreTile extends AbstractSoulCoreTile {
 	@Override
 	public void tick() {
 		super.tick();
-		if(world == null || world.isRemote) return;
+		if(level == null || level.isClientSide) return;
 		
 		Optional<ServerPlayerEntity> player = findPlayer();
 		boolean isHere = player.isPresent();
@@ -38,7 +38,7 @@ public class EnderSoulCoreTile extends AbstractSoulCoreTile {
 		if(!isHere) {
 			handler = EmptyHandler.INSTANCE;
 		} else if(handler == EmptyHandler.INSTANCE) {
-			handler = new ManaDrainingInvWrapper(player.get().getInventoryEnderChest());
+			handler = new ManaDrainingInvWrapper(player.get().getEnderChestInventory());
 		}
 	}
 	

@@ -35,14 +35,14 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 	
 	@Override
 	public void render(@Nullable UnstableCubeTile te, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
-		ms.push();
+		ms.pushPose();
 		
 		partialTicks = ClientTickHandler.partialTicks;
 		
 		if(te == null) {
 			roll(ms, partialTicks);
 		} else {
-			roll(ms, partialTicks, te.rotationAngle, te.rotationSpeed, te.bump, te.bumpDecay, MathHelper.hash(MathHelper.hash(te.getPos().hashCode())) % 50000);
+			roll(ms, partialTicks, te.rotationAngle, te.rotationSpeed, te.bump, te.bumpDecay, MathHelper.murmurHash3Mixer(MathHelper.murmurHash3Mixer(te.getBlockPos().hashCode())) % 50000);
 		}
 		
 		int colorPacked = color.getColorValue();
@@ -50,30 +50,30 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 		float green = ((colorPacked & 0x00FF00) >> 8) / 255f;
 		float blue = (colorPacked & 0x0000FF) / 255f;
 		
-		IVertexBuilder builder = buf.getBuffer(RenderType.getEntityCutout(texture));
-		model.render(ms, builder, light, overlay, red, green, blue, 1f);
+		IVertexBuilder builder = buf.getBuffer(RenderType.entityCutout(texture));
+		model.renderToBuffer(ms, builder, light, overlay, red, green, blue, 1f);
 		
-		ms.pop();
+		ms.popPose();
 	}
 	
 	private static class CubeModel extends Model {
 		public CubeModel() {
-			super(RenderType::getEntityCutout);
-			textureWidth = 64;
-			textureHeight = 32;
+			super(RenderType::entityCutout);
+			texWidth = 64;
+			texHeight = 32;
 			
 			cube = new ModelRenderer(this, 0, 0);
 			cube.addBox(-8, -8, -8, 16, 16, 16);
-			cube.setRotationPoint(8, 8, 8);
+			cube.setPos(8, 8, 8);
 		}
 		
 		private final ModelRenderer cube;
 		
 		@Override
-		public void render(MatrixStack ms, IVertexBuilder builder, int light, int overlay, float red, float green, float blue, float alpha) {
-			ms.push();
+		public void renderToBuffer(MatrixStack ms, IVertexBuilder builder, int light, int overlay, float red, float green, float blue, float alpha) {
+			ms.pushPose();
 			cube.render(ms, builder, light, overlay, red, green, blue, alpha);
-			ms.pop();
+			ms.popPose();
 		}
 	}
 	
@@ -104,18 +104,18 @@ public class UnstableCubeRenderer extends TileEntityRenderer<UnstableCubeTile> {
 		int flip = (hash % 2) == 0 ? -1 : 1;
 		
 		ms.translate(.5, .5, .5);
-		ms.rotate(Vector3f.YP.rotationDegrees((flip * predictedAngle + hash) % 360));
+		ms.mulPose(Vector3f.YP.rotationDegrees((flip * predictedAngle + hash) % 360));
 		
 		float wobble = ticks + hash;
 		float wobbleSin = Inc.sinDegrees(wobble);
 		float wobbleCos = Inc.cosDegrees(wobble);
 		float wobbleAmountDegrees = 15 * flip;
 		
-		ms.rotate(XZP.rotationDegrees(MathHelper.sin(hash + ticks * 0.02f) * 40 * flip));
-		ms.rotate(Vector3f.XP.rotationDegrees(wobbleCos * wobbleAmountDegrees));
-		ms.rotate(Vector3f.XP.rotationDegrees(wobbleSin * wobbleAmountDegrees));
-		ms.rotate(Vector3f.ZP.rotationDegrees(-wobbleSin * wobbleAmountDegrees));
-		ms.rotate(Vector3f.ZP.rotationDegrees(-wobbleCos * wobbleAmountDegrees));
+		ms.mulPose(XZP.rotationDegrees(MathHelper.sin(hash + ticks * 0.02f) * 40 * flip));
+		ms.mulPose(Vector3f.XP.rotationDegrees(wobbleCos * wobbleAmountDegrees));
+		ms.mulPose(Vector3f.XP.rotationDegrees(wobbleSin * wobbleAmountDegrees));
+		ms.mulPose(Vector3f.ZP.rotationDegrees(-wobbleSin * wobbleAmountDegrees));
+		ms.mulPose(Vector3f.ZP.rotationDegrees(-wobbleCos * wobbleAmountDegrees));
 		
 		float upscale = (predictedBump * 0.7f) + 1;
 		ms.scale(upscale, upscale, upscale);

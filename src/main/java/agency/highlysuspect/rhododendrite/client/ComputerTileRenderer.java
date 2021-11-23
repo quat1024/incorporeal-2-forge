@@ -70,7 +70,7 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 		}
 		
 		//Submit everything to the IVertexBuilder
-		ms.push();
+		ms.pushPose();
 		ms.translate(0.5, 0.5, 0.5); //lame hack because it's not actually in world space
 		
 		int a = (color >> 24) & 0xFF;
@@ -80,10 +80,10 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 		
 		IVertexBuilder buffer = buffers.getBuffer(RenderHelper.LINE_1);
 		for(int i = 3; i < positions.length; i += 3) {
-			buffer.pos(ms.getLast().getMatrix(), positions[i - 3], positions[i - 2], positions[i - 1]).color(r, g, b, a).endVertex();
-			buffer.pos(ms.getLast().getMatrix(), positions[i], positions[i + 1], positions[i + 2]).color(r, g, b, a).endVertex();
+			buffer.vertex(ms.last().pose(), positions[i - 3], positions[i - 2], positions[i - 1]).color(r, g, b, a).endVertex();
+			buffer.vertex(ms.last().pose(), positions[i], positions[i + 1], positions[i + 2]).color(r, g, b, a).endVertex();
 		}
 		
-		ms.pop();
+		ms.popPose();
 	}
 }

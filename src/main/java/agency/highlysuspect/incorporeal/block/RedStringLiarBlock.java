@@ -7,6 +7,8 @@ import vazkii.botania.common.block.string.BlockRedString;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class RedStringLiarBlock extends BlockRedString {
 	public RedStringLiarBlock(Properties props) {
 		super(props);
@@ -14,7 +16,7 @@ public class RedStringLiarBlock extends BlockRedString {
 	
 	@Nullable
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader world) {
+	public TileEntity newBlockEntity(IBlockReader world) {
 		return new RedStringLiarTile();
 	}
 }

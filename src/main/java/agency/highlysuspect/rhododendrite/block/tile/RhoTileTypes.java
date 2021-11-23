@@ -8,9 +8,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 @SuppressWarnings("ConstantConditions")
 public class RhoTileTypes {
-	public static final TileEntityType<RhodoCellTile> CELL = TileEntityType.Builder.create(RhodoCellTile::new, RhoBlocks.CELL).build(null);
-	public static final TileEntityType<RhodoOpTile> OP = TileEntityType.Builder.create(RhodoOpTile::new, RhoBlocks.OP).build(null);
-	public static final TileEntityType<RhodoFunnelTile> FUNNEL = TileEntityType.Builder.create(RhodoFunnelTile::new, RhoBlocks.FUNNEL).build(null);
+	public static final TileEntityType<RhodoCellTile> CELL = TileEntityType.Builder.of(RhodoCellTile::new, RhoBlocks.CELL).build(null);
+	public static final TileEntityType<RhodoOpTile> OP = TileEntityType.Builder.of(RhodoOpTile::new, RhoBlocks.OP).build(null);
+	public static final TileEntityType<RhodoFunnelTile> FUNNEL = TileEntityType.Builder.of(RhodoFunnelTile::new, RhoBlocks.FUNNEL).build(null);
 	
 	public static void register(RegistryEvent.Register<TileEntityType<?>> event) {
 		IForgeRegistry<TileEntityType<?>> r = event.getRegistry();

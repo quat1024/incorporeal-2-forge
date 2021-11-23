@@ -24,7 +24,7 @@ public class ClientPacketHandler {
 			@Override
 			public void run() {
 				Minecraft client = Minecraft.getInstance();
-				ClientWorld world = client.world;
+				ClientWorld world = client.level;
 				if(world == null) return;
 				
 				showSparkleLine(world, sparkle);
@@ -38,7 +38,7 @@ public class ClientPacketHandler {
 			@Override
 			public void run() {
 				Minecraft client = Minecraft.getInstance();
-				ClientWorld world = client.world;
+				ClientWorld world = client.level;
 				if(world == null) return;
 				
 				for(Pair<IncNetwork.SparkleLine, byte[]> item : funny.data) {
