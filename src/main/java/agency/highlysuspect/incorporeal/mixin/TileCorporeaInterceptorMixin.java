@@ -1,11 +1,11 @@
 package agency.highlysuspect.incorporeal.mixin;
 
 import agency.highlysuspect.incorporeal.block.CorporeaSolidifierBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,7 +28,7 @@ public class TileCorporeaInterceptorMixin {
 		)
 	)
 	private void whenIntercepting(ICorporeaRequestMatcher request, int count, ICorporeaSpark spark, ICorporeaSpark source, List<ItemStack> stacks, List<ICorporeaNode> nodes, boolean doit, CallbackInfo ci) {
-		World world = ((TileCorporeaInterceptor) (Object) this).getLevel(); assert world != null;
+		Level world = ((TileCorporeaInterceptor) (Object) this).getLevel(); assert world != null;
 		BlockPos pos = ((TileCorporeaInterceptor) (Object) this).getBlockPos();
 		
 		for(Direction dir : Direction.values()) {

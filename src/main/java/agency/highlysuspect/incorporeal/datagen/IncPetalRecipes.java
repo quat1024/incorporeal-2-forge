@@ -5,13 +5,13 @@ import agency.highlysuspect.incorporeal.item.IncItems;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import vazkii.botania.common.core.helper.ItemNBTHelper;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.item.ModItems;
@@ -35,7 +35,7 @@ public class IncPetalRecipes extends RecipeProvider {
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
 		//Copypaste
 		Ingredient white = tagIngr("petals/white");
 		Ingredient orange = tagIngr("petals/orange");
@@ -79,7 +79,7 @@ public class IncPetalRecipes extends RecipeProvider {
 	}
 	
 	//Copypaste of internal private class from Botania
-	public static class FinishedRecipe implements IFinishedRecipe {
+	public static class FinishedRecipe implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final ItemStack output;
 		private final Ingredient[] inputs;
@@ -106,7 +106,7 @@ public class IncPetalRecipes extends RecipeProvider {
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return ModRecipeTypes.PETAL_SERIALIZER;
 		}
 		

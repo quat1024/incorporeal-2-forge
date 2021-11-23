@@ -4,11 +4,11 @@ import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import agency.highlysuspect.rhododendrite.item.RhoItems;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -142,12 +142,12 @@ public class RhoStatesModels extends BlockStateProvider {
 	}
 	
 	//i thought forge datagen stuff was supposed to handle the common cases. guess im wrong?
-	private void blockItemParent(IItemProvider i) {
+	private void blockItemParent(ItemLike i) {
 		itemModels().withExistingParent(n(i.asItem()), Rho.id("block/" + n(i.asItem())));
 	}
 	
 	//this is a mess im sorry. this is the wrong way to do it
-	private void itemGenerated(IItemProvider asd) {
+	private void itemGenerated(ItemLike asd) {
 		IForgeRegistryEntry<?> thingie = asd.asItem();
 		assert thingie.getRegistryName() != null; //no u
 		ResourceLocation item = new ResourceLocation(thingie.getRegistryName().getNamespace(), "item/" + thingie.getRegistryName().getPath());

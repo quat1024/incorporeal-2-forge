@@ -1,12 +1,12 @@
 package agency.highlysuspect.rhododendrite;
 
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 
 public class LegacyRho {
 	//TODO this is not on any event bus. idk which one it's fired on, will need to check.
-	public static void missingMappings(RegistryEvent.MissingMappings<TileEntityType<?>> event) {
-		for(RegistryEvent.MissingMappings.Mapping<TileEntityType<?>> map : event.getMappings(Rho.MODID)) {
+	public static void missingMappings(RegistryEvent.MissingMappings<BlockEntityType<?>> event) {
+		for(RegistryEvent.MissingMappings.Mapping<BlockEntityType<?>> map : event.getMappings(Rho.MODID)) {
 			switch(map.key.getPath()) {
 				case "core":
 				case "awakened_log":

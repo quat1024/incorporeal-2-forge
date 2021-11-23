@@ -3,13 +3,13 @@ package agency.highlysuspect.rhododendrite.block.tile;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.rhododendrite.computer.RhodoFunnelable;
 import agency.highlysuspect.rhododendrite.computer.RhodoFunnelableCapability;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-public class RhodoCellTile extends AbstractComputerTile implements ITickableTileEntity {
+public class RhodoCellTile extends AbstractComputerTile implements TickableBlockEntity {
 	public RhodoCellTile() {
 		super(RhoTileTypes.CELL);
 	}
@@ -43,7 +43,7 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	RhodoCellTile getBoundCell() {
 		if(binding == null) return null;
 		assert level != null;
-		TileEntity tile = level.getBlockEntity(binding);
+		BlockEntity tile = level.getBlockEntity(binding);
 		return tile instanceof RhodoCellTile ? (RhodoCellTile) tile : null;
 	}
 	
@@ -105,18 +105,18 @@ public class RhodoCellTile extends AbstractComputerTile implements ITickableTile
 	}
 	
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		return binding == null ? new AxisAlignedBB(worldPosition) : new AxisAlignedBB(worldPosition, binding);
+	public AABB getRenderBoundingBox() {
+		return binding == null ? new AABB(worldPosition) : new AABB(worldPosition, binding);
 	}
 	
 	@Override
-	public void writePacketNBT(CompoundNBT nbt) {
+	public void writePacketNBT(CompoundTag nbt) {
 		super.writePacketNBT(nbt);
 		nbt.put("Request", request.toTag());
 	}
 	
 	@Override
-	public void readPacketNBT(CompoundNBT nbt) {
+	public void readPacketNBT(CompoundTag nbt) {
 		super.readPacketNBT(nbt);
 		request = SolidifiedRequest.fromNbtOrEmpty(nbt.getCompound("Request"));
 	}

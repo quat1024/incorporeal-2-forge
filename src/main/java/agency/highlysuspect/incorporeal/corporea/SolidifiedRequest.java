@@ -1,11 +1,11 @@
 package agency.highlysuspect.incorporeal.corporea;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -32,22 +32,22 @@ public class SolidifiedRequest {
 	
 	public static final SolidifiedRequest EMPTY = new SolidifiedRequest(EmptyCorporeaRequestMatcher.INSTANCE, 0);
 	
-	public CompoundNBT toTag() {
-		CompoundNBT tag = MatcherUtils.toTag(matcher);
+	public CompoundTag toTag() {
+		CompoundTag tag = MatcherUtils.toTag(matcher);
 		
 		//count
 		tag.putInt("count", count);
 		return tag;
 	}
 	
-	public static Optional<SolidifiedRequest> tryFromTag(CompoundNBT tag) {
+	public static Optional<SolidifiedRequest> tryFromTag(CompoundTag tag) {
 		return MatcherUtils.tryFromTag(tag).map(matcher -> {
 			int count = tag.getInt("count");
 			return new SolidifiedRequest(matcher, count);
 		});
 	}
 	
-	public static SolidifiedRequest fromNbtOrEmpty(CompoundNBT tag) {
+	public static SolidifiedRequest fromNbtOrEmpty(CompoundTag tag) {
 		return tryFromTag(tag).orElse(EMPTY);
 	}
 	
@@ -56,8 +56,8 @@ public class SolidifiedRequest {
 		return matcher == EmptyCorporeaRequestMatcher.INSTANCE && count == 0;
 	}
 	
-	public ITextComponent toText() {
-		return new TranslationTextComponent("incorporeal.solidified_request", count, matcher.getRequestName());
+	public Component toText() {
+		return new TranslatableComponent("incorporeal.solidified_request", count, matcher.getRequestName());
 	}
 	
 	public int signalStrength() {
@@ -117,13 +117,13 @@ public class SolidifiedRequest {
 			
 			@Nullable
 			@Override
-			public INBT writeNBT(Capability<Holder> capability, Holder instance, Direction side) {
+			public Tag writeNBT(Capability<Holder> capability, Holder instance, Direction side) {
 				//No
 				return null;
 			}
 			
 			@Override
-			public void readNBT(Capability<Holder> capability, Holder instance, Direction side, INBT nbt) {
+			public void readNBT(Capability<Holder> capability, Holder instance, Direction side, Tag nbt) {
 				//No
 			}
 		}

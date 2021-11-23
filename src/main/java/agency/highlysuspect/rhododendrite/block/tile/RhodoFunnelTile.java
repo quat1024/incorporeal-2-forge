@@ -3,15 +3,15 @@ package agency.highlysuspect.rhododendrite.block.tile;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.rhododendrite.computer.RhodoFunnelable;
 import agency.highlysuspect.rhododendrite.computer.RhodoFunnelableCapability;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DirectionalBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import vazkii.botania.common.core.helper.Vector3;
 
@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTileEntity {
+public class RhodoFunnelTile extends AbstractComputerTile implements TickableBlockEntity {
 	public RhodoFunnelTile() {
 		super(RhoTileTypes.FUNNEL);
 	}
@@ -81,11 +81,11 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 	}
 	
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		if(foreBinding == null && aftBinding == null) return new AxisAlignedBB(worldPosition);
-		if(foreBinding == null) return new AxisAlignedBB(worldPosition, conv(aftBinding.direct));
-		if(aftBinding == null) return new AxisAlignedBB(worldPosition, conv(foreBinding.direct));
-		else return new AxisAlignedBB(conv(foreBinding.direct), conv(aftBinding.direct));
+	public AABB getRenderBoundingBox() {
+		if(foreBinding == null && aftBinding == null) return new AABB(worldPosition);
+		if(foreBinding == null) return new AABB(worldPosition, conv(aftBinding.direct));
+		if(aftBinding == null) return new AABB(worldPosition, conv(foreBinding.direct));
+		else return new AABB(conv(foreBinding.direct), conv(aftBinding.direct));
 	}
 	
 	//convert Botania Vec3 to a blockpos in one step.
@@ -100,11 +100,11 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 		
 		Predicate<RhodoFunnelable> funnelableCond = fore ? RhodoFunnelable::canRhodoInsert : RhodoFunnelable::canRhodoExtract;
 		
-		BlockPos.Mutable cursor = worldPosition.mutable();
+		BlockPos.MutableBlockPos cursor = worldPosition.mutable();
 		for(int i = 0; i < RANGE; i++) {
 			cursor.move(dir);
 			
-			TileEntity t = level.getBlockEntity(cursor);
+			BlockEntity t = level.getBlockEntity(cursor);
 			
 			//Chain through other rhodo funnels
 			if(t instanceof RhodoFunnelTile) {
@@ -114,7 +114,7 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 			}
 			
 			//Bind directly to entities
-			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AxisAlignedBB(cursor));
+			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(cursor));
 			Collections.shuffle(nearbyEntities, level.random);
 			for(Entity e : nearbyEntities) {
 				LazyOptional<RhodoFunnelable> cap = e.getCapability(RhodoFunnelableCapability.INSTANCE);
@@ -153,10 +153,10 @@ public class RhodoFunnelTile extends AbstractComputerTile implements ITickableTi
 		return () -> op.resolve().orElse(null);
 	}
 	
-	private static Supplier<RhodoFunnelable> fromLoose(World world, BlockPos pos, BlockState state, Direction face, RhodoFunnelable.Loose looseFunnelable) {
-		WeakReference<World> worldWeak = new WeakReference<>(world);
+	private static Supplier<RhodoFunnelable> fromLoose(Level world, BlockPos pos, BlockState state, Direction face, RhodoFunnelable.Loose looseFunnelable) {
+		WeakReference<Level> worldWeak = new WeakReference<>(world);
 		return () -> {
-			World w = worldWeak.get();
+			Level w = worldWeak.get();
 			return w == null ? null : looseFunnelable.getFunnelable(w, pos, state, face);
 		};
 	}

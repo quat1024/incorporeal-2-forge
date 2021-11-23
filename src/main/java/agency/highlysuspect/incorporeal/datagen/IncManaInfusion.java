@@ -4,14 +4,14 @@ import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 import vazkii.botania.api.recipe.StateIngredient;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.core.helper.ItemNBTHelper;
@@ -41,13 +41,13 @@ public class IncManaInfusion extends RecipeProvider {
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
 		consumer.accept(mini(IncBlocks.SMALL_SANVOCALIA, IncBlocks.SANVOCALIA));
 		consumer.accept(mini(IncBlocks.SMALL_FUNNY, IncBlocks.FUNNY));
 	}
 	
 	//Copypaste
-	public FinishedRecipe mini(IItemProvider mini, IItemProvider full) {
+	public FinishedRecipe mini(ItemLike mini, ItemLike full) {
 		return FinishedRecipe.alchemy(id(Registry.ITEM.getKey(mini.asItem()).getPath()), new ItemStack(mini), ingr(full), 2500, "botania:flower_shrinking");
 	}
 	
@@ -55,11 +55,11 @@ public class IncManaInfusion extends RecipeProvider {
 		return new ResourceLocation(modid, "mana_infusion/" + s);
 	}
 	
-	public Ingredient ingr(IItemProvider i) {
+	public Ingredient ingr(ItemLike i) {
 		return Ingredient.of(i);
 	}
 	
-	public void cycle(Consumer<IFinishedRecipe> consumer, int cost, String group, IItemProvider... items) {
+	public void cycle(Consumer<FinishedRecipe> consumer, int cost, String group, ItemLike... items) {
 		for (int i = 0; i < items.length; i++) {
 			Ingredient in = ingr(items[i]);
 			ItemStack out = new ItemStack(i == items.length - 1 ? items[0] : items[i + 1]);
@@ -69,7 +69,7 @@ public class IncManaInfusion extends RecipeProvider {
 	}
 	
 	//Copypaste
-	public static class FinishedRecipe implements IFinishedRecipe {
+	public static class FinishedRecipe implements FinishedRecipe {
 		private static final StateIngredient CONJURATION = StateIngredientHelper.of(ModBlocks.conjurationCatalyst);
 		private static final StateIngredient ALCHEMY = StateIngredientHelper.of(ModBlocks.alchemyCatalyst);
 		
@@ -129,7 +129,7 @@ public class IncManaInfusion extends RecipeProvider {
 		}
 		
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return ModRecipeTypes.MANA_INFUSION_SERIALIZER;
 		}
 		

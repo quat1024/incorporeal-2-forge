@@ -1,22 +1,22 @@
 package agency.highlysuspect.rhododendrite;
 
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.block.trees.Tree;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
-import net.minecraft.world.gen.trunkplacer.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -31,6 +31,28 @@ import java.util.function.Consumer;
 //like, the tree has to know about the logs, so the logs have to be created before the tree.
 //Some of them are commented out; they should work ok, i just don't have textures for them.
 //Also see RhoStatesModels for some woodfamily datagen stuff.
+import net.minecraft.util.UniformInt;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WoodButtonBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+
 public class WoodFamily {
 	public WoodFamily(String name, MaterialColor planksColor, MaterialColor barkColor) {
 		this.name = name;
@@ -45,45 +67,45 @@ public class WoodFamily {
 	}
 	
 	public WoodFamily defaults() {
-		if(planks == null) planks = new Block(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+		if(planks == null) planks = new Block(BlockBehaviour.Properties.of(Material.WOOD, planksColor)
 			.strength(2, 3)
 			.sound(SoundType.WOOD));
 		
-		if(strippedLog == null) strippedLog = new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+		if(strippedLog == null) strippedLog = new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD, planksColor)
 			.strength(2.0F)
 			.sound(SoundType.WOOD));
 		
-		if(log == null) log = new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? planksColor : barkColor)
+		if(log == null) log = new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD, state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? planksColor : barkColor)
 			.strength(2.0F)
 			.sound(SoundType.WOOD)) {
 			//In lieu of letting you just add things to the stinkin axe-item stripping map, Forge provides... whatever this is?
 			//Yeah man I dunno.
 			@Nullable
 			@Override
-			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
+			public BlockState getToolModifiedState(BlockState state, Level world, BlockPos pos, Player player, ItemStack stack, ToolType toolType) {
 				if(toolType == ToolType.AXE)
 					return strippedLog.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
 				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
 			}
 		};
 		
-		if(strippedWood == null) strippedWood = new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+		if(strippedWood == null) strippedWood = new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD, planksColor)
 			.strength(2)
 			.sound(SoundType.WOOD));
 		
-		if(wood == null) wood = new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, barkColor)
+		if(wood == null) wood = new RotatedPillarBlock(BlockBehaviour.Properties.of(Material.WOOD, barkColor)
 			.strength(2)
 			.sound(SoundType.WOOD)) {
 			@Nullable
 			@Override
-			public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) {
+			public BlockState getToolModifiedState(BlockState state, Level world, BlockPos pos, Player player, ItemStack stack, ToolType toolType) {
 				if(toolType == ToolType.AXE)
 					return strippedWood.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
 				return super.getToolModifiedState(state, world, pos, player, stack, toolType);
 			}
 		};
 		
-		if(leaves == null) leaves = new LeavesBlock(AbstractBlock.Properties.of(Material.LEAVES).
+		if(leaves == null) leaves = new LeavesBlock(BlockBehaviour.Properties.of(Material.LEAVES).
 			strength(0.2F)
 			.randomTicks()
 			.sound(SoundType.GRASS)
@@ -92,7 +114,7 @@ public class WoodFamily {
 			.isSuffocating((state, reader, pos) -> false) //inlined isntSolid
 			.isViewBlocking((state, reader, pos) -> false));
 		
-		if(stairs == null) stairs = new StairsBlock(planks.defaultBlockState(), AbstractBlock.Properties.copy(planks));
+		if(stairs == null) stairs = new StairBlock(planks.defaultBlockState(), BlockBehaviour.Properties.copy(planks));
 
 //		if(sign == null) sign = new StandingSignBlock(AbstractBlock.Properties.create(Material.WOOD)
 //			.doesNotBlockMovement()
@@ -112,12 +134,12 @@ public class WoodFamily {
 //			.lootFrom(() -> sign),
 //			woodType);
 		
-		if(pressurePlate == null) pressurePlate = new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, AbstractBlock.Properties.of(Material.WOOD, planksColor)
+		if(pressurePlate == null) pressurePlate = new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.of(Material.WOOD, planksColor)
 			.noCollission()
 			.strength(.5f)
 			.sound(SoundType.WOOD));
 		
-		if(fence == null) fence = new FenceBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+		if(fence == null) fence = new FenceBlock(BlockBehaviour.Properties.of(Material.WOOD, planksColor)
 			.strength(2f, 3f)
 			.sound(SoundType.WOOD));
 
@@ -127,16 +149,16 @@ public class WoodFamily {
 //			.notSolid()
 //			.setAllowsSpawn((p_test_1_, p_test_2_, p_test_3_, p_test_4_) -> false));
 		
-		if(fenceGate == null) fenceGate = new FenceGateBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+		if(fenceGate == null) fenceGate = new FenceGateBlock(BlockBehaviour.Properties.of(Material.WOOD, planksColor)
 			.strength(2f, 3f)
 			.sound(SoundType.WOOD));
 		
-		if(button == null) button = new WoodButtonBlock(AbstractBlock.Properties.of(Material.DECORATION)
+		if(button == null) button = new WoodButtonBlock(BlockBehaviour.Properties.of(Material.DECORATION)
 			.noCollission()
 			.strength(0.5f)
 			.sound(SoundType.WOOD));
 		
-		if(slab == null) slab = new SlabBlock(AbstractBlock.Properties.of(Material.WOOD, planksColor)
+		if(slab == null) slab = new SlabBlock(BlockBehaviour.Properties.of(Material.WOOD, planksColor)
 			.strength(2f, 3f)
 			.sound(SoundType.WOOD));
 		
@@ -146,33 +168,33 @@ public class WoodFamily {
 		//this is literally just a straight-up copy of the birch tree with some numbers fudged a bit
 		//yeah idk how this tree stuff works
 		//i tried making it larger so it was slightly creative, but it looked bad
-		if(treeFeature == null) treeFeature = Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(
+		if(treeFeature == null) treeFeature = Feature.TREE.configured(new TreeConfiguration.TreeConfigurationBuilder(
 			//Trunk blockstate provider
-			new SimpleBlockStateProvider(log.defaultBlockState()),
+			new SimpleStateProvider(log.defaultBlockState()),
 			//Leaves blockstate provider
-			new SimpleBlockStateProvider(leaves.defaultBlockState()),
+			new SimpleStateProvider(leaves.defaultBlockState()),
 			//Foliage placer
 			new BlobFoliagePlacer(
-				FeatureSpread.fixed(2), //method is probably named "exactly" - 0 spread
-				FeatureSpread.fixed(0),
+				UniformInt.fixed(2), //method is probably named "exactly" - 0 spread
+				UniformInt.fixed(0),
 				3
 			),
 			//Trunk placer
 			new StraightTrunkPlacer(6, 3, 0),
 			//Minimum size (limit, lower, upper)
-			new TwoLayerFeature(1, 0, 1)
+			new TwoLayersFeatureSize(1, 0, 1)
 		).ignoreVines().build());
 		
-		if(tree == null) tree = new Tree() {
+		if(tree == null) tree = new AbstractTreeGrower() {
 			@Nullable
 			@Override
-			protected ConfiguredFeature<BaseTreeFeatureConfig, ?> getConfiguredFeature(Random random, boolean nearbyFlower) {
+			protected ConfiguredFeature<TreeConfiguration, ?> getConfiguredFeature(Random random, boolean nearbyFlower) {
 				return WoodFamily.this.treeFeature;
 			}
 		};
 		
-		if(sapling == null) sapling = new SaplingBlock(tree, AbstractBlock.Properties.copy(Blocks.OAK_SAPLING));
-		if(pottedSapling == null) pottedSapling = new FlowerPotBlock(sapling, AbstractBlock.Properties.copy(Blocks.POTTED_OAK_SAPLING));
+		if(sapling == null) sapling = new SaplingBlock(tree, BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING));
+		if(pottedSapling == null) pottedSapling = new FlowerPotBlock(sapling, BlockBehaviour.Properties.copy(Blocks.POTTED_OAK_SAPLING));
 		
 		return this;
 	}
@@ -188,7 +210,7 @@ public class WoodFamily {
 	public RotatedPillarBlock wood;
 	public RotatedPillarBlock strippedWood;
 	public Block leaves;
-	public StairsBlock stairs;
+	public StairBlock stairs;
 	//public StandingSignBlock sign;
 	//public DoorBlock door;
 	//public WallSignBlock wallSign;
@@ -205,8 +227,8 @@ public class WoodFamily {
 	public Block pottedSapling;
 	
 	//tree hell
-	public Tree tree;
-	public ConfiguredFeature<BaseTreeFeatureConfig, ?> treeFeature;
+	public AbstractTreeGrower tree;
+	public ConfiguredFeature<TreeConfiguration, ?> treeFeature;
 	
 	public void registerBlocks(IForgeRegistry<Block> r) {
 		Rho.reg(r, name + "_planks", planks);
@@ -253,6 +275,6 @@ public class WoodFamily {
 	}
 	
 	public void registerFeature(IForgeRegistry<Feature<?>> r) {
-		Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, Rho.id(name + "_tree_feature"), treeFeature);
+		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, Rho.id(name + "_tree_feature"), treeFeature);
 	}
 }

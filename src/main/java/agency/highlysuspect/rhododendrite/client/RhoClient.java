@@ -4,7 +4,7 @@ import agency.highlysuspect.rhododendrite.RhoProxy;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import agency.highlysuspect.rhododendrite.block.tile.RhoTileTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -22,12 +22,12 @@ public class RhoClient implements RhoProxy {
 //				Atlases.addWoodType(RhoBlocks.RHODODENDRITE.woodType);
 //			});
 			
-			RenderTypeLookup.setRenderLayer(RhoBlocks.CELL, RenderType.translucent());
-			RenderTypeLookup.setRenderLayer(RhoBlocks.OP, RenderType.translucent());
-			RenderTypeLookup.setRenderLayer(RhoBlocks.FUNNEL, RenderType.translucent());
+			ItemBlockRenderTypes.setRenderLayer(RhoBlocks.CELL, RenderType.translucent());
+			ItemBlockRenderTypes.setRenderLayer(RhoBlocks.OP, RenderType.translucent());
+			ItemBlockRenderTypes.setRenderLayer(RhoBlocks.FUNNEL, RenderType.translucent());
 			
-			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.leaves, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(RhoBlocks.RHODODENDRITE.sapling, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(RhoBlocks.RHODODENDRITE.leaves, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(RhoBlocks.RHODODENDRITE.sapling, RenderType.cutout());
 		});
 		
 		modBus.addListener((ModelRegistryEvent e) -> {

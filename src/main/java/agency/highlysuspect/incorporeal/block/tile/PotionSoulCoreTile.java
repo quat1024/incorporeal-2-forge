@@ -2,10 +2,10 @@ package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.entity.PotionSoulCoreCollectorEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +25,8 @@ public class PotionSoulCoreTile extends AbstractSoulCoreTile {
 		super.tick();
 		if(level == null || level.isClientSide) return;
 		
-		List<PotionSoulCoreCollectorEntity> collectors = level.getEntitiesOfClass(PotionSoulCoreCollectorEntity.class, new AxisAlignedBB(worldPosition));
-		Optional<ServerPlayerEntity> playerOp = findPlayer();
+		List<PotionSoulCoreCollectorEntity> collectors = level.getEntitiesOfClass(PotionSoulCoreCollectorEntity.class, new AABB(worldPosition));
+		Optional<ServerPlayer> playerOp = findPlayer();
 		
 		if(collectors.size() >= 2 || !playerOp.isPresent()) {
 			collectors.forEach(Entity::remove);
@@ -41,6 +41,6 @@ public class PotionSoulCoreTile extends AbstractSoulCoreTile {
 	@Override
 	public void onExpire() {
 		super.onExpire();
-		if(level != null)	level.getEntitiesOfClass(PotionSoulCoreCollectorEntity.class, new AxisAlignedBB(worldPosition)).forEach(Entity::remove);
+		if(level != null)	level.getEntitiesOfClass(PotionSoulCoreCollectorEntity.class, new AABB(worldPosition)).forEach(Entity::remove);
 	}
 }

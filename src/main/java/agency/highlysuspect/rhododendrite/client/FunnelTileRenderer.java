@@ -1,19 +1,19 @@
 package agency.highlysuspect.rhododendrite.client;
 
 import agency.highlysuspect.rhododendrite.block.tile.RhodoFunnelTile;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.util.Mth;
 import vazkii.botania.common.core.helper.Vector3;
 
 public class FunnelTileRenderer extends ComputerTileRenderer<RhodoFunnelTile> {
-	public FunnelTileRenderer(TileEntityRendererDispatcher dispatcher) {
+	public FunnelTileRenderer(BlockEntityRenderDispatcher dispatcher) {
 		super(dispatcher);
 	}
 	
 	@Override
-	public void render(RhodoFunnelTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int light, int overlay) {
+	public void render(RhodoFunnelTile tile, float partialTicks, PoseStack ms, MultiBufferSource buf, int light, int overlay) {
 		if(tile.getLevel() == null) return;
 		
 		Vector3 foreBinding = tile.getForeDirectBind();
@@ -26,7 +26,7 @@ public class FunnelTileRenderer extends ComputerTileRenderer<RhodoFunnelTile> {
 				Vector3.fromTileEntityCenter(tile),
 				foreBinding,
 				color,
-				MathHelper.murmurHash3Mixer(tile.getBlockPos().hashCode()),
+				Mth.murmurHash3Mixer(tile.getBlockPos().hashCode()),
 				1.3f,
 				0.1f,
 				2f
@@ -38,7 +38,7 @@ public class FunnelTileRenderer extends ComputerTileRenderer<RhodoFunnelTile> {
 				Vector3.fromTileEntityCenter(tile),
 				aftBinding,
 				color,
-				MathHelper.murmurHash3Mixer(tile.getBlockPos().hashCode()),
+				Mth.murmurHash3Mixer(tile.getBlockPos().hashCode()),
 				0.1f,
 				1.3f,
 				-2f

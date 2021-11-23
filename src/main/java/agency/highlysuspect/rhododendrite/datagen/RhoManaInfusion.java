@@ -4,7 +4,7 @@ import agency.highlysuspect.incorporeal.datagen.IncManaInfusion;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.item.RhoItems;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.recipes.FinishedRecipe;
 
 import java.util.function.Consumer;
 
@@ -19,7 +19,7 @@ public class RhoManaInfusion extends IncManaInfusion {
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
 //		cycle(consumer, 20, "rhododendrite:opcode_cycle",
 //			RhoItems.OPCODE_BLANK,
 //			RhoItems.OPCODE_PUSH,

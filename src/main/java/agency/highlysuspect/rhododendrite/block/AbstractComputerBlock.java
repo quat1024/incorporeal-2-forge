@@ -1,21 +1,21 @@
 package agency.highlysuspect.rhododendrite.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DirectionalBlock;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public abstract class AbstractComputerBlock extends Block {
 	public AbstractComputerBlock(Properties properties) {
@@ -24,18 +24,18 @@ public abstract class AbstractComputerBlock extends Block {
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder.add(DirectionalBlock.FACING));
 	}
 	
 	@Nullable
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return defaultBlockState().setValue(DirectionalBlock.FACING, context.getNearestLookingDirection());
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 		return SHAPE;
 	}
 	
@@ -43,17 +43,17 @@ public abstract class AbstractComputerBlock extends Block {
 	
 	static {
 		//shoutouts to the "VoxelShape Generator" blockbench plugin lol.
-		VoxelShape shape = VoxelShapes.empty();
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.75, 0.0625, 0.0625, 0.9375, 0.25, 0.25), IBooleanFunction.OR);
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.0625, 0.0625, 0.0625, 0.25, 0.25, 0.25), IBooleanFunction.OR);
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.75, 0.0625, 0.75, 0.9375, 0.25, 0.9375), IBooleanFunction.OR);
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.0625, 0.0625, 0.75, 0.25, 0.25, 0.9375), IBooleanFunction.OR);
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.0625, 0.75, 0.0625, 0.25, 0.9375, 0.25), IBooleanFunction.OR);
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.75, 0.75, 0.0625, 0.9375, 0.9375, 0.25), IBooleanFunction.OR);
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.75, 0.75, 0.75, 0.9375, 0.9375, 0.9375), IBooleanFunction.OR);
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(0.0625, 0.75, 0.75, 0.25, 0.9375, 0.9375), IBooleanFunction.OR);
+		VoxelShape shape = Shapes.empty();
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(0.75, 0.0625, 0.0625, 0.9375, 0.25, 0.25), BooleanOp.OR);
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(0.0625, 0.0625, 0.0625, 0.25, 0.25, 0.25), BooleanOp.OR);
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(0.75, 0.0625, 0.75, 0.9375, 0.25, 0.9375), BooleanOp.OR);
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(0.0625, 0.0625, 0.75, 0.25, 0.25, 0.9375), BooleanOp.OR);
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(0.0625, 0.75, 0.0625, 0.25, 0.9375, 0.25), BooleanOp.OR);
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(0.75, 0.75, 0.0625, 0.9375, 0.9375, 0.25), BooleanOp.OR);
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(0.75, 0.75, 0.75, 0.9375, 0.9375, 0.9375), BooleanOp.OR);
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(0.0625, 0.75, 0.75, 0.25, 0.9375, 0.9375), BooleanOp.OR);
 		//Big block in the middle because actually having a hole in the middle of the block was annoying.
-		shape = VoxelShapes.joinUnoptimized(shape, VoxelShapes.box(3/16d, 3/16d, 3/16d, 13/16d, 13/16d, 13/16d), IBooleanFunction.OR);
+		shape = Shapes.joinUnoptimized(shape, Shapes.box(3/16d, 3/16d, 3/16d, 13/16d, 13/16d, 13/16d), BooleanOp.OR);
 		SHAPE = shape.optimize();
 	}
 }

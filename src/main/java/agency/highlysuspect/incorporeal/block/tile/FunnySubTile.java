@@ -3,16 +3,16 @@ package agency.highlysuspect.incorporeal.block.tile;
 import agency.highlysuspect.incorporeal.Despacito;
 import agency.highlysuspect.incorporeal.IncNetwork;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.NoteBlockInstrument;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import vazkii.botania.api.subtile.RadiusDescriptor;
 import vazkii.botania.api.subtile.TileEntityFunctionalFlower;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FunnySubTile extends TileEntityFunctionalFlower {
-	protected FunnySubTile(int range, int ticksBetweenNotes, int pitchShift, double sparkleHeight, TileEntityType<?> type) {
+	protected FunnySubTile(int range, int ticksBetweenNotes, int pitchShift, double sparkleHeight, BlockEntityType<?> type) {
 		super(type);
 		this.range = range;
 		this.ticksBetweenNotes = ticksBetweenNotes;
@@ -103,7 +103,7 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 			}
 			
 			//play music
-			Vector3d particleSrc = level.getBlockState(pos).getOffset(level, pos).add(pos.getX() + .5, pos.getY() + sparkleHeight, pos.getZ() + .5);
+			Vec3 particleSrc = level.getBlockState(pos).getOffset(level, pos).add(pos.getX() + .5, pos.getY() + sparkleHeight, pos.getZ() + .5);
 			
 			List<Pair<IncNetwork.SparkleLine, byte[]>> sparkleData = new ArrayList<>();
 			
@@ -117,17 +117,17 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 		}
 	}
 	
-	private boolean doIt(World world, BlockPos pos, int tick, Vector3d particleSrc, BlockPos noteblockPos, NoteBlockInstrument inst, List<Pair<IncNetwork.SparkleLine, byte[]>> sparkleLines) {
+	private boolean doIt(Level world, BlockPos pos, int tick, Vec3 particleSrc, BlockPos noteblockPos, NoteBlockInstrument inst, List<Pair<IncNetwork.SparkleLine, byte[]>> sparkleLines) {
 		if(noteblockPos == null) return false;
 		
 		byte[] notes = Despacito.notesForTick(tick, inst);
 		if(notes != null) {
-			sparkleLines.add(Pair.of(new IncNetwork.SparkleLine(particleSrc, Vector3d.atCenterOf(noteblockPos), 2, 1f), notes));
+			sparkleLines.add(Pair.of(new IncNetwork.SparkleLine(particleSrc, Vec3.atCenterOf(noteblockPos), 2, 1f), notes));
 			for(int note : notes) {
 				if(getMana() > NOTE_MANA_COST) {
 					addMana(-NOTE_MANA_COST);
 					float convertedPitch = (float) Math.pow(2, (note - 12 + pitchShift) / 12d);
-					world.playSound(null, pos, inst.getSoundEvent(), SoundCategory.RECORDS, 3f, convertedPitch);
+					world.playSound(null, pos, inst.getSoundEvent(), SoundSource.RECORDS, 3f, convertedPitch);
 				}
 			}
 			return true;
@@ -158,13 +158,13 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 	}
 	
 	@Override
-	public void writeToPacketNBT(CompoundNBT cmp) {
+	public void writeToPacketNBT(CompoundTag cmp) {
 		super.writeToPacketNBT(cmp);
 		cmp.putInt("Clock", clock);
 	}
 	
 	@Override
-	public void readFromPacketNBT(CompoundNBT cmp) {
+	public void readFromPacketNBT(CompoundTag cmp) {
 		super.readFromPacketNBT(cmp);
 		clock = cmp.getInt("Clock");
 	}

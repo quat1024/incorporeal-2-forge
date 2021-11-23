@@ -4,32 +4,32 @@ import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.tile.AbstractSoulCoreTile;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.model.GenericHeadModel;
-import net.minecraft.client.renderer.entity.model.HumanoidHeadModel;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.SkullModel;
+import net.minecraft.client.model.HumanoidHeadModel;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
-public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
-	public SoulCoreRenderer(TileEntityRendererDispatcher dispatcher, ResourceLocation cubesTexture) {
+public class SoulCoreRenderer extends BlockEntityRenderer<AbstractSoulCoreTile> {
+	public SoulCoreRenderer(BlockEntityRenderDispatcher dispatcher, ResourceLocation cubesTexture) {
 		super(dispatcher);
 		this.cubesTexture = cubesTexture;
 	}
@@ -39,13 +39,13 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		this(null, cubesTexture);
 	}
 	
-	private static final GenericHeadModel headModel = new HumanoidHeadModel(); 
+	private static final SkullModel headModel = new HumanoidHeadModel(); 
 	private final CubeModel cubeModel = new CubeModel();
 	
 	private final ResourceLocation cubesTexture;
 	
 	@Override
-	public void render(@Nullable AbstractSoulCoreTile tile, float partialTicks, MatrixStack ms, IRenderTypeBuffer buf, int combinedLight, int combinedOverlay) {
+	public void render(@Nullable AbstractSoulCoreTile tile, float partialTicks, PoseStack ms, MultiBufferSource buf, int combinedLight, int combinedOverlay) {
 		int hash = positionalHash(tile);
 		//Using getRenderPartialTicks instead of trusting the partialTicks parameter - Botania's "TEISR" utility passes 0 always. I should PR that.
 		//TODO: I did PR that! Not released rn though.
@@ -63,7 +63,7 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 				ms.pushPose(); //again
 				wobbleSkull(ms, hash, ticks);
 				
-				IVertexBuilder builder = buf.getBuffer(getSkullRenderType(tile.getOwnerProfile()));
+				VertexConsumer builder = buf.getBuffer(getSkullRenderType(tile.getOwnerProfile()));
 				headModel.renderToBuffer(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
 				
 				ms.popPose();
@@ -73,7 +73,7 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		wobbleCubes(ms, hash, ticks);
 		
 		//idk
-		IVertexBuilder builder = buf.getBuffer(RenderType.entityTranslucentCull(cubesTexture));
+		VertexConsumer builder = buf.getBuffer(RenderType.entityTranslucentCull(cubesTexture));
 		cubeModel.expand = Inc.rangeRemap(Inc.sinDegrees(hash + 800 + ticks * 3.4f), -1, 1, 1.5f / 16f, 1.9f / 16f);
 		cubeModel.renderToBuffer(ms, builder, combinedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, Inc.rangeRemap(Inc.sinDegrees(hash + ticks * 4), -1, 1, .7f, .95f));
 		
@@ -86,17 +86,17 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 			texWidth = 64;
 			texHeight = 32;
 			
-			cube = new ModelRenderer(this, 0, 0);
+			cube = new ModelPart(this, 0, 0);
 			cube.setTexSize(64, 32);
 			cube.addBox(1.6f, 1.6f, 1.6f, 16, 16, 16);
 			cube.setPos(0, 0, 0);
 		}
 		
-		private final ModelRenderer cube;
+		private final ModelPart cube;
 		private float expand = 1.6f;
 		
 		@Override
-		public void renderToBuffer(MatrixStack ms, IVertexBuilder buf, int light, int overlay, float red, float green, float blue, float alpha) {
+		public void renderToBuffer(PoseStack ms, VertexConsumer buf, int light, int overlay, float red, float green, float blue, float alpha) {
 //			
 //			ModelRenderer cube;
 //			cube = new ModelRenderer(this, 0, 0);
@@ -124,19 +124,19 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 	}
 	
 	private static int positionalHash(@Nullable AbstractSoulCoreTile tile) {
-		return tile == null ? 0 : MathHelper.murmurHash3Mixer(MathHelper.murmurHash3Mixer(tile.getBlockPos().hashCode())) % 150000;
+		return tile == null ? 0 : Mth.murmurHash3Mixer(Mth.murmurHash3Mixer(tile.getBlockPos().hashCode())) % 150000;
 	}
 	
 	//Much of this has been lifted straight from the 1.12 version of the mod - I don't know exactly how it works.
 	//I remember spending a lot of time tweaking the numbers until it looked decent, haha.
 	
-	private static void initialWobble(MatrixStack ms, int hash, float ticks) {
+	private static void initialWobble(PoseStack ms, int hash, float ticks) {
 		ms.translate(.5, .5, .5);
 		ms.mulPose(Vector3f.YP.rotationDegrees((hash + ticks) * 2 % 360));
 		ms.translate(0, 0.1 * Inc.sinDegrees((hash + ticks) * 4), 0);
 	}
 	
-	private static void wobbleSkull(MatrixStack ms, int hash, float ticks) {
+	private static void wobbleSkull(PoseStack ms, int hash, float ticks) {
 		float wobble = (hash + ticks) * 5;
 		float wobbleSin = Inc.sinDegrees(wobble);
 		float wobbleCos = Inc.cosDegrees(wobble);
@@ -151,9 +151,9 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		ms.scale(-1f, -1f, 1f);
 	}
 	
-	private static void wobbleCubes(MatrixStack ms, int hash, float ticks) {
+	private static void wobbleCubes(PoseStack ms, int hash, float ticks) {
 		ms.mulPose(Vector3f.YP.rotationDegrees(((-ticks + hash) / 5f) % 360));
-		ms.mulPose(Vector3f.YP.rotationDegrees(MathHelper.sin((ticks + hash) / 50f) * 40));
+		ms.mulPose(Vector3f.YP.rotationDegrees(Mth.sin((ticks + hash) / 50f) * 40));
 		
 		float wobble2 = (hash + ticks) * 3;
 		float wobble2Sin = Inc.sinDegrees(wobble2);
@@ -176,6 +176,6 @@ public class SoulCoreRenderer extends TileEntityRenderer<AbstractSoulCoreTile> {
 		Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(profile);
 		return map.containsKey(MinecraftProfileTexture.Type.SKIN) ?
 			RenderType.entityTranslucent(minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) :
-			RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(PlayerEntity.createPlayerUUID(profile)));
+			RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(Player.createPlayerUUID(profile)));
 	}
 }

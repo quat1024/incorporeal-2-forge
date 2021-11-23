@@ -9,14 +9,14 @@ import agency.highlysuspect.rhododendrite.computer.RhodoFunnelableCapability;
 import agency.highlysuspect.rhododendrite.datagen.RhoDatagen;
 import agency.highlysuspect.rhododendrite.item.RhoItems;
 import com.google.common.base.Preconditions;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -44,7 +44,7 @@ public class Rho {
 		
 		modBus.addGenericListener(Block.class, RhoBlocks::register);
 		modBus.addGenericListener(Item.class, RhoItems::register);
-		modBus.addGenericListener(TileEntityType.class, RhoTileTypes::register);
+		modBus.addGenericListener(BlockEntityType.class, RhoTileTypes::register);
 		modBus.addGenericListener(Feature.class, (RegistryEvent.Register<Feature<?>> e) -> RhoBlocks.RHODODENDRITE.registerFeature(e.getRegistry()));
 		
 		modBus.addListener((FMLCommonSetupEvent e) -> {
@@ -54,7 +54,7 @@ public class Rho {
 			RhodoFunnelableCapability.initialize();
 			RhodoFunnelableCapability.registerBuiltinLooseFunnelables();
 			
-			MinecraftForge.EVENT_BUS.addGenericListener(TileEntity.class, RhoCapEvents::tileCaps);
+			MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, RhoCapEvents::tileCaps);
 			MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, RhoCapEvents::entCaps);
 		});
 		

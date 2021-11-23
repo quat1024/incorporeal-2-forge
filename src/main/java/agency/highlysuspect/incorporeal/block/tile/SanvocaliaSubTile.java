@@ -7,27 +7,27 @@ import agency.highlysuspect.incorporeal.corporea.IndexRequestFaker;
 import agency.highlysuspect.incorporeal.corporea.NearbyIndicesFinder;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.item.IncItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ItemParticleData;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ChatType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import vazkii.botania.api.subtile.RadiusDescriptor;
 import vazkii.botania.api.subtile.TileEntityFunctionalFlower;
 import vazkii.botania.common.block.tile.corporea.TileCorporeaIndex;
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
-	public SanvocaliaSubTile(int radius, TileEntityType<?> type) {
+	public SanvocaliaSubTile(int radius, BlockEntityType<?> type) {
 		super(type);
 		this.radius = radius;
 	}
@@ -55,7 +55,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	private int cooldown;
 	
 	private UUID placerUuid = null;
-	private ITextComponent displayName = null;
+	private Component displayName = null;
 	
 	@Override
 	public void tickFlower() {
@@ -69,7 +69,7 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 		
 		BlockPos pos = getEffectivePos(); //name shadow
 		
-		AxisAlignedBB itemDetectionBox = new AxisAlignedBB(pos.offset(-radius, 0, -radius), pos.offset(radius + 1, 1, radius + 1));
+		AABB itemDetectionBox = new AABB(pos.offset(-radius, 0, -radius), pos.offset(radius + 1, 1, radius + 1));
 		List<ItemEntity> nearbyTicketEnts = level.getEntitiesOfClass(ItemEntity.class, itemDetectionBox, ent -> {
 			if(ent == null || !ent.isAlive()) return false;
 			ItemStack stack = ent.getItem();
@@ -88,13 +88,13 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 			//A nod to when people write in chat while accidentally standing too far from the corporea index
 			MinecraftServer server = level.getServer();
 			if(server != null && getMana() >= 100) {
-				TranslationTextComponent msg = new TranslationTextComponent("chat.type.text", displayName == null ? new TranslationTextComponent("block.incorporeal.sanvocalia") : displayName, request.toText());
+				TranslatableComponent msg = new TranslatableComponent("chat.type.text", displayName == null ? new TranslatableComponent("block.incorporeal.sanvocalia") : displayName, request.toText());
 				
 				Inc.LOGGER.info("Sanvocalia chat message triggered at {} in dimension {}", pos.toShortString(), level.dimension().location());
 				if(IncConfig.INST.everyoneHearsSanvocalia.get()) {
 					server.getPlayerList().broadcastMessage(msg, ChatType.CHAT, CHAT_SEND_UUID);
 				} else {
-					ServerPlayerEntity placer = server.getPlayerList().getPlayer(placerUuid); 
+					ServerPlayer placer = server.getPlayerList().getPlayer(placerUuid); 
 					if(placer != null) placer.sendMessage(msg, CHAT_SEND_UUID);
 				}
 				
@@ -130,18 +130,18 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 		
 		//Burp
 		SoundEvent sound = level.random.nextFloat() < 0.1 ? SoundEvents.PLAYER_BURP : SoundEvents.GENERIC_EAT;
-		level.playSound(null, worldPosition, sound, SoundCategory.BLOCKS, .5f, 1);
+		level.playSound(null, worldPosition, sound, SoundSource.BLOCKS, .5f, 1);
 		
 		//Show eating particles
-		if(level instanceof ServerWorld) {
-			((ServerWorld) level).sendParticles(new ItemParticleData(ParticleTypes.ITEM, ticket.getItem()), ticket.getX(), ticket.getY(), ticket.getZ(), 10, 0.1, 0.1, 0.1, 0.03);
+		if(level instanceof ServerLevel) {
+			((ServerLevel) level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, ticket.getItem()), ticket.getX(), ticket.getY(), ticket.getZ(), 10, 0.1, 0.1, 0.1, 0.03);
 		}
 		
 		//Show sparkle lines
 		if(indexPositions != null) {
-			Vector3d here = ticket.position();
+			Vec3 here = ticket.position();
 			for(BlockPos pos : indexPositions) {
-				Vector3d there = Vector3d.atCenterOf(pos);
+				Vec3 there = Vec3.atCenterOf(pos);
 				IncNetwork.sendToNearby(level, pos, new IncNetwork.SparkleLine(here, there, 4, 1f));
 			}
 		}
@@ -172,30 +172,30 @@ public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+	public void onBlockPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
 		placerUuid = entity == null ? null : entity.getUUID();
 		if(stack.hasCustomHoverName()) displayName = stack.getHoverName();
 	}
 	
 	@Override
-	public void readFromPacketNBT(CompoundNBT tag) {
+	public void readFromPacketNBT(CompoundTag tag) {
 		super.readFromPacketNBT(tag);
 		
 		if(tag.contains("Placer")) placerUuid = tag.getUUID("Placer");
 		else placerUuid = null;
 		
-		if(tag.contains("Name")) displayName = ITextComponent.Serializer.fromJson(tag.getString("Name"));
+		if(tag.contains("Name")) displayName = Component.Serializer.fromJson(tag.getString("Name"));
 		else displayName = null;
 		
 		cooldown = tag.getInt("Cooldown");
 	}
 	
 	@Override
-	public void writeToPacketNBT(CompoundNBT tag) {
+	public void writeToPacketNBT(CompoundTag tag) {
 		super.writeToPacketNBT(tag);
 		
 		if(placerUuid != null) tag.putUUID("Placer", placerUuid);
-		if(displayName != null) tag.putString("Name", ITextComponent.Serializer.toJson(displayName));
+		if(displayName != null) tag.putString("Name", Component.Serializer.toJson(displayName));
 		tag.putInt("Cooldown", cooldown);
 	}
 }

@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal;
 
-import net.minecraft.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 
 import javax.annotation.Nullable;
 

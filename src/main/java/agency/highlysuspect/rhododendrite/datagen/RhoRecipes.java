@@ -5,12 +5,12 @@ import agency.highlysuspect.rhododendrite.WoodFamily;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import agency.highlysuspect.rhododendrite.item.RhoItems;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.core.Registry;
 import vazkii.botania.common.block.ModFluffBlocks;
 
 import java.util.function.Consumer;
@@ -26,7 +26,7 @@ public class RhoRecipes extends IncRecipes {
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> r) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> r) {
 		doWoodFamily(r, RhoBlocks.RHODODENDRITE);
 		
 		shapeless(RhoItems.OPCODE_BLANK, 32)
@@ -66,7 +66,7 @@ public class RhoRecipes extends IncRecipes {
 	}
 	
 	@SuppressWarnings("SameParameterValue")
-	protected void doWoodFamily(Consumer<IFinishedRecipe> r, WoodFamily family) {
+	protected void doWoodFamily(Consumer<FinishedRecipe> r, WoodFamily family) {
 		//ok because i dont have item tags set up, the recipe gen tries to make 2 recipes named "rhododendrite_planks"
 		//and blows up. its just because i cant change the name of the recipe >.>
 		//totally valid to have two recipes that give the same item but Nooo..
@@ -91,7 +91,7 @@ public class RhoRecipes extends IncRecipes {
 	
 	//Most of these are copy pasta from vanilla because they're all PRIVATE
 	//changed a lot of names because mcp has em wrong lol
-	protected static void planks(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider plank, IItemProvider log) {
+	protected static void planks(Consumer<FinishedRecipe> recipeConsumer, ItemLike plank, ItemLike log) {
 		ShapelessRecipeBuilder.shapeless(plank, 4)
 			.requires(log)
 			.group("planks")
@@ -99,7 +99,7 @@ public class RhoRecipes extends IncRecipes {
 			.save(recipeConsumer);
 	}
 	
-	protected static void bark(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider stripped, IItemProvider input) {
+	protected static void bark(Consumer<FinishedRecipe> recipeConsumer, ItemLike stripped, ItemLike input) {
 		ShapedRecipeBuilder.shaped(stripped, 3)
 			.define('#', input)
 			.pattern("##")
@@ -109,39 +109,39 @@ public class RhoRecipes extends IncRecipes {
 			.save(recipeConsumer);
 	}
 	
-	protected static void button(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider button, IItemProvider input) {
+	protected static void button(Consumer<FinishedRecipe> recipeConsumer, ItemLike button, ItemLike input) {
 		ShapelessRecipeBuilder.shapeless(button).requires(input).group("wooden_button").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
-	protected static void door(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider door, IItemProvider input) {
+	protected static void door(Consumer<FinishedRecipe> recipeConsumer, ItemLike door, ItemLike input) {
 		ShapedRecipeBuilder.shaped(door, 3).define('#', input).pattern("##").pattern("##").pattern("##").group("wooden_door").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
-	private static void fence(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider fence, IItemProvider input) {
+	private static void fence(Consumer<FinishedRecipe> recipeConsumer, ItemLike fence, ItemLike input) {
 		ShapedRecipeBuilder.shaped(fence, 3).define('#', Items.STICK).define('W', input).pattern("W#W").pattern("W#W").group("wooden_fence").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
-	private static void fenceGate(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider fenceGate, IItemProvider input) {
+	private static void fenceGate(Consumer<FinishedRecipe> recipeConsumer, ItemLike fenceGate, ItemLike input) {
 		ShapedRecipeBuilder.shaped(fenceGate).define('#', Items.STICK).define('W', input).pattern("#W#").pattern("#W#").group("wooden_fence_gate").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
-	private static void pressurePlate(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider pressurePlate, IItemProvider input) {
+	private static void pressurePlate(Consumer<FinishedRecipe> recipeConsumer, ItemLike pressurePlate, ItemLike input) {
 		ShapedRecipeBuilder.shaped(pressurePlate).define('#', input).pattern("##").group("wooden_pressure_plate").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
-	private static void slab(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider slab, IItemProvider input) {
+	private static void slab(Consumer<FinishedRecipe> recipeConsumer, ItemLike slab, ItemLike input) {
 		ShapedRecipeBuilder.shaped(slab, 6).define('#', input).pattern("###").group("wooden_slab").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
-	private static void stairs(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider stairs, IItemProvider input) {
+	private static void stairs(Consumer<FinishedRecipe> recipeConsumer, ItemLike stairs, ItemLike input) {
 		ShapedRecipeBuilder.shaped(stairs, 4).define('#', input).pattern("#  ").pattern("## ").pattern("###").group("wooden_stairs").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
-	private static void trapdoor(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider trapdoor, IItemProvider input) {
+	private static void trapdoor(Consumer<FinishedRecipe> recipeConsumer, ItemLike trapdoor, ItemLike input) {
 		ShapedRecipeBuilder.shaped(trapdoor, 2).define('#', input).pattern("###").pattern("###").group("wooden_trapdoor").unlockedBy("has_planks", has(input)).save(recipeConsumer);
 	}
 	
-	private static void sign(Consumer<IFinishedRecipe> recipeConsumer, IItemProvider sign, IItemProvider input) {
+	private static void sign(Consumer<FinishedRecipe> recipeConsumer, ItemLike sign, ItemLike input) {
 		String s = Registry.ITEM.getKey(input.asItem()).getPath();
 		ShapedRecipeBuilder.shaped(sign, 3).group("sign").define('#', input).define('X', Items.STICK).pattern("###").pattern("###").pattern(" X ").unlockedBy("has_" + s, has(input)).save(recipeConsumer);
 	}

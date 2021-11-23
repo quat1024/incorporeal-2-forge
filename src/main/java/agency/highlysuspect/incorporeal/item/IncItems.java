@@ -3,7 +3,7 @@ package agency.highlysuspect.incorporeal.item;
 import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import net.minecraft.item.*;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import vazkii.botania.common.Botania;
@@ -11,6 +11,12 @@ import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 import java.util.EnumMap;
 import java.util.Map;
+
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class IncItems {
 	public static final CorporeaTicketItem CORPOREA_TICKET = new CorporeaTicketItem(defaultProps());
@@ -93,7 +99,7 @@ public class IncItems {
 		r.register(bi);
 	}
 	
-	private static class Tab extends ItemGroup {
+	private static class Tab extends CreativeModeTab {
 		public static final Tab INSTANCE = new Tab();
 		
 		public Tab() {

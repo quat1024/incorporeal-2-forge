@@ -1,7 +1,7 @@
 package agency.highlysuspect.incorporeal;
 
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 
 public interface IncProxy {
 	default void setup() {}

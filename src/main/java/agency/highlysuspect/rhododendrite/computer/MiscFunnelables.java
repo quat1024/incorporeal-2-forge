@@ -3,16 +3,16 @@ package agency.highlysuspect.rhododendrite.computer;
 import agency.highlysuspect.incorporeal.block.CorporeaSolidifierBlock;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.RedstoneWireBlock;
-import net.minecraft.block.RepeaterBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RepeaterBlock;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import vazkii.botania.common.core.helper.Vector3;
 
 import javax.annotation.Nonnull;
@@ -23,7 +23,7 @@ public class MiscFunnelables {
 	public static final RhodoFunnelable.Loose DUST = new RhodoFunnelable.Loose() {
 		@Nullable
 		@Override
-		public RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face) {
+		public RhodoFunnelable getFunnelable(Level world, BlockPos pos, BlockState state, Direction face) {
 			return state.getBlock() == Blocks.REDSTONE_WIRE ? new RhodoFunnelable() {
 				@Override
 				public boolean canRhodoExtract() {
@@ -32,7 +32,7 @@ public class MiscFunnelables {
 				
 				@Override
 				public Optional<SolidifiedRequest> rhodoExtract(boolean simulate) {
-					return Optional.of(new SolidifiedRequest(new ItemStack(Items.REDSTONE), state.getValue(RedstoneWireBlock.POWER)));
+					return Optional.of(new SolidifiedRequest(new ItemStack(Items.REDSTONE), state.getValue(RedStoneWireBlock.POWER)));
 				}
 			} : null;
 		}
@@ -46,7 +46,7 @@ public class MiscFunnelables {
 	public static final RhodoFunnelable.Loose REPEATER = new RhodoFunnelable.Loose() {
 		@Nullable
 		@Override
-		public RhodoFunnelable getFunnelable(World world, BlockPos pos, BlockState state, Direction face) {
+		public RhodoFunnelable getFunnelable(Level world, BlockPos pos, BlockState state, Direction face) {
 			return state.getBlock() == Blocks.REPEATER ? new RhodoFunnelable() {
 				@Override
 				public boolean canRhodoExtract() {
@@ -65,7 +65,7 @@ public class MiscFunnelables {
 				
 				@Override
 				public boolean tryRhodoInsert(@Nonnull SolidifiedRequest request, boolean simulate) {
-					int clampCount = MathHelper.clamp(request.count, 1, 4);
+					int clampCount = Mth.clamp(request.count, 1, 4);
 					if(clampCount == request.count) {
 						if(!simulate) {
 							world.setBlockAndUpdate(pos, state.setValue(RepeaterBlock.DELAY, clampCount));

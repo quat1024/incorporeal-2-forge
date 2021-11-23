@@ -7,13 +7,13 @@ import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
 import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
 import agency.highlysuspect.incorporeal.item.IncItems;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,26 +33,26 @@ public class IncClient implements IncProxy {
 		
 		modBus.addListener((FMLClientSetupEvent e) -> {
 			e.enqueueWork(() -> {
-				ItemModelsProperties.register(IncItems.CORPOREA_TICKET, Inc.id("written_ticket"), (stack, world, ent) -> IncItems.CORPOREA_TICKET.hasRequest(stack) ? 1 : 0);
+				ItemProperties.register(IncItems.CORPOREA_TICKET, Inc.id("written_ticket"), (stack, world, ent) -> IncItems.CORPOREA_TICKET.hasRequest(stack) ? 1 : 0);
 			});
 			
-			RenderTypeLookup.setRenderLayer(IncBlocks.ENDER_SOUL_CORE, RenderType.translucent());
-			RenderTypeLookup.setRenderLayer(IncBlocks.CORPOREA_SOUL_CORE, RenderType.translucent());
-			RenderTypeLookup.setRenderLayer(IncBlocks.POTION_SOUL_CORE, RenderType.translucent());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.ENDER_SOUL_CORE, RenderType.translucent());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.CORPOREA_SOUL_CORE, RenderType.translucent());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.POTION_SOUL_CORE, RenderType.translucent());
 			
-			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_REPEATER, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.NATURAL_COMPARATOR, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.REDSTONE_ROOT_CROP, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.NATURAL_REPEATER, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.NATURAL_COMPARATOR, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.REDSTONE_ROOT_CROP, RenderType.cutout());
 			
-			RenderTypeLookup.setRenderLayer(IncBlocks.SANVOCALIA, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_SANVOCALIA, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_SANVOCALIA, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_SANVOCALIA, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.SANVOCALIA, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.SMALL_SANVOCALIA, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.FLOATING_SANVOCALIA, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.SMALL_FLOATING_SANVOCALIA, RenderType.cutout());
 			
-			RenderTypeLookup.setRenderLayer(IncBlocks.FUNNY, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FUNNY, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.FLOATING_FUNNY, RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(IncBlocks.SMALL_FLOATING_FUNNY, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.FUNNY, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.SMALL_FUNNY, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.FLOATING_FUNNY, RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(IncBlocks.SMALL_FLOATING_FUNNY, RenderType.cutout());
 			
 			RenderingRegistry.registerEntityRenderingHandler(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, NotQuiteNoopRender::new);
 			RenderingRegistry.registerEntityRenderingHandler(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, NotQuiteNoopRender::new);

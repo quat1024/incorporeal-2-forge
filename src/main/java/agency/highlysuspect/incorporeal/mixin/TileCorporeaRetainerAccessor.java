@@ -1,7 +1,7 @@
 package agency.highlysuspect.incorporeal.mixin;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
@@ -13,7 +13,7 @@ import java.util.function.Function;
 @Mixin(TileCorporeaRetainer.class)
 public interface TileCorporeaRetainerAccessor {
 	@Accessor(value = "corporeaMatcherDeserializers", remap = false)
-	static Map<ResourceLocation, Function<CompoundNBT, ? extends ICorporeaRequestMatcher>> inc$getDeserializers() {
+	static Map<ResourceLocation, Function<CompoundTag, ? extends ICorporeaRequestMatcher>> inc$getDeserializers() {
 		throw new IllegalStateException("oh no");
 	}
 	

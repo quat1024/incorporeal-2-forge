@@ -1,9 +1,9 @@
 package agency.highlysuspect.incorporeal.corporea;
 
 import agency.highlysuspect.incorporeal.Inc;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class IncCapEvents {
-	public static void attachTileCapabilities(AttachCapabilitiesEvent<TileEntity> e) {
-		TileEntity tile = e.getObject();
+	public static void attachTileCapabilities(AttachCapabilitiesEvent<BlockEntity> e) {
+		BlockEntity tile = e.getObject();
 		if(tile instanceof TileCorporeaRetainer) {
 			e.addCapability(RETAINER_CAP, new RetainerProvider((TileCorporeaRetainer) tile));
 		}

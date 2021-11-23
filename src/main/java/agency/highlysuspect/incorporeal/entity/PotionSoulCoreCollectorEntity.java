@@ -5,15 +5,15 @@ import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
 import agency.highlysuspect.incorporeal.block.tile.PotionSoulCoreTile;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -21,15 +21,20 @@ import net.minecraftforge.event.entity.living.LivingHealEvent;
 import java.util.Collections;
 import java.util.Optional;
 
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+
 public class PotionSoulCoreCollectorEntity extends LivingEntity {
-	public PotionSoulCoreCollectorEntity(EntityType<? extends LivingEntity> type, World world) {
+	public PotionSoulCoreCollectorEntity(EntityType<? extends LivingEntity> type, Level world) {
 		super(type, world);
 		
 		setInvulnerable(true);
 		setNoGravity(true);
 	}
 	
-	public PotionSoulCoreCollectorEntity(World world, BlockPos pos) {
+	public PotionSoulCoreCollectorEntity(Level world, BlockPos pos) {
 		this(IncEntityTypes.POTION_SOUL_CORE_COLLECTOR, world);
 		setPos(pos.getX() + .5d, pos.getY() + 0.005d, pos.getZ() + .5d);
 	}
@@ -55,15 +60,15 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	}
 	
 	@Override
-	public CreatureAttribute getMobType() {
-		return CreatureAttribute.UNDEAD; //With it being a soul and all, like, ...
+	public MobType getMobType() {
+		return MobType.UNDEAD; //With it being a soul and all, like, ...
 	}
 	
-	private Optional<Pair<PotionSoulCoreTile, ServerPlayerEntity>> find() {
+	private Optional<Pair<PotionSoulCoreTile, ServerPlayer>> find() {
 		PotionSoulCoreTile tile = IncTileTypes.POTION_SOUL_CORE.getBlockEntity(level, blockPosition());
 		if(tile == null) { remove(); return Optional.empty(); }
 		
-		Optional<ServerPlayerEntity> player = tile.findPlayer();
+		Optional<ServerPlayer> player = tile.findPlayer();
 		if(!player.isPresent()) { remove(); return Optional.empty(); }
 		
 		return Optional.of(Pair.of(tile, player.get()));
@@ -86,7 +91,7 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 		
 		find().ifPresent(pair -> {
 			//Transfer long-lasting potion effects to the player
-			for(EffectInstance effect : getActiveEffects()) {
+			for(MobEffectInstance effect : getActiveEffects()) {
 				pair.getSecond().addEffect(effect);
 				pair.getFirst().drainMana(200);
 			}
@@ -99,7 +104,7 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	
 	private boolean onHeal(float howMuch) {
 		if(level.isClientSide) return true;
-		Optional<Pair<PotionSoulCoreTile, ServerPlayerEntity>> found = find();
+		Optional<Pair<PotionSoulCoreTile, ServerPlayer>> found = find();
 		
 		found.ifPresent(pair -> {
 			pair.getSecond().heal(howMuch);
@@ -111,7 +116,7 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	
 	private boolean onAttack(DamageSource source, float howMuch) {
 		if(level.isClientSide) return true;
-		Optional<Pair<PotionSoulCoreTile, ServerPlayerEntity>> found = find();
+		Optional<Pair<PotionSoulCoreTile, ServerPlayer>> found = find();
 		
 		if(found.isPresent()) {
 			boolean happened = found.get().getSecond().hurt(source, howMuch);
@@ -135,12 +140,12 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	}
 	
 	@Override
-	public ItemStack getItemBySlot(EquipmentSlotType slot) {
+	public ItemStack getItemBySlot(EquipmentSlot slot) {
 		return ItemStack.EMPTY;
 	}
 	
 	@Override
-	public void setItemSlot(EquipmentSlotType slot, ItemStack stack) {
+	public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
 		//Noh
 	}
 	
@@ -165,7 +170,7 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	}
 	
 	@Override
-	public HandSide getMainArm() {
-		return HandSide.LEFT;
+	public HumanoidArm getMainArm() {
+		return HumanoidArm.LEFT;
 	}
 }

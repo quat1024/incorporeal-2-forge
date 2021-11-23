@@ -2,10 +2,10 @@ package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.corporea.FrameReader;
 import agency.highlysuspect.incorporeal.corporea.LyingCorporeaNode;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -28,13 +28,13 @@ public class RedStringLiarTile extends TileRedString {
 	public boolean acceptBlock(BlockPos pos) {
 		assert level != null;
 		
-		TileEntity tile = level.getBlockEntity(pos);
+		BlockEntity tile = level.getBlockEntity(pos);
 		if(tile == null) return false;
 		else return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getOrientation().getOpposite()).isPresent();
 	}
 	
-	public ICorporeaNode getNode(World world, ICorporeaSpark spark) {
-		TileEntity bound = getTileAtBinding();
+	public ICorporeaNode getNode(Level world, ICorporeaSpark spark) {
+		BlockEntity bound = getTileAtBinding();
 		if(bound != null) {
 			//todo (issue #2): there's no reason to limit myself to only ForgeCapCorporeaNodes
 			// the new implementation of LyingCorporeaNode is generic over all corporea nodes. might be something to look at.
@@ -58,8 +58,8 @@ public class RedStringLiarTile extends TileRedString {
 	public static class NodeDetector implements ICorporeaNodeDetector {
 		@Nullable
 		@Override
-		public ICorporeaNode getNode(World world, ICorporeaSpark spark) {
-			TileEntity tile = world.getBlockEntity(spark.getAttachPos());
+		public ICorporeaNode getNode(Level world, ICorporeaSpark spark) {
+			BlockEntity tile = world.getBlockEntity(spark.getAttachPos());
 			if(tile instanceof RedStringLiarTile) return ((RedStringLiarTile) tile).getNode(world, spark);
 			else return null;
 		}

@@ -1,25 +1,25 @@
 package agency.highlysuspect.rhododendrite.block;
 
 import agency.highlysuspect.rhododendrite.block.tile.RhodoOpTile;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class RhodoOpBlock extends AbstractComputerBlock {
 	public RhodoOpBlock(Properties properties) {
@@ -28,18 +28,18 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder.add(BlockStateProperties.POWERED));
 	}
 	
 	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block from, BlockPos fromPos, boolean isMoving) {
+	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block from, BlockPos fromPos, boolean isMoving) {
 		boolean shouldPower = world.getBestNeighborSignal(pos) > 0;
 		boolean isPowered = state.getValue(BlockStateProperties.POWERED);
 		if(shouldPower != isPowered) {
 			world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.POWERED, shouldPower));
 			if(shouldPower) {
-				TileEntity tile = world.getBlockEntity(pos);
+				BlockEntity tile = world.getBlockEntity(pos);
 				if(tile instanceof RhodoOpTile) {
 					((RhodoOpTile) tile).onRedstonePower();
 				}
@@ -53,8 +53,8 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 	}
 	
 	@Override
-	public int getAnalogOutputSignal(BlockState blockState, World world, BlockPos pos) {
-		TileEntity tile = world.getBlockEntity(pos);
+	public int getAnalogOutputSignal(BlockState blockState, Level world, BlockPos pos) {
+		BlockEntity tile = world.getBlockEntity(pos);
 		return tile instanceof RhodoOpTile ? ((RhodoOpTile) tile).getComparatorSignal() : 0;
 	}
 	
@@ -65,18 +65,18 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
 		return new RhodoOpTile();
 	}
 	
 	@Override
-	public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
 		//The lazy way, without using a block loot table.
 		//My excuse: ChestBlock does it too.
 		if(!state.is(newState.getBlock())) {
-			TileEntity tile = world.getBlockEntity(pos);
+			BlockEntity tile = world.getBlockEntity(pos);
 			if(tile instanceof RhodoOpTile) {
-				InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), ((RhodoOpTile) tile).getCard());
+				Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), ((RhodoOpTile) tile).getCard());
 			}
 		}
 		
@@ -84,14 +84,14 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 	}
 	
 	@Override
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-		TileEntity tile = world.getBlockEntity(pos);
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		BlockEntity tile = world.getBlockEntity(pos);
 		if(tile instanceof RhodoOpTile) {
 			RhodoOpTile op = (RhodoOpTile) tile;
 			ItemStack held = player.getItemInHand(hand);
 			
 			//This code is cursed don't touch it
-			if((hand == Hand.MAIN_HAND && held.isEmpty()) || op.inventory.isItemValid(0, held)) {
+			if((hand == InteractionHand.MAIN_HAND && held.isEmpty()) || op.inventory.isItemValid(0, held)) {
 				ItemStack toPut = held.isEmpty() ? ItemStack.EMPTY : held.split(1);
 				
 				ItemStack whatsInside = op.inventory.getStackInSlot(0);
@@ -101,6 +101,6 @@ public class RhodoOpBlock extends AbstractComputerBlock {
 			}
 		}
 		
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 }

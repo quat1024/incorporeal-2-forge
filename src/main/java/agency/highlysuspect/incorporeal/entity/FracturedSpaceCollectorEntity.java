@@ -2,25 +2,25 @@ package agency.highlysuspect.incorporeal.entity;
 
 import agency.highlysuspect.incorporeal.IncTags;
 import agency.highlysuspect.incorporeal.item.IncItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.server.TicketType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.TicketType;
 import net.minecraftforge.fml.network.NetworkHooks;
 import vazkii.botania.api.mana.ManaItemHandler;
 import vazkii.botania.client.fx.SparkleParticleData;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class FracturedSpaceCollectorEntity extends Entity {
-	public FracturedSpaceCollectorEntity(EntityType<?> type, World world) {
+	public FracturedSpaceCollectorEntity(EntityType<?> type, Level world) {
 		super(type, world);
 		
 		//I guess this is a good place to do it?
@@ -40,7 +40,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 		setNoGravity(true);
 	}
 	
-	public FracturedSpaceCollectorEntity(World world, BlockPos cratePos, PlayerEntity player) {
+	public FracturedSpaceCollectorEntity(Level world, BlockPos cratePos, Player player) {
 		this(IncEntityTypes.FRACTURED_SPACE_COLLECTOR, world);
 		
 		this.cratePos = cratePos;
@@ -53,7 +53,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 	
 	private static final double RADIUS = 2;
 	private static final int MAX_AGE = 30;
-	private static final int AGE_SPECIAL_START = MathHelper.floor((MAX_AGE * 3f / 4f));
+	private static final int AGE_SPECIAL_START = Mth.floor((MAX_AGE * 3f / 4f));
 	private static final int MANA_COST_PER_ITEM = 500;
 	private static final ItemStack TOOL_STACK = new ItemStack(IncItems.FRACTURED_SPACE_ROD);
 	
@@ -67,7 +67,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 		if(level.isClientSide && age < MAX_AGE) {
 			doSparkles();
 		} else if(age > AGE_SPECIAL_START) {
-			AxisAlignedBB aabb = getBoundingBox().inflate(RADIUS, 1, RADIUS);
+			AABB aabb = getBoundingBox().inflate(RADIUS, 1, RADIUS);
 			List<ItemEntity> nearbyItemEnts = level.getEntitiesOfClass(ItemEntity.class, aabb, ent -> ent != null && Math.hypot(ent.getX() - getX(), ent.getZ() - getZ()) <= RADIUS);
 			
 			for(ItemEntity ent : nearbyItemEnts) {
@@ -85,20 +85,20 @@ public class FracturedSpaceCollectorEntity extends Entity {
 					remove(); return;
 				}
 				
-				PlayerEntity player = level.getPlayerByUUID(ownerUuid);
+				Player player = level.getPlayerByUUID(ownerUuid);
 				
 				if(player == null) {
 					remove(); return;
 				}
 				
 				//Chunkload the immediate area for a little bit
-				if(level instanceof ServerWorld) {
+				if(level instanceof ServerLevel) {
 					ChunkPos ticketPos = new ChunkPos(cratePos);
-					((ServerWorld) level).getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, ticketPos, 3, player.getId());
+					((ServerLevel) level).getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, ticketPos, 3, player.getId());
 				}
 				
 				BlockState state = level.getBlockState(cratePos);
-				TileEntity tile = level.getBlockEntity(cratePos);
+				BlockEntity tile = level.getBlockEntity(cratePos);
 				
 				if(state.is(IncTags.Blocks.OPEN_CRATES) && tile instanceof TileOpenCrate && ((TileOpenCrate) tile).canEject()) {
 					boolean redstone = isCratePowered(level, cratePos);
@@ -126,7 +126,7 @@ public class FracturedSpaceCollectorEntity extends Entity {
 		}
 	}
 	
-	private static boolean isCratePowered(World world, BlockPos pos) {
+	private static boolean isCratePowered(Level world, BlockPos pos) {
 		//Uses the exact same logic open crates do to check if they're powered!
 		for(Direction dir : Direction.values()) {
 			if(world.getSignal(pos.relative(dir), dir) != 0) {
@@ -137,11 +137,11 @@ public class FracturedSpaceCollectorEntity extends Entity {
 		return false;
 	}
 	
-	private static void fakeCrateEject(World world, BlockPos pos, boolean redstone, ItemStack stack) {
+	private static void fakeCrateEject(Level world, BlockPos pos, boolean redstone, ItemStack stack) {
 		//mostly a copy of the open crate ejection logic, but doesn't touch the buffered item in the crate
 		double ejectY = pos.getY() - EntityType.ITEM.getHeight();
 		ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, ejectY, pos.getZ() + 0.5, stack);
-		item.setDeltaMovement(Vector3d.ZERO);
+		item.setDeltaMovement(Vec3.ZERO);
 		
 		if(redstone) //noinspection ConstantConditions
 			((AccessorItemEntity) item).setAge(-200);
@@ -191,17 +191,17 @@ public class FracturedSpaceCollectorEntity extends Entity {
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		age = compound.getInt("Age");
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putInt("Age", age);
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

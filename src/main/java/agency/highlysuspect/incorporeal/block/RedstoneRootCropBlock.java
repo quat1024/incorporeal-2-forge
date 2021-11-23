@@ -1,34 +1,41 @@
 package agency.highlysuspect.incorporeal.block;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import vazkii.botania.common.item.ModItems;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
-public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
+import net.minecraft.Util;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.ItemLike;
+
+public class RedstoneRootCropBlock extends CropBlock implements IPlantable {
 	public RedstoneRootCropBlock(Properties builder) {
 		super(builder);
 	}
@@ -39,12 +46,12 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 	public static final VoxelShape[] SHAPES = Util.make(new VoxelShape[AGE_MAX + 1], arr -> {
 		for(int i = 0; i <= AGE_MAX; i++) {
 			double yea = (AGE_MAX - i) / 32d;
-			arr[i] = VoxelShapes.box(yea, 0, yea, 1 - yea, 3/16d, 1 - yea);
+			arr[i] = Shapes.box(yea, 0, yea, 1 - yea, 3/16d, 1 - yea);
 		}
 	});
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		//No call to super() since that adds the cropsblock default age property.
 		builder.add(AGE);
 	}
@@ -60,12 +67,12 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 	}
 	
 	@Override
-	protected IItemProvider getBaseSeedId() {
+	protected ItemLike getBaseSeedId() {
 		return ModItems.redstoneRoot;
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 		return SHAPES[state.getValue(AGE)];
 	}
 	
@@ -78,21 +85,21 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 	
 	//Weird forge extension thing
 	@Override
-	public PlantType getPlantType(IBlockReader world, BlockPos pos) {
+	public PlantType getPlantType(BlockGetter world, BlockPos pos) {
 		return PlantType.CROP;
 	}
 	
 	public static void interactEvent(PlayerInteractEvent.RightClickBlock e) {
 		ItemStack stack = e.getItemStack();
-		BlockRayTraceResult hit = e.getHitVec();
-		PlayerEntity player = e.getPlayer();
-		World world = e.getWorld();
+		BlockHitResult hit = e.getHitVec();
+		Player player = e.getPlayer();
+		Level world = e.getWorld();
 		
-		if(world != null && stack.getItem() == ModItems.redstoneRoot && hit != null && hit.getType() == RayTraceResult.Type.BLOCK) {
+		if(world != null && stack.getItem() == ModItems.redstoneRoot && hit != null && hit.getType() == HitResult.Type.BLOCK) {
 			//see BlockItemUseContext#offsetPos
 			BlockPos targetPos = hit.getBlockPos().relative(hit.getDirection());
 			
-			BlockItemUseContext haha = new BlockItemUseContext(e.getPlayer(), e.getHand(), stack, hit);
+			BlockPlaceContext haha = new BlockPlaceContext(e.getPlayer(), e.getHand(), stack, hit);
 			
 			//this particular arrangement of targetPos and getFace is correct, see BucketItem
 			if(e.getPlayer().mayUseItemAt(targetPos, hit.getDirection(), stack) &&
@@ -104,15 +111,15 @@ public class RedstoneRootCropBlock extends CropsBlock implements IPlantable {
 				
 				SoundType type = SoundType.GRASS;
 				SoundEvent sound = type.getPlaceSound(); 
-				world.playSound(player, targetPos, sound, SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
+				world.playSound(player, targetPos, sound, SoundSource.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
 				
 				if(!player.isCreative()) stack.shrink(1);
-				if(player instanceof ServerPlayerEntity) {
-					CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, targetPos, stack);
+				if(player instanceof ServerPlayer) {
+					CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) player, targetPos, stack);
 				}
 				
 				e.setCanceled(true);
-				e.setCancellationResult(ActionResultType.SUCCESS);
+				e.setCancellationResult(InteractionResult.SUCCESS);
 			}
 		}
 	}

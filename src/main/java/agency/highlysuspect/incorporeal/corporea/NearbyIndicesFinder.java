@@ -1,7 +1,7 @@
 package agency.highlysuspect.incorporeal.corporea;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import vazkii.botania.common.block.tile.corporea.TileCorporeaIndex;
 
 import java.lang.reflect.Field;
@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class NearbyIndicesFinder {
-	public static List<TileCorporeaIndex> findNearbyIndicesReflect(World world, BlockPos pos, int radius) {
+	public static List<TileCorporeaIndex> findNearbyIndicesReflect(Level world, BlockPos pos, int radius) {
 		Set<TileCorporeaIndex> serverIndices;
 		try {
 			Field f = TileCorporeaIndex.class.getDeclaredField("serverIndexes");

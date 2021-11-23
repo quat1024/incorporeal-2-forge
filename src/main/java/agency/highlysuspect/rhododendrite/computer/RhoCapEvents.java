@@ -5,13 +5,13 @@ import agency.highlysuspect.incorporeal.corporea.SolidifiedRequest;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.mixin.AccessorCorporeaItemStackMatcher;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class RhoCapEvents {
-	public static void tileCaps(AttachCapabilitiesEvent<TileEntity> e) {
+	public static void tileCaps(AttachCapabilitiesEvent<BlockEntity> e) {
 		if(e.getObject() instanceof TileCorporeaRetainer) {
 			e.addCapability(RETAINER_CAP, new RetainerFunnelable((RetainerDuck) e.getObject()));
 		}
@@ -39,7 +39,7 @@ public class RhoCapEvents {
 		}
 		
 		if(e.getObject() instanceof TileCorporeaFunnel || e.getObject() instanceof TileCorporeaIndex) {
-			e.addCapability(REQUESTOR_CAP, new RequestorFunnelable<>((TileEntity & ICorporeaRequestor) e.getObject()));
+			e.addCapability(REQUESTOR_CAP, new RequestorFunnelable<>((BlockEntity & ICorporeaRequestor) e.getObject()));
 		}
 	}
 	
@@ -48,8 +48,8 @@ public class RhoCapEvents {
 			e.addCapability(ITEM_ENTITY_CAP, new ItemStackFunnelable.Ent((ItemEntity) e.getObject()));
 		}
 		
-		if(e.getObject() instanceof ItemFrameEntity) {
-			e.addCapability(ITEM_FRAME_CAP, new ItemStackFunnelable.Frame((ItemFrameEntity) e.getObject()));
+		if(e.getObject() instanceof ItemFrame) {
+			e.addCapability(ITEM_FRAME_CAP, new ItemStackFunnelable.Frame((ItemFrame) e.getObject()));
 		}
 	}
 	
@@ -134,7 +134,7 @@ public class RhoCapEvents {
 		}
 	}
 	
-	public static class RequestorFunnelable<T extends TileEntity & ICorporeaRequestor> extends FunnelableBase {
+	public static class RequestorFunnelable<T extends BlockEntity & ICorporeaRequestor> extends FunnelableBase {
 		public RequestorFunnelable(T tile) {
 			this.tile = tile;
 		}
@@ -228,11 +228,11 @@ public class RhoCapEvents {
 		}
 		
 		class Frame implements ItemStackFunnelable {
-			public Frame(ItemFrameEntity frame) {
+			public Frame(ItemFrame frame) {
 				this.frame = frame;
 			}
 			
-			protected final ItemFrameEntity frame;
+			protected final ItemFrame frame;
 			
 			@Override
 			public ItemStack getStack() {

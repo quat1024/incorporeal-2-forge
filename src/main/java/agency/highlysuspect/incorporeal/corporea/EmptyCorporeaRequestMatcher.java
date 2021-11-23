@@ -1,9 +1,9 @@
 package agency.highlysuspect.incorporeal.corporea;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
 
 //mainly used in Rhododendrite, put in here so i have something to assign to SolidifiedRequest.EMPTY
@@ -16,12 +16,12 @@ public class EmptyCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	}
 	
 	@Override
-	public void writeToNBT(CompoundNBT tag) {
+	public void writeToNBT(CompoundTag tag) {
 		//Nope!
 	}
 	
 	@Override
-	public ITextComponent getRequestName() {
-		return new TranslationTextComponent("incorporeal.empty_matcher");
+	public Component getRequestName() {
+		return new TranslatableComponent("incorporeal.empty_matcher");
 	}
 }

@@ -1,17 +1,17 @@
 package agency.highlysuspect.incorporeal.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,7 +19,7 @@ import java.util.Random;
 
 //Mostly a paste of RepeaterBlock, less the stuff about changing the delay.
 //Oh compared to 1.12, i also added the repeater-locking. Why not, right?
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class CrappyRepeaterBlock extends CrappyRedstoneDiodeBlock {
 	public CrappyRepeaterBlock(Properties properties) {
@@ -34,7 +34,7 @@ public class CrappyRepeaterBlock extends CrappyRedstoneDiodeBlock {
 	public static final BooleanProperty LOCKED = BlockStateProperties.LOCKED;
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder.add(FACING, LOCKED, POWERED));
 	}
 	
@@ -45,7 +45,7 @@ public class CrappyRepeaterBlock extends CrappyRedstoneDiodeBlock {
 	
 	//from RepeaterBlock, modified just to clean up decompiler cruft (boxed bool, assertion)
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockState blockstate = super.getStateForPlacement(context);
 		assert blockstate != null;
 		return blockstate.setValue(LOCKED, this.isLocked(context.getLevel(), context.getClickedPos(), blockstate));
@@ -53,13 +53,13 @@ public class CrappyRepeaterBlock extends CrappyRedstoneDiodeBlock {
 	
 	//from RepeaterBlock, modified just to clean up decompiler cruft (boxed bool)
 	@Override
-	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
 		return !worldIn.isClientSide() && facing.getAxis() != stateIn.getValue(FACING).getAxis() ? stateIn.setValue(LOCKED, this.isLocked(worldIn, currentPos, stateIn)) : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
 	}
 	
 	//from RepeaterBlock
 	@Override
-	public boolean isLocked(IWorldReader worldIn, BlockPos pos, BlockState state) {
+	public boolean isLocked(LevelReader worldIn, BlockPos pos, BlockState state) {
 		return this.getAlternateSignal(worldIn, pos, state) > 0;
 	}
 	
@@ -72,7 +72,7 @@ public class CrappyRepeaterBlock extends CrappyRedstoneDiodeBlock {
 	//from RepeaterBlock, modified to hardcode the alternate particle distance
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
 		if (stateIn.getValue(POWERED)) {
 			Direction direction = stateIn.getValue(FACING);
 			double d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
@@ -87,7 +87,7 @@ public class CrappyRepeaterBlock extends CrappyRedstoneDiodeBlock {
 			f = f / 16.0F;
 			double d3 = (double)(f * (float)direction.getStepX());
 			double d4 = (double)(f * (float)direction.getStepZ());
-			worldIn.addParticle(RedstoneParticleData.REDSTONE, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+			worldIn.addParticle(DustParticleOptions.REDSTONE, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
 		}
 	}
 }

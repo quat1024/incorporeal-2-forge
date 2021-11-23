@@ -1,14 +1,14 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
 import agency.highlysuspect.rhododendrite.item.RhoCardItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -18,7 +18,7 @@ import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEntity {
+public class RhodoOpTile extends AbstractComputerTile implements TickableBlockEntity {
 	public RhodoOpTile() {
 		super(RhoTileTypes.OP);
 	}
@@ -54,7 +54,7 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	public @Nullable RhodoCellTile getBoundCell() {
 		if(binding == null) return null;
 		assert level != null;
-		TileEntity tile = level.getBlockEntity(binding.root);
+		BlockEntity tile = level.getBlockEntity(binding.root);
 		return tile instanceof RhodoCellTile ? (RhodoCellTile) tile : null;
 	}
 	
@@ -119,8 +119,8 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	}
 	
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		return binding == null ? new AxisAlignedBB(worldPosition) : new AxisAlignedBB(worldPosition, binding.direct);
+	public AABB getRenderBoundingBox() {
+		return binding == null ? new AABB(worldPosition) : new AABB(worldPosition, binding.direct);
 	}
 	
 	@Nonnull
@@ -131,14 +131,14 @@ public class RhodoOpTile extends AbstractComputerTile implements ITickableTileEn
 	}
 	
 	@Override
-	public void writePacketNBT(CompoundNBT nbt) {
+	public void writePacketNBT(CompoundTag nbt) {
 		super.writePacketNBT(nbt);
 		nbt.put("Inventory", inventory.serializeNBT());
 		nbt.putInt("Signal", comparatorSignal);
 	}
 	
 	@Override
-	public void readPacketNBT(CompoundNBT nbt) {
+	public void readPacketNBT(CompoundTag nbt) {
 		super.readPacketNBT(nbt);
 		inventory.deserializeNBT(nbt.getCompound("Inventory"));
 		comparatorSignal = nbt.getInt("Signal");

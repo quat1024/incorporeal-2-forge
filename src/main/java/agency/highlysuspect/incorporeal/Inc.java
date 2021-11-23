@@ -15,14 +15,14 @@ import agency.highlysuspect.incorporeal.entity.IncEntityTypes;
 import agency.highlysuspect.incorporeal.entity.PotionSoulCoreCollectorEntity;
 import agency.highlysuspect.incorporeal.item.IncItems;
 import agency.highlysuspect.incorporeal.item.TicketConjurerItem;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -61,7 +61,7 @@ public class Inc {
 		
 		modBus.addGenericListener(Block.class, IncBlocks::register);
 		modBus.addGenericListener(Item.class, IncItems::register);
-		modBus.addGenericListener(TileEntityType.class, IncTileTypes::register);
+		modBus.addGenericListener(BlockEntityType.class, IncTileTypes::register);
 		modBus.addGenericListener(EntityType.class, IncEntityTypes::register);
 		modBus.addGenericListener(SoundEvent.class, IncSoundEvents::register);
 		
@@ -80,7 +80,7 @@ public class Inc {
 			MinecraftForge.EVENT_BUS.addListener(CorporeaSoulCoreTile::corporeaIndexRequestEvent);
 			MinecraftForge.EVENT_BUS.addListener(TicketConjurerItem::chatEvent);
 			
-			MinecraftForge.EVENT_BUS.addGenericListener(TileEntity.class, IncCapEvents::attachTileCapabilities);
+			MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, IncCapEvents::attachTileCapabilities);
 			
 			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::healEvent);
 			MinecraftForge.EVENT_BUS.addListener(PotionSoulCoreCollectorEntity::attackEvent);
@@ -128,10 +128,10 @@ public class Inc {
 	}
 	
 	public static float sinDegrees(float in) {
-		return MathHelper.sin((in % 360) * (float) (Math.PI / 180));
+		return Mth.sin((in % 360) * (float) (Math.PI / 180));
 	}
 	
 	public static float cosDegrees(float in) {
-		return MathHelper.cos((in % 360) * (float) (Math.PI / 180));
+		return Mth.cos((in % 360) * (float) (Math.PI / 180));
 	}
 }

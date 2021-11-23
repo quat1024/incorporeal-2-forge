@@ -1,16 +1,16 @@
 package agency.highlysuspect.rhododendrite.block.tile;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import vazkii.botania.common.block.tile.TileMod;
 
 import javax.annotation.Nullable;
 
 //Basically this is just spicy red string
 public abstract class AbstractComputerTile extends TileMod {
-	public AbstractComputerTile(TileEntityType<?> type) {
+	public AbstractComputerTile(BlockEntityType<?> type) {
 		super(type);
 	}
 	
@@ -22,10 +22,10 @@ public abstract class AbstractComputerTile extends TileMod {
 		//return rootExtractingChainBind(dir, (cursor, tile) -> directBind.bindsTo(poss, tile) ? poss : null); //Wasteful
 		assert level != null;
 		
-		BlockPos.Mutable cursor = worldPosition.mutable();
+		BlockPos.MutableBlockPos cursor = worldPosition.mutable();
 		for(int i = 0; i < RANGE; i++) {
 			cursor.move(dir);
-			@Nullable TileEntity tile = level.getBlockEntity(cursor);
+			@Nullable BlockEntity tile = level.getBlockEntity(cursor);
 			if(directBind.bindsTo(cursor, tile)) return cursor.immutable();
 		}
 		
@@ -43,10 +43,10 @@ public abstract class AbstractComputerTile extends TileMod {
 	protected @Nullable ChainBindResult rootExtractingChainBind(Direction dir, ChainBindRootExtactor chainRoot) {
 		assert level != null;
 		
-		BlockPos.Mutable cursor = worldPosition.mutable();
+		BlockPos.MutableBlockPos cursor = worldPosition.mutable();
 		for(int i = 0; i < RANGE; i++) { //same as red string
 			cursor.move(dir);
-			@Nullable TileEntity tile = level.getBlockEntity(cursor);
+			@Nullable BlockEntity tile = level.getBlockEntity(cursor);
 			@Nullable BlockPos root = chainRoot.getRootBind(cursor, tile);
 			if(root != null) return new ChainBindResult(cursor.immutable(), root.immutable());
 		}
@@ -64,11 +64,11 @@ public abstract class AbstractComputerTile extends TileMod {
 	}
 	
 	protected interface DirectBindPredicate {
-		boolean bindsTo(BlockPos.Mutable cursor, @Nullable TileEntity tile);
+		boolean bindsTo(BlockPos.MutableBlockPos cursor, @Nullable BlockEntity tile);
 	}
 	
 	protected interface ChainBindRootExtactor {
 		@Nullable
-		BlockPos getRootBind(BlockPos.Mutable cursor, @Nullable TileEntity tile);
+		BlockPos getRootBind(BlockPos.MutableBlockPos cursor, @Nullable BlockEntity tile);
 	}
 }

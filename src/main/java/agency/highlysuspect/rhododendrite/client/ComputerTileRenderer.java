@@ -1,23 +1,23 @@
 package agency.highlysuspect.rhododendrite.client;
 
 import agency.highlysuspect.incorporeal.Inc;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.util.Mth;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.helper.RenderHelper;
 import vazkii.botania.common.core.helper.Vector3;
 
-public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEntityRenderer<T> {
-	public ComputerTileRenderer(TileEntityRendererDispatcher dispatcher) {
+public abstract class ComputerTileRenderer<T extends BlockEntity> extends BlockEntityRenderer<T> {
+	public ComputerTileRenderer(BlockEntityRenderDispatcher dispatcher) {
 		super(dispatcher);
 	}
 	
-	protected void renderBinding(MatrixStack ms, IRenderTypeBuffer buffers, Vector3 start, Vector3 end, int color, int hash, float sizeStart, float sizeEnd, float twistiness) {
+	protected void renderBinding(PoseStack ms, MultiBufferSource buffers, Vector3 start, Vector3 end, int color, int hash, float sizeStart, float sizeEnd, float twistiness) {
 		//HEY Maybe don't copy this... Lol
 		//The intention was to draw vertices in world space (?) but it doesn't actually work.
 		//For one, the "start" vec3 is kind of ignored.
@@ -56,11 +56,11 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 			float size = Inc.rangeRemap(lerp, 0, 1, sizeStart, sizeEnd);
 			//Perturb that size a bit with this magic formula!!! Idk its copied from botania lol
 			magic += stepMag * twistiness;
-			float ampl = (0.15f * (MathHelper.sin(magic * 2f) * 0.5f + 0.5f) + 0.1f) * size;
+			float ampl = (0.15f * (Mth.sin(magic * 2f) * 0.5f + 0.5f) + 0.1f) * size;
 			//The X and Z components of the spiral.
 			//Original botania added randomness here, but i want a smoother look
-			float xComponent = MathHelper.sin(magic * 20) * ampl;
-			float zComponent = MathHelper.cos(magic * 20) * ampl;
+			float xComponent = Mth.sin(magic * 20) * ampl;
+			float zComponent = Mth.cos(magic * 20) * ampl;
 			
 			//Urrrrgh this allocates a ton im sorry. a mutable Vector3 class would come in handy here.
 			Vector3 finalPos = step.multiply(i).add(frameX.multiply(xComponent)).add(frameZ.multiply(zComponent));
@@ -78,7 +78,7 @@ public abstract class ComputerTileRenderer<T extends TileEntity> extends TileEnt
 		int g = (color >> 8) & 0xFF;
 		int b = color & 0xFF;
 		
-		IVertexBuilder buffer = buffers.getBuffer(RenderHelper.LINE_1);
+		VertexConsumer buffer = buffers.getBuffer(RenderHelper.LINE_1);
 		for(int i = 3; i < positions.length; i += 3) {
 			buffer.vertex(ms.last().pose(), positions[i - 3], positions[i - 2], positions[i - 1]).color(r, g, b, a).endVertex();
 			buffer.vertex(ms.last().pose(), positions[i], positions[i + 1], positions[i + 2]).color(r, g, b, a).endVertex();

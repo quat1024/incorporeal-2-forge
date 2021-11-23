@@ -3,20 +3,25 @@ package agency.highlysuspect.incorporeal.datagen;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
 import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
 import agency.highlysuspect.incorporeal.item.IncItems;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.ModFluffBlocks;
 import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.lib.ModTags;
 
 import java.util.function.Consumer;
+
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 
 public class IncRecipes extends RecipeProvider {
 	public IncRecipes(DataGenerator gen) {
@@ -29,7 +34,7 @@ public class IncRecipes extends RecipeProvider {
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> r) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> r) {
 		for(UnstableCubeBlock cube : IncBlocks.UNSTABLE_CUBES.values()) {
 			unstableCube(cube).save(r);
 		}
@@ -48,7 +53,7 @@ public class IncRecipes extends RecipeProvider {
 	}
 	
 	//Copypaste
-	private void createFloatingFlowerRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider input) {
+	private void createFloatingFlowerRecipe(Consumer<FinishedRecipe> consumer, ItemLike input) {
 		ResourceLocation inputName = Registry.ITEM.getKey(input.asItem());
 		Item output = Registry.ITEM.getOptional(new ResourceLocation(inputName.getNamespace(), "floating_" + inputName.getPath())).get();
 		ShapelessRecipeBuilder.shapeless(output)
@@ -58,11 +63,11 @@ public class IncRecipes extends RecipeProvider {
 			.save(consumer);
 	}
 	
-	protected ShapelessRecipeBuilder shapeless(IItemProvider item, int count) {
+	protected ShapelessRecipeBuilder shapeless(ItemLike item, int count) {
 		return ShapelessRecipeBuilder.shapeless(item, count);
 	}
 	
-	protected ShapedRecipeBuilder shaped(IItemProvider item, int count, String... lines) {
+	protected ShapedRecipeBuilder shaped(ItemLike item, int count, String... lines) {
 		ShapedRecipeBuilder shaped = ShapedRecipeBuilder.shaped(item, count);
 		for(String line : lines) shaped.pattern(line);
 		return shaped;
@@ -129,12 +134,12 @@ public class IncRecipes extends RecipeProvider {
 		return builder;
 	}
 	
-	protected void item(ShapedRecipeBuilder builder, Character key, IItemProvider in) {
+	protected void item(ShapedRecipeBuilder builder, Character key, ItemLike in) {
 		builder.define(key, in);
 		builder.unlockedBy(in.asItem().getRegistryName().getPath(), has(in));
 	}
 	
-	protected void item(ShapedRecipeBuilder builder, Character key, ITag.INamedTag<Item> in) {
+	protected void item(ShapedRecipeBuilder builder, Character key, Tag.Named<Item> in) {
 		builder.define(key, in);
 		builder.unlockedBy(in.getName().getPath(), has(in));
 	}

@@ -1,8 +1,8 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import vazkii.botania.api.corporea.CorporeaHelper;
 import vazkii.botania.api.corporea.CorporeaIndexRequestEvent;
 
@@ -35,7 +35,7 @@ public class CorporeaSoulCoreTile extends AbstractSoulCoreTile {
 			.collect(Collectors.toSet());
 		
 		if(!coredUuids.isEmpty() && !coredUuids.contains(event.getRequester().getUUID())) {
-			event.getRequester().sendMessage(new TranslationTextComponent("incorporeal.no_soul_core").withStyle(TextFormatting.RED), CHAT_SEND_UUID);
+			event.getRequester().sendMessage(new TranslatableComponent("incorporeal.no_soul_core").withStyle(ChatFormatting.RED), CHAT_SEND_UUID);
 			event.setCanceled(true);
 		}
 	}

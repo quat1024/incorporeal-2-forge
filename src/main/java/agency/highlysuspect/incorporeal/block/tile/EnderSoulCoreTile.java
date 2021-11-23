@@ -1,9 +1,9 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -32,7 +32,7 @@ public class EnderSoulCoreTile extends AbstractSoulCoreTile {
 		super.tick();
 		if(level == null || level.isClientSide) return;
 		
-		Optional<ServerPlayerEntity> player = findPlayer();
+		Optional<ServerPlayer> player = findPlayer();
 		boolean isHere = player.isPresent();
 		
 		if(!isHere) {
@@ -51,7 +51,7 @@ public class EnderSoulCoreTile extends AbstractSoulCoreTile {
 	
 	//non-static inner class
 	public class ManaDrainingInvWrapper extends InvWrapper {
-		public ManaDrainingInvWrapper(IInventory inv) {
+		public ManaDrainingInvWrapper(Container inv) {
 			super(inv);
 		}
 		

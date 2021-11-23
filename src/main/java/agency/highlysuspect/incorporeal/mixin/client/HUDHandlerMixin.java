@@ -1,7 +1,7 @@
 package agency.highlysuspect.incorporeal.mixin.client;
 
 import agency.highlysuspect.incorporeal.client.IncHudHandler;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +26,7 @@ public class HUDHandlerMixin {
 		at = @At("HEAD"),
 		remap = false
 	)
-	private static void whenRenderingNearIndexDisplay(MatrixStack ms, CallbackInfo ci) {
+	private static void whenRenderingNearIndexDisplay(PoseStack ms, CallbackInfo ci) {
 		IncHudHandler.botaniaDrewCorporeaIndexOverlay = true;
 	}
 }

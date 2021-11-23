@@ -3,10 +3,10 @@ package agency.highlysuspect.incorporeal.client;
 import agency.highlysuspect.incorporeal.IncNetwork;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkEvent;
 import vazkii.botania.client.fx.SparkleParticleData;
 
@@ -24,7 +24,7 @@ public class ClientPacketHandler {
 			@Override
 			public void run() {
 				Minecraft client = Minecraft.getInstance();
-				ClientWorld world = client.level;
+				ClientLevel world = client.level;
 				if(world == null) return;
 				
 				showSparkleLine(world, sparkle);
@@ -38,13 +38,13 @@ public class ClientPacketHandler {
 			@Override
 			public void run() {
 				Minecraft client = Minecraft.getInstance();
-				ClientWorld world = client.level;
+				ClientLevel world = client.level;
 				if(world == null) return;
 				
 				for(Pair<IncNetwork.SparkleLine, byte[]> item : funny.data) {
 					showSparkleLine(world, item.getFirst());
 					
-					Vector3d end = item.getFirst().end;
+					Vec3 end = item.getFirst().end;
 					byte[] notes = item.getSecond();
 					
 					if(notes.length == 1) {
@@ -58,15 +58,15 @@ public class ClientPacketHandler {
 		});
 	}
 	
-	private static void showSparkleLine(World world, IncNetwork.SparkleLine sparkle) {
+	private static void showSparkleLine(Level world, IncNetwork.SparkleLine sparkle) {
 		//Loosely based on PacketBotaniaEffect's SPARK_NET_INDICATOR (...is the comment i wrote back in 2018)
-		Vector3d diff = sparkle.end.subtract(sparkle.start);
-		Vector3d movement = diff.normalize().scale(.2);
+		Vec3 diff = sparkle.end.subtract(sparkle.start);
+		Vec3 movement = diff.normalize().scale(.2);
 		int iters = (int) (diff.length() / movement.length());
 		float huePer = 1F / iters;
 		float hueSum = (float) Math.random();
 		
-		Vector3d currentPos = sparkle.start;
+		Vec3 currentPos = sparkle.start;
 		
 		for(int i = 0; i < iters; i++) {
 			float hue = i * huePer + hueSum;

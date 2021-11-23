@@ -3,12 +3,12 @@ package agency.highlysuspect.rhododendrite.datagen;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.item.RhoItems;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.core.Registry;
 import vazkii.botania.data.recipes.StonecuttingProvider;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class RhoStonecutting extends RecipeProvider {
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
 		stonecutToAny(consumer,
 			RhoItems.OPCODE_BLANK,
 			RhoItems.OPCODE_PUSH,
@@ -56,11 +56,11 @@ public class RhoStonecutting extends RecipeProvider {
 	}
 	
 	//A pile of stonecutting recipes where each item can stonecut to all the other items
-	private static void stonecutToAny(Consumer<IFinishedRecipe> consumer, IItemProvider... all) {
-		List<IItemProvider> inputs = Arrays.asList(all);
-		for(IItemProvider output : all) {
-			Ingredient input = Ingredient.of(inputs.stream().filter(obj -> output != obj).toArray(IItemProvider[]::new));
-			consumer.accept(new StonecuttingProvider.Result(Rho.id("stonecutting/" + Registry.ITEM.getKey(output.asItem()).getPath()), IRecipeSerializer.STONECUTTER, input, output.asItem(), 1));
+	private static void stonecutToAny(Consumer<FinishedRecipe> consumer, ItemLike... all) {
+		List<ItemLike> inputs = Arrays.asList(all);
+		for(ItemLike output : all) {
+			Ingredient input = Ingredient.of(inputs.stream().filter(obj -> output != obj).toArray(ItemLike[]::new));
+			consumer.accept(new StonecuttingProvider.Result(Rho.id("stonecutting/" + Registry.ITEM.getKey(output.asItem()).getPath()), RecipeSerializer.STONECUTTER, input, output.asItem(), 1));
 		}
 	}
 }

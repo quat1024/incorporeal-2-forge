@@ -3,11 +3,11 @@ package agency.highlysuspect.rhododendrite.computer;
 import agency.highlysuspect.incorporeal.corporea.EmptyCorporeaRequestMatcher;
 import agency.highlysuspect.incorporeal.corporea.MatcherUtils;
 import com.google.common.base.Preconditions;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentUtils;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
 
 import java.util.*;
@@ -75,16 +75,16 @@ public class CompoundCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	}
 	
 	@Override
-	public void writeToNBT(CompoundNBT tag) {
-		ListNBT list = new ListNBT();
+	public void writeToNBT(CompoundTag tag) {
+		ListTag list = new ListTag();
 		for(ICorporeaRequestMatcher matcher : others) list.add(MatcherUtils.toTag(matcher));
 		tag.put("CompoundRequest", list);
 	}
 	
-	public static CompoundCorporeaRequestMatcher fromTag(CompoundNBT tag) {
+	public static CompoundCorporeaRequestMatcher fromTag(CompoundTag tag) {
 		return new CompoundCorporeaRequestMatcher(tag.getList("CompoundRequest", 10).stream()
-			.filter(inbt -> inbt instanceof CompoundNBT)
-			.map(inbt -> (CompoundNBT) inbt)
+			.filter(inbt -> inbt instanceof CompoundTag)
+			.map(inbt -> (CompoundTag) inbt)
 			.map(MatcherUtils::tryFromTag)
 			.filter(Optional::isPresent)
 			.map(Optional::get)
@@ -92,9 +92,9 @@ public class CompoundCorporeaRequestMatcher implements ICorporeaRequestMatcher {
 	}
 	
 	@Override
-	public ITextComponent getRequestName() {
+	public Component getRequestName() {
 		//TODO this just comma-separates them, is that cool
-		return TextComponentUtils.formatList(others, ICorporeaRequestMatcher::getRequestName);
+		return ComponentUtils.formatList(others, ICorporeaRequestMatcher::getRequestName);
 	}
 	
 	@Override

@@ -1,8 +1,8 @@
 package agency.highlysuspect.rhododendrite.computer;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -41,12 +41,12 @@ public class RhodoFunnelableCapability {
 		
 		@Nullable
 		@Override
-		public INBT writeNBT(Capability<RhodoFunnelable> capability, RhodoFunnelable instance, Direction side) {
-			return new CompoundNBT();
+		public Tag writeNBT(Capability<RhodoFunnelable> capability, RhodoFunnelable instance, Direction side) {
+			return new CompoundTag();
 		}
 		
 		@Override
-		public void readNBT(Capability<RhodoFunnelable> capability, RhodoFunnelable instance, Direction side, INBT nbt) {
+		public void readNBT(Capability<RhodoFunnelable> capability, RhodoFunnelable instance, Direction side, Tag nbt) {
 			//No
 		}
 	}

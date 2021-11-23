@@ -2,12 +2,12 @@ package agency.highlysuspect.rhododendrite.item;
 
 import agency.highlysuspect.rhododendrite.block.tile.RhodoCellTile;
 import agency.highlysuspect.rhododendrite.block.tile.RhodoOpTile;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class RhoCardItem extends Item {
 	public RhoCardItem(Properties properties, CellAction action, boolean isCondition) {

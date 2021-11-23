@@ -3,19 +3,19 @@ package agency.highlysuspect.incorporeal.block.tile;
 import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.IncSoundEvents;
 import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
-import net.minecraft.item.DyeColor;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.common.Botania;
 import vazkii.botania.common.block.tile.TileMod;
 import vazkii.botania.common.core.helper.Vector3;
 
-public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
+public class UnstableCubeTile extends TileMod implements TickableBlockEntity {
 	public UnstableCubeTile(DyeColor color) {
 		super(IncTileTypes.UNSTABLE_CUBES.get(color));
 		this.color = color;
@@ -48,7 +48,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 		
 		bump *= bumpDecay;
 		
-		int newPower = MathHelper.clamp(MathHelper.floor(Inc.rangeRemap(rotationSpeed, 0, 90, 0, 15)), 0, 15);
+		int newPower = Mth.clamp(Mth.floor(Inc.rangeRemap(rotationSpeed, 0, 90, 0, 15)), 0, 15);
 		if(power != newPower) {
 			power = newPower;
 			level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
@@ -80,7 +80,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 				float pitch = basePitch + (rotationSpeed / 600f);
 				if(rotationSpeed > 83) pitch += 0.1;
 				
-				level.playLocalSound(worldPosition.getX() + .5, worldPosition.getY() + .5, worldPosition.getZ() + .5, IncSoundEvents.UNSTABLE, SoundCategory.BLOCKS, volume, pitch, false);
+				level.playLocalSound(worldPosition.getX() + .5, worldPosition.getY() + .5, worldPosition.getZ() + .5, IncSoundEvents.UNSTABLE, SoundSource.BLOCKS, volume, pitch, false);
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
 		//On the client, ignore changes to the rotation angle (unless this is the first packet).
 		//helps prevent it jittering on servers, since the rotation is sorta controlled serverside.
 		float oldRotationAngle = rotationAngle;
@@ -113,7 +113,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 	}
 	
 	@Override
-	public void writePacketNBT(CompoundNBT nbt) {
+	public void writePacketNBT(CompoundTag nbt) {
 		super.writePacketNBT(nbt);
 		
 		nbt.putFloat("RotationAngle", rotationAngle);
@@ -123,7 +123,7 @@ public class UnstableCubeTile extends TileMod implements ITickableTileEntity {
 	}
 	
 	@Override
-	public void readPacketNBT(CompoundNBT nbt) {
+	public void readPacketNBT(CompoundTag nbt) {
 		super.readPacketNBT(nbt);
 		
 		rotationAngle = nbt.getFloat("RotationAngle");

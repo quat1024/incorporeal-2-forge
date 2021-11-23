@@ -2,18 +2,18 @@ package agency.highlysuspect.incorporeal.block.tile;
 
 import agency.highlysuspect.incorporeal.Inc;
 import com.mojang.authlib.GameProfile;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
@@ -24,8 +24,14 @@ import vazkii.botania.common.block.tile.TileMod;
 
 import java.util.Optional;
 
-public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, ITickableTileEntity, IManaReceiver {
-	public AbstractSoulCoreTile(TileEntityType<?> type) {
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+
+public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, TickableBlockEntity, IManaReceiver {
+	public AbstractSoulCoreTile(BlockEntityType<?> type) {
 		super(type);
 	}
 	
@@ -51,14 +57,14 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
 	}
 	
-	public Optional<ServerPlayerEntity> findPlayer() {
+	public Optional<ServerPlayer> findPlayer() {
 		assert level != null; //grumble grumble
 		if(level.isClientSide) throw new IllegalStateException("findPlayer on client world");
 		
 		if(!hasOwnerProfile()) return Optional.empty();
 		
 		MinecraftServer server = level.getServer(); assert server != null; //!isRemote
-		ServerPlayerEntity player = server.getPlayerList().getPlayer(ownerProfile.getId());
+		ServerPlayer player = server.getPlayerList().getPlayer(ownerProfile.getId());
 		
 		//Must be online & in the same dimension. ("same dimension" is not a technical limitation, but a gameplay one.)
 		if(player == null || player.level != level) return Optional.empty();
@@ -66,7 +72,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 		else return Optional.of(player);
 	}
 	
-	public ActionResultType activate(PlayerEntity player, Hand hand) {
+	public InteractionResult activate(Player player, InteractionHand hand) {
 		assert level != null;
 		
 		if(!player.getGameProfile().equals(ownerProfile)) {
@@ -77,10 +83,10 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 				player.hurt(SOUL, 5f);
 				receiveInitialMana();
 			}
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 	
 	public void receiveInitialMana() {
@@ -113,7 +119,7 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	public void onExpire() {
 		findPlayer().ifPresent(p -> p.hurt(SOUL, 5f));
 		setOwnerProfile(null);
-		if(level != null) level.playSound(null, worldPosition, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, .5f, 1.2f);
+		if(level != null) level.playSound(null, worldPosition, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, .5f, 1.2f);
 	}
 	
 	public int getComparator() {
@@ -146,24 +152,24 @@ public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, 
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void renderHUD(MatrixStack ms, Minecraft mc, World world, BlockPos pos) {
+	public void renderHUD(PoseStack ms, Minecraft mc, Level world, BlockPos pos) {
 		//lol
 		HUDHandler.drawSimpleManaHUD(ms, 0xee4444, mana, getMaxMana(), getBlockState().getBlock().getName().getString()); 
 	}
 	
 	@Override
-	public void writePacketNBT(CompoundNBT cmp) {
+	public void writePacketNBT(CompoundTag cmp) {
 		super.writePacketNBT(cmp);
 		
-		if(ownerProfile != null) cmp.put("OwnerProfile", NBTUtil.writeGameProfile(new CompoundNBT(), ownerProfile));
+		if(ownerProfile != null) cmp.put("OwnerProfile", NbtUtils.writeGameProfile(new CompoundTag(), ownerProfile));
 		cmp.putInt("Mana", mana);
 	}
 	
 	@Override
-	public void readPacketNBT(CompoundNBT cmp) {
+	public void readPacketNBT(CompoundTag cmp) {
 		super.readPacketNBT(cmp);
 		
-		if(cmp.contains("OwnerProfile")) ownerProfile = NBTUtil.readGameProfile(cmp.getCompound("OwnerProfile"));
+		if(cmp.contains("OwnerProfile")) ownerProfile = NbtUtils.readGameProfile(cmp.getCompound("OwnerProfile"));
 		else ownerProfile = null;
 		
 		mana = cmp.getInt("Mana");

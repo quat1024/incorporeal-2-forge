@@ -7,18 +7,31 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.block.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.SurvivesExplosion;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class ModidBlockDrops extends BlockLootTables implements IDataProvider  {
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.WallSignBlock;
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+
+public class ModidBlockDrops extends BlockLoot implements DataProvider  {
 	public ModidBlockDrops(String modid, DataGenerator d) {
 		this.modid = modid;
 		this.d = d;
@@ -34,13 +47,13 @@ public class ModidBlockDrops extends BlockLootTables implements IDataProvider  {
 	}
 	
 	@Override
-	public void run(DirectoryCache cache) throws IOException {
+	public void run(HashCache cache) throws IOException {
 		for(Block b : ForgeRegistries.BLOCKS.getValues()) {
 			ResourceLocation id = b.getRegistryName(); assert id != null; //FUCKING FORGE
 			if(!id.getNamespace().equals(modid)) continue;
 			
 			if(b instanceof WallSignBlock) continue; //by convention these all "dropsLike" the regular block, no need for an extra table
-			if(b instanceof CropsBlock) continue; //no u
+			if(b instanceof CropBlock) continue; //no u
 			
 			if(b instanceof DoorBlock) {
 				save(cache, b, door(b));
@@ -56,28 +69,28 @@ public class ModidBlockDrops extends BlockLootTables implements IDataProvider  {
 		}
 	}
 	
-	private void save(DirectoryCache cache, Block b, LootTable table) throws IOException {
+	private void save(HashCache cache, Block b, LootTable table) throws IOException {
 		ResourceLocation id = b.getRegistryName(); assert id != null; //im gonna kms for real
 		
 		Path out = d.getOutputFolder().resolve("data/" + id.getNamespace() + "/loot_tables/blocks/" + id.getPath() + ".json");
-		IDataProvider.save(GSON, cache, LootTableManager.serialize(table), out);
+		DataProvider.save(GSON, cache, LootTables.serialize(table), out);
 	}
 	
 	private static LootTable self(Block b) {
 		return LootTable.lootTable().withPool(
-			LootPool.lootPool().name("self").setRolls(ConstantRange.exactly(1)).add(ItemLootEntry.lootTableItem(b)).when(SurvivesExplosion.survivesExplosion())
-		).setParamSet(LootParameterSets.BLOCK).build();
+			LootPool.lootPool().name("self").setRolls(ConstantIntValue.exactly(1)).add(LootItem.lootTableItem(b)).when(ExplosionCondition.survivesExplosion())
+		).setParamSet(LootContextParamSets.BLOCK).build();
 	}
 	
 	private static LootTable door(Block b) {
-		return BlockLootTables.createDoorTable(b).setParamSet(LootParameterSets.BLOCK).build();
+		return BlockLoot.createDoorTable(b).setParamSet(LootContextParamSets.BLOCK).build();
 	}
 	
 	private static LootTable slab(Block b) {
-		return createSlabItemTable(b).setParamSet(LootParameterSets.BLOCK).build();
+		return createSlabItemTable(b).setParamSet(LootContextParamSets.BLOCK).build();
 	}
 	
 	private static LootTable leaves(Block b, Block sapling) {
-		return createLeavesDrops(b, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F).setParamSet(LootParameterSets.BLOCK).build();
+		return createLeavesDrops(b, sapling, 0.05F, 0.0625F, 0.083333336F, 0.1F).setParamSet(LootContextParamSets.BLOCK).build();
 	}
 }

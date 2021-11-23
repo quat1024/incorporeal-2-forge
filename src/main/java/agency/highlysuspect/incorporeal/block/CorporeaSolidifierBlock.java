@@ -1,26 +1,26 @@
 package agency.highlysuspect.incorporeal.block;
 
 import agency.highlysuspect.incorporeal.item.IncItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import vazkii.botania.api.corporea.ICorporeaRequestMatcher;
 import vazkii.botania.common.core.helper.InventoryHelper;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class CorporeaSolidifierBlock extends Block {
 	public CorporeaSolidifierBlock(Properties properties) {
 		super(properties);
 	}
 	
-	public void receiveRequest(World world, BlockPos pos, BlockState state, ICorporeaRequestMatcher request, int count) {
+	public void receiveRequest(Level world, BlockPos pos, BlockState state, ICorporeaRequestMatcher request, int count) {
 		if(world == null || world.isClientSide) return;
 		
 		ItemStack ticket = IncItems.CORPOREA_TICKET.produceForRequest(request, count);
@@ -37,7 +37,7 @@ public class CorporeaSolidifierBlock extends Block {
 	}
 	
 	//Modified from TileCorporeaFunnel.
-	private IItemHandler getInv(World world, BlockPos pos) {
+	private IItemHandler getInv(Level world, BlockPos pos) {
 		//Try 1 block below
 		IItemHandler ret = InventoryHelper.getInventory(world, pos.below(), Direction.UP);
 		if (ret == null) ret = InventoryHelper.getInventory(world, pos.below(), null);

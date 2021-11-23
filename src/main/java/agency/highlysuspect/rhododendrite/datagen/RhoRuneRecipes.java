@@ -5,10 +5,10 @@ import agency.highlysuspect.incorporeal.item.IncItems;
 import agency.highlysuspect.rhododendrite.Rho;
 import agency.highlysuspect.rhododendrite.block.RhoBlocks;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 
 import java.util.function.Consumer;
@@ -26,7 +26,7 @@ public class RhoRuneRecipes extends IncRuneRecipes {
 	}
 	
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
 		consumer.accept(new FinishedRecipe(
 			Rho.id("temp_recipe_to_make_the_sapling_lololol"),
 			new ItemStack(RhoBlocks.RHODODENDRITE.sapling),
