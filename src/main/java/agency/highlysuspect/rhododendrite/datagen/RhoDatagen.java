@@ -22,6 +22,7 @@ public class RhoDatagen {
 		if(e.includeServer()) {
 			data.addProvider(new ModidBlockDrops(Rho.MODID, data));
 			data.addProvider(new RhoRecipes(data));
+			data.addProvider(new RhoStonecutting(data));
 			
 			RhoTags.BlockProvider b = new RhoTags.BlockProvider(data, dontCare);
 			data.addProvider(b);

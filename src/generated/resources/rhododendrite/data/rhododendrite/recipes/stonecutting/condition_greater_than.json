@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": [
+    {
+      "item": "rhododendrite:condition_blank"
+    },
+    {
+      "item": "rhododendrite:condition_is_empty"
+    },
+    {
+      "item": "rhododendrite:condition_is_zero"
+    },
+    {
+      "item": "rhododendrite:condition_equal"
+    },
+    {
+      "item": "rhododendrite:condition_count_equal"
+    },
+    {
+      "item": "rhododendrite:condition_less_than"
+    }
+  ],
+  "result": "rhododendrite:condition_greater_than",
+  "count": 1
+}

@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": [
+    {
+      "item": "rhododendrite:opcode_blank"
+    },
+    {
+      "item": "rhododendrite:opcode_push"
+    },
+    {
+      "item": "rhododendrite:opcode_pull"
+    },
+    {
+      "item": "rhododendrite:opcode_dup"
+    },
+    {
+      "item": "rhododendrite:opcode_tumble"
+    },
+    {
+      "item": "rhododendrite:opcode_add"
+    },
+    {
+      "item": "rhododendrite:opcode_subtract"
+    },
+    {
+      "item": "rhododendrite:opcode_multiply"
+    },
+    {
+      "item": "rhododendrite:opcode_divide"
+    },
+    {
+      "item": "rhododendrite:opcode_remainder"
+    },
+    {
+      "item": "rhododendrite:opcode_matcher_difference"
+    },
+    {
+      "item": "rhododendrite:opcode_swap"
+    }
+  ],
+  "result": "rhododendrite:opcode_matcher_union",
+  "count": 1
+}
