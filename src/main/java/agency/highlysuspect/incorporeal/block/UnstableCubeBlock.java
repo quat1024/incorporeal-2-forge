@@ -1,6 +1,6 @@
 package agency.highlysuspect.incorporeal.block;
 
-import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
+import agency.highlysuspect.incorporeal.block.tile.IncBlockEntityTypes;
 import agency.highlysuspect.incorporeal.block.tile.UnstableCubeTile;
 import net.minecraft.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -23,8 +23,6 @@ import vazkii.botania.api.wand.IWandable;
 import vazkii.botania.common.block.BlockModWaterloggable;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class UnstableCubeBlock extends BlockModWaterloggable implements IWandable {
 	public UnstableCubeBlock(Properties properties, DyeColor color) {
@@ -92,6 +90,6 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 	@Nullable
 	@Override
 	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		return IncTileTypes.UNSTABLE_CUBES.get(color).create();
+		return IncBlockEntityTypes.UNSTABLE_CUBES.get(color).create();
 	}
 }

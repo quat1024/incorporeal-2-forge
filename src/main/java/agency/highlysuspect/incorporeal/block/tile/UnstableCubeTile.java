@@ -17,7 +17,7 @@ import vazkii.botania.common.core.helper.Vector3;
 
 public class UnstableCubeTile extends TileMod implements TickableBlockEntity {
 	public UnstableCubeTile(DyeColor color) {
-		super(IncTileTypes.UNSTABLE_CUBES.get(color));
+		super(IncBlockEntityTypes.UNSTABLE_CUBES.get(color));
 		this.color = color;
 	}
 	

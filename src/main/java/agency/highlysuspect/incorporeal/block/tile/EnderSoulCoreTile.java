@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class EnderSoulCoreTile extends AbstractSoulCoreTile {
 	public EnderSoulCoreTile() {
-		super(IncTileTypes.ENDER_SOUL_CORE);
+		super(IncBlockEntityTypes.ENDER_SOUL_CORE);
 	}
 	
 	@Override

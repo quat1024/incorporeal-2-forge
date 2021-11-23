@@ -1,7 +1,6 @@
 package agency.highlysuspect.incorporeal.entity;
 
-import agency.highlysuspect.incorporeal.Inc;
-import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
+import agency.highlysuspect.incorporeal.block.tile.IncBlockEntityTypes;
 import agency.highlysuspect.incorporeal.block.tile.PotionSoulCoreTile;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.*;
@@ -65,7 +64,7 @@ public class PotionSoulCoreCollectorEntity extends LivingEntity {
 	}
 	
 	private Optional<Pair<PotionSoulCoreTile, ServerPlayer>> find() {
-		PotionSoulCoreTile tile = IncTileTypes.POTION_SOUL_CORE.getBlockEntity(level, blockPosition());
+		PotionSoulCoreTile tile = IncBlockEntityTypes.POTION_SOUL_CORE.getBlockEntity(level, blockPosition());
 		if(tile == null) { remove(); return Optional.empty(); }
 		
 		Optional<ServerPlayer> player = tile.findPlayer();

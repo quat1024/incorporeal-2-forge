@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class CorporeaSoulCoreTile extends AbstractSoulCoreTile {
 	public CorporeaSoulCoreTile() {
-		super(IncTileTypes.CORPOREA_SOUL_CORE);
+		super(IncBlockEntityTypes.CORPOREA_SOUL_CORE);
 	}
 	
 	@Override

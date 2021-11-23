@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RedStringLiarTile extends TileRedString {
 	public RedStringLiarTile() {
-		super(IncTileTypes.RED_STRING_LIAR);
+		super(IncBlockEntityTypes.RED_STRING_LIAR);
 	}
 	
 	@Override

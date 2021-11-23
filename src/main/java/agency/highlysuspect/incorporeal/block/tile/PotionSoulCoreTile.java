@@ -1,6 +1,5 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
-import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.entity.PotionSoulCoreCollectorEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,7 +11,7 @@ import java.util.Optional;
 
 public class PotionSoulCoreTile extends AbstractSoulCoreTile {
 	public PotionSoulCoreTile() {
-		super(IncTileTypes.POTION_SOUL_CORE);
+		super(IncBlockEntityTypes.POTION_SOUL_CORE);
 	}
 	
 	@Override

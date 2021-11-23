@@ -2,10 +2,8 @@ package agency.highlysuspect.incorporeal.item;
 
 import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.IncBlocks;
-import net.minecraft.item.*;
+import net.minecraft.core.Registry;
 import net.minecraft.Util;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 import vazkii.botania.common.Botania;
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
@@ -13,10 +11,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
 public class IncItems {
 	public static final CorporeaTicketItem CORPOREA_TICKET = new CorporeaTicketItem(defaultProps());
@@ -54,11 +50,12 @@ public class IncItems {
 	public static final ItemBlockSpecialFlower SMALL_FLOATING_FUNNY = new ItemBlockSpecialFlower(IncBlocks.SMALL_FLOATING_FUNNY, defaultProps());
 	
 	private static Item.Properties defaultProps() {
-		return new Item.Properties().tab(Tab.INSTANCE);
+		//return new Item.Properties().tab(Tab.INSTANCE);
+		return new Item.Properties();
 	}
 	
-	public static void register(RegistryEvent.Register<Item> event) {
-		IForgeRegistry<Item> r = event.getRegistry();
+	public static void register() {
+		Registry<Item> r = Registry.ITEM;
 		
 		//items
 		Inc.reg(r, "corporea_ticket", CORPOREA_TICKET);
@@ -93,30 +90,28 @@ public class IncItems {
 		regBlockItem(r, SMALL_FLOATING_FUNNY);
 	}
 	
-	public static void regBlockItem(IForgeRegistry<Item> r, BlockItem bi) {
-		assert bi.getBlock().getRegistryName() != null; //i dont know what the fuck "registry delegates" are, and i never will
-		bi.setRegistryName(bi.getBlock().getRegistryName());
-		r.register(bi);
+	public static void regBlockItem(Registry<Item> r, BlockItem bi) {
+		Registry.register(Registry.ITEM, Registry.BLOCK.getKey(bi.getBlock()), bi);
 	}
 	
-	private static class Tab extends CreativeModeTab {
-		public static final Tab INSTANCE = new Tab();
-		
-		public Tab() {
-			super(Inc.MODID);
-			hideTitle();
-			//noinspection deprecation (forge extends this, but this works fine too)
-			setBackgroundSuffix(Inc.MODID + ".png");
-		}
-		
-		@Override
-		public ItemStack makeIcon() {
-			return new ItemStack(SOUL_CORE_FRAME);
-		}
-		
-		@Override
-		public boolean hasSearchBar() {
-			return true;
-		}
-	}
+//	private static class Tab extends CreativeModeTab {
+//		public static final Tab INSTANCE = new Tab();
+//		
+//		public Tab() {
+//			super(Inc.MODID);
+//			hideTitle();
+//			//noinspection deprecation (forge extends this, but this works fine too)
+//			setBackgroundSuffix(Inc.MODID + ".png");
+//		}
+//		
+//		@Override
+//		public ItemStack makeIcon() {
+//			return new ItemStack(SOUL_CORE_FRAME);
+//		}
+//		
+//		@Override
+//		public boolean hasSearchBar() {
+//			return true;
+//		}
+//	}
 }

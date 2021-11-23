@@ -30,11 +30,11 @@ public class FunnySubTile extends TileEntityFunctionalFlower {
 	}
 	
 	public static FunnySubTile big() {
-		return new FunnySubTile(4, 4, 0, 0.75, IncTileTypes.FUNNY_BIG);
+		return new FunnySubTile(4, 4, 0, 0.75, IncBlockEntityTypes.FUNNY_BIG);
 	}
 	
 	public static FunnySubTile small() {
-		return new FunnySubTile(2, 3, 7, 0.6, IncTileTypes.FUNNY_SMALL);
+		return new FunnySubTile(2, 3, 7, 0.6, IncBlockEntityTypes.FUNNY_SMALL);
 	}
 	
 	private final int range;

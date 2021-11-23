@@ -2,29 +2,23 @@ package agency.highlysuspect.incorporeal.block;
 
 import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.block.tile.FunnySubTile;
-import agency.highlysuspect.incorporeal.block.tile.IncTileTypes;
+import agency.highlysuspect.incorporeal.block.tile.IncBlockEntityTypes;
 import agency.highlysuspect.incorporeal.block.tile.SanvocaliaSubTile;
+import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.Util;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistry;
-import vazkii.botania.api.subtile.TileEntitySpecialFlower;
 import vazkii.botania.common.block.BlockFloatingSpecialFlower;
 import vazkii.botania.common.block.BlockSpecialFlower;
 import vazkii.botania.common.block.ModBlocks;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.function.Supplier;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class IncBlocks {
 	public static final CorporeaSolidifierBlock CORPOREA_SOLIDIFIER = new CorporeaSolidifierBlock(BlockBehaviour.Properties.copy(ModBlocks.corporeaRetainer));
@@ -43,9 +37,9 @@ public class IncBlocks {
 		.strength(1f)
 		.isRedstoneConductor((state, world, pos) -> false)
 		.noOcclusion();
-	public static final Block ENDER_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.ENDER_SOUL_CORE);
-	public static final Block CORPOREA_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.CORPOREA_SOUL_CORE);
-	public static final Block POTION_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncTileTypes.POTION_SOUL_CORE);
+	public static final Block ENDER_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncBlockEntityTypes.ENDER_SOUL_CORE);
+	public static final Block CORPOREA_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncBlockEntityTypes.CORPOREA_SOUL_CORE);
+	public static final Block POTION_SOUL_CORE = new SoulCoreBlock(soulCoreProps, () -> IncBlockEntityTypes.POTION_SOUL_CORE);
 	
 	public static final Block NATURAL_REPEATER = new CrappyRepeaterBlock(BlockBehaviour.Properties.of(Material.DECORATION).instabreak().sound(SoundType.CROP).noOcclusion());
 	public static final Block NATURAL_COMPARATOR = new CrappyComparatorBlock(BlockBehaviour.Properties.of(Material.DECORATION).instabreak().sound(SoundType.CROP).noOcclusion());
@@ -54,18 +48,18 @@ public class IncBlocks {
 	public static final Block.Properties flowerProps = BlockBehaviour.Properties.copy(Blocks.POPPY);
 	public static final Block.Properties floatingProps = ModBlocks.FLOATING_PROPS;
 	
-	public static final BlockSpecialFlower SANVOCALIA = new NotBlockSpecialFlower(MobEffects.GLOWING, 20, flowerProps, SanvocaliaSubTile::big);
-	public static final BlockSpecialFlower SMALL_SANVOCALIA = new NotBlockSpecialFlower(MobEffects.GLOWING, 5, flowerProps, SanvocaliaSubTile::small);
-	public static final BlockFloatingSpecialFlower FLOATING_SANVOCALIA = new NotBlockFloatingSpecialFlower(floatingProps, SanvocaliaSubTile::big);
-	public static final BlockFloatingSpecialFlower SMALL_FLOATING_SANVOCALIA = new NotBlockFloatingSpecialFlower(floatingProps, SanvocaliaSubTile::small);
+	public static final BlockSpecialFlower SANVOCALIA = new BlockSpecialFlower(MobEffects.GLOWING, 20, flowerProps, SanvocaliaSubTile::big);
+	public static final BlockSpecialFlower SMALL_SANVOCALIA = new BlockSpecialFlower(MobEffects.GLOWING, 5, flowerProps, SanvocaliaSubTile::small);
+	public static final BlockFloatingSpecialFlower FLOATING_SANVOCALIA = new BlockFloatingSpecialFlower(floatingProps, SanvocaliaSubTile::big);
+	public static final BlockFloatingSpecialFlower SMALL_FLOATING_SANVOCALIA = new BlockFloatingSpecialFlower(floatingProps, SanvocaliaSubTile::small);
 	
-	public static final BlockSpecialFlower FUNNY = new NotBlockSpecialFlower(MobEffects.BAD_OMEN, 20, flowerProps, FunnySubTile::big);
-	public static final BlockSpecialFlower SMALL_FUNNY = new NotBlockSpecialFlower(MobEffects.BAD_OMEN, 5, flowerProps, FunnySubTile::small);
-	public static final BlockFloatingSpecialFlower FLOATING_FUNNY = new NotBlockFloatingSpecialFlower(floatingProps, FunnySubTile::big);
-	public static final BlockFloatingSpecialFlower SMALL_FLOATING_FUNNY = new NotBlockFloatingSpecialFlower(floatingProps, FunnySubTile::small);
+	public static final BlockSpecialFlower FUNNY = new BlockSpecialFlower(MobEffects.BAD_OMEN, 20, flowerProps, FunnySubTile::big);
+	public static final BlockSpecialFlower SMALL_FUNNY = new BlockSpecialFlower(MobEffects.BAD_OMEN, 5, flowerProps, FunnySubTile::small);
+	public static final BlockFloatingSpecialFlower FLOATING_FUNNY = new BlockFloatingSpecialFlower(floatingProps, FunnySubTile::big);
+	public static final BlockFloatingSpecialFlower SMALL_FLOATING_FUNNY = new BlockFloatingSpecialFlower(floatingProps, FunnySubTile::small);
 	
-	public static void register(RegistryEvent.Register<Block> event) {
-		IForgeRegistry<Block> r = event.getRegistry();
+	public static void register() {
+		Registry<Block> r = Registry.BLOCK;
 		
 		//misc blocks!
 		Inc.reg(r, "corporea_solidifier", CORPOREA_SOLIDIFIER);
@@ -94,17 +88,5 @@ public class IncBlocks {
 		Inc.reg(r, "funny_chibi", SMALL_FUNNY);
 		Inc.reg(r, "floating_funny", FLOATING_FUNNY);
 		Inc.reg(r, "floating_funny_chibi", SMALL_FLOATING_FUNNY);
-	}
-	
-	private static class NotBlockSpecialFlower extends BlockSpecialFlower {
-		public NotBlockSpecialFlower(MobEffect stewEffect, int stewDuration, Properties props, Supplier<? extends TileEntitySpecialFlower> teProvider) {
-			super(stewEffect, stewDuration, props, teProvider);
-		}
-	}
-	
-	private static class NotBlockFloatingSpecialFlower extends BlockFloatingSpecialFlower {
-		public NotBlockFloatingSpecialFlower(Properties props, Supplier<? extends TileEntitySpecialFlower> teProvider) {
-			super(props, teProvider);
-		}
 	}
 }

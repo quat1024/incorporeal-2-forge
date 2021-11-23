@@ -1,54 +1,25 @@
 Incorporeal 2 + Rhododendrite
 =============================
 
-Let's try this again. Forge this time.
+Let's try this again. Forge this time. Jk Fabric this time.
 
-Two mods for the price of one: Incorporeal 2, a fairly straightforward port of Incorporeal less the "cygnus network", and Rhododendrite, that mechanic's successor. Them being two separate mods is mainly for organizational purposes - eventually I want to separate the mods into their own .jars? Rhodo might get its own standalone Fabric port. Idk. I hesitate because it won't be very useful without Botania/a corporea network to power with it, and it also depends on a bit of code from incorporeal 2 and botania
+# things i gotta do
 
-# Incorporeal 2
+* Fix config
+* Fix PotionSoulCoreCollectorEntity::attributeEvent
+* Fix CorporeaSoulCoreTile::corporeaIndexRequestEvent
+* Fix TicketConjurerItem::chatEvent
+* port capabilities over to cardinal capabilities
+* Fix RedstoneRootCropBlock::interactEvent
 
-## Things left to port
-
-* frame screw
-
-## Things that have been ported
-
-* corporea solidifier
-* corporea ticket
-* sanvocalia flower
-* red string liar
-* funny despacito flower
-* item frame tinkerer (there was some interest in botania taking this on)
-* ender soul core
-* corporea soul core (security system)
-* ticket conjurer
-* rod of the fractured space
-* corporea retainer evaporator (possssibly obsolete???)
-* unstable cube
-* potion soul core
-* recipes Lol
-* documentation Loooll
-* natural redstone circuitry
-* that thing where you can plant redstone roots
-
-## Things that will not be ported
-
-* cygnus network
-  * replaced with Rhododendrite mod
-* corporea decorative blocks
-  * subsumed
-* corporea spark tinkerer
-  * obsoleted by paintslinger lens
-* that block that obstructs corporea sparks from connecting
-  * it's fairly computationally expensive, and doesn't even work too well; just use paintslinger now
-* lokiw block
-  * wait it wasn't funny? Never has been
-* forgotten shrine
-  * weird fluff, only existed because the tile was left unused in botania and i found it interesting. it was deleted last year
+* Fix corporea ticket written_ticket item property
+* Fix entity renderers (register them, idk how)
+* fix block entity renderers
+* fix ISTER (probably copy botania)
 
 ## other things to do
 
-Move more things to datagen, i really dont like forge datagens though
+Move more things to datagen, ~~i really dont like forge datagens though~~wheres my excuse now huh
 
 # Rhododendrite
 
