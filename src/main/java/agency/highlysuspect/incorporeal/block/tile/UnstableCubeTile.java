@@ -6,18 +6,16 @@ import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.common.Botania;
 import vazkii.botania.common.block.tile.TileMod;
-import vazkii.botania.common.core.helper.Vector3;
 
-public class UnstableCubeTile extends TileMod implements TickableBlockEntity {
+public class UnstableCubeTile extends TileMod {
 	public UnstableCubeTile(DyeColor color, BlockPos pos, BlockState state) {
 		super(IncBlockEntityTypes.UNSTABLE_CUBES.get(color), pos, state);
 		this.color = color;
@@ -36,7 +34,10 @@ public class UnstableCubeTile extends TileMod implements TickableBlockEntity {
 	
 	private final float[] basePitches = new float[] {1f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.35f, 1.4f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f, 0.65f, 0.6f, 0.55f};
 	
-	@Override
+	public static void commonTick(Level level, BlockPos blockPos, BlockState blockState, UnstableCubeTile e) {
+		e.tick();
+	}
+	
 	public void tick() {
 		if(level == null || !(getBlockState().getBlock() instanceof UnstableCubeBlock)) return;
 		
@@ -58,14 +59,14 @@ public class UnstableCubeTile extends TileMod implements TickableBlockEntity {
 		
 		if(level.isClientSide) {
 			if(level.getGameTime() >= nextLightningTick) {
-				int colorPacked = color.getColorValue();
+				int colorPacked = color.getTextColor();
 				int red = (colorPacked & 0xFF0000) >> 16;
 				int green = (colorPacked & 0x00FF00) >> 8;
 				int blue = (colorPacked & 0x0000FF);
 				int colorDarker = ((red / 2) << 16) | ((green / 2) << 8) | (blue / 2);
 				
-				Vector3 start = Vector3.fromBlockPos(worldPosition);
-				Vector3 end = start.add(level.random.nextDouble() * 2 - 1, level.random.nextDouble() * 2 - 1, level.random.nextDouble() * 2 - 1);
+				Vec3 start = Vec3.atCenterOf(worldPosition);
+				Vec3 end = start.add(level.random.nextDouble() * 2 - 1, level.random.nextDouble() * 2 - 1, level.random.nextDouble() * 2 - 1);
 				
 				//TODO (issue #3): Why doesn't this produce any lightning
 				Botania.proxy.lightningFX(start, end, 5f, colorDarker, colorPacked);
@@ -103,16 +104,16 @@ public class UnstableCubeTile extends TileMod implements TickableBlockEntity {
 		return power;
 	}
 	
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
-		//On the client, ignore changes to the rotation angle (unless this is the first packet).
-		//helps prevent it jittering on servers, since the rotation is sorta controlled serverside.
-		float oldRotationAngle = rotationAngle;
-		super.onDataPacket(net, packet);
-		if(oldRotationAngle != 0 && oldRotationAngle != rotationAngle) {
-			rotationAngle = oldRotationAngle;
-		}
-	}
+//	@Override
+//	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+//		//On the client, ignore changes to the rotation angle (unless this is the first packet).
+//		//helps prevent it jittering on servers, since the rotation is sorta controlled serverside.
+//		float oldRotationAngle = rotationAngle;
+//		super.onDataPacket(net, packet);
+//		if(oldRotationAngle != 0 && oldRotationAngle != rotationAngle) {
+//			rotationAngle = oldRotationAngle;
+//		}
+//	}
 	
 	@Override
 	public void writePacketNBT(CompoundTag nbt) {

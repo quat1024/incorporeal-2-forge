@@ -2,8 +2,10 @@ package agency.highlysuspect.incorporeal.block;
 
 import agency.highlysuspect.incorporeal.block.tile.IncBlockEntityTypes;
 import agency.highlysuspect.incorporeal.block.tile.UnstableCubeTile;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -19,12 +21,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import vazkii.botania.api.wand.IWandable;
+import vazkii.botania.api.block.IWandable;
+import vazkii.botania.common.block.BlockMod;
 import vazkii.botania.common.block.BlockModWaterloggable;
+import vazkii.botania.common.block.tile.string.TileRedString;
 
 import javax.annotation.Nullable;
 
-public class UnstableCubeBlock extends BlockModWaterloggable implements IWandable {
+public class UnstableCubeBlock extends BlockModWaterloggable implements /*IWandable,*/ EntityBlock {
 	public UnstableCubeBlock(Properties properties, DyeColor color) {
 		super(properties);
 		this.color = color;
@@ -49,7 +53,8 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 		return InteractionResult.SUCCESS;
 	}
 	
-	@Override
+	//TODO fix IWandable (no pos?)
+	//@Override
 	public boolean onUsedByWand(Player player, ItemStack stack, Level world, BlockPos pos, Direction side) {
 		punch(world, pos);
 		return true;
@@ -82,14 +87,15 @@ public class UnstableCubeBlock extends BlockModWaterloggable implements IWandabl
 		return RenderShape.ENTITYBLOCK_ANIMATED;
 	}
 	
+	@Nullable
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return IncBlockEntityTypes.UNSTABLE_CUBES.get(color).create(pos, state);
 	}
 	
 	@Nullable
 	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		return IncBlockEntityTypes.UNSTABLE_CUBES.get(color).create();
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+		return BlockMod.createTickerHelper(blockEntityType, IncBlockEntityTypes.UNSTABLE_CUBES.get(color), UnstableCubeTile::commonTick);
 	}
 }

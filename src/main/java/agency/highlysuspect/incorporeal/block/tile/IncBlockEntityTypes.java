@@ -5,23 +5,18 @@ import agency.highlysuspect.incorporeal.block.IncBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.Util;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-@SuppressWarnings("ConstantConditions")
 public class IncBlockEntityTypes {
 	public static final BlockEntityType<RedStringLiarTile> RED_STRING_LIAR = FabricBlockEntityTypeBuilder.create(RedStringLiarTile::new, IncBlocks.RED_STRING_LIAR).build();
 	
 	//forgive me for this - I can only assign one renderer per tileentitytype
 	public static final Map<DyeColor, BlockEntityType<UnstableCubeTile>> UNSTABLE_CUBES = Util.make(new EnumMap<>(DyeColor.class), m -> {
-		for(DyeColor color : DyeColor.values()) m.put(color, FabricBlockEntityTypeBuilder.create(() -> new UnstableCubeTile(color), IncBlocks.UNSTABLE_CUBES.get(color)).build());
+		for(DyeColor color : DyeColor.values()) m.put(color, FabricBlockEntityTypeBuilder.create((pos, state) -> new UnstableCubeTile(color, pos, state), IncBlocks.UNSTABLE_CUBES.get(color)).build());
 	});
 	
 	public static final BlockEntityType<EnderSoulCoreTile> ENDER_SOUL_CORE = FabricBlockEntityTypeBuilder.create(EnderSoulCoreTile::new, IncBlocks.ENDER_SOUL_CORE).build();
