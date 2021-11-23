@@ -21,7 +21,7 @@ buildscript {
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: "eclipse"
 apply plugin: "maven-publish"
-apply plugin: "org.spongepowered.mixin"
+//apply plugin: "org.spongepowered.mixin"
 
 ////////////////
 
@@ -39,9 +39,9 @@ def curios_forge_version = "1.16.4-4.0.3.5"
 
 println("Java: " + System.getProperty("java.version") + " JVM: " + System.getProperty("java.vm.version") + "(" + System.getProperty("java.vendor") + ") Arch: " + System.getProperty("os.arch")) //so true bestie
 
-mixin {
-	add sourceSets.main, "incorporeal.refmap.json"
-}
+//mixin {
+//	add sourceSets.main, "incorporeal.refmap.json"
+//}
 
 minecraft {
 	//mappings channel: "official", version: "1.16.5"

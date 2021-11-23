@@ -21,6 +21,7 @@ import java.util.List;
 public class TileCorporeaInterceptorMixin {
 	@Inject(
 		method = "interceptRequestLast",
+		remap = false,
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
