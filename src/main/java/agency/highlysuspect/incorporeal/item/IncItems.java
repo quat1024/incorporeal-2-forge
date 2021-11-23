@@ -37,6 +37,8 @@ public class IncItems {
 	public static final BlockItem NATURAL_REPEATER = new BlockItem(IncBlocks.NATURAL_REPEATER, defaultProps());
 	public static final BlockItem NATURAL_COMPARATOR = new BlockItem(IncBlocks.NATURAL_COMPARATOR, defaultProps());
 	
+	public static final BlockItem REDSTONE_SEQUENCER = new BlockItem(IncBlocks.REDSTONE_SEQUENCER, defaultProps());
+	
 	public static final ItemBlockSpecialFlower SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SANVOCALIA, defaultProps());
 	public static final ItemBlockSpecialFlower SMALL_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.SMALL_SANVOCALIA, defaultProps());
 	public static final ItemBlockSpecialFlower FLOATING_SANVOCALIA = new ItemBlockSpecialFlower(IncBlocks.FLOATING_SANVOCALIA, defaultProps());
@@ -74,6 +76,8 @@ public class IncItems {
 		
 		regBlockItem(r, NATURAL_REPEATER);
 		regBlockItem(r, NATURAL_COMPARATOR);
+		
+		regBlockItem(r, REDSTONE_SEQUENCER);
 		
 		//flowers
 		regBlockItem(r, SANVOCALIA);

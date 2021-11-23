@@ -5,6 +5,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -24,7 +25,7 @@ import vazkii.botania.common.entity.EntityDoppleganger;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public class SoulCoreBlock extends Block implements IWandHUD {
+public class SoulCoreBlock extends Block implements IWandHUD, ITileEntityProvider {
 	public SoulCoreBlock(Properties properties, Supplier<TileEntityType<? extends AbstractSoulCoreTile>> typeS) {
 		super(properties);
 		this.typeS = typeS;
@@ -33,14 +34,9 @@ public class SoulCoreBlock extends Block implements IWandHUD {
 	//Using a supplier here since tiletypes depend on blocks and this block depends on the tile type.
 	private final Supplier<TileEntityType<? extends AbstractSoulCoreTile>> typeS;
 	
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		return typeS.get().create();
 	}
 	
