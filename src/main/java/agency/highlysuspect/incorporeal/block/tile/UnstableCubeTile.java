@@ -3,6 +3,7 @@ package agency.highlysuspect.incorporeal.block.tile;
 import agency.highlysuspect.incorporeal.Inc;
 import agency.highlysuspect.incorporeal.IncSoundEvents;
 import agency.highlysuspect.incorporeal.block.UnstableCubeBlock;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -10,14 +11,15 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.common.Botania;
 import vazkii.botania.common.block.tile.TileMod;
 import vazkii.botania.common.core.helper.Vector3;
 
 public class UnstableCubeTile extends TileMod implements TickableBlockEntity {
-	public UnstableCubeTile(DyeColor color) {
-		super(IncBlockEntityTypes.UNSTABLE_CUBES.get(color));
+	public UnstableCubeTile(DyeColor color, BlockPos pos, BlockState state) {
+		super(IncBlockEntityTypes.UNSTABLE_CUBES.get(color), pos, state);
 		this.color = color;
 	}
 	

@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
@@ -30,13 +31,14 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 
-public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, TickableBlockEntity, IManaReceiver {
-	public AbstractSoulCoreTile(BlockEntityType<?> type) {
-		super(type);
+public abstract class AbstractSoulCoreTile extends TileMod implements IWandHUD, IManaReceiver {
+	public AbstractSoulCoreTile(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
 	}
 	
-	//idk where else to stick this
-	public static final DamageSource SOUL = new DamageSource("incorporeal.soul").setMagic();
+	//TODO 1.17 AW this
+	//public static final DamageSource SOUL = new DamageSource("incorporeal.soul").setMagic();
+	public static final DamageSource SOUL = DamageSource.ANVIL;
 	
 	protected GameProfile ownerProfile;
 	protected int mana;

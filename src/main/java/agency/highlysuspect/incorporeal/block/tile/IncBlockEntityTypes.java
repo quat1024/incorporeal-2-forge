@@ -5,6 +5,8 @@ import agency.highlysuspect.incorporeal.block.IncBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.Util;
 import net.minecraftforge.event.RegistryEvent;

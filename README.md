@@ -17,6 +17,8 @@ Let's try this again. Forge this time. Jk Fabric this time.
 * fix block entity renderers
 * fix ISTER (probably copy botania)
 
+* fix Red String Liar logic
+
 ## other things to do
 
 Move more things to datagen, ~~i really dont like forge datagens though~~wheres my excuse now huh

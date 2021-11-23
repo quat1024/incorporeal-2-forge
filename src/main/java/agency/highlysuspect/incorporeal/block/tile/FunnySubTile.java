@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FunnySubTile extends TileEntityFunctionalFlower {
-	protected FunnySubTile(int range, int ticksBetweenNotes, int pitchShift, double sparkleHeight, BlockEntityType<?> type) {
-		super(type);
+	protected FunnySubTile(int range, int ticksBetweenNotes, int pitchShift, double sparkleHeight, BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
 		this.range = range;
 		this.ticksBetweenNotes = ticksBetweenNotes;
 		this.pitchShift = pitchShift;

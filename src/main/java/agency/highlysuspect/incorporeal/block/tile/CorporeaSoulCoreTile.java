@@ -2,7 +2,9 @@ package agency.highlysuspect.incorporeal.block.tile;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 import vazkii.botania.api.corporea.CorporeaHelper;
 import vazkii.botania.api.corporea.CorporeaIndexRequestEvent;
 
@@ -12,8 +14,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CorporeaSoulCoreTile extends AbstractSoulCoreTile {
-	public CorporeaSoulCoreTile() {
-		super(IncBlockEntityTypes.CORPOREA_SOUL_CORE);
+	public CorporeaSoulCoreTile(BlockPos pos, BlockState state) {
+		super(IncBlockEntityTypes.CORPOREA_SOUL_CORE, pos, state);
 	}
 	
 	@Override

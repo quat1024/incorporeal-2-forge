@@ -1,9 +1,11 @@
 package agency.highlysuspect.incorporeal.block.tile;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -16,8 +18,8 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class EnderSoulCoreTile extends AbstractSoulCoreTile {
-	public EnderSoulCoreTile() {
-		super(IncBlockEntityTypes.ENDER_SOUL_CORE);
+	public EnderSoulCoreTile(BlockPos pos, BlockState state) {
+		super(IncBlockEntityTypes.ENDER_SOUL_CORE, pos, state);
 	}
 	
 	@Override

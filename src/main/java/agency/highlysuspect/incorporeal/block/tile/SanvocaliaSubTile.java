@@ -36,8 +36,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SanvocaliaSubTile extends TileEntityFunctionalFlower {
-	public SanvocaliaSubTile(int radius, BlockEntityType<?> type) {
-		super(type);
+	public SanvocaliaSubTile(int radius, BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
 		this.radius = radius;
 	}
 	
