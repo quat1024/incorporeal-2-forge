@@ -27,8 +27,6 @@ import vazkii.botania.mixin.AccessorItemEntity;
 
 import java.util.List;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 public class FrameTinkererBlock extends BlockModWaterloggable {
 	public FrameTinkererBlock(Properties properties) {
 		super(properties);
