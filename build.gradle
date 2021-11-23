@@ -44,8 +44,8 @@ println("Java: " + System.getProperty("java.version") + " JVM: " + System.getPro
 //}
 
 minecraft {
-	//mappings channel: "official", version: "1.16.5"
-	mappings channel: "snapshot", version: "20201028-1.16.3" //same mappings Botania uses (MCP)
+	mappings channel: "official", version: "1.16.5"
+	//mappings channel: "snapshot", version: "20201028-1.16.3" //same mappings Botania uses (MCP)
 	
 	// makeObfSourceJar = false
 	
